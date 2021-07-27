@@ -22,8 +22,8 @@
                         entry.listprice = (entry.listprice / 12).toFixed(2);
                         entry.netprice = (entry.netprice / 12).toFixed(2);
                     } else {
-                        entry.listprice = entry.listprice;
-                        entry.netprice = entry.netprice;
+                        entry.listprice = (entry.listprice).toFixed(2);
+                        entry.netprice = (entry.netprice).toFixed(2);
                     }
 
                     if (typeof entry.inclusions != 'undefined' && entry.inclusions != null) {
@@ -69,22 +69,22 @@
         component.set("v.navObj", navEvent);
         console.log('Called selectedProduct2');
         that.apexRequest(component, 'productSelection', {
-            productName: component.get("v.productName"),
-            accountId: component.get("v.accountId"),
-            sessionId: component.get("v.sessionId")
-        })
-        .then(function(response) {
-            window.setTimeout(
-                $A.getCallback(function() {
-                    that.getQuoteId2(component, event);
-                }), 300
-            );
-        })
-        .catch(function(e) {
-            console.log('error ' + JSON.stringify(e));
-            component.set("v.isLoading", false);
-            component.set("v.isError", true);
-        });
+                productName: component.get("v.productName"),
+                accountId: component.get("v.accountId"),
+                sessionId: component.get("v.sessionId")
+            })
+            .then(function(response) {
+                window.setTimeout(
+                    $A.getCallback(function() {
+                        that.getQuoteId2(component, event);
+                    }), 300
+                );
+            })
+            .catch(function(e) {
+                console.log('error ' + JSON.stringify(e));
+                component.set("v.isLoading", false);
+                component.set("v.isError", true);
+            });
     },
 
     getQuoteId2: function(component, event) {
@@ -92,31 +92,31 @@
         console.log('Called getQuoteId2');
         //component.set('v.quoteId', null);
         that.apexRequest(component, 'getQuoteId', {
-            accountId: component.get("v.accountId"),
-            sessionId: component.get("v.sessionId")
-        })
-        .then(function(response) {
-            //var that = self;
-            console.log('getQuoteIdresponse2 ', response)
-            if (response!=null) {
-                component.set("v.isLoading", false);
-                component.set('v.quoteId', response);
-                sessionStorage.setItem('quoteId', response);
-            } else {
-                component.set("v.isLoading", true);
-                window.setTimeout(
-                    $A.getCallback(function() {
-                        that.getQuoteId2(component, event);
-                    }), 1000
-                );
-            }
+                accountId: component.get("v.accountId"),
+                sessionId: component.get("v.sessionId")
+            })
+            .then(function(response) {
+                //var that = self;
+                console.log('getQuoteIdresponse2 ', response)
+                if (response != null) {
+                    component.set("v.isLoading", false);
+                    component.set('v.quoteId', response);
+                    sessionStorage.setItem('quoteId', response);
+                } else {
+                    component.set("v.isLoading", true);
+                    window.setTimeout(
+                        $A.getCallback(function() {
+                            that.getQuoteId2(component, event);
+                        }), 1000
+                    );
+                }
 
-        })
-        .catch(function(e) {
-            console.log('Unknown Error>>>>>>');
-            component.set("v.isLoading", false);
-            component.set("v.isError", true);
-        });
+            })
+            .catch(function(e) {
+                console.log('Unknown Error>>>>>>');
+                component.set("v.isLoading", false);
+                component.set("v.isError", true);
+            });
     },
 
     createQuoteLines2: function(component, event) {
@@ -124,78 +124,78 @@
         console.log('Called createQuoteLines2');
 
         var qid = component.get("v.quoteId");
-        component.set("v.quoteLinesInProgress",true);
+        component.set("v.quoteLinesInProgress", true);
         component.set("v.isLoading", true);
         let selProds = [];
         let prodlist = component.get('v.selectedList');
-        
-        prodlist.forEach(function(elm,id){
-            if(elm.inclusions!=null){
-                elm.inclusions=null;
+
+        prodlist.forEach(function(elm, id) {
+            if (elm.inclusions != null) {
+                elm.inclusions = null;
             }
             selProds.push(elm);
         });
         self.apexRequest(component, 'createQuoteLines', {
-            productsJSON: JSON.stringify(selProds),
-            quoteId: qid,
-            paymentFrequency: component.get("v.frequency")
-        })
-        .then(function(response) {
-            var t = self;
-            console.log('createQuoteLines ', response);
-            component.set("v.isLoading", true);
-            window.setTimeout(
-                $A.getCallback(function() {
-                    t.getQuoteLinesCompleteionFlag2(component,event);
-                }), 300
-            );
-        })
-        .catch(function(e) {
-            console.log('error ' + JSON.stringify(e));
-            component.set("v.isLoading", false);
-            component.set("v.isError", true);
-            component.set("v.quoteLinesInProgress",false);
-        });
+                productsJSON: JSON.stringify(selProds),
+                quoteId: qid,
+                paymentFrequency: component.get("v.frequency")
+            })
+            .then(function(response) {
+                var t = self;
+                console.log('createQuoteLines ', response);
+                component.set("v.isLoading", true);
+                window.setTimeout(
+                    $A.getCallback(function() {
+                        t.getQuoteLinesCompleteionFlag2(component, event);
+                    }), 300
+                );
+            })
+            .catch(function(e) {
+                console.log('error ' + JSON.stringify(e));
+                component.set("v.isLoading", false);
+                component.set("v.isError", true);
+                component.set("v.quoteLinesInProgress", false);
+            });
     },
 
     getQuoteLinesCompleteionFlag2: function(component, event) {
         var that = this;
         console.log('Called getQuoteLinesCompleteionFlag2');
         that.apexRequest(component, 'getQuoteLinesCompleteionFlag', {
-            quoteId: component.get("v.quoteId")
-        })
-        .then(function(response) {
-            console.log('getQuoteLinesCompleteionFlag2 Res ', response)
-            var t = that;
-            if (response) {
+                quoteId: component.get("v.quoteId")
+            })
+            .then(function(response) {
+                console.log('getQuoteLinesCompleteionFlag2 Res ', response)
+                var t = that;
+                if (response) {
+                    component.set("v.isLoading", false);
+                    component.set("v.quoteLinesInProgress", false);
+                    t.PageNavigation(component, event);
+                } else {
+                    component.set("v.isLoading", true);
+                    console.log('getQuoteLinesCompleteionFlag2 polling');
+                    var count = component.get("v.callCount");
+                    window.setTimeout(
+                        $A.getCallback(function() {
+                            if (count <= 10) {
+                                t.getQuoteLinesCompleteionFlag2(component, event);
+                            } else {
+                                component.set("v.isLoading", false);
+                                component.set("v.isError", true);
+                            }
+                            component.set("v.callCount", count += 1);
+                        }), 3000
+                    );
+
+                }
+
+            })
+            .catch(function(e) {
+                console.log('error ' + JSON.stringify(e));
                 component.set("v.isLoading", false);
-                component.set("v.quoteLinesInProgress",false);
-                t.PageNavigation(component, event);
-            } else {
-                component.set("v.isLoading", true);
-                console.log('getQuoteLinesCompleteionFlag2 polling');
-                var count = component.get("v.callCount");
-                window.setTimeout(
-                    $A.getCallback(function() {
-                        if (count <= 10) {
-                            t.getQuoteLinesCompleteionFlag2(component, event);
-                        } else {
-                            component.set("v.isLoading", false);
-                            component.set("v.isError", true);
-                        }
-                        component.set("v.callCount", count += 1);
-                    }), 3000
-                );
-
-            }
-
-        })
-        .catch(function(e) {
-            console.log('error ' + JSON.stringify(e));
-            component.set("v.isLoading", false);
-            component.set("v.isError", true);
-            component.set("v.quoteLinesInProgress",false);
-        });
+                component.set("v.isError", true);
+                component.set("v.quoteLinesInProgress", false);
+            });
     },
 
     selectedProduct: function(component, event, selectedList) {
@@ -239,31 +239,30 @@
     },
 
     getPremiumBundle: function(component, event) {
-        var that=this;
-        this.apexRequest(component, 'getPremiumBundleProduct' , {
-            accountId: component.get("v.accountId"),
-            sessionId: component.get("v.sessionId")
-        })
-        .then(function(response){
-            console.log('premium bundle: ', response);
-            if(response){
-                var t=that;
-                if(response!=null){
-                    component.set("v.premiumBundle",JSON.parse(response));
+        var that = this;
+        this.apexRequest(component, 'getPremiumBundleProduct', {
+                accountId: component.get("v.accountId"),
+                sessionId: component.get("v.sessionId")
+            })
+            .then(function(response) {
+                console.log('premium bundle: ', response);
+                if (response) {
+                    var t = that;
+                    if (response != null) {
+                        component.set("v.premiumBundle", JSON.parse(response));
+                    } else {
+                        console.log('No premium bundle found.');
+                        component.set("v.isLoading", false);
+                        component.set("v.isError", true);
+                    }
                 }
-                else{
-                    console.log('No premium bundle found.');
-                    component.set("v.isLoading",false);
-                    component.set("v.isError", true);
-                }
-            }
-        })
-        .catch(function(e){
-            console.log('error '+ JSON.stringify(e));
-            component.set("v.isLoading",false);
-            component.set("v.isError", true);
+            })
+            .catch(function(e) {
+                console.log('error ' + JSON.stringify(e));
+                component.set("v.isLoading", false);
+                component.set("v.isError", true);
 
-        });
+            });
     },
 
     createQuoteLines: function(component, event) {

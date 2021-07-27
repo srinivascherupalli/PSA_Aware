@@ -41,8 +41,7 @@
 
     <aura:renderif isTrue="{!v.isLoading == true}">
         <h3 class="loaderMsg">
-            This may take a few minutes. We are finalising a few details, and creating your invoice. While we complete this, 
-            give yourself a pat on the back for making a great choice with a PSA membership
+            This may take a few minutes. We are finalising a few details, and creating your invoice. While we complete this, give yourself a pat on the back for making a great choice with a PSA membership
         </h3>
     </aura:renderif>
 
@@ -72,7 +71,9 @@
                         </aura:if>
                         <aura:if isTrue="{!item.netprice != '0.00'}">
                             <lightning:formattedNumber value="{!item.netprice}" style="currency" currencyCode="AUD" currencyDisplayAs="symbol" />
-                            <div class="payment_frequency"><h4>{!v.displayfrequency}</h4></div>
+                            <div class="payment_frequency">
+                                <h4>{!v.displayfrequency}</h4>
+                            </div>
                         </aura:if>
 
                     </h2>
