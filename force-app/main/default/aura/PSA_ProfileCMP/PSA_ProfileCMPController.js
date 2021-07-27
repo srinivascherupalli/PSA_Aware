@@ -34,7 +34,8 @@
             monthofGraduation: '',
             studentUniversityEmail: '',
             university: '',
-            studentnumber: ''
+            studentnumber: '',
+            signedUp: true
         }
         component.set("v.profileDetail", profileDetail);
         helper.getCurrentUserInfo(component, event);

@@ -391,7 +391,8 @@
             </div>
             <div class="col-sm-4 col-md-4 col-lg-4">
                 <div class="form-group-payment-method">
-                    <lightning:input aura:id="forminput" value="{!v.profileDetail.dobdate}" class="form-input" type="date" name="dob" label="Date of birth" required="true" messageWhenValueMissing="Date of birth is required." disabled="{!v.isDOBAvailable}" />
+                    <lightning:input aura:id="forminput" value="{!v.profileDetail.dobdate}" class="form-input" type="date" name="dob" label="Date of birth" required="true" messageWhenValueMissing="Date of birth is required." disabled="{!v.isDOBAvailable || v.profileDetail.signedUp}"
+                    />
                 </div>
             </div>
         </div>
@@ -509,7 +510,8 @@
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6">
                     <div class="form-group-payment-method">
-                        <lightning:input value="{!v.profileDetail.AHPRA}" aura:id="forminput" class="form-input" type="text" name="ahpranumber" label="AHPRA Number (if you do not have an AHPRA Number, please enter N/A)" disabled="{!v.profileDetail.signedUp}" required="true" messageWhenValueMissing="AHPRA Number is required." />
+                        <lightning:input value="{!v.profileDetail.AHPRA}" aura:id="forminput" class="form-input" type="text" name="ahpranumber" label="AHPRA Number (if you do not have an AHPRA Number, please enter N/A)" disabled="{!v.profileDetail.signedUp}" required="true"
+                            messageWhenValueMissing="AHPRA Number is required." />
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-12">
@@ -590,8 +592,8 @@
 
                 <div class="col-sm-3 col-md-3 col-lg-3">
                     <div class="form-group-payment-method" aura:id="yearOfGraduation">
-                        <lightning:input class="form-input" pattern="[0-9]{4}" name="number" label="Expected Year Of Graduation" required="true" maxlength="4" value="{!v.profileDetail.yrofqualification}" messageWhenValueMissing="Year of Initial Pharmacy Qualification is required." onkeyup="{!c.validateGraduationDate}"
-                        />
+                        <lightning:input class="form-input" pattern="[0-9]{4}" name="number" label="Expected Year Of Graduation" required="true" maxlength="4" value="{!v.profileDetail.yrofqualification}" messageWhenValueMissing="Year of Initial Pharmacy Qualification is required."
+                            onkeyup="{!c.validateGraduationDate}" />
                         <div aura:id="dateOfGraduationMsg" aria-live="assertive" class="slds-form-element__help hide">Please enter a valid date of graduation.</div>
                         <aura:if isTrue="{!v.isPastDate}">
                             <span class="alert_msg">
@@ -661,7 +663,8 @@
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6">
                     <div class="form-group-payment-method">
-                        <lightning:input value="{!v.profileDetail.AHPRA}" aura:id="forminput" class="form-input" type="text" name="ahpranumber" label="AHPRA Number (if you do not have an AHPRA Number, please enter N/A)" disabled="{!v.profileDetail.signedUp}" required="true" messageWhenValueMissing="AHPRA Number is required." />
+                        <lightning:input value="{!v.profileDetail.AHPRA}" aura:id="forminput" class="form-input" type="text" name="ahpranumber" label="AHPRA Number (if you do not have an AHPRA Number, please enter N/A)" disabled="{!v.profileDetail.signedUp}" required="true"
+                            messageWhenValueMissing="AHPRA Number is required." />
                     </div>
                 </div>
 

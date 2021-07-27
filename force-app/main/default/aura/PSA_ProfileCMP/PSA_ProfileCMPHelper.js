@@ -55,7 +55,9 @@
                             hoursworkedperweek: userdetail.AS_Hours_Worked_Per_Week__c,
                             yrofgraduation: userdetail.AS_Graduation_Year__c,
                             studentnumber: userdetail.AS_Student_Number__c,
-                            signedUp: accdetail.Signed_Up__c,
+                            //signedUp: accdetail.Signed_Up__c, 
+                            //If user id exists means the user is already signed in into the application. So setting the value to false
+                            signedUp: false,
                             parentalLeave: userdetail.parental_leave_date__c ? true : false,
                             returnToWorkDate: userdetail.parental_leave_date__c,
                             monthofGraduation: accdetail.Graduation_Month__c,
