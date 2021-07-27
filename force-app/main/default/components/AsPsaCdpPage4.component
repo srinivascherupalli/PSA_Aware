@@ -1,0 +1,79 @@
+<!-- 
+    *Author : Jet R. Compayan
+    *Description : This Component will Display all Selected Domains and Topics of Cpd Planning Tool  
+    *Date Created : Apr 26,2018
+    *Last Modified By : 
+    *Date Last Modified : 
+    *Related Meta Data : User
+-->
+
+<!-- AsPsaCdpPage4 -->
+<apex:component controller="AsCPDPlanner">
+<div id="cdp_component4" class="cdp-wrapper-container-box slds-box cdp-component">
+	<div class="cpd-float-box">
+		<p  class="p" style="text-align: justify;" >
+			The summary below identifies the competencies you have selected as relevant to your scope of practice, and the topics that you have identified as your opportunities for professional development.
+		</p>
+		<p  class="p" style="text-align: justify;">
+			Review these details for accuracy before you progress. If any changes are required, click the previous button to go back through the steps to make the necessary adjustments.
+		</p>
+		<div class="slds-grid">
+			<div class="slds-col slds-size_12-of-12 ">	
+				<div class="cdp-domain-box">
+					<div class="cdp-domain-list" id="cpd-display-domains_prview">
+					</div>
+				</div>
+				<div class="cdp-domain-box">
+					<div class="cpd-topic-group">
+						<div class="cdp-domain-title cpd-topic-titles" style="background:#616161 ">
+						TOPICS: My professional development opportunities</div>
+						<div class="cdp-domain-list-container cpd-review-topics">  </div>
+					</div>
+				</div> 
+			</div>
+		</div>
+		<div class="cdp-btn-group-procced">
+			<div class="slds-grid">
+				<div class="slds-col">
+					<p class="desc">When you are done, click the Next button to continue.</p>	
+				</div>
+				<div class="slds-col slds-text-align_right">
+					<div class="slds-form-element">
+						<div class="slds-form-element__icon slds-align-middle">
+							<div class="cpd-for-review" style="margin-bottom: 30px;">
+								<button class="slds-button slds-button_icon slds-button slds-button_icon cdp-btn-helper-bottom" aria-describedby="help" title="Help">
+									<svg class="slds-button__icon" aria-hidden="true">
+										<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use>
+									</svg>
+									<span class="slds-assistive-text">Help</span>
+									<div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help">
+										<div class="slds-popover__body">Sit nulla est ex deserunt exercitation anim occaecat. Nostrud ullamco deserunt aute id consequat veniam incididunt duis in sint irure nisi.</div>
+									</div>
+								</button>
+								<button class="slds-button slds-button_brand cpd-btn-back-to-menu">Back</button>
+                                <button class="slds-button slds-button_brand cpd-plan-next-page5">Next</button>
+							</div>
+							<div class="cpd-for-default">
+								<a href="https://my.psa.org.au/s/article/CPD-UserGuide" target="_blank"><button class="slds-button slds-button_icon slds-button slds-button_icon cdp-btn-helper-bottom" aria-describedby="help" title="Help">
+									<svg class="slds-button__icon" aria-hidden="true">
+										<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use>
+									</svg>
+									<span class="slds-assistive-text">Help</span>
+<!-- 									<div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help">
+										<div class="slds-popover__body">Need help? Access the full National Competency Standards Framework and view user guides and tutorial videos to assist you.</div>
+									</div> -->
+								</button>
+								</a>
+								<button class="slds-button slds-button_brand cpd-btn-back-to-page3">Previous</button>
+								<button class="slds-button slds-button_brand cpd-btn-back-to-page5">Next</button>	
+							</div>
+						</div>
+					</div> 
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- 	<div class="cdp-box-container">
+	</div> -->
+</div>
+</apex:component>

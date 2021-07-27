@@ -1,0 +1,102 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="PSA_RenewalScreenContoller">  
+
+    <aura:attribute name="menuItems" type="List" /> 
+    <aura:attribute name="screenName" type="String" default="screen1" />
+    <aura:attribute name="quoteId" type="String" />
+    <aura:attribute name="invoiceRecord" type="Object"/>
+    <aura:attribute name="billingInfo" type="Object"/>
+    <aura:attribute name="isLoading" type="Boolean" />
+
+    <aura:attribute name="invoiceStatus" type="String" default="Draft"/>
+
+    <aura:attribute name="frequency" type="String" default="monthly" />
+    <aura:attribute name="selectedRole" type="String" />
+    <aura:attribute name="startDate" type="String" />
+    <aura:attribute name="selectedList" type="List"/>
+    <aura:attribute name="profileDetail" type="Map"/>
+    <aura:attribute name="accountId" type="String"/>
+    <aura:attribute name="selectedPackage" type="Object"/>
+
+    
+    <!--init handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!-- Resources CMP-->
+    <c:PSA_PaymentScreenResourceCMP />
+    <!-- Logo Section Starts -->
+    <c:PSA_SiteHeaderCMP />
+    <!-- Logo Section Ends -->
+    
+    <!-- Banner and Desktop Menu Section Starts -->
+    <c:PSA_NavigationHeaderCMP menuItems="{!v.menuItems}" screenName="{!v.screenName}" aura:id="headerNav"/>
+    <!-- Banner and Desktop Menu Section Ends -->
+    
+    <!-- Payment Method Section Starts -->
+    <div class="container-fluid bg-psa">
+        <aura:if isTrue="{!v.isLoading == true}">
+            <div class="base-spinner">
+                <lightning:spinner variant="brand" alternativeText="Loading" size="large" />
+            </div>
+        </aura:if>
+        <div class="psa-top-center-circle-heading">
+          	<div class="circle-icon-heading"><i class="fas fa-folder-open"></i></div>
+        </div>
+        <div class="row">
+            <div class="container bg-container-psa">
+                <div class="row">
+                    <div class="col-xs-12">
+                            <aura:if isTrue="{!v.screenName == 'screen1'}">
+                                <c:PSA_Renewal_MembershipCMP 
+                                    quoteId="{!v.quoteId}" 
+                                    screenName="{!v.screenName}" 
+                                    invoiceRecord="{!v.invoiceRecord}" 
+                                    invoiceStatus="{!v.invoiceStatus}"
+                                    profileDetail="{!v.profileDetail}" 
+                                    selectedPackage="{!v.selectedPackage}" 
+                                    isLoading="{!v.isLoading}"
+                                    />
+                            </aura:if>
+                            <aura:if isTrue="{!v.screenName == 'screen1b'}">
+
+                                <c:PSA_Renewal_InsuranceScreenCMP 
+                                isLoading="{!v.isLoading}" 
+                                selectedRole="{#v.profileDetail.role}" 
+                                startDate="{#v.startDate}"
+                                frequency="{#v.frequency}" 
+                                selectedPackage="{#v.selectedPackage}" 
+                                profileDetail="{!v.profileDetail}" 
+                                selectedList="{#v.selectedList}" 
+                                accountId="{#v.accountId}" 
+                                quoteId="{!v.quoteId}"/>
+
+<!--                                 <c:PSA_InsuranceScreenCMP 
+                                    quoteId="{!v.quoteId}" 
+                                    screenName="{!v.screenName}" 
+                                    invoiceRecord="{!v.invoiceRecord}"
+                                    isLoading="{!v.isLoading}"
+                                    /> -->
+                            </aura:if>
+                            <aura:if isTrue="{!v.screenName == 'screen2'}">
+                                <c:PSA_Renewal_PaymentScreenCMP 
+                                    quoteId="{!v.quoteId}" 
+                                    screenName="{!v.screenName}" 
+                                    invoiceRecord="{!v.invoiceRecord}" 
+                                    billingInfo="{!v.billingInfo}"
+                                    isLoading="{!v.isLoading}"
+                                    />
+                            </aura:if>
+                            <aura:if isTrue="{!v.screenName == 'screen3'}">
+                            <c:PSA_Renewal_ReviewScreenCMP 
+                                quoteId="{!v.quoteId}" 
+                                screenName="{!v.screenName}" 
+                                invoiceRecord="{!v.invoiceRecord}"
+                                billingInfo="{!v.billingInfo}"
+                                isLoading="{!v.isLoading}"
+                                />
+                        </aura:if>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

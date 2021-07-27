@@ -1,0 +1,25 @@
+<aura:component>
+  <aura:attribute name="title" type="string" default="" />
+  <aura:attribute name="iconList" type="List" default="[]" />
+
+  <div class="mb-1 icon-grid">
+    <div class="row">
+      <div class="col-12 text-center"
+        ><h2 class="text-blue3">{!v.title}</h2></div
+      >
+    </div>
+    <div class="row align-items-top mt-1">
+      <aura:iteration items="{!v.iconList}" var="item">
+        <div class="col-12 col-sm text-center">
+          <lightning:icon
+            iconName="{!item.icon}"
+            size="large"
+            alternativeText="{!item.title}"
+            title="{!item.title}"
+          />
+          <h3 class="h5 text-coolGrey">{!item.title}</h3>
+        </div>
+      </aura:iteration>
+    </div>
+  </div>
+</aura:component>

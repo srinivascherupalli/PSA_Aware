@@ -1,0 +1,162 @@
+<aura:component controller="DL_Events" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:attribute name="events" type="List" />
+    <aura:attribute name="eventSessions" type="List" />
+    <aura:attribute name="sessionsDetails" type="List" />
+    <aura:attribute name="eventMembers" type="List" />
+    <aura:attribute name="member" type="Map" />
+    <aura:attribute name="event" type="Map" />
+    <aura:attribute name="session" type="Map" />
+    <aura:attribute name="sessionId" type="String" />
+    <aura:attribute name="sessionName" type="String" default=""/>
+    <aura:attribute name="scanInBool" type="Boolean" default="true"/>
+    <aura:attribute name="showClosed" type="Boolean" default="false"/>
+    <aura:attribute name="playInSound" type="Boolean" default="false"/>
+    <aura:attribute name="playOutSound" type="Boolean" default="false"/>
+    <aura:attribute name="scanInCount" type="Integer" default="0"/>
+    <aura:attribute name="scanOutCount" type="Integer" default="0"/>
+    <aura:attribute name="scanInputValue" type="String" />
+    <aura:attribute name="timeLastScanned" type="String" />
+    <aura:attribute name="idInputValue" type="String" />
+    <aura:attribute name="rfidInputValue" type="String" />
+    <aura:attribute name="imageURL" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:handler name="change" value="{!v.event}" action="{!c.eventChange}" />
+    <aura:handler name="change" value="{!v.sessionId}" action="{!c.sessionChange}" />
+
+
+    <div style="height:100%;" aura:id="Main" id="Main">
+        
+        <div id="settingsButtonDiv">
+            <lightning:buttonIcon class="button" aura:id="eventsTableButton" iconName="utility:event" size="large" variant="bare" onclick="{!c.toggleEventsTable}" alternativeText="Open Events" disabled="true"/>
+            <lightning:buttonIcon class="button" aura:id="settingsButton" iconName="utility:settings" size="large" variant="bare" onclick="{!c.toggleSettings}" alternativeText="Open Settings" />
+        </div>
+
+
+        <div aura:id="PSA_logo" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small">
+            <div id="PSA_logoDiv" class="slds-col slds-align_absolute-center" >
+                <img id="PSA_logo_Img" src="{!$Resource.PSA_logo2}" /> 
+            </div>
+        </div>
+        
+
+        <div aura:id="campaignImage" id="campaignImage" class="slds-hide slds-align_absolute-center" style="top:0px;" onclick="{!c.inputFocus}">
+            <img src="{!v.imageURL}" />
+        </div>
+
+
+        <div id="eventsDiv" aura:id="eventsDiv" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small">
+            <lightning:select name="Events" label="Select an Event:" aura:id="events" value="{!v.event}">
+                <aura:iteration items="{!v.events}" var="eventItem">
+                    <option text="{!eventItem.Name}" value="{!eventItem.Id}" /> 
+                </aura:iteration>
+            </lightning:select>
+        </div>
+    
+
+        <div aura:id="sessionsDiv" class="slds-grid slds-wrap slds-gutters slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small slds-hide">
+            <div id="sessionSelect" class="slds-col slds-size_1-of-1 slds-align_absolute-center" style="width:50%;">
+                <lightning:select name="EventSessions" aura:id="eventSessions" value="{!v.sessionId}">
+                    <aura:iteration items="{!v.eventSessions}" var="eventSession">
+                        <option text="{!eventSession.Name}" value="{!eventSession.Id}" selected="{!eventSession.selected}" />
+                    </aura:iteration>
+                </lightning:select>   
+            </div>
+
+            <div aura:id="sessionNameDiv" id="sessionNameDiv" class="slds-col slds-size_1-of-1 slds-align_absolute-center" style="padding-top: 3%" onclick="{!c.inputFocus}"> 
+        
+            </div>
+        </div>
+    
+
+        <div aura:id="Members" id="Members" class="slds-grid slds-wrap slds-gutters slds-align_absolute-center" onclick="{!c.inputFocus}">
+            <div id="in_out_Controls" aura:id="in_out_Controls" class="slds-col slds-size_1-of-1 slds-align_absolute-center">
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div id="inCount" class="slds-col slds-size_1-of-12 slds-align_absolute-center"> {!v.scanInCount} </div>
+                    <div id="switchDiv" aura:id="switchDiv" class="slds-col slds-size_1-of-1 slds-align_absolute-center" >
+                        <div aura:id="inSwitch" id="inSwitch" class="activeSwitch inSwitch slds-align_absolute-center" onclick="{!c.buttonClick}">In</div>
+                        <div aura:id="outSwitch" id="outSwitch" class="outSwitch slds-align_absolute-center" onclick="{!c.buttonClick}">Out</div>
+                    </div>
+                    <div id="outCount" class="slds-col slds-size_1-of-12 slds-align_absolute-center"> {!v.scanOutCount} </div>
+                </div>
+            </div>
+
+            <div class="slds-tabs_scoped slds-tabs_large slds-grid slds-wrap slds-gutters" id="inputsDiv">
+                <ul class="slds-tabs_scoped__nav" role="tablist">
+                    <li aura:id="scanTab" class="slds-tabs_scoped__item slds-is-active" title="Member Scan" role="presentation"><a class="slds-tabs_scoped__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-scoped-1" id="tab-scoped-1__item" onclick="{!c.tabClick}" ><lightning:icon iconName="utility:change_owner" variant="Member Scan"/></a></li>
+                    <li aura:id="registerTab" class="slds-tabs_scoped__item" title="Member Register" role="presentation"><a class="slds-tabs_scoped__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-scoped-2" id="tab-scoped-2__item" onclick="{!c.tabClick}" ><lightning:icon iconName="utility:identity" variant="Member Register"/></a></li> 
+                </ul>
+
+                <div aura:id="tab-scoped-1" id="tab-scoped-1" class="slds-col slds-size_1-of-1 slds-align_absolute-center slds-tabs_scoped__content slds-show" role="tabpanel" aria-labelledby="tab-scoped-1__item" onclick="{!c.inputFocus}">
+                    <span class="slds-grid slds-grid_vertical-align-center slds-grid_align-center row" style="width:100%;" onkeypress="{!c.scanInput_Submit}">
+                        <lightning:input class="inputTextAlign_Center" aura:id="scanInput" id="scanInput" style="width: 30%;" name="scanInput" value="{!v.scanInputValue}" type="tel" />
+                    </span>
+
+                    <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-center" id="memberWelcome">
+
+                        <!--Spinner
+                        <div aura:id="spinner" id="spinner" class="slds-spinner_container slds-is-fixed slds-hide">
+                            <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                                <span class="slds-assistive-text">Loading</span>
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>-->
+
+                    </div>
+                </div>
+
+                <div aura:id="tab-scoped-2" id="tab-scoped-2" class="slds-col slds-size_1-of-1 slds-align_absolute-center slds-tabs_scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-scoped-2__item">
+                    <div id="memberDetails" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center">
+                    </div>
+                    <div id="memberRFID" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center"> 
+                    </div>
+                    <span class="slds-grid slds-grid_vertical-align-center slds-grid_align-center row" style="width:100%;" onkeypress="{!c.processInput}">
+                        <lightning:input class="inputTextAlign_Center" placeholder="PSA ID:" aura:id="psaIDInput" id="psaIDInput" style="width: 30%; padding: none;" name="psaIdInput" value="{!v.idInputValue}" type="tel" />
+                    </span>
+                    <span class="slds-grid slds-grid_vertical-align-center slds-grid_align-center row" style="width:100%;" onkeypress="{!c.processInput}">
+                        <lightning:input class="inputTextAlign_Center" placeholder="RFID:" aura:id="rfidInput" id="rfidInput" style="width: 30%; padding: none;" name="rfidInput" value="{!v.rfidInputValue}" type="tel" />
+                    </span>
+                    <div id="successMessage" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center" style="padding: 5%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-hide" aura:id="eventsTable" id="eventsTable" >
+            <div style="position:absolute; top: 2%; right: 2%; z-index: 6; padding: 0;" >
+                <lightning:buttonIcon iconName="utility:close" size="large" variant="bare" onclick="{!c.toggleEventsTable }" alternativeText="Close Events" />
+            </div>
+            <div id="eventsTable_Div" class="slds-grid slds-wrap slds-gutters slds-grid_vertical-align-center slds-grid_align-center">
+
+            </div>
+        </div>
+
+        <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-hide" aura:id="settings" id="settings" >
+            <div style="position:absolute; top: 2%; right: 2%; z-index: 6; padding: 0;" >
+                <lightning:buttonIcon iconName="utility:close" size="large" variant="bare" onclick="{!c.toggleSettings }" alternativeText="Close Settings" />
+            </div>
+            <div class="slds-grid slds-wrap slds-gutters slds-grid_vertical-align-center slds-grid_align-center">
+                <div class="slds-col slds-size_1-of-1 slds-align_absolute-center slds-p-around_small slds-size_large">
+                    <lightning:input type="checkbox" label="Show Closed Sessions" name="closedSessions_Checkbox" checked="{!v.showClosed}" onchange="{!c.showClosed_Change}"/>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-align_absolute-center slds-p-around_small">
+                    <lightning:button label="Close Event" iconName="utility:close" iconPosition="left" onclick="{!c.init}"/>
+                </div>
+                <div id="screenInfo" class="slds-col slds-size_1-of-1 slds-p-around_small slds-align_absolute-center">
+                </div>
+            </div>
+        </div>
+
+        <aura:if isTrue="{!v.playInSound}" >
+            <audio autoplay="true">
+                <source src='{!$Resource.DL_ScanInBeep}' type='audio/mpeg'/>
+            </audio>
+        </aura:if>
+
+        <aura:if isTrue="{!v.playOutSound}" >
+            <audio autoplay="true">
+                <source src='{!$Resource.DL_ScanOutBeep}' type='audio/mpeg'/>
+            </audio>
+        </aura:if>
+    </div>
+</aura:component>

@@ -1,0 +1,17 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+	<div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="course-body__didyouknow text-left">
+                    <div class="uiOutputRichText">
+                        <h3>Did you know...</h3>
+                        <p>As a PSA member:</p><ul>
+                        <li>It’s quick and easy to add any PSA education activities to your CPD plan for access later </li>
+                        <li>You can choose to exclude completed activities from your plan at any stage</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

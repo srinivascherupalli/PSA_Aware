@@ -1,0 +1,58 @@
+<apex:page controller="AS_PSA_CustomLogoutController" showHeader="false" sidebar="false">
+    
+    <style>
+        form {
+            background-size: cover;
+            background: url() 50% 50%/cover no-repeat fixed rgb(177, 186, 193);
+            min-height: 100%;
+            width: 100%;
+            position: absolute;
+            font-family: Arial;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+        center {
+            text-align: left;
+            width: 320px;
+            background: #ffff;
+            margin: 0 auto;
+            padding: 20px;
+            font-size: 13px;
+            border-radius: 3px; 
+            box-shadow: 0px 0px 5px #ddd;
+            color: #3B4961;
+            font-family: monospace;
+        }
+    </style>
+    
+    <apex:form >
+        
+        <center>You are logged out of this app and a logout request was sent to other apps.</center>
+        
+        <apex:actionFunction action="{!pushValue}" name="pushEmailJs" reRender="content">
+            <apex:param name="myParam" value=""/>
+        </apex:actionFunction>            
+        
+        <script>
+            setTimeout( function() {
+                console.log( localStorage.getItem("communityLogoutEmail") );
+                pushEmailJs( localStorage.getItem("communityLogoutEmail") );  
+                window.location.replace("{!$Site.BaseUrl}");
+
+              // console.log( "{!$Site.BaseUrl}" )
+
+              //  console.log( window.location.href  )
+                
+            }, 1000);
+        </script>
+
+            
+    </apex:form> 
+    
+    
+</apex:page>

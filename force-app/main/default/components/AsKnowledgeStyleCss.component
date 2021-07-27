@@ -1,0 +1,264 @@
+<!-- AsKnowledgeStyleCss -->
+<apex:component ><style type="text/css">
+	html {
+	    background: #ffffff;
+	}
+	.psa-knowledge-wrap {
+		margin: 1% auto;
+		width: 95%;
+		margin-top: 35px;
+	}
+	.psa-knowledge-wrap .psa-kwowledge-box--category .knowled-categories-tiles {
+	    border: 1px solid #d6d6d6;
+	    min-height: 145px;
+	    padding: 5px;
+	    margin: 2%;
+	    padding-top: 26%;
+	    text-align: center;
+	    background: #d6d6d6;
+	    color: #fff;
+	    font-weight: 600;
+	    cursor: pointer;
+	}
+	.psa-knowledge-wrap .psa-kwowledge-box--category .knowled-categories-tiles span{font-style: italic;}
+	.psa-knowledge-wrap .psa-kwowledge-box--category .commings--soon {
+	    border: 1px solid #888383;
+	    background: #888383;
+	    cursor: no-drop;
+	}
+	#knowledge-categories-group .knowledge-categories-title{
+    	font-weight: 600!important;
+	}
+	.psa-knowledge-wrap .psa-knowledeeg-btn--dropdown{
+		width: 200px;
+		text-align: left;
+		padding-left: 8px;
+	    border-radius: 0px;
+	    border: #fff;
+	}
+	.psa-knowledge-wrap .psa-knowledeeg-btn--dropdown svg{
+		float: right;
+		margin-right: 6px;
+	} 
+	.psa-knowledge-wrap .slds-dropdown_left {
+		width: 100%;
+	}
+	.psa-knowledge-wrap .psa-knowledge-title{
+		text-decoration: underline;
+		cursor: pointer;
+	}
+	.psa-knowledge-wrap .psa-knowledeg-box--follow{
+		height: 4rem;
+		border: 1px solid;
+		margin-bottom: 30px;
+		background: #dce5ee;
+	}
+	.categoryItem {
+		color: #4d85cb;
+		cursor: pointer;
+	}	
+
+	#article-content h1 {
+	    font-size: 2em;
+	    margin: 0.67em 0;
+	}
+	#article-content h2 {
+	    font-size: 1.5em;
+	    margin: 0.83em 0;
+	}
+	#article-content h3 {
+	    font-size: 1.17em;
+	    margin: 1em 0;
+	}
+	#article-content h4 {
+	    font-size: 1em;
+	    margin: 1.33em 0;
+	}
+	#article-content h5 {
+	    font-size: 0.83em;
+	    margin: 1.67em 0;
+	}
+	#article-content h6 {
+	    font-size: 0.75em;
+	    margin: 2.33em 0;
+	}
+	.knwledeg-multi-picklist {
+	    border: none;
+	    padding: 7px;
+	    background: #003d79;
+    	color: #fff;
+	}
+	.knwledeg-picklist-contianer {
+	    height: 238px;
+	    overflow-y: scroll;
+	    margin-top: 6px;
+	}
+	ul.knwledeg-set li {padding: 3px;}
+	ul.knwledeg-set li:hover { cursor: pointer;}
+	.knwledge-active {
+	    background: #0083ca;
+	    color: #fff;
+	}
+	.knwledeg-multi-picklist label{
+	    font-size: 15px;
+	    font-weight: 800;
+	}
+	.knwledge-action-group {
+		margin-top: 15px;
+    	text-align: right;
+	}
+	.article-summary {
+		font-size: 13px;
+    	margin-top: 1%;
+	}
+	.article-topic-date {
+		font-weight: 600;
+    	font-size: 12px;
+	}
+
+
+	#article-exerpts span,
+	#article-exerpts object,
+	#article-exerpts iframe,
+	#article-exerpts h1,
+	#article-exerpts h2,
+	#article-exerpts h3,
+	#article-exerpts h4,
+	#article-exerpts h5,
+	#article-exerpts h6,
+	#article-exerpts p,
+	#article-exerpts blockquote,
+	#article-exerpts pre,
+	#article-exerpts abbr,
+	#article-exerpts address,
+	#article-exerpts cite,
+	#article-exerpts code, 
+	#article-exerpts del,
+	#article-exerpts dfn,
+	#article-exerpts em,
+	#article-exerpts img,
+	#article-exerpts ins,
+	#article-exerpts kbd,
+	#article-exerpts q,
+	#article-exerpts samp,
+	#article-exerpts small,
+	#article-exerpts strong,
+	#article-exerpts sub,
+	#article-exerpts sup,
+	#article-exerpts var,
+	#article-exerpts b,
+	#article-exerpts i,
+	#article-exerpts dl,
+	#article-exerpts dt,
+	#article-exerpts dd,
+	#article-exerpts ol,
+	#article-exerpts ul,
+	#article-exerpts li,
+	#article-exerpts fieldset,
+	#article-exerpts form,
+	#article-exerpts label,
+	#article-exerpts legend,
+	#article-exerpts table,
+	#article-exerpts caption,
+	#article-exerpts tbody,
+	#article-exerpts tfoot,
+	#article-exerpts thead,
+	#article-exerpts tr,
+	#article-exerpts th,
+	#article-exerpts td,
+	#article-exerpts article,
+	#article-exerpts aside,
+	#article-exerpts figure,
+	#article-exerpts footer,
+	#article-exerpts header,
+	#article-exerpts hgroup,
+	#article-exerpts menu,
+	#article-exerpts nav,
+	#article-exerpts section,
+	#article-exerpts time,
+	#article-exerpts mark,
+	#article-exerpts audio,
+	#article-exerpts video,
+	#article-exerpts details,
+	#article-exerpts summary {
+	border: 0;
+	vertical-align: baseline;
+	background: transparent;
+	}  
+
+	#article-exerpts h1,
+	#article-exerpts h2,
+	#article-exerpts h3,
+	#article-exerpts h4,
+	#article-exerpts h5,
+	#article-exerpts h6 {
+		font-weight: 600 !important;
+    	font-size: initial !important;
+	}
+
+	#article-exerpts h1,
+	#article-exerpts h2,
+	#article-exerpts h3,
+	#article-exerpts h4,
+	#article-exerpts h5,
+	#article-exerpts h6,
+	#article-exerpts p { 
+		padding-top: 3px;
+    	padding-bottom: 11px; 
+	}
+
+/*	#article-exerpts dl, #article-exerpts fieldset, #article-exerpts h1, #article-exerpts h2, #article-exerpts h3, #article-exerpts h4, #article-exerpts h5, #article-exerpts h6, #article-exerpts ol, #article-exerpts p, #article-exerpts ul {
+        margin: 1px!important;      
+    }*/
+
+    #article-exerpts ul ,  #article-exerpts ol {
+        margin: 10px 0 10px 40px!important;
+    }
+
+    #article-exerpts ul { 
+       list-style-type: disc !important; 
+       list-style-position: inside !important;
+    }
+    #article-exerpts ol { 
+       list-style-type: decimal !important;
+       list-style-position: inside !important;
+    }
+    #article-exerpts  ul ul, #article-exerpts ol ul { 
+       list-style-type: circle !important; 
+       list-style-position: inside !important; 
+       margin-left: 15px !important;
+    }
+     #article-exerpts ol ol, #article-exerpts ul ol { 
+       list-style-type: lower-latin !important;
+       list-style-position: inside !important; 
+       margin-left: 15px !important;   
+    }
+	 
+	.knowldege-article-formats {
+		margin-bottom: 4%;
+	}
+
+	#if-not-login {
+		text-align: center;
+	}
+
+/*	#article-content h1, #article-content h2, #article-content h3, #article-content h4, #article-content h5, #article-content h6, #article-content p, #article-content blockquote, #article-content pre,
+	#article-content abbr, #article-content address, #article-content cite, #article-content code,
+	#article-content del, #article-content dfn, #article-content em, #article-content img, #article-content ins, #article-content kbd, #article-content q, #article-content samp,
+	#article-content small, #article-content strong, #article-content sub, #article-content sup, #article-content var,
+	#article-content b, #article-content i,
+	#article-content dl, #article-content dt, #article-content dd, #article-content ol, #article-content ul, #article-content li,
+	#article-content fieldset, #article-content form, #article-content label, #article-content legend,
+	#article-content table, #article-content caption, #article-content tbody, #article-content tfoot,  #article-content thead, #article-content tr, #article-content th, #article-content td,
+	#article-content article, #article-content aside, #article-content canvas, #article-content details, #article-content figcaption, #article-content figure, 
+	#article-content footer, #article-content header, #article-content hgroup, #article-content menu, #article-content nav, #article-content section, #article-content summary,
+	#article-content time, #article-content mark, #article-content audio, #article-content video {
+	 margin:0;
+	 padding:0;
+	 border:0;
+	 outline:0;
+	 vertical-align:baseline;
+	 background:transparent;
+	}*/
+
+</style></apex:component>

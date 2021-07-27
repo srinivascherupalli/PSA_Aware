@@ -1,0 +1,195 @@
+<apex:page >
+<!-- Author : Jet Compayan
+Description:  This page is not used 
+last Date modified : Feb 28 2018
+ -->
+
+
+<!--   <meta name="viewport" content="width=device-width, initial-scale=1.0"> </meta>
+    <body> 
+
+        <div class="styleclasscontainer">
+                <c:PSA_Style1 />
+        </div>
+        
+    
+     
+         <div id="psa" >
+            <div class="psa-header">
+                <div class="psa-logo">
+                    <img src="{!$Resource.psaLogo}" />
+                </div>
+                <div class="psa-title">
+                    <h1>PSA MEMBERSHIP SIGN UP FORM</h1>
+                    <p>Than you for your interest in becoming a member of <br/> the Pharmaceutical Society Of Australia.</p>
+                </div>
+            </div>
+            
+            <div  class="psa-content">
+                <div class="psa-col psa-col-1">
+                    <h1 class="psa-side-title" >I Want to Become A <b>PSA</b> Member! </h1>
+                </div>
+                <div class="psa-col psa-col-2">
+                    <div class="psa-logo-only">
+                        
+                  </div>
+                  <apex:form style="display:none" styleClass="psa-attachment">
+                <apex:pageMessages />
+                <apex:pageBlock title="Upload a Attachment">
+                    <apex:pageBlockButtons >
+                        <apex:commandButton action="{!upload}" styleClass="btn-psa-upload" value="upload"  />
+                    </apex:pageBlockButtons>
+                    <apex:pageBlockSection showHeader="false" columns="2" id="block1">
+                        <apex:pageBlockSectionItem > 
+                            <apex:inputFile styleClass="psa-fileupload" value="{!theFileHander}" filename="{!theFileName}" id="file"/>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>  
+                </apex:pageBlock> 
+            </apex:form> 
+                    <div class="psa-subcontent"></div>
+                    <flow:interview name="PSA_Membership_Sign_Up" interview="{!myFlow}" finishLocation="{!OID}" />                    
+                    <div class="psa-image-footer"></div>
+                </div>
+            </div> 
+        </div>
+    </body> -->
+<!--   <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js" /> -->
+    <script> 
+      //   $(document).ready(function(){
+          
+      //     $('[id$="bottom:next"]').val('Next        >');
+      //     $('[id$="bottom:back"]').val('BACK TO PREVIOUS STEP');
+      //     $('tr td.requiredInput:nth-child(1) ').append('<span class="span_req">•</span>');   
+      //     $('.psa-attachment').hide();
+      //       $('input[type="file"]').change(function(){
+                
+      //           $('.btn-psa-upload').trigger('click');
+                
+      //       });
+              
+      // /* 1. */
+      //       if( $('[id$=BecomeMember]').length == 1 ){
+            
+      //         $('.psa-page-8 style').html('');
+      //           $('.psa-page-2 style').html(''); 
+      //           $('.psa-page-3 style').html('');
+      //           $('.psa-page-4 style').html(''); 
+      //           $('.psa-page-5 style').html(''); 
+      //           $('.psa-page-6 style').html('');
+      //           $('.psa-page-7 style').html('');
+      //   $('.psa-page-9 style').html('');
+        
+ 
+               
+      //       }
+      //       /* 2. */
+      //       if( $('[id$=PersonalDetails]').length == 1 ){
+      //         $('.psa-page-8 style').html('');
+      //           $('.psa-page-1 style').html(''); 
+      //           $('.psa-page-3 style').html('');
+      //           $('.psa-page-4 style').html('');  
+      //           $('.psa-page-5 style').html('');
+      //           $('.psa-page-6 style').html('');
+      //           $('.psa-page-7 style').html('');
+      //           $('.psa-page-9 style').html('');
+      //   $(' [id*=Primary_Address] div:not(.requiredBlock) label').append('<span class="checkmark"></span>');
+      //       }
+      //       /* 3. */
+      //       if( $('[id$=MembershipPricelist]').length == 1  ){
+      //         $('.psa-page-8 style').html('');
+      //         $('.psa-page-2 style').html(''); 
+      //         $('.psa-page-1 style').html(''); 
+      //         $('.psa-page-4 style').html('');
+      //         $('.psa-page-5 style').html('');
+      //         $('.psa-page-6 style').html('');
+      //         $('.psa-page-7 style').html('');
+      //         $('.psa-page-9 style').html('');
+ 
+      //       }
+      //       /* 4. */
+      //       if( $('[id$=PharmacistDetails]').length == 1  ){
+      //         $('.psa-page-8 style').html('');
+      //         $('.psa-page-2 style').html(''); 
+      //         $('.psa-page-1 style').html('');  
+      //         $('.psa-page-3 style').html('');
+      //         $('.psa-page-5 style').html('');
+      //         $('.psa-page-6 style').html('');
+      //         $('.psa-page-7 style').html('');
+      //         $('.psa-page-9 style').html('');
+      //       }
+      //       /* 5. */
+      //       if( $('[id$="Year_of_Expected_Graduation.prompt"]').length == 1  ){
+      //         $('.psa-page-8 style').html('');
+      //         $('.psa-page-1 style').html(''); 
+      //         $('.psa-page-2 style').html(''); 
+      //           $('.psa-page-3 style').html('');
+      //           $('.psa-page-4 style').html('');
+      //           $('.psa-page-6 style').html('');
+      //           $('.psa-page-7 style').html('');
+      //           $('.psa-page-9 style').html('');
+
+      //       }
+      //       /* 6. */
+      //       if( $('[id$="PriceList_Affiliate"]').length  == 1  ){
+      //         $('.psa-page-8 style').html('');
+      //         $('.psa-page-1 style').html(''); 
+      //         $('.psa-page-2 style').html(''); 
+      //           $('.psa-page-3 style').html('');
+      //           $('.psa-page-4 style').html('');
+      //           $('.psa-page-5 style').html('');
+      //           $('.psa-page-7 style').html('');
+      //           $('.psa-page-9 style').html('');
+
+      //       }
+      //       /* 7. */
+      //       if( $('[id$="PriceList_Associate"]').length  == 1  ){
+      //           $('.psa-page-8 style').html('');
+      //         $('.psa-page-1 style').html(''); 
+      //         $('.psa-page-2 style').html(''); 
+      //           $('.psa-page-3 style').html('');
+      //           $('.psa-page-4 style').html('');
+      //           $('.psa-page-5 style').html('');
+      //           $('.psa-page-6 style').html('');
+      //           $('.psa-page-9 style').html('');
+                
+      //       }
+      //       /* 8. */
+      //       if( $('[id$="ProceedtoPaymentText"]').length == 1 ){
+      //           $('.psa-page-1 style').html(''); 
+      //         $('.psa-page-2 style').html(''); 
+      //           $('.psa-page-3 style').html('');
+      //           $('.psa-page-4 style').html('');
+      //           $('.psa-page-5 style').html('');
+      //           $('.psa-page-6 style').html('');
+      //           $('.psa-page-7 style').html('');
+      //           $('.psa-page-9 style').html('');
+      //           $('body').addClass('psa-thankyou-page');
+      //           $('[id$="ProceedtoPaymentText"] div').attr('align','CENTER');
+      //       }
+      //      / * 9. */
+      //      if( $('[id$="Registration_Complete_Text"]').length == 1 ){
+           
+      //         $('.psa-page-1 style').html(''); 
+      //         $('.psa-page-2 style').html(''); 
+      //           $('.psa-page-3 style').html('');
+      //           $('.psa-page-4 style').html('');
+      //           $('.psa-page-5 style').html(''); 
+      //           $('.psa-page-6 style').html('');
+      //           $('.psa-page-7 style').html('');
+      //           $('.psa-page-8 style').html(''); 
+      //           $('body').addClass('psa-thankyou-page');
+      //         $('[id$="Registration_Complete_Text"] div').attr('align','CENTER');
+      //         $('.psa-attachment').show();
+            
+      //      }
+           
+ 
+      //   });  
+          
+        
+        
+    </script> 
+        
+
+ 
+</apex:page>

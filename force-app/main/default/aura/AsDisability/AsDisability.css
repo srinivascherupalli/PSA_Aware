@@ -1,0 +1,60 @@
+.THIS.slds-container {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 19px;
+    opacity: 1;
+    padding: 30px;
+    border-radius: 7px;
+    margin-top: 20px;
+    display: inline-block;
+    width: 100%;
+}
+
+.THIS .slds-popover__body {
+    max-height: 200px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.THIS .slds-form-control .slds-form-element__icon {
+    position: absolute !important;
+    padding: 0 !important;
+    top: 8px !important;
+    right: 0 !important;
+}
+
+.THIS .slds-form-control .slds-popover_tooltip {
+    position: absolute;
+    width: 300px;
+    top: -208px;
+    left: -18px;
+    display: none;
+}
+
+.THIS .slds-form-control .slds-form-element__icon:hover .slds-popover_tooltip {
+    display: block;
+}
+
+.THIS .slds-custom-radio .slds-form-element {
+    display: inline-block;
+}
+
+.THIS .slds-custom-radio fieldset legend {
+    display: none;
+}
+
+.THIS .slds-custom-radio .slds-radio_faux {
+    margin: 0 !important;
+}
+
+.THIS .slds-custom-radio .slds-form-element__icon {
+    position: static !important;
+    margin-left: 5px;
+}
+
+.THIS .slds-disablility-label {
+    padding-right: 20px;
+}
+
+/* .THIS .slds-custom-radio .slds-form-element__control > span.slds-radio:nth-child(2) {
+    display: none;
+} */

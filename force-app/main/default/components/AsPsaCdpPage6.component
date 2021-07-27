@@ -1,0 +1,75 @@
+<!-- 
+    *Author : Jet R. Compayan
+    *Description : This component display all the traning modules 
+    *Date Created : Apr 26,2018
+    *Last Modified By : 
+    *Date Last Modified : 
+    *Related Meta Data : User
+-->
+
+<!--  cdp_component6 -->
+<apex:component controller="AsCPDPlanner">
+	<div id="cdp_component6" class="cdp-wrapper-container-box slds-box cdp-component">
+		<div class="cpd-module-containers">
+			<div class="cpd-module-header">
+				<h4> Add professional development activities to your CPD plan</h4>
+				<p> The following activities address the competencies you identified as relevant to your role, and the focus of your learning opportunities. Select the activities that you would like to include in your CPD plan.
+</p>
+			</div>
+			<div class="cpd-module-body">
+				<div class="cpd-module-body-count-items" >
+					<h4 id="cpd-count-items"> Showing 312 modules out of 312 </h4>
+				</div>	
+				<div class="cpd-module-tile-containers" style="margin:auto 1%"> <!-- added for ticket (#PSA-309) -->
+					<div class="slds-grid slds-wrap slds-grid_pull-padded" id="cpd-module-tiles-list">
+						<div class="slds-p-horizontal_small slds-medium-size_6-of-12">
+							<div class="slds-box cpd-tiles">
+								<div class="slds-grid slds-wrap ">
+									<div class="slds-large-size_4-of-12"> 
+										<img alt="Lightning Experience Rollout icon" class="tile-icon-image" src="https://psa-org--LMS.cs57.my.salesforce.com/img/rypple/GoldStar.png" />
+									</div>
+									<div class="slds-large-size_8-of-12  ">
+										<h6 class="cpd-title-tiles-module slds-m-bottom--x-small"> sample sample </h6>
+									    <!--span class="slds-badge slds-badge-info ">Not Registered</span>
+										<p class="plan-due-date slds-m-top--x-small">Available Until : 1/01/2019</p-->
+									</div>
+									<div class="slds-large-size_12-of-12 slds-p-top--x-small">
+									<button class="cpd-tile-select-module cpd-tils-btn " > 
+										<svg class="slds-button__icon" aria-hidden="true">
+											<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#add')}"></use></svg> 
+									</button> 
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> 
+				</div>
+			</div>
+			<div class="cpd-module-footer"> 
+				<div class="cdp-btn-group-procced">
+					<div class="slds-grid">
+						<div class="slds-col">
+						</div>
+						<div class="slds-col slds-text-align_right">
+							<div class="slds-form-element">
+								<div class="slds-form-element__icon slds-align-middle">
+									<a href="https://my.psa.org.au/s/article/CPD-UserGuide" target="_blank"><button class="slds-button slds-button_icon slds-button slds-button_icon cdp-btn-helper-bottom" aria-describedby="help" title="Help">
+										<svg class="slds-button__icon" aria-hidden="true">
+											<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use>
+										</svg>
+										<span class="slds-assistive-text">Help</span>
+	<!-- 									<div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help">
+											<div class="slds-popover__body">Need help? Access the full National Competency Standards Framework and view user guides and tutorial videos to assist you.</div>
+										</div> -->
+									</button>
+									</a>
+									<button class="slds-button slds-button_brand cpd-btn-save-training">Finish</button>
+								</div>
+							</div> 
+						</div>
+					</div> 
+				</div>
+			</div>
+		</div>
+	</div>
+</apex:component>

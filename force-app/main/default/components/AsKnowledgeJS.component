@@ -1,0 +1,1081 @@
+<!-- AsKnowledgeJS -->
+<apex:component controller="AsKnowledgeController">
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+<script type="text/javascript" src="/soap/ajax/28.0/connection.js"></script>
+<script type="text/javascript">
+
+jQuery(document).ready(function($){ 
+	$(document.body)
+	.delegate('.categoryItem', 'click', function(){
+		var itemUrl = $(this).attr('item-url'); 
+	    //Retain navigation history
+	    almond.redirectHandlerWithStatus(itemUrl,false);
+	});
+
+	$(document.body)
+	.delegate('.categoryItemRedirectoDetails', 'click', function(){
+		var itemUrl = $(this).attr('item-url'); 
+ 
+		window.open(parent.window.location.origin+'/'+itemUrl)
+	    //Retain navigation history
+	   // almond.redirectHandlerWithStatus(itemUrl,false);
+	});
+				 
+
+	$(document)
+	.on('click', 'a.thatTag', function (e) {
+		e.preventDefault();
+	}); 
+
+});
+
+var IS_SESSION_LOGIN_OR_NONMEMBER = ('{!$Api.Session_Id}' == 'NULL_SESSION_ID' ? false : true );
+var IsMEMBER = false;
+var ARTICLTYPE_REV = [];
+var LISTARTICLES = [];
+var CATEGORIES_MAP = [];
+var ArticleTypeMap = [];
+var CATEGORIES_SELECTED  = {
+	'categoryMap' : {}
+};
+
+function AsKnowledge(){
+	var knowledge = new AsKnowledegeHelper();
+
+	knowledge.checkProfileMemeber(function( res ){
+		 
+		if( IS_SESSION_LOGIN_OR_NONMEMBER ){
+			IS_SESSION_LOGIN_OR_NONMEMBER = res;
+			IsMEMBER = res;
+		}
+ 
+	});
+
+
+
+	/*
+	*Laod all the cetagories set as to map 			
+	*/
+	knowledge.getCategories(function( res ){
+		res.forEach(function( result ) { 
+			result.topCategories[0].childCategories.forEach(function( sub_Result ) { 
+				ArticleTypeMap[sub_Result.name] = sub_Result.label; 
+			});
+		});
+	});
+
+ 
+	/*
+	* Author : Jet
+	* Description : this method for the Category Tiles Page
+	* Parameter : .
+	* Return : 
+	*/
+	this.CategoryTiles  = function() {
+
+		/*
+		* Author : Jet
+		* Description : This Method loads all the Categories 
+		* Parameter : NA.
+		* Return : Categories
+		*/
+		var initArticles = function() {
+			knowledge.getCategories(function( res ){
+
+				res = res.sort(sort_by('label', false, function(a){return a.toUpperCase()}));
+				var htmlCateggories = '';
+
+				var CategorType = {
+					'DOSE ADMINISTRATION AIDS (DAA)':true,
+					'STAGED SUPPLY':true,
+					'MEDSCHECK AND DIABETES MEDSCHECK':true,
+					'PRACTICE GUIDELINES':true,
+					'PRACTICE SUPPORT RESOURCES':true,
+					'EDUCATION':true,
+				}
+
+
+				res.forEach(function( r ) { 
+
+					if( r.label != 'Practice Area' ){
+
+
+						htmlCateggories +=' <div class="slds-grid slds-wrap slds-grid--pull-padded slds-p-bottom_xxx-small"> ';
+						htmlCateggories +=' 		<div class="slds-col--padded slds-size--12-of-12">';
+						htmlCateggories +=' 			<h1 class="slds-text-heading--medium knowledge-categories-title slds-text-align_center slds-p-bottom_large"> '+ r.label.toUpperCase() +' </h1>';	
+						htmlCateggories +=' 		</div>';
+						htmlCateggories +=' 	</div>';
+							
+						htmlCateggories +=' 	<div class="slds-grid slds-wrap  slds-p-bottom_xx-large" >'; 
+
+							r.topCategories[0].childCategories.forEach(function( sub_r ) {
+								if( CategorType[sub_r.label.toUpperCase()] ){
+									htmlCateggories +=' 		<div class="slds-large-size--2-of-12 psa-kwowledge-box--category  btn-category" parentCategory-value="'+ r.name +'" category-value="'+ sub_r.name +'" item-url="{!$Page.AsKnowledgeListView}" >';	 
+									htmlCateggories +=' 		<div class="knowled-categories-tiles ">'; 
+									htmlCateggories += sub_r.label.toUpperCase();
+									htmlCateggories +=' 		</div>'; 
+									htmlCateggories +=' 		</div>'; 
+								} else { 
+									htmlCateggories +=' 		<div class="slds-large-size--2-of-12 psa-kwowledge-box--category ">';
+									htmlCateggories +=' 		<div class="knowled-categories-tiles commings--soon ">'; 
+									htmlCateggories += sub_r.label.toUpperCase(); 
+									htmlCateggories +='<br/><span>Coming sooon</span>'; 
+									htmlCateggories +=' 		</div>'; 
+									htmlCateggories +=' 		</div>'; 
+								}
+							});
+
+						htmlCateggories +=' 	</div>';
+
+
+					}
+
+				});
+				$('#knowledge-categories-group') 
+				.html( htmlCateggories );
+
+			});
+
+
+
+		}
+		initArticles();
+
+		$(document).on('click', '.btn-category', function(){
+			var categorApiName = $(this).attr('category-value');
+			var parentCategorApiName = $(this).attr('parentCategory-value');
+			CATEGORIES_SELECTED.categoryMap[ parentCategorApiName ] = [];
+			CATEGORIES_SELECTED.categoryMap[ parentCategorApiName ].push( categorApiName+'__c' );
+			var itemUrl = $(this).attr('item-url'); 
+			var rediUrl = itemUrl + '?categories='+JSON.stringify(CATEGORIES_SELECTED);
+			almond.redirectHandlerWithStatus(rediUrl,false); 	
+		});
+
+	}
+
+	/*
+	* Author : Jet
+	* Description : This Method for Article List Page
+	* Parameter : .
+	* Return : 
+	*/
+	this.ArticleListView  = function() {
+
+		//set up all the categories
+		this.setUpAllCategories();
+
+		/*
+		* Author : Jet
+		* Description : This Method will display the articles under in this type.
+		* Parameter : none.
+		* Return : Aritcles
+		*/
+		var	loadAllArticlesUnderType = function() {		
+
+			var paramStr = decodeURIComponent(getUrlVarAParent('categories'));
+
+			knowledge.getArticleUnderCategory( paramStr , function( res ){
+				knowledge.loadsListOfArticle(res);
+				var decoJSON = decodeURIComponent(getUrlVarAParent('categories'));
+				decoJSON = JSON.parse( decoJSON );
+
+				var categoryTypeTitleHtml = ''; 
+				for (var key in decoJSON.categoryMap ) {
+					if ( decoJSON.categoryMap.hasOwnProperty(key) ) {
+
+						for (var i = 0; i < decoJSON.categoryMap[key].length; i++) {
+							var cat =  decoJSON.categoryMap[key][i];
+							$('#knw_'+cat).addClass('knwledge-active');
+							CATEGORIES_SELECTED.categoryMap[ key ].push( cat );
+						}
+
+					}
+				} 
+
+			});
+
+		} 
+
+		loadAllArticlesUnderType();
+
+	}
+
+
+
+	/*
+	* Author : Jet
+	* Description : This Method for Article Page.
+	* Parameter : .
+	* Return : 
+	*/
+	this.Article = function() {
+
+
+		/*
+		* Author : Jet
+		* Description : This method will just get the Aritcle Types Re-assign to an Array.
+		* Parameter : callback function.
+		* Return : Aritcles
+		*/
+		var articleType = function( callback ) {
+
+			knowledge.getArticles(function( res ){
+
+				for (var key in res) {
+					if ( res.hasOwnProperty(key) ) {
+						ARTICLTYPE_REV[res[key]] = key;
+					}
+				}
+
+			});
+
+			callback(ARTICLTYPE_REV);
+
+		}
+		
+		/*
+		* Author : Jet
+		* Description : this method will display the content for the Article to page.
+		* Parameter : .
+		* Return : Aritcles
+		*/
+		var singleArticle = function(){
+			//get from url
+			var articleType = getUrlVar('artType');
+			var articleId = (getUrlVar('artId')==''?'{!$CurrentPage.parameters.Id}':getUrlVar('artId'));
+ 
+			// var articleparam = [];
+			// articleparam[0] = articleType; 
+			// articleparam[1] = articleId;
+			 
+
+			knowledge.singleArticle( articleId , function( res ){
+				 
+				var r = res[0];
+				var relatedCategories = [];
+				/*
+				* Display Article Title.
+				*/
+				$('#article-title')
+				.text( r.Title );
+				/*
+				* Display Docuement Date and Article Type.
+				*/
+				var categroyHtml = '';
+				if(  typeof r.DataCategorySelections !== 'undefined' ){
+
+					// for (var i = 0; i < r.DataCategorySelections.length; i++) {
+					// 	var rCat = r.DataCategorySelections[i];
+					// 	categroyHtml +='|'+ ArticleTypeMap[ rCat.DataCategoryName ];
+					// }
+
+
+					for (var i = 0; i < r.DataCategorySelections.length; i++) {
+						var rCat =  r.DataCategorySelections[i];
+ 						relatedCategories[rCat.DataCategoryGroupName] = [];
+					}
+
+					for (var i = 0; i < r.DataCategorySelections.length; i++) {
+						var rCat =  r.DataCategorySelections[i];
+						relatedCategories[rCat.DataCategoryGroupName].push(rCat.DataCategoryName);
+					}
+
+					var seperatorTopic = '';
+					for( var categories in relatedCategories ){
+						if ( relatedCategories.hasOwnProperty(categories) ) {
+							var listCategories = ''
+							
+							for (var i = 0; i < relatedCategories[ categories ].length; i++) {
+								var resCat = relatedCategories[ categories ][i];
+								listCategories += ArticleTypeMap[resCat]+', ';
+
+							} 
+
+							seperatorTopic+=' | '+listCategories.slice(0,-1);
+						} 
+					} 
+					categroyHtml += seperatorTopic.slice(0,-1);
+
+				} 
+
+				$('#article-type-and-date')
+				.html(  ( typeof r.Document_Date__c  == 'undefined' ? '' : DateFormater( r.Document_Date__c ).split_date )  +' '+categroyHtml );
+
+				/*
+				* Display Article Summary.
+				*/
+				$('#article-summary')
+				.text( r.Summary );
+
+
+				/*
+				* Display Content if Article Type is Standard.
+				*/
+				//if( articleType.toLowerCase() ==  'standard__kav' ){
+
+					/*
+					* Display Content.
+					*/
+					$('#article-pdf-searchable')
+					.text( ( typeof r.Searchable_PDF_Content__c  == 'undefined' ? '' : r.Searchable_PDF_Content__c  ) );
+
+					/* 
+					* Display Excerpt.
+					*/
+					
+					if( !IsMEMBER ){
+						var exrptHtml = $.parseHTML(r.Excerpt__c);
+						var htmlArticcles = '';
+						htmlArticcles += '<div class="knowldege-article-formats" >'+  ( typeof r.Excerpt__c  == 'undefined' ? '' : exrptHtml[0].textContent )  +'</div>';
+						$('#article-exerpts')
+						.html($.parseHTML(htmlArticcles));
+					} else	{
+						var contentHtml = $.parseHTML(r.Content_Member_Content__c);
+						var exrptHtml = $.parseHTML(r.Excerpt__c);
+
+						var htmlArticcles = '';
+
+						htmlArticcles += '<div class="knowldege-article-formats" >'+  ( typeof r.Excerpt__c  == 'undefined' ? '' : exrptHtml[0].textContent )  +'</div>';
+
+						htmlArticcles += '<div class="knowldege-article-formats" >'+  ( typeof r.Content_Member_Content__c  == 'undefined' ? '' : contentHtml[0].textContent )  +'</div>';
+
+						$('#article-exerpts')
+						.html($.parseHTML(htmlArticcles));
+
+
+
+					}
+				
+				//}
+
+
+				//Show ASDownload_Link__c for public, hide if no content
+				//Show ASMember_Download_Link_c for member/admin, hide if no content 
+
+
+
+				/*
+				*  Checking the PDF file is Exist.
+				*/
+				//AS_PDF_File__Name__s = member
+				//PDF_File_Member_Content__Name__s = public
+				if( typeof r.AS_PDF_File__Name__s  !== 'undefined' || typeof r.PDF_File_Member_Content__Name__s  !== 'undefined' ){
+
+
+					/* 
+					*  Disaply with ancher Pdf Name
+					*/
+
+					var pdfName = '';
+					var fieldTyps = '';
+					var showContent = false;
+					var dowlaodLinkUrl = '';
+					//If Public PDF contains a file, display the Public PDF in iframe for All Profiles
+					if( typeof r.PDF_File_Member_Content__Name__s   !== 'undefined' ){
+						pdfName =  r.PDF_File_Member_Content__Name__s
+						fieldTyps = 'PDF_File_Member_Content__Body__s';
+						showContent = true;
+					}
+					//If Member PDF contains a file, display the Member PDF in iframe for Profile = Member, Admin
+					else if( typeof r.AS_PDF_File__Name__s   !== 'undefined' && IsMEMBER){ 
+						pdfName =  r.AS_PDF_File__Name__s
+						fieldTyps = 'AS_PDF_File__Body__s';
+						showContent = true;
+					} 
+
+					var pdfAndDownlaodLinks = '';
+	 
+					if( showContent ){ 
+ 
+						pdfAndDownlaodLinks += '<div class="slds-text-heading_small" id="knowledeg-text" >This is available for download as a PDF:<a href="/servlet/fileField?entityId='+ r.Id +'&field='+fieldTyps+'"  target="_blank" > <img style="width: 3%;" src="https://cdn3.iconfinder.com/data/icons/line-icons-set/128/1-02-512.png"> '+ pdfName +' </a>  </div>' ;
+
+						$('#article-pdf-embed')
+							.html( '<embed src="/servlet/fileField?entityId='+ r.Id +'&field='+fieldTyps+'" style="width:100%;" height="700"> ' ); 
+
+					}
+
+				} else {
+
+					$('#knowledeg-text').hide();
+
+				}
+
+				if( typeof r.ASDownload_Link__c  !== 'undefined' ) {
+					pdfAndDownlaodLinks += '<div class="slds-text-heading_small" id="knowledeg-text" >Click the link to download as a PDF:<a href="'+r.ASDownload_Link__c+'"  target="_blank" > <img style="width: 3%;" src="https://cdn3.iconfinder.com/data/icons/line-icons-set/128/1-02-512.png"> '+ r.ASDownload_Link__c +' </a>  </div>';
+				}
+				if ( typeof r.ASMember_Download_Link__c  !== 'undefined' && IsMEMBER ) {
+					pdfAndDownlaodLinks += '<div class="slds-text-heading_small" id="knowledeg-text" >Click the link to download as a PDF:<a href="'+r.ASMember_Download_Link__c+'"  target="_blank" > <img style="width: 3%;" src="https://cdn3.iconfinder.com/data/icons/line-icons-set/128/1-02-512.png"> '+ r.ASMember_Download_Link__c +' </a>  </div>';
+				}
+
+				$('#article-link')  
+				.html( pdfAndDownlaodLinks );
+		
+
+				/* 
+				*  check the user if not login or nonmember
+				*/
+				if(! IS_SESSION_LOGIN_OR_NONMEMBER ){
+					if( r.ASDisplay_Non_Member_Login_Prompt__c  ){
+						$('#if-not-login')
+						.html(' <h1 class="slds-text-heading--medium" style="font-weight: 500;" > You don\'t have permission to view this article </h1> <p>To view this article, please <a href="https://my.psa.org.au/s/login/"> login </a> or <a href="https://psa.secure.force.com/membershipsignup"> register </a> </p>');
+					}
+				}
+
+			});
+
+		} 
+
+		articleType(function(res) {
+			singleArticle();
+		});
+
+
+	}
+
+	/*
+	* Author : Jet
+	* Description : This Method used to handle some function for the categories Picklist and functionality.
+	* Parameter : .
+	* Return : 
+	*/
+	this.setUpAllCategories = function() {
+
+		/*
+		* Author : Jet
+		* Description : This Method used to display dynamicly the Categories and the subCategory
+		* Parameter : .
+		* Return : 
+		*/
+		var CATEGORIESOBJECT = [];
+		var categoriesTree = function() {
+
+	
+
+			knowledge.getCategories(function( res ){
+
+				var chategoryHtml = '';
+				var categoryIndex = 0;
+
+				CATEGORIESOBJECT = res;
+
+				res.forEach(function( r ) {
+
+					chategoryHtml +='<div  style="text-align: left;" id="knowledge-categories-filters">';
+					chategoryHtml +='	<div class="knwledeg-multi-picklist">';
+					chategoryHtml +='		<label> '+ r.label +' </label>';
+					chategoryHtml +='		<div class="knwledeg-picklist-contianer">';
+					chategoryHtml +='			<ul class="knwledeg-set nav_'+r.name+'" >';
+
+						CATEGORIES_SELECTED.categoryMap[  r.name ] = [];
+						r.topCategories[0].childCategories.forEach(function( sub_r ) {
+							chategoryHtml +='		<li id="knw_'+ sub_r.name+'__c" class="knowledge-select" knowledge-category="'+ r.name +'" knowledge-subCategory="'+ sub_r.name +'" > '+ sub_r.label+' </li>';
+						});
+	 
+					chategoryHtml +='			</ul>';
+					chategoryHtml +='		</div>';
+					chategoryHtml +='		<div class="knwledge-action-group">';
+					chategoryHtml +='			<button class="slds-button slds-button_brand knw-SelectAll"  item-url="{!$Page.AsKnowledgeListView}" knowledge-category="'+ r.name +'" > Select All </button>';
+					chategoryHtml +='			<button class="slds-button slds-button_brand knw-clear"  item-url="{!$Page.AsKnowledgeListView}" knowledge-category="'+ r.name +'" > Clear </button>';
+					chategoryHtml +='		</div>';
+					chategoryHtml +='	</div>  ';
+					chategoryHtml +='</div>	';
+
+				});
+			
+				$('#knowledge-categories-filters').html( chategoryHtml );
+
+			});
+		}
+		categoriesTree();
+
+		var lastPicklistClick;
+
+		$(document).on('click','.knowledge-select',function(argument) {
+			var dataThis = $(this);
+
+			if( dataThis.hasClass( "knwledge-active" )  ){
+	 
+				dataThis.removeClass("knwledge-active");
+			} else {
+	 
+				dataThis.addClass( "knwledge-active" );
+			}
+
+			knowledge.triggerDropDownFunction( $(this) , 'category' , '' , '' );
+
+		});
+
+		$(document).on('click','.psa-knowledeeg-btn--dropdown', function() {
+      		var dropDownId = $(this).attr('knowledeg-dropdonw-id');
+      		var isOpen = $(this).attr('konwledge-toggle');
+      		if( isOpen == 0 ){
+      			$('.knowledeg-picklist').removeClass('slds-is-open');
+      			lastPicklistClick = dropDownId;
+      			$(dropDownId).addClass('slds-is-open');
+      			$(this).attr('konwledge-toggle',1);
+      		} else {
+      			$('.knowledeg-picklist').removeClass('slds-is-open');
+      			$(this).attr('konwledge-toggle',0);
+      		}
+		}); 
+
+		$(document).on('click', '.knowledeg-select-category', function(){
+			$('.knowledeg-picklist').removeClass('slds-is-open');
+			var categoryValue = $(this).attr('category-label');
+			var dropdownType = $(this).attr('knowledge-dropdown-type');
+			knowledge.triggerDropDownFunction( $(this) , dropdownType, lastPicklistClick , categoryValue );
+		});
+
+		$(document).on('click', '.knwledeg-bnt--search', function(){
+
+			for (var key in CATEGORIES_SELECTED.categoryMap ) {
+				if ( CATEGORIES_SELECTED.categoryMap.hasOwnProperty(key) ) { 
+					if( CATEGORIES_SELECTED.categoryMap[key].length == 0){
+						delete	CATEGORIES_SELECTED.categoryMap[key];
+					}  
+				}
+			}
+
+			var itemUrl = $(this).attr('item-url');  
+			var rediUrl = itemUrl + '?categories='+JSON.stringify(CATEGORIES_SELECTED);
+			parent.location.replace(parent.window.location.origin+'/'+rediUrl); 
+			//parent.window.location.href = parent.window.location.origin+'/'+rediUrl; 
+			//almond.redirectHandlerWithStatus(rediUrl,false); 
+		});   
+ 
+		$(document).on('click', '.knw-clear', function(){
+
+			var dataThis = $(this);
+			var category = dataThis.attr('knowledge-category');
+			$('.nav_'+category+' .knowledge-select').removeClass('knwledge-active');
+
+			for (var key in CATEGORIES_SELECTED.categoryMap ) {
+				if ( CATEGORIES_SELECTED.categoryMap.hasOwnProperty(key) ) {
+					if( key == category ){
+						CATEGORIES_SELECTED.categoryMap[key]=[];
+					}
+				}
+			}
+
+
+			// var itemUrl = $(this).attr('item-url'); 
+			// var rediUrl = itemUrl + '?categories='+JSON.stringify(CATEGORIES_SELECTED);
+			// almond.redirectHandlerWithStatus(rediUrl,false);  
+		}); 
+
+		$(document).on('click', '.knw-clearAll', function(){
+
+			$('.knowledge-select').removeClass();
+			for (var key in CATEGORIES_SELECTED.categoryMap ) {
+				if ( CATEGORIES_SELECTED.categoryMap.hasOwnProperty(key) ) {
+					delete	CATEGORIES_SELECTED.categoryMap[key];
+				}
+			}
+
+            
+      var itemUrl = $(this).attr('item-url');  
+			var rediUrl = itemUrl + '?categories='+JSON.stringify(CATEGORIES_SELECTED);
+			parent.location.replace(parent.window.location.origin+'/'+rediUrl); 
+
+		});
+
+		$(document).on('click', '.knw-SelectAll', function(){
+			var dataThis = $(this);
+			var category = dataThis.attr('knowledge-category');
+
+
+			
+
+			CATEGORIESOBJECT.forEach(function( r ) {
+				if( r.name == category ){
+					r.topCategories[0].childCategories.forEach(function( sub_r ) {
+
+						var index = CATEGORIES_SELECTED.categoryMap[ r.name ].indexOf( sub_r.name+'__c' );
+						if (index > -1) {
+						 	//CATEGORIES_SELECTED.categoryMap[  r.name  ].splice(index, 1);
+						} else {
+							CATEGORIES_SELECTED.categoryMap[  r.name  ].push( sub_r.name+'__c'  );	
+							$('#knw_'+sub_r.name+'__c').addClass('knwledge-active');
+							 
+						}
+
+					});
+				} 
+			}); 
+
+			// for (var key in CATEGORIES_SELECTED.categoryMap ) {
+			// 	if ( CATEGORIES_SELECTED.categoryMap.hasOwnProperty(key) ) {
+			// 		if( CATEGORIES_SELECTED.categoryMap[key].length == 0){
+			// 			delete	CATEGORIES_SELECTED.categoryMap[key];
+			// 		} 
+			// 	}
+			// }
+
+
+			// var itemUrl = $(this).attr('item-url'); 	
+			// var rediUrl = itemUrl + '?categories='+JSON.stringify(CATEGORIES_SELECTED);
+			// almond.redirectHandlerWithStatus(rediUrl,false); 
+			
+		});
+
+
+		/*
+		* Author : Jet
+		* Description : This Method used to display the Article Types in the Picklist
+		* Parameter : 
+		* Return : 
+		*/
+		var articleType = function() {
+
+			knowledge.getArticles(function( res ){
+
+				var articleHtml ='';
+
+				for (var key in res) {
+
+					if ( res.hasOwnProperty(key) ) {
+
+						articleHtml +='<li class="slds-dropdown__item knowledeg-select-category categoryItem" item-url="{!$Page.AsKnowledgeListView}?article='+ res[key] +'" category-label="'+ key +'" category-value="'+ key +'" knowledge-dropdown-type="article" role="presentation">';
+						articleHtml +='	<a href="javascript:void(0);" role="menuitem" tabindex="0">';
+						articleHtml +='		<span class="slds-truncate" title="Menu Item One">' + key + '</span>';
+						articleHtml +='	</a>';
+						articleHtml +='</li>';
+						ARTICLTYPE_REV[res[key]] = key;
+					}
+				}
+
+				$('#knowledge-article-items').html( articleHtml );
+		
+			});
+
+		}
+		articleType();
+
+	}
+
+}
+
+/* Helper */
+function AsKnowledegeHelper() {
+
+	/*
+	* Author : Jet
+	* Description : use to get all the articles 
+	* Parameter : callback.
+	* Return : Articles
+	*/
+	this.getArticles = function( callback ){
+
+        Visualforce.remoting.Manager.invokeAction( 
+        	'{!$RemoteAction.AsKnowledgeController.allArticleType}',
+        	function( result, event ) {
+        		callback( result );
+        	}
+        );  
+
+	}
+
+	/*
+	* Author : Jet
+	* Description : use to get all the articles 
+	* Parameter : ArticleType,callback.
+	* Return : Articles
+	*/
+	this.getArticleUnderType = function( ArticleType , callback ){
+
+        Visualforce.remoting.Manager.invokeAction( 
+        	'{!$RemoteAction.AsKnowledgeController.allArticleUnderType}',
+        	ArticleType,
+        	function( result, event ) {
+        		callback( result );
+        	}
+        );  
+
+	}
+
+
+	/*
+	* Author : Jet
+	* Description : use to get all the categories 
+	* Parameter :callback.
+	* Return : Articles
+	*/
+	this.getCategories = function( callback ){
+
+        Visualforce.remoting.Manager.invokeAction( 
+        	'{!$RemoteAction.AsKnowledgeController.categoryTree}',
+        	function( result, event ) {
+        		callback( result );
+        	}
+        );  
+
+	}
+
+	/*
+	* Author : Jet
+	* Description : use to get all Article under the Category 
+	* Parameter :callback.
+	* Return : Articles
+	*/
+	this.getArticleUnderCategory = function( param , callback  ){
+ 
+        Visualforce.remoting.Manager.invokeAction( 
+        	'{!$RemoteAction.AsKnowledgeController.allArticleUnderCategory}',
+        	param,
+        	function( result, event ) {
+        		callback( result );
+        	}
+        );  
+
+	}
+
+	/*
+	* Author : Jet
+	* Description : use to get single article 
+	* Parameter : ArticleType,callback.
+	* Return : Articles
+	*/
+	this.singleArticle = function( param , callback ){
+
+        Visualforce.remoting.Manager.invokeAction( 
+        	'{!$RemoteAction.AsKnowledgeController.singleArticle}',
+        	param,
+        	function( result, event ) {
+        		callback( result );
+        	}
+        );  
+
+	}
+
+	/*
+	* Author : Jet
+	* Description : use to get Profile if Member  
+	* Parameter : ArticleType,callback.
+	* Return : Articles
+	*/
+	this.checkProfileMemeber = function( callback ){
+
+        Visualforce.remoting.Manager.invokeAction( 
+        	'{!$RemoteAction.AsKnowledgeController.checkUserProfileIfMember}',
+        	function( result, event ) {
+        		callback( result );
+        	}
+        );  
+  
+	}
+
+	/*
+	* Author : Jet
+	* Description : dropdown function object 
+	* Parameter :callback.
+	* Return :  
+	*/
+	this.triggerDropDownFunction = function( el , type , lastPicklistClick , categoryValue ) {
+		var objectFunction = [];
+		//init the parent class
+		var knowledge = new AsKnowledegeHelper();
+		objectFunction['category'] = function() {
+			var subCategory =  $(el).attr('knowledge-subcategory');
+			var parentCategory =  $(el).attr('knowledge-category');
+			var index = CATEGORIES_SELECTED.categoryMap[ parentCategory ].indexOf( subCategory+'__c' );
+			if (index > -1) {
+			 	CATEGORIES_SELECTED.categoryMap[ parentCategory ].splice(index, 1);
+			} else {
+				CATEGORIES_SELECTED.categoryMap[ parentCategory ].push( subCategory+'__c' );		
+			}
+		}
+
+		objectFunction['sorting'] = function() {
+			var sortingType = $(el).attr('category-value');
+			$(lastPicklistClick+'-selected').text(categoryValue); 
+			var SortedData = [];	
+			switch(sortingType) {
+				case 'A-Z':
+					SortedData = LISTARTICLES.sort(sort_by('Title', false, function(a){return a.toUpperCase()}));
+				break;
+				case 'Z-A':
+					SortedData = LISTARTICLES.sort(sort_by('Title', true, function(a){return a.toUpperCase()}));
+				break;
+				case 'Oldest to Newest':
+					SortedData =  LISTARTICLES.sort(sort_by('FirstPublishedDate', true, function(a){return new Date( a )})) 
+				break;
+				case 'Newest to Oldest':
+					SortedData = LISTARTICLES.sort(sort_by('FirstPublishedDate', false, function(a){return new Date( a )})) 
+				break;
+			}
+			knowledge.loadsListOfArticle(SortedData);
+		}
+
+		objectFunction['article'] = function() {}
+
+		//trigger the function by name 
+		objectFunction[type]();
+	}
+
+
+	/*
+	* Author : Jet
+	* Description : This Method Loads and Manage the Articles by page to display
+	* Parameter : Object
+	* Return : Array
+	*/
+	this.loadsListOfArticle = function( res ) {
+		LISTARTICLES = res;
+		var resDevided = Math.ceil( res.length / 10 );
+		var pageObject = {};
+		var pageArray  = [];
+		var countPage = 0;
+		var indexPage = 0;
+		for (var i = 0; i < res.length; i++) {
+			var r = res[i];
+			if( countPage < 9  ){
+				if( (indexPage + 1) ==  resDevided   ){
+					pageObject[	countPage ]= r;
+					countPage +=1;
+					if( countPage == ( res.length % 10 ) ){
+						pageArray.push(pageObject);
+					}
+				} else {
+					pageObject[	countPage ]= r;
+					countPage +=1;
+				}
+			} else { 
+				pageObject[	countPage ]= r;
+				countPage +=1;
+				pageArray.push(pageObject);
+				countPage = 0; 
+				indexPage +=1;
+				pageObject = {};
+			}
+		} 
+		var pageNumber = 0;
+		$('#page-para').text( 'Page '+ ( resDevided == 0 ? 0 : (  pageNumber + 1 ) )  +' of '+ resDevided +' ' ); 
+		if(resDevided <= 1){
+			$('#page-next').prop('disabled',true);
+		}
+		loadThisList( pageNumber , pageArray );
+		$('#page-prev').prop('disabled',true);
+		$('.knowledeg-btn-pagination').click(function() {
+			if( $(this).attr('knowledeg-page') == 'prev' ){
+				pageNumber -=1;
+			} else {
+				pageNumber +=1;
+			}
+			$('.knowledeg-btn-pagination').prop('disabled',false);
+			if( pageNumber == 0 ){
+				$('#page-prev').prop('disabled',true);
+			}
+			if( ( pageNumber + 1 ) == resDevided   ){
+				$('#page-next').prop('disabled',true);
+			}
+			$('#page-para').text( 'Page '+ ( pageNumber + 1 ) +' of '+ resDevided +' ' ); 
+			loadThisList( pageNumber , pageArray );
+		});
+
+	}
+
+
+	/*
+	* Author : Jet
+	* Description : This Method will display the Articles by Page Number and the Data of the Articles
+	* Parameter : Object
+	* Return : Array
+	*/
+	var loadThisList = function( pageNumber , pageArray ){ 
+		var resArry = pageArray[pageNumber];
+		var listArticleHtml = '';
+		for (var key in resArry) {
+			if ( resArry.hasOwnProperty(key) ) {
+				var relatedCategories = [];
+				var r = resArry[key];
+
+				listArticleHtml +='	<div class="psa-knowledeg-Article slds-m-bottom_medium" > ';
+				listArticleHtml +='		<div  class="slds-text-heading--small psa-knowledge-title categoryItemRedirectoDetails" item-url="s/article/'+r.Id+'" >';
+				listArticleHtml +=  		r.Title ; 
+				listArticleHtml +='		</div>';
+				listArticleHtml +='		<p class="article-topic-date"> '+  ( typeof r.Document_Date__c  == 'undefined' ? '' : ' Published '+DateFormater( r.Document_Date__c ).split_date)+' <span class="CategoryTypeName">';
+				if( typeof r.DataCategorySelections !== 'undefined' ){
+					for (var i = 0; i < r.DataCategorySelections.length; i++) {
+						var rCat =  r.DataCategorySelections[i];
+ 						relatedCategories[rCat.DataCategoryGroupName] = [];
+					}
+					for (var i = 0; i < r.DataCategorySelections.length; i++) {
+						var rCat =  r.DataCategorySelections[i];
+						relatedCategories[rCat.DataCategoryGroupName].push(rCat.DataCategoryName);
+					}
+					var seperatorTopic = '';
+					for( var categories in relatedCategories ){
+						if ( relatedCategories.hasOwnProperty(categories) ) {
+							var listCategories = '';
+							for (var i = 0; i < relatedCategories[ categories ].length; i++) {
+								var resCat = relatedCategories[ categories ][i];
+								listCategories += ArticleTypeMap[resCat]+', '; 
+							} 
+							seperatorTopic+=' | '+listCategories.slice(0,-2)+' ';
+						}  
+ 					}  
+					listArticleHtml += seperatorTopic.slice(0,-1);
+				}
+				listArticleHtml +='</span></p>';
+				listArticleHtml +='<p class="article-summary">'+(typeof r.Summary != 'undefined' ?  r.Summary : '' )+'</p>';
+				listArticleHtml +='	</div>'; 
+
+			} 
+		}
+		$('#knowledge-title--articlename').html( ARTICLTYPE_REV[getUrlVar('article').toLowerCase() ] );
+		$('#knowledge-picklist-article-selected').html( ( getUrlVar('article') == '' ? '-- Select -- ' :  ARTICLTYPE_REV[getUrlVar('article').toLowerCase()]  ));
+		$('#knowledge-aritcles-list').html( listArticleHtml );
+	}
+
+
+
+ 
+}
+
+/*
+* Author : Jet
+* Description: use to get the variable value in the url.
+* Parameter : name of the variable.
+* Return : Opportuninty Id. 
+*/
+var getUrlVarAParent = function ( name ) {
+
+     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+     var regexS = "[\\?&]" + name + "=([^&#]*)";
+     var regex = new RegExp(regexS);
+     var results = regex.exec(parent.window.location.href);
+     if (results == null){
+        return "";
+     }else{
+        return results[1];
+     }
+
+};
+
+var getUrlVar = function ( name ) {
+
+     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+     var regexS = "[\\?&]" + name + "=([^&#]*)";
+     var regex = new RegExp(regexS);
+     var results = regex.exec(window.location.href);
+     if (results == null){
+        return "";
+     }else{
+        return results[1];
+     }
+
+};
+/*
+* Author : Jet
+* Description: This Method will manage the Url by array
+* Parameter : url 
+* Return : array
+*/
+function getAllUrlParams(url) {
+
+      // get query string from url (optional) or window
+      var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+
+      // we'll store the parameters here
+      var obj = {};
+
+      // if query string exists
+      if (queryString) {
+
+        // stuff after # is not part of query string, so get rid of it
+        queryString = queryString.split('#')[0];
+
+        // split our query string into its component parts
+        var arr = queryString.split('&');
+
+        for (var i=0; i<arr.length; i++) {
+          // separate the keys and the values
+          var a = arr[i].split('=');
+
+          // in case params look like: list[]=thing1&list[]=thing2
+          var paramNum = undefined;
+          var paramName = a[0].replace(/\[\d*\]/, function(v) {
+            paramNum = v.slice(1,-1);
+            return '';
+          });
+
+          // set parameter value (use 'true' if empty)
+          var paramValue = typeof(a[1])==='undefined' ? true : a[1];
+
+          // (optional) keep case consistent
+          paramName = paramName.toLowerCase();
+          paramValue = paramValue.toLowerCase();
+
+          // if parameter name already exists
+          if (obj[paramName]) {
+            // convert value to array (if still string)
+            if (typeof obj[paramName] === 'string') {
+              obj[paramName] = [obj[paramName]];
+            }
+            // if no array index number specified...
+            if (typeof paramNum === 'undefined') {
+              // put the value on the end of the array
+              obj[paramName].push(paramValue);
+            }
+            // if array index number specified...
+            else {
+              // put the value at that index number
+              obj[paramName][paramNum] = paramValue;
+            }
+          }
+          // if param name doesn't exist yet, set it
+          else {
+            obj[paramName] = paramValue;
+          }
+        }
+      }
+
+      return obj;
+    }
+
+/*
+* Author : Jet
+* Description: use to get the date by formated
+* Parameter : date
+* Return : date 
+*/
+var DateFormater = function(date) {
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var monthNamesnum = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+    reDate = new Date(date);
+    var ampm = (reDate.getHours() >= 12) ? "PM" : "AM";   
+    return {
+        date: monthNames[reDate.getMonth()] + ' ' + reDate.getDate() + ',' + reDate.getFullYear(),
+        time: reDate.getHours() + ':' + reDate.getMinutes() + ' ' + ampm,
+        split_date:  ('0' + reDate.getDate()).slice(-2) + '/' +monthNamesnum[reDate.getMonth()] + '/' + reDate.getFullYear(), 
+        split_time: reDate.getHours() + ':' + reDate.getMinutes() + ' ' + ampm,
+        fullDate: reDate.getFullYear() + '-' + monthNamesnum[reDate.getMonth()] + '-' + reDate.getDate() + ' ' + reDate.getHours() + ':' + reDate.getMinutes() + ':00'
+    }
+}
+ 
+/*
+* Author : Jet
+* Description: This Method will used to sort the Object
+* Parameter : url 
+* Return : array
+*/
+var sort_by = function(field, reverse, primer){
+
+   var key = primer ? 
+       function(x) {return primer(x[field])} : 
+       function(x) {return x[field]};
+
+   reverse = !reverse ? 1 : -1;
+
+   return function (a, b) {
+       return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+     } 
+}
+
+var  htmlDecode = function(input){
+  var e = document.createElement('div');
+  e.innerHTML = input;
+  return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+}
+
+</script></apex:component>

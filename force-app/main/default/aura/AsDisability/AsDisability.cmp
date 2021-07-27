@@ -1,0 +1,171 @@
+<aura:component controller="AsDisabilityController">
+
+    <aura:attribute name="recordId" type="String" default="0019D000005AFyB"/>
+    <aura:attribute name="recordIdEnrol" type="String" default="a1i9D0000001bQk"/>
+    <aura:registerEvent name="Enrolment_Event" type="c:EnrolmentActiveStep"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:attribute name="helpText" type="String" default="lorem ipsum" />
+    <aura:attribute name="disabilityTypeValue" type="String" default="" />
+    <aura:attribute name="disabilityTypeArr" type="String" default="" />
+    <aura:attribute name="disArray" type="List" default="[]" />
+
+    <aura:attribute name="otherDisabilityTypeValue" type="String" default="" />
+    <aura:attribute name="disabilityLongTermVal" type="String" default="" />
+
+    <aura:attribute name="disabilitylongtermcondition" type="BOOLEAN" default="false" />
+    <aura:attribute name="otherdisabilityif" type="BOOLEAN" default="false" />
+    <aura:attribute name="isRequired" type="BOOLEAN" default="false" />
+    <aura:attribute name="isRequiredOther" type="BOOLEAN" default="false" />
+
+    <aura:attribute name="account" type="Account" />
+
+    <aura:attribute name="disabilityType" type="List" default="[
+        { 'label' : 'Yes', 'value' : 'true' },
+        { 'label' : 'No', 'value' : 'false' }
+    ]"/>
+
+    <aura:attribute name="disabilityLongTerm" type="List" default="[
+        { 'label' : 'Yes', 'value' : 'true' },
+        { 'label' : 'No', 'value' : 'false' }
+    ]"/>
+
+    <aura:attribute name="enrolment" type="Enrolment_Form__c" default="{
+        'sobjectType': 'Enrolment_Form__c',                                        
+        'AS_Parent_Guardian_Name__c': '',
+        'AS_second_given_name__c'  : '',
+        'AS_Parent_Guardian_Phone_Number__c': '',
+        'AS_Parent_Guardian_Email__c': '',
+        'AS_Alternate_Email__c': '',
+        'AS_Business_Pharmacy_Name__c' : '',
+        'AS_Primary_Property_name__c' : '',
+        'AS_Primary_Unit_details__c' : '',
+        'AS_Primary_Street_Number__c' : '',
+        'AS_Alternate_Property_name__c' : '',
+        'AS_Alternate_Unit_details__c' : '',
+        'AS_Alternate_Street_Number__c' : '',
+        'Enrolment_Status__c' : ''
+    }"/>
+
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    <aura:attribute name="showToast" type="Boolean" default="false" />
+
+    <h2 class='slds-title'><b>Disability</b></h2>
+
+    <div class='slds-container'>
+        
+        <lightning:layout >
+
+            <lightning:layoutItem padding="around-small" size="12">
+                
+                <div class="slds-p-bottom_x-small">
+                    <lightning:radioGroup 
+                        aura:id="disability-field-1"
+                        name="AS_Has_Disability_Impairment_or_Long_Ter__pc"
+                        label="Do you consider yourself to have a disability, impairment or long-term condition?"
+                        options="{! v.disabilityLongTerm }"
+                        value="{! v.disabilityLongTermVal }"
+                        type="radio"
+                        required="true"
+                        onchange="{! c.disabilityChange }"
+                        disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"
+                    />
+                </div>
+
+                    <aura:if isTrue="{!v.disabilitylongtermcondition}">
+    
+                        <div class="slds-p-bottom_x-small slds-form-control">
+                            <lightning:radioGroup 
+                                aura:id="disability-field-2"
+                                name="dummy_input"
+                                label="If you indicated the presence of a disability, impairment or long-term condition, please select the area(s) in the following list"
+                                required="{!v.isRequired}"
+                                value="{!v.disabilityTypeValue}"
+                                class="slds-disablility-label"
+                            />
+                            <lightning:helptext class="slds-help-text" content="Disability in this context does not include short-term disabling health conditions such as a fractured leg, influenza, or corrected physical conditions such as impaired vision managed by wearing glasses or lenses."/>
+                        </div>
+                            
+                        <aura:iteration items="{!v.disabilityTypeArr}" var="item">
+                            <div class="slds-form-element__control slds-custom-radio">
+                                <div class="slds-radio">
+                                    <lightning:radioGroup class="{!item.count}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" name="{!item.label}" title="{!item.checked}" aura:id="disability-custom" options="{!item.options}" label="{!item.label}" onclick="{! c.disabilityfunc }" onchange="(!c.changeDisablity)" value="{!item.value}"/><span class="slds-form-element__label" >{!item.label}  <lightning:helptext content="{!item.helptext}"/></span>
+                                </div>
+                            </div>
+                        </aura:iteration>
+
+                        <!--div class="slds-p-bottom_small">
+                            <div style="padding-left:2rem;padding-top:13rem;position:relative" class="slds-form-element__icon">
+                                <lightning:icon iconName="utility:info" alternativeText="Info" size="xx-small"/>
+                                <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help">
+                                    <div class="slds-popover__body"><aura:unescapedHtml value="{!v.helpText}" /></div> 
+                                </div>
+                            </div>
+                        </div-->
+                    </aura:if>
+                
+                    <aura:if isTrue="{! v.otherdisabilityif }">
+                        <lightning:input disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" aura:id="disability-field-3" name="AS_Other_Disability_pc__c" label="Other Disability"  required="{!v.isRequiredOther}" value="{! v.otherDisabilityTypeValue }"/>
+                    </aura:if>
+
+
+                    <!-- buttons here! -->
+                    <div class="slds-m-top_xx-large slds-btn-content">
+                        <div class="slds-float_left">
+                            <lightning:button variant="Neutral" class="slds-back-btn" label="Back" title="Back" onclick="{!c.backCallback}"/>
+                            <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{!c.cancelCallback}"/>
+                        </div>
+                        <div class="slds-float_right">
+    
+                            <aura:if isTrue="{!'Draft' == v.enrolment.Enrolment_Status__c}">
+                                    
+                                <!-- email button -->
+                                <lightning:button variant="Neutral" class="slds-save-email-btn"  label="Save &amp; Email me a link" title="Save &amp; Email me a link" onclick="{!c.sendMeLinkChanges}"/> 
+    
+                            </aura:if> 
+    
+                             <!-- save button -->
+                             <lightning:button variant="brand"  class="slds-save-btn" label="Save and Continue" title="Save &amp; Continue" onclick="{!c.saveChanges}"/>
+    
+                        </div>
+                    </div>
+
+            </lightning:layoutItem>
+
+        </lightning:layout>
+
+    </div>
+
+    <!-- spinner -->
+    <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+     <!-- spinner -->
+
+    <!--toast-->
+    <aura:if isTrue="{!v.showToast}">
+        <div class="slds-notify_container">
+            <div class="{!'slds-notify slds-notify--alert slds-theme--alert-texture ' +v.toastTheme}" role="alert">
+                <button onclick="{!c.toastclose}" class="slds-button slds-notify__close slds-button--icon-inverse" title="Close">
+                    <lightning:icon iconName="utility:close" size="small" variant="inverse"/>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <div class="slds-notify__content slds-grid">
+                    <div class="slds-col slds-align-middle">
+                        <h3 class="slds-text-heading--small ">{!v.message}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div aura:id="backdrop" class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+    <!--End toast-->
+ 
+</aura:component>

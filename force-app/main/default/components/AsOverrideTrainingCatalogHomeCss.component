@@ -1,0 +1,210 @@
+<!-- AsKnowledgeStyleCss -->
+<apex:component >
+	<style type="text/css">
+		.filter {
+			background-color: #003d79;
+			box-sizing:border-box;
+			color:#fffff !important;
+			display:block;
+			font-family:SalesforceSans, ProximaNovaRegular, Helvetica, Arial, sans-serif;
+			font-size:13px;
+			line-height:20px;
+			padding:30px 20px;
+		}
+		
+		.tag-filter-list {
+			box-sizing:border-box;
+			display:block;
+			font-size:12px;
+			line-height:20px;
+			list-style-image:none;
+			list-style-position:outside;
+			list-style-type:none;
+			margin:20px;
+			padding:20px;
+			max-height:170px;
+			overflow-x:hidden;
+			overflow-y:scroll;
+			position:relative;
+		}
+
+		.training-plan-header .slds-text-heading_large{
+		    color: #fff;
+		    font-weight: 700;
+		    font-size: 2.10em;
+		    text-align: center;
+		    line-height: 27px;
+		    -webkit-margin-after: 15px;
+		}
+
+		.training-plan-header .slds-text-description { 
+		    color: #aebacc;
+		    font-weight: 100;
+		    font-size: 12px;
+		    text-align: center;
+		    margin: 0;
+		    -webkit-margin-before: 0em;
+		    -webkit-margin-after: 46px;
+		}
+		
+		
+		.filter .tag-filter-list {
+			padding-left :10px !important;
+			padding-top :10px !important;
+			margin-top: 4%;
+			margin-bottom: 6%;
+		}
+		
+		.filter .tag-filter-list li{
+			padding-bottom :5px !important;
+		}
+		
+		.almond-slds .filter a {
+    		color: #fff!important;
+    		padding: 5px;
+		}
+		
+		.almond-slds .filter a:hover , .almond-slds .filter a{
+    		text-decoration: none;
+		}
+		
+		.almond-slds .filter h3{
+			font-size: 1rem!important;
+		    color: #fff!important;
+		    padding-left: 10px!important;
+		    padding-bottom: 8px;
+		}
+		
+		.almond-slds .filter .delivery-type-selected , .almond-slds .filter .target-audience-selected, .almond-slds .filter .course-type-selected, .almond-slds .filter .category-selected{
+			border-radius: 5px;
+	    	background-color: #0083ca;
+		}
+
+	
+
+		.training-plan-wrap {
+			margin: 0% auto;
+			padding: 1%;
+		} 
+
+		.training-plan-wrap .training-item{
+		    margin: 4%;
+		    min-height: 86px;
+		}
+		
+		.training-plan-wrap .training-item {
+			cursor:pointer;
+		}
+
+		.almond .categoryItem {
+			display: block ; 
+		}
+		
+		.filter .clear-course { 
+		    color: #ffffff;
+		    background: #1774d0;
+		    margin-left: 12px;
+		    border-radius: 4px;
+		    font-size: 12px;
+		    width: 59px;
+		    border: 1px solid #fff;
+		}
+		
+		
+		.filter .clear-all-course-div {
+	    text-align:right;
+		}
+		
+		.filter .clear-all-course {
+			color: #ffffff;
+	    background: #1774d0;
+	    margin:15px 0px 0px 5px;
+	    border-radius: 4px;
+	    font-size: 12px;
+	    width: 113px;
+	    border: 1px solid #fff;
+	    text-align:center;
+	    font-family:SalesforceSans, ProximaNovaRegular, Helvetica, Arial, sans-serif;
+	    height:27px;
+		}
+
+		.tplan_container {
+            border: 1px solid #DDD;
+            border-radius: 8px;
+            box-shadow: 0 2px 2px #DDD;
+            margin: 0 auto 20px;
+            
+        }
+        
+        .tplan_container:hover{
+        	cursor:pointer;
+        }
+        
+        .tplan_container .tplan_cus_header {
+            color: #fff;
+            padding: 4%;
+            border-radius: 8px 8px 0px 0px;
+        }
+        .tplan_container  .tplan_cus_body{
+            min-height: 100px;
+            padding: 4%;
+        }
+        .almond .ttrack_img table .sfdc_richtext{
+            text-align: left!important;
+        }
+        .tplan_right_side{
+            text-align: right;
+        }
+
+        .almond .ttrack_img {
+        	text-align: left;	
+        }
+
+        .almond .ttrack_img {
+        	padding: 5px 3px 0 !important;
+        }
+
+        .almond .ttrack_img {
+            min-height: 80px!important;
+        }
+        h3.tplan_cus_title {
+            font-size: 16px!important;
+            font-weight: 600!important;
+        }
+    	
+    	.tpl-dark-blue{
+    		background: #014076;
+    	}
+    	.tpl-light-blue{
+    		background: #0083cb;
+    	}
+
+    	.slds-is-open .section-icon-switch{
+            display: block;
+        }
+        .slds-is-open .section-icon-chevronright{
+            display: none;
+        }
+       .section-icon-switch{
+            display: none;
+        }
+       .section-icon-chevronright{
+            display: block;
+        }
+        .slds-section__title-action{
+        	background: #fff!important;
+		    border: none;
+		    font-size: 28px!important;
+		    border-bottom: 1px solid #cecece;
+		    outline: none!important;
+        }
+        .almond-slds .slds-button__icon {
+		    width: 1.875rem;
+		    height: 17px;
+		}
+ 		.cour-cat-filter-title {
+    		float: left;
+ 		}
+
+	</style>
+</apex:component>

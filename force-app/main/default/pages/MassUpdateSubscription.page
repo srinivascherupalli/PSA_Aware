@@ -1,0 +1,2 @@
+<apex:page standardController="AS_Subscription__c" recordSetVar="subscriptions" extensions="AS_massUpdateSubsStatus" action="{!updateSubs}">
+</apex:page>

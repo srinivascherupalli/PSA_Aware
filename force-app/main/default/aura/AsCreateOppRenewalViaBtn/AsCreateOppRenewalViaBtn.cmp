@@ -1,0 +1,41 @@
+<aura:component controller="AS_batchMembershipRenewalT1" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+	
+	<aura:attribute name="record" type="Object"
+                    description="The record object to be displayed"/>
+ 	<aura:attribute name="subRecord" type="Object"
+                    description="A simplified view record object to be displayed"/>
+	<aura:attribute name="messageError" type="String" />
+	<aura:attribute name="hasErrors" type="Boolean" description="Indicate whether there were failures or not" />
+	
+	 <aura:registerEvent name="closeWindow" type="c:AsCloseTheWindow" />
+	
+	<force:recordData aura:id="record"
+                      layoutType="FULL"
+                      recordId="{!v.recordId}"
+                      targetRecord="{!v.record}"
+                      targetFields="{!v.subRecord }"
+                      mode="VIEW"/>
+                      
+	<h1>Create new renewal Opportunity</h1>
+	<br/>
+	<h1>This will generate a new renewal Opportunity for this membership Subscription. Click OK to continue.</h1>
+	<br/>
+    	<!-- lightning:button label="Generate Credential Card" onclick="{!c.handleClick}"/--> 
+    	<aura:if isTrue="{!v.hasErrors}">
+	        <div class="userCreateError">
+	            <ui:message title="Error" severity="error" aura:id="message">
+	                {!v.messageError}
+	            </ui:message>
+	        </div>
+	    </aura:if>
+	    <br />
+    	<div class="slds-form-element">
+      	<div class="slds-col modal-footer slds-modal__footer">        
+			    <lightning:button variant="neutral" label="Cancel" onclick="{! c.cancel }" />      
+			    <lightning:button variant="brand" label="Ok" onclick="{! c.createRenewalOpp }" />
+				</div>
+       </div>
+    	
+    	
+    <br/>
+</aura:component>

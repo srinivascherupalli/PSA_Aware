@@ -1,0 +1,29 @@
+<!--
+  @File Name          : AsConfirmationPage.cmp
+  @Description        : 
+  @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 10/17/2019, 3:24:25 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    10/14/2019   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<div class="AsMainCont">
+        <div class="AsHeaderCont">
+            <h1>Thank you for Enrolling!</h1>
+        </div>
+        <p class="AsSuccessMsg">
+            You will be notified via email when your enrolment has been processed.
+        </p>
+        <div class="AsImageCont">
+            <img src="{!$Resource.computer}" />
+        </div>
+        <p class="AsWarning">If you don’t receive an email within 24 hours Please call: <span>1300 369 772</span></p>
+        <div class="AsBtnContainer">
+            <button onclick="{!c.redirectToAllCourses}">Browse All Courses</button>
+            <button onclick="{!c.redirectToMyEnrolments}">Finish</button>
+        </div>
+    </div>
+</aura:component>

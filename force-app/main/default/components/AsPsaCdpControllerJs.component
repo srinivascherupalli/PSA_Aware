@@ -1,0 +1,156 @@
+<!-- 
+    *Author : Jet R. Compayan
+    *Description : This is the Controller JS Component of Cpd Planning Tool  
+    *Date Created : Apr 26,2018
+    *Last Modified By : Cristelle Do-ong
+    *Date Last Modified : July 27, 2018
+    *Related Meta Data : User
+-->
+<!-- AsPsaCdpControllerJs -->
+<apex:component controller="AsCPDPlanner">
+
+<script type="text/javascript">
+	jpsa = jQuery.noConflict();
+	jpsa(function( $ ) {
+		var pch = new PsaCdpHelper( jpsa );
+		$('.cpd-for-review').hide();
+		/* load Default Component */
+		if( !pch.checklastComponent() ){
+			pch.displayComponent ('cdp_component1');
+		} else {
+			pch.loadMethod[ sessionStorage.getItem('lastCompnent') ]();
+		}
+		$('#psa-spinner')
+		.hide();
+        /*$('#cdp-reflect').click(function(){		
+			pch.displayComponent('cdp_component2');
+			pch.loadMethod['cdp_component2']();
+		});*/
+        $('#cdp-reflect').click(function(){
+			pch.displayComponent('cdp_component01');
+			pch.loadMethod['cdp_component01'](); 
+            
+            /* danryl's code */
+			delete sessionStorage.previewPage;
+        });
+       $(document).on('click','.cdp-next-select-domain3',function(){
+			$('.cdp-btn-helper-bottom .slds-popover')
+			.hide();
+            pch.displayComponent('cdp_component2');
+			pch.loadMethod['cdp_component2']();
+           	pch.loadMethod['cdp_component01']();
+           
+		});
+        $(document).on('click','.cdp-next-select-page02',function(){
+        	$('.cdp-btn-helper-bottom .slds-popover')
+			.hide();
+            pch.displayComponent('cdp_component02');
+			pch.loadMethod['cdp_component02']();
+            pch.loadMethod['cdp_component01']();
+		});
+       $(document).on('click','.cdp-back-to-page01',function(){
+			$('.cdp-btn-helper-bottom .slds-popover')
+			.hide();
+            pch.displayComponent('cdp_component01');
+		});
+		$('.cdp-btn-helper-bottom .slds-popover').hide();
+		$(document).on('click','.cdp-btn-helper-bottom', function(){
+			$('.cdp-btn-helper-bottom .slds-popover')
+			.toggle();
+		});
+		$(document).on('click','.cdp-back-to-menu', function(){		
+			$('.cdp-btn-helper-bottom .slds-popover')
+			.hide();
+			pch.displayComponent('cdp_component1');
+			pch.loadMethod['cdp_component1']();
+		});
+		$(document).on('click', '.cdp-next-page-3', function(){		
+			$('.cdp-btn-helper-bottom .slds-popover')
+			.hide();
+			pch.displayComponent('cdp_component3');
+		 	pch.loadMethod['cdp_component3']();
+		});
+		$(document).on('click', '.cpd-btn-back-to-page3', function(){		
+			$('.cdp-btn-helper-bottom .slds-popover')
+			.hide();
+			pch.displayComponent('cdp_component3');
+			pch.loadMethod['cdp_component3']();
+		});
+		$(document).on('click', '.cpd-btn-back-to-page2', function(){
+			$('.cdp-btn-helper-bottom .slds-popover')
+			.hide();
+			pch.displayComponent('cdp_component2');
+			pch.loadMethod['cdp_component2']();
+			$('.cpd-domain-container-box-2')
+			.hide();
+			$('.cpd-domain-container-box-1')
+			.show();
+            pch.loadMethod['cdp_component01']();
+		});
+		$(document).on('click', '.cpd-btn-back-to-page4', function(){
+			$('.cdp-btn-helper-bottom .slds-popover')
+			.hide();
+            /*delete sessionStorage.previewPage; */
+			pch.displayComponent('cdp_component4');
+			pch.loadMethod['cdp_component4'](); 
+		});
+		$(document).on('click','.cpd-btn-back-to-menu', function(){
+			pch.displayComponent('cdp_component1');
+		});	
+		$(document).on('click','#cdp-review' , function() {
+			$('.cdp-btn-helper-bottom .slds-popover')
+			.hide();	
+			pch.displayComponent('cdp_component4');
+			sessionStorage.setItem('previewPage',true);
+			pch.loadMethod['cdp_component4InitDataFromDatabase'](); 
+			setTimeout(function(){
+				// pch.loadMethod['cdp_component4']();  
+				$('.cdp-btn-helper-bottom .slds-popover')
+				.hide();
+				pch.loadMethod['setDataToSf'](function( res ){
+					if( res.status == 'SUCCESS' ){
+						pch.displayComponent('cdp_component6');
+						pch.loadMethod['cdp_component6'](); 
+					} else {
+						alert( res.message );
+					} 
+				}); 
+			},1000);
+		});
+ 
+
+		$(document).on('click', '.cpd-plan-next-page5', function(){
+			$('.cdp-btn-helper-bottom .slds-popover').hide();
+			$('.cpd-for-review').hide();
+			$('.cpd-for-default').show();
+			pch.displayComponent('cdp_component5');
+			pch.loadMethod['cdp_component5']();   
+        });
+		$(document).on('click', '.cpd-btn-back-to-page5', function(){
+			$('.cdp-btn-helper-bottom .slds-popover').hide();
+			$('.cpd-for-review').hide();
+			$('.cpd-for-default').show();
+			pch.displayComponent('cdp_component5');
+			pch.loadMethod['cdp_component5'](); 
+		});
+		$(document).on('click', '.cpd-btn-back-to-page-finish', function(){
+			$('.cdp-btn-helper-bottom .slds-popover')
+			.hide();
+			pch.loadMethod['setDataToSf'](function( res ){
+				if( res.status == 'SUCCESS' ){
+					pch.displayComponent('cdp_component6');
+					pch.loadMethod['cdp_component6'](); 
+				} else {
+					alert( res.message );
+				}
+			}); 
+		});
+		$(document).on('click', '.cpd-btn-save-training', function(){
+			$('.cdp-btn-helper-bottom .slds-popover')
+			.hide();
+			pch.loadMethod['setDataSaveTrainingModules'](); 
+
+		});
+	});
+
+</script> <c:AsPsaCdpHelperJs /> </apex:component>

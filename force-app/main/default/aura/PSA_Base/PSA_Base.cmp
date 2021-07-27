@@ -1,0 +1,40 @@
+<aura:component extensible="true">
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+    <aura:attribute name="invoiceId" type="String" access="public" required="false" /> 
+    <aura:attribute name="invoiceRecord" type="Object" access="public" required="false" />
+    <aura:attribute name="payment" type="Map" access="public" required="false" />
+    <aura:attribute name="recordLoadError" type="String" access="public" required="false" /> 
+    <aura:attribute name="screenName" type="String" access="public" required="false" /> 
+    <aura:attribute name="accountId" type="String" access="public" required="false" />
+    <aura:attribute name="firstName" type="String" access="public" required="false" default="" description="" />
+    <aura:attribute name="lastName" type="String" access="public" required="false" default="" description="" />
+    <aura:attribute name="billingAddress" type="String" access="public" required="false" default="" description="" />
+    <aura:attribute name="billingAddress2" type="String" access="public" required="false" default="" description="" />
+    <aura:attribute name="billingCity" type="String" access="public" required="false" default="" description="" />
+    <aura:attribute name="billingState" type="String" access="public" required="false" default="" description="" />
+    <aura:attribute name="billingZip" type="String" access="public" required="false" default="" description="" />
+    <aura:attribute name="billingCountry" type="String" access="public" required="false" default="" description="" />
+    <aura:attribute name="billingEmail" type="String" access="public" required="false" default="" description="" />
+    <aura:attribute name="cardHolderName" type="String" access="public" required="false" default="" description="" />
+    
+    <!-- <aura:attribute name="billingInfo" type="Object" access="public" required="false" /> -->
+    <aura:attribute name="sessionId" type="String" access="public" required="false" /> 
+    <aura:attribute name="frequency" type="String" access="public" required="false" default="" description=""/>
+
+    <aura:attribute name="countryoptions" type="List" default="[
+                                                               { label : 'Australia', value: 'Australia'},
+                                                               { label : 'New Zealand', value: 'New Zealand'},
+                                                               ]"/>
+
+    <aura:attribute name="quoteId" type="String" access="public" required="false" default="" description=""/>
+
+    <!--Notifications Library-->
+    <lightning:notificationsLibrary aura:id="notifLib" />
+    
+    {!v.body}
+    <!--<aura:if isTrue="{!v.isLoading == true}">
+        <div class="base-spinner">
+            <lightning:spinner variant="brand" alternativeText="Loading" size="large" />
+        </div>
+    </aura:if>-->
+</aura:component>

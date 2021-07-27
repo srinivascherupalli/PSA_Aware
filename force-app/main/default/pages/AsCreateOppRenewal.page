@@ -1,0 +1,39 @@
+<apex:page StandardController="AS_Subscription__c" showHeader="true">
+<apex:includeScript value="/lightning/lightning.out.js" />
+<script type='text/javascript' src='/canvas/sdk/js/publisher.js'></script>
+<div id="lightning"/>
+
+ <script>
+ 		var visualForceFunction = function(event)
+    {
+    	console.log(event.getParam("recordId"));
+    	console.log(getBaseURL());
+      document.location.href = getBaseURL()+ event.getParam("recordId");
+    };
+    
+    var base = function() {
+		   return location.protocol + "//" + location.hostname + 
+		      (location.port && ":" + location.port) + "/";
+		}
+		
+		function getBaseURL() {
+    
+	    var url = location.href;  // entire url including querystring - also: window.location.href;
+	    var baseURL = url.substring(0, url.indexOf('/', 14));
+	
+		return baseURL + "/";
+	   }
+ 	
+     $Lightning.use("c:AsCreateOppRenewalViaBtnApp", function() {
+       $Lightning.createComponent("c:AsCreateOppRenewalViaBtn", { 
+       		recordId: "{!AS_Subscription__c.Id}",
+       		hasErrors: false,
+        },
+       "lightning",
+       function(component) {
+       
+       	$A.eventService.addHandler({ "event": "c:AsCloseTheWindow", "handler" : visualForceFunction});
+       });
+     });
+ </script>
+</apex:page>

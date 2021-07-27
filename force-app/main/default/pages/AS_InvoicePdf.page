@@ -1,0 +1,226 @@
+<apex:page showHeader="false" renderAs="pdf" standardController="Order" extensions="AS_orderInvoiceExt">
+    <div id="inv-wrapper" style="font-family: sans-serif!important;font-size: 11px;" >   
+        <apex:image url="{!$Resource.psaLogo}" style="width: 70%;margin-left: -4%;" />
+        <div id="row1" style="    margin-top: -14%;">
+           <div class="row1-col1" style="display: inline-block;width: 68%;  vertical-align: text-top;" >
+                <p style="padding: 0% 0px 0px 0px!important;-webkit-margin-before: 0em;-webkit-margin-after: 0em;">
+                    <span>PO BOX 42</span> <br/>
+                    <span>DEAKIN WEST ACT 2600</span> <br/> 
+                    <span>ABN: 49 008 532 072</span> <br/>
+                    <span>P: 1300 369 772</span> <br/>
+                    <span>www.psa.org.au</span> <br/> 
+                    <span>finance@psa.org.au</span> <br/>
+                </p>                
+            </div>   
+             <div style="display: inline-block;vertical-align: text-top;width:31%"  >
+                <table style="width:99%;border-spacing: 0px;margin: 2%;"> 
+                    <tr>
+                        <td style="padding: 5px;border-top: 1px solid #222;border-left: 1px solid #222;background: #1b3d6d;color: #fff;" >PSA ID:</td>
+                        <td style="padding: 5px;padding: 5px;border-top: 1px solid;border-left: 1px solid;border-right: 1px solid;" >{!Order.Account.PSA_PSA_ID__c}</td>        
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px;border-top: 1px solid #222;border-left: 1px solid #222;border-bottom: 1px solid #222;background: #1b3d6d;color: #fff;" >Invoice date:</td>
+                        <td style="padding: 5px; border: 1px solid;"  >{!DAY(Order.EffectiveDate)}/{!MONTH(Order.EffectiveDate)}/{!YEAR(Order.EffectiveDate)}</td> 
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px;border-bottom: 1px solid #222;border-left: 1px solid #222;background: #1b3d6d;color: #fff;" >Invoice number:</td>
+                        <td style="padding: 5px; border-bottom: 1px solid;border-left: 1px solid; border-right: 1px solid;" >{!Order.AS_Invoice_Number__c}</td> 
+                    </tr>
+                </table>
+            </div>
+                        
+        </div>
+            <div id="row2"  style="    text-align: right;    margin-top: -3%;padding-right:11%;" >
+               <h1 style="color:#1b3d6d;"> 
+                   TAX INVOICE
+                </h1>
+            </div> 
+            <div id="row3">
+                <table border="1" style="border-spacing: 0px;width: 100%;font-family: sans-serif!important;font-size: 11px;">
+                    <tr>
+                        <th style="    padding: 5px;background: #1b3d6d;color: #fff; border: 1px solid #000;" >Bill to:</th>
+                        <th style="    padding: 5px;background: #1b3d6d;color: #fff; border: 1px solid #000;">Ship to:</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px 5px 12px 5px;vertical-align:top" >
+                            
+                                {!IF(ISNULL(Order.Account.Name), '',Order.Account.Name)}
+                            <p>
+                                {!IF(ISNULL(Order.BillToContact), '','Attn: ' + Order.BillToContact.Name)}
+                            </p>
+                            <p>
+                                {!IF(ISNULL(Order.BillingStreet), '',Order.BillingStreet)}
+                            </p>
+                            <p>
+                               {!IF(ISNULL(Order.BillingCity), '',Order.BillingCity + ' ')}
+                               {!IF(ISNULL(Order.BillingState), '',Order.BillingState + ' ')}
+                               {!IF(ISNULL(Order.BillingPostalCode), '',Order.BillingPostalCode + ' ')}
+                               {!IF(ISNULL(Order.BillingCountry), '',Order.BillingCountry)}
+                            </p>
+                        </td>
+                        <td style="padding: 12px 5px 12px 5px;vertical-align:top" >
+                                {!IF(ISNULL( shipToContactAccStr  ), '',shipToContactAccStr )}
+                            <p>
+                                {!IF(ISNULL(shipToContactStr), '','Attn: ' +shipToContactStr )}
+                            </p>
+                            <p>
+                                {!IF(ISNULL(Order.ShippingStreet), '',Order.ShippingStreet)}
+                            </p>
+                            <p>
+                               {!IF(ISNULL(Order.ShippingCity), '',Order.ShippingCity + ' ')}
+                               {!IF(ISNULL(Order.ShippingState), '',Order.ShippingState + ' ')}
+                               {!IF(ISNULL(Order.ShippingPostalCode), '',Order.ShippingPostalCode + ' ')}
+                               {!IF(ISNULL(Order.ShippingCountry), '',Order.ShippingCountry)}
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        <br/>
+            <div id="row4">
+                <table border="1" style="border-spacing: 0px;width: 100%;font-family: sans-serif!important;font-size: 11px;">
+                    <tr>
+                        <th style=" padding: 5px; background: #1b3d6d;
+    color: #fff;
+    border: 1px solid #000;text-align: left" >Quantity</th>
+                        <th style=" padding: 5px; background: #1b3d6d;
+    color: #fff;
+    border: 1px solid #000;text-align: left">Description</th>
+                        <th style=" padding: 5px; background: #1b3d6d;
+    color: #fff;
+    border: 1px solid #000;text-align: left">Unit Price</th>
+                        <th style=" padding: 5px; background: #1b3d6d;
+    color: #fff;
+    border: 1px solid #000;text-align: left">Discount %</th>
+                        <th style=" padding: 5px; background: #1b3d6d;
+    color: #fff;
+    border: 1px solid #000;text-align: left;width: 107px;">Extended Price</th>
+                    </tr>
+                    <apex:repeat value="{!allprocessOrdItem}" var="item">
+                        <tr>
+                            
+                            <td style="padding: 12px 5px 12px 5px;text-align: right" >
+                                   {!item.quantity}
+                            </td>
+                            <td style="padding: 5px;text-align: left">
+                                {!IF(ISNULL(item.description), '',item.description)}
+                            </td>
+                            <td style="padding: 5px;text-align: right">
+                                {!item.unitprice}
+                            </td>
+                            <td style="padding: 5px;text-align: right" >
+                                {!IF(ISNULL(item.discount), '0',item.discount)}
+                            </td>
+                            <td style="padding: 5px;text-align: right">
+                                {!IF(ISNULL(item.extendedprice), '0',item.extendedprice)}
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                    <tr>
+                        <td colspan="3" style="border: 1px solid #fff;vertical-align:top">
+                            <p style ="padding-left:5px;">
+                                Purchase order number: {!IF(ISNULL(Order.AS_Purchase_Order__c), '', Order.AS_Purchase_Order__c)}
+                            </p>
+                        </td>
+                        <td colspan="2" style="border: 1px solid #fff;padding-right: 5px;">
+                           <p style="text-align: right"> 
+                            Amount due (excl.tax): ${!Order.TotalAmount} 
+                           </p> 
+                           <p style="text-align: right">
+                               GST: ${!Order.AS_Taxable_Amount__c} 
+                           </p>
+                           <p style="text-align: right">
+                                <b>
+                               TOTAL: ${!Order.AS_Invoiced_Amount__c}
+                               </b>
+                           </p>
+                          <!-- <p style="text-align: right">
+                               Adjustments: 
+                           </p> -->
+                           <p style="text-align: right">
+                               Received: ${!Order.AS_Payment_Amount__c}
+                           </p>
+                           <p style="text-align: right">
+                               Amount due: ${!Order.AS_Outstanding_Amount__c}
+                           </p>
+                        </td>
+                    </tr> 
+                </table>
+            </div>
+            <hr style="border-top: 1px solid;margin-top: 5%;" />
+            <div id="row5">
+                <div class="row5-col1" style="display:block;width: 48%;">
+                        <p>{!IF(ISNULL(Order.AS_Payment_Terms__c), '','Payment Terms: ' + Order.AS_Payment_Terms__c)}</p>
+                    <apex:image url="{!$Resource.psaLogo}" style="width: 70%;     margin-left: -8%;"/>
+                    <div >
+                    <ul style="padding: 0px;margin:0px;">
+                        <li style="display:inline;vertical-align:top;margin-left:2px;">
+                            <apex:image url="{!$Resource.AS_BpayLogo}" style="width:10%;"/>
+                        </li>
+                        <li style="display: inline-block;
+                            vertical-align: top;
+                            color: #95a6b8;
+                            font-size: 13px;
+                            border:2px solid rgb(0, 45, 107);
+                            min-height: 50px;
+                            margin-top:-1px;
+                            width: 50%;">
+                            <p style="padding:0px 30px 0px 0px;color:#042c6f;margin: 5px 0px 0px 3px;">
+                                Biller Code: 220160
+                            </p>
+                            <p style="padding:0px 20px 0px 0px;color:#042c6f;margin: 4px 0px 0px 3px;">
+                                Ref: {!Order.Account.PSA_BPAY_CRN__c}
+                            </p>
+                        </li>
+                    </ul>
+                        <!--div style="display:inline;">
+                       
+                        </div>
+                        
+                        <div style="border-style: solid;border-width: 2px;border-color: blue;display:inline;">
+                                <p>
+                                    Biller Code: 
+                                </p>
+                                <p>
+                                    Ref: 
+                                </p>
+                        </div-->
+                    </div>
+                </div>  
+                <!--<p>
+                    Cheque: please post cheque and remittance advice to PSA, PO Box 42, DEAKIN WEST ACT 2600
+                </p> -->
+                <p>
+                    Credit Card:  call 1800 303 270 with your credit card name, number and expiry date
+                </p>
+
+ <!--                <div class="row5-col1" style="  display: inline-block; width: 50%;vertical-align:top">
+
+                    <p style="    text-align: center;
+    font-weight: 700;
+    font-size: 14px;
+">  Remittance Advice </p>
+                    <p>
+                        Name:
+                    </p>  
+                    <p>
+                        PSA ID:
+                    </p>
+                    <p>
+                        Invoice number:
+                    </p>
+                    <p>
+                        Invoice date:
+                    </p>
+                    <p>
+                        Amount due:
+                    </p>
+                    <p>
+                        Due date:
+                    </p>
+                </div>  --> 
+            </div>
+
+    </div>
+</apex:page>

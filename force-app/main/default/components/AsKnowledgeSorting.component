@@ -1,0 +1,41 @@
+<apex:component >
+	<div  style="text-align: right;" >
+		<label class="slds-text-title" > Sort By: </label>
+		<div class="slds-dropdown-trigger slds-dropdown-trigger_click knowledeg-picklist" id="knowledge-picklist-sorting">
+			<button style="width: 250px;" class="slds-button slds-button_icon slds-button_icon-border-filled psa-knowledeeg-btn--dropdown knowledge-btn-picklist" konwledge-toggle="0" aria-haspopup="true" title="Show More" knowledeg-dropdonw-id="#knowledge-picklist-sorting" >
+
+				<span id="knowledge-picklist-sorting-selected">None</span>
+
+				<svg class="slds-button__icon" aria-hidden="true">
+					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#down')}"></use>
+				</svg>
+
+				<span class="slds-assistive-text">Show More</span>
+			</button>
+			<div class="slds-dropdown slds-dropdown_left">
+				<ul class="slds-dropdown__list" role="menu" aria-label="Show More">
+					<li class="slds-dropdown__item knowledeg-select-category" knowledge-dropdown-type="sorting" category-label="Alphabetical A-Z" category-value="A-Z" role="presentation">
+						<a href="javascript:void(0);" role="menuitem" tabindex="0">
+							<span class="slds-truncate" title="Menu Item One"> Alphabetical A-Z </span>
+						</a>
+					</li>
+					<li class="slds-dropdown__item knowledeg-select-category" knowledge-dropdown-type="sorting" category-label="Alphabetical Z-A" category-value="Z-A" role="presentation">
+						<a href="javascript:void(0);" role="menuitem" tabindex="-1">
+							<span class="slds-truncate" title="Menu Item Two"> Alphabetical Z-A</span>
+						</a> 
+					</li>
+					<li class="slds-dropdown__item knowledeg-select-category" knowledge-dropdown-type="sorting" category-label="Document Date - Oldest to Newest" category-value="Oldest to Newest" role="presentation">
+						<a href="javascript:void(0);" role="menuitem" tabindex="-1">
+							<span class="slds-truncate" title="Menu Item Three">Document Date - Oldest to Newest</span>
+						</a>
+					</li>
+					<li class="slds-dropdown__item knowledeg-select-category" knowledge-dropdown-type="sorting" category-label="Document Date - Newest to Oldest" category-value="Newest to Oldest" role="presentation">
+						<a href="javascript:void(0);" role="menuitem" tabindex="-1">
+							<span class="slds-truncate" title="Menu Item Four">Document Date - Newest to Oldest</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div> 
+	</div>
+</apex:component>

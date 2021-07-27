@@ -1,0 +1,100 @@
+.THIS {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #FFFFFF;
+    box-shadow: 0px 10px 35px #F8F8F8;
+    border-radius: 19px;
+    padding: 40px 100px;
+}
+.THIS .AsHeaderCont {
+    /* text-align: center; */
+    border-bottom: 2px solid #F2F2F2;
+    padding: 40px 0;
+    margin-bottom: 42px;
+}
+.THIS .AsHeaderCont h1 {
+    font-size: 34px;
+    color: #003D79;
+    text-align: center;
+    font-weight: bold;
+}
+.THIS .AsSuccessMsg {
+    text-align: center;
+    font-size: 18px;
+    color: #003D79;
+    margin-bottom: 48px;
+    padding: 0 45px;
+}
+.THIS .AsWarning {
+    font-size: 16px;
+    color: #607A91;
+    text-align: center;
+    margin-bottom: 42px;
+    padding: 0 120px;
+}
+.THIS .AsWarning span {
+    font-weight: bold;
+}
+.THIS .AsBtnContainer {
+    text-align: center;
+    width: 100%;
+}
+.THIS .AsBtnContainer button {
+    padding: 15px 30px;
+    background-color: #003D79;
+    border: 2px solid #003D79;
+    color: #FFFFFF;
+    font-size: 16px;
+    border-radius: 6px;
+    min-width: 150px;
+}
+.THIS .AsBtnContainer button:hover {
+    background-color: #FFFFFF;
+    color: #003D79;
+}
+.THIS .AsBtnContainer button:nth-child(2) {
+    margin-left: 18px;
+}
+.THIS .AsImageCont {
+    text-align: center;
+    margin-bottom: 36px;
+}
+.THIS .AsImageCont img{
+    width: 145px;
+    height: 131px;
+}
+@media only screen and (max-width: 600px) {
+    .THIS {
+        padding: 40px 50px;
+    }
+    .THIS .AsSuccessMsg {
+        padding: 0 45px;
+    }
+    .THIS .AsWarning {
+        padding: 0 60px;
+    }
+}
+@media only screen and (max-width: 425px) {
+    .THIS {
+        padding: 30px 25px;
+    }
+    .THIS .AsHeaderCont {
+        padding: 28px 0;
+        margin-bottom: 37px;
+    }
+    .THIS .AsHeaderCont h1 {
+        font-size: 30px;
+    }
+    .THIS .AsSuccessMsg,
+    .THIS .AsWarning {
+        padding: 0;
+    }
+    .THIS .AsBtnContainer button {
+        width: 100%;
+    }
+    .THIS .AsBtnContainer button:nth-child(2) {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}

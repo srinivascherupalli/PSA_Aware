@@ -1,0 +1,376 @@
+<!--
+Copyright (c) 2014, salesforce.com, Inc.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+    * Neither the name of the salesforce.com, Inc. nor the names of its contributors
+    may be used to endorse or promote products derived from this software
+    without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<apex:page controller="TrainingTrackDetailCtrl" docType="html-5.0" sidebar="false" showHeader="{!showSFHeader}" standardStylesheets="false" cache="false">
+
+
+    <style type="text/css">
+        .almond #hero-banner {
+            background-color: #ffffff!important;
+        }
+        .almond #hero-banner .lms-desc-border-bottom {
+            border-bottom: 1px solid #DDD;    
+            padding-bottom: 40px;
+        }
+        .almond #hero-banner .lms-section-content{
+            border-bottom: 1px solid #DDD;    
+            padding-bottom: 40px;
+            margin-left: 27px;
+        }
+        .almond #hero-banner .slds-section__title-action {
+           background: #fff;   
+           font-weight: 300;
+           font-size: 1.75rem;
+           line-height: 1.25;
+           padding: 0;
+        }
+        .almond #hero-banner .slds-section__title-action span{
+            margin-left: 13px;
+        }
+    
+        .almond-slds .lms-collapse-section .slds-button:focus {
+            box-shadow: 0 0 3px #ffffff!important;
+        }
+        .slds-is-open .section-icon-switch{
+            display: block;
+        }
+        .slds-is-open .section-icon-chevronright{
+            display: none;
+        }
+       .section-icon-switch{
+            display: none;
+        }
+       .section-icon-chevronright{
+            display: block;
+        }
+        .slds-wrap{
+            padding-top: 24px;
+        }
+        #hb-wrap .track-detials-contianer { margin-left: 29px;  }
+        .lms-collapse-section{color: #000;}
+
+        #description-decode-css dl, #description-decode-css fieldset, #description-decode-css h1, #description-decode-css h2, #description-decode-css h3, #description-decode-css h4, #description-decode-css h5, #description-decode-css h6, #description-decode-css ol, #description-decode-css p, #description-decode-css ul {
+            margin: 1px!important;      
+        }
+
+        #description-decode-css ul ,  #description-decode-css ol {
+            margin: 10px 0 10px 40px!important;
+        }
+
+        #description-decode-css ul {
+            display: block;
+            list-style-type: disc;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            margin-left: 0;
+            margin-right: 0;
+            padding-left: 40px;
+        }
+ 
+
+    </style> 
+
+    <apex:composition template="LMS_HeroTemplate">
+ 
+        <apex:define name="head">
+            <title>{!track.Name}</title>
+        </apex:define>
+
+        <apex:define name="hero-banner">
+            <div id="hb-wrap">
+
+                <div class="track-detials-contianer">
+
+                    <apex:form >
+                        <apex:outputPanel layout="none" rendered="{!TrackType != null}">
+                            <div class="slds-p-horizontal--small slds-size--1-of-1" style="padding:10px 0;">
+                                <apex:outputPanel rendered="{! isLogin   }" >
+                                        
+                                    <apex:outputPanel rendered="{! isEnrolledInTrack   }" >
+                                            <p style="color: #b10839;"> You are now enrolled into the units for this course. </p>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{! isEnrolledInTrack == false }" >
+                                            <apex:commandButton styleClass="slds-button slds-button--brand btn-lg" action="{!purchase}" oncomplete="redirect()" reRender="resultsPanel" value="Purchase full course here"/>
+                                    </apex:outputPanel>
+
+                                </apex:outputPanel>
+                                 
+                                <apex:outputPanel rendered="{! isLogin == false   }" >
+                                      <apex:commandButton styleClass="slds-button slds-button--brand btn-lg" action="{!purchase}" oncomplete="redirect()" reRender="resultsPanel" value="Purchase full course here"/>
+                                </apex:outputPanel>
+
+                                
+                                <apex:outputPanel layout="none" id="resultsPanel">
+                                    <apex:inputHidden id="redirectURL" value="{!redirectURL}"/>
+                                    <apex:inputHidden id="ErrorMsg" value="{!userErrorMessage}"/>
+                                    <apex:inputHidden id="isGuest" value="{!isGuest}"/>
+                                </apex:outputPanel>
+                                <script>
+                                    function redirect(){
+                                        setTimeout(function(){
+                                            var isGuest = $('[id$="isGuest"]').val();
+                                            var redirectURL = $('[id$="redirectURL"]').val();
+                                            console.log('isGuest==>',isGuest);
+                                            if(isGuest == 'guest' || isGuest =='non-member' || isGuest =='member' ) showVError();
+                                            else window.location.replace(redirectURL);
+                                        }, 1000);
+                                    }
+                                    function proceedRedirect(){
+                                        var isGuest = $('[id$="isGuest"]').val();
+                                        var redirectURL = $('[id$="redirectURL"]').val();
+                                        parent.window.location.replace(redirectURL);
+                                    }
+                                </script>
+                            </div>
+                        </apex:outputPanel>
+                    </apex:form>
+
+                    <div class="slds-p-vertical--large slds-text-heading--large">{!track.Name}</div>
+                    <p class="slds-p-vertical--large"><apex:outputField value="{!track.Description__c}"/></p>
+                    <apex:outputPanel layout="none" rendered="{! trackTy.AS_Code__c != null }">
+                        <p class="slds-p-vertical--large" style="font-size: 14px"> Code: {!trackTy.AS_Code__c} </p>
+                    </apex:outputPanel>
+                </div>
+                <apex:outputPanel layout="none" rendered="{! trackTy.Information__c != null }">
+                        
+                    <div class="lms-collapse-section">
+                        <div class="slds-section slds-is-open" id="lms-section-1">
+                                <h3 class="slds-section__title">
+                                <button aria-controls="expando-unique-id" data-section-toggle-id="#lms-section-1" aria-expanded="true" class="slds-button slds-section__title-action lms-btn-section">
+                                    <svg  class="slds-button__icon section-icon-switch" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#switch')}"></use>
+                                    </svg> 
+                                    <svg  class="slds-button__icon section-icon-chevronright" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#chevronright')}"></use>
+                                    </svg> 
+                                    <span class="slds-truncate" title="Section Title">Description</span>
+                                </button>
+                            </h3>
+                            <div aria-hidden="false" class="slds-section__content lms-section-content" id="expando-unique-id">
+                                <div id="description-decode-css" >
+                                    <apex:outputtext value="{!trackTy.Information__c}" escape="false" />
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+
+                </apex:outputPanel>
+
+            </div>
+            <!--custom code -->
+            <br/>
+<!--             <apex:form >
+                <apex:outputPanel layout="none" rendered="{!TrackType != null}">
+                    <div class="slds-p-horizontal--small slds-size--1-of-1" style="padding:10px 0;">
+
+                        <apex:commandButton styleClass="slds-button slds-button--brand btn-lg" action="{!purchase}" oncomplete="redirect()" reRender="resultsPanel" value="Purchase full course here"/>
+                        <apex:outputPanel layout="none" id="resultsPanel">
+                            <apex:inputHidden id="redirectURL" value="{!redirectURL}"/>
+                            <apex:inputHidden id="ErrorMsg" value="{!userErrorMessage}"/>
+                            <apex:inputHidden id="isGuest" value="{!isGuest}"/>
+                        </apex:outputPanel>
+                        <script>
+                            function redirect(){
+                                setTimeout(function(){
+                                    var isGuest = $('[id$="isGuest"]').val();
+                                    var redirectURL = $('[id$="redirectURL"]').val();
+                                    
+                                    if(isGuest == 'guest') showVError();
+                                    else window.location.replace(redirectURL);
+                                }, 1000);
+                            }
+                            function proceedRedirect(){
+                                var isGuest = $('[id$="isGuest"]').val();
+                                var redirectURL = $('[id$="redirectURL"]').val();
+                                parent.window.location.replace(redirectURL);
+                            }
+                        </script>
+                    </div>
+                </apex:outputPanel>
+            </apex:form> -->
+        </apex:define>
+
+        <apex:define name="hero-banner-badge">
+            <div id="hb-right" class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--4-of-12 slds-large-size--3-of-12">
+                <div class="badge-container">
+                    <apex:outputfield value="{!track.Achievement__r.Acquired_Image__c}" rendered="{!track.Achievement__r.Work_Badge_Image_URL__c == null}"/>
+                    <apex:image url="{!track.Achievement__r.Work_Badge_Image_URL__c}" rendered="{!track.Achievement__r.Work_Badge_Image_URL__c != null}"/>
+                </div>
+            </div>
+        </apex:define>
+
+        <apex:define name="hero-banner-footer">
+            <span style="padding:0 1rem;">{!$Label.ALMS_Total_Plans} : {!totalItems}</span>
+        </apex:define>
+
+        <apex:define name="body">
+          
+            <div style="padding:0 1rem;margin-bottom:20px;">
+                <div class="progress-bar" title=" {!IF(totalCompleted != null && totalItems >0,(totalCompleted/totalItems)*100,"0")}%" style="width:100%;">
+                    <div class="progress-bar-value progress-bar-value-default" style="width:{!IF(totalCompleted != null && totalItems >0,(totalCompleted/totalItems)*100,'0')}%;">
+                    </div>
+                </div>
+            </div>
+
+            <apex:repeat value="{!trackLevels}" var="l">
+                <div class="slds-text-heading--medium" style="padding:0 1rem;">{!l.name}</div>
+                <hr/>
+                <div class="slds-text-heading--small" style="padding:0 1rem;">{!l.description}</div>
+                
+                <div class="trainingplan-container slds-grid slds-wrap slds-grid--pull-padded" style="padding:0 1rem;">
+                    <apex:repeat value="{!l.trackItems}" var="ti">
+                                                
+                        <apex:variable var="hasBadge" value="{!ti.mainAchievement.Acquired_Image__c != null || ti.mainAchievement.Work_Badge_Image_URL__c != null}" />
+                        <apex:variable var="itemURL" value="{!ti.itemURL}"/>
+                                                
+                        <div class="tplan_box_container slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--3-of-6 slds-large-size--4-of-12 track-level-item-content" item-url="{!IF(ti.isExpired,'',itemURL)}">
+                            <div class="tplan_box {!IF(itemURL == null,'tplan_box_disabled','')}">
+                                <apex:outputPanel layout="none" rendered="{!hasBadge}">
+                                    <div class="tplan_img">
+                                        <apex:outputPanel layout="none" rendered="{!ti.itemURL != null}">
+                                            <apex:outputfield value="{!ti.mainAchievement.Acquired_Image__c}" rendered="{!ti.mainAchievement.Work_Badge_Image_URL__c == null}"/>
+                                            <apex:image url="{!ti.mainAchievement.Work_Badge_Image_URL__c}" rendered="{!ti.mainAchievement.Work_Badge_Image_URL__c != null}"/>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel layout="none" rendered="{!ti.itemURL == null}">
+                                            <apex:outputfield value="{!ti.mainAchievement.Eligible_Image__c}" rendered="{!ti.mainAchievement.Work_Badge_Image_URL__c == null}"/>
+                                            <apex:image url="{!ti.mainAchievement.Work_Badge_Image_URL__c}" styleClass="badge-disabled" rendered="{!ti.mainAchievement.Work_Badge_Image_URL__c != null}"/>
+                                        </apex:outputPanel>
+                                    </div>
+                                </apex:outputPanel>
+                                <div class="{!IF(hasBadge,'tplan_details','tplan_details_no_image')}" >
+                                
+                                    <div class="slds-text-heading--small tplan_box_title">{!ti.trackItem.Training_Plan__r.Name}</div>
+                                    <apex:outputPanel layout="block" rendered="{!ti.tplanAssignment != null && !ti.isExpired}" styleClass="slds-m-top--x-small">
+                                        <span class="slds-badge slds-badge-{!IF(ti.tplanAssignment.Status__c=='Completed','success',IF(ti.tplanAssignment.Status__c=='In Progress','primary','default'))}">
+                                            {!IF(ti.tplanAssignment.Status__c == 'Completed',$Label.ALMS_Training_Status_Completed, IF(ti.tplanAssignment.Status__c == 'In Progress', $Label.ALMS_Training_Status_In_Progress, $Label.ALMS_Training_Status_Not_Started))}
+                                        </span>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel layout="block" rendered="{!itemURL != null && ti.tplanAssignment == null && !ti.isExpired}" styleClass="slds-m-top--x-small">>
+                                        <span class="slds-badge slds-badge-info slds-m-top--small">{!$Label.ALMS_TPlan_Not_Registered}</span>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel layout="block" rendered="{!itemURL == null && !ti.isExpired}" styleClass="slds-m-top--x-small">>
+                                        <span class="slds-badge slds-badge-default slds-m-top--small">{!$Label.ALMS_TPlan_Requires_Assignment}</span>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel layout="block" rendered="{!ti.isExpired}" styleClass="slds-m-top--x-small">>
+                                        <span class="slds-badge slds-badge-default slds-m-top--small">{!IF(ti.trackItem.Training_Plan__r.Status__c == 'Archived',$Label.ALMS_TPlan_Archived, $Label.ALMS_TPlan_Expired)}</span>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel layout="none" rendered="{!ti.trackItem.Training_Plan__r.Hide_After_End_Date__c && ti.trackItem.Training_Plan__r.End_Date__c != null}">
+                                        <span class="plan-due-date">{!$Label.ALMS_Training_Plan_Due} :&nbsp;<apex:outputField value="{!ti.trackItem.Training_Plan__r.End_Date__c}" /></span>
+                                    </apex:outputPanel>
+                                </div>
+                                <apex:outputPanel rendered="{!ti.trackItem.Training_Plan__r.New_Until__c != null && TODAY() <= ti.trackItem.Training_Plan__r.New_Until__c}">
+                                    <div class="ribbon-wrapper-green"><div class="ribbon-green">{!$Label.ALMS_New_Training_Plan}</div></div>
+                                </apex:outputPanel>
+                            </div>
+                        </div>
+
+                    </apex:repeat>
+                </div>
+
+            </apex:repeat>
+            
+            <div id="customLaunchModalBackdrop" class="slds-backdrop"></div>
+            <!-- Custom modal-->
+            <div id="customLaunchModal" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <button class="slds-button slds-modal__close slds-button--icon-inverse" onclick="return hideVError();">
+                            <svg aria-hidden="true" class="slds-button__icon slds-button__icon--large">
+                                <use xlink:href="{!URLFOR($Resource.almond_uilib, '/slds/icons/utility-sprite/svg/symbols.svg')}#close"></use>
+                            </svg>
+                        </button>
+                        <h3 id="header43" class="slds-text-heading--medium">Error</h3>
+                    </div>
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <h3 id="feedback_error"></h3>
+                    </div>
+                    <div class="slds-modal__footer">
+                        <button class="slds-button slds-button--neutral" onclick="return proceedRedirect();">Login/Register</button>
+                        <button class="slds-button slds-button--neutral" onclick="return hideVError();">{!$Label.ALMS_Close}</button>
+                    </div>
+                </div>
+            </div>
+
+            <apex:actionStatus id="status">
+                <apex:facet name="start">
+                    <apex:outputPanel >
+
+                        <c:LMSStatus statusComponentId="{!$Component.status}"/>
+                    </apex:outputPanel>
+                </apex:facet>
+            </apex:actionStatus>
+
+            <script>
+                jQuery(document).ready(function($){
+
+                    var bkcolor = "{!JSENCODE(track.Background_Color__c)}";
+                    var txtcolor = "{!JSENCODE(track.Text_Color__c)}";
+                    var bkimage = "url('{!JSENCODE(track.Background_Image_URL__c)}')";
+                    $('#hero-banner').css('background-color',bkcolor);
+                    $('#hero-banner').css('color',txtcolor);
+                    $('#hero-banner').css('background-image', bkimage);
+
+                    $(document.body).delegate('.track-level-item-content', 'click', function(){
+                        var planUrl = $(this).attr('item-url');
+                        if(planUrl){
+                            // Retain navigation history
+                            almond.redirectHandlerWithStatus(planUrl,true);
+                        }
+                    });
+
+                    $('.lms-btn-section').on('click', function(){
+                        var sectionId = $(this).attr('data-section-toggle-id');
+                        if( $( sectionId+'.slds-is-open' ).length == 1 ){
+                            $( sectionId ).removeClass( 'slds-is-open' );
+                        } else {
+                            $( sectionId ).addClass( 'slds-is-open' );
+                        }
+                    });
+                });
+            
+                function showVError(){
+                    console.log(' jrc ==> {!userErrorMessage}');
+                    console.log('showVError');
+                    var error_msg = $('[id$="ErrorMsg"]').val();
+                    if(error_msg){
+                        console.log('111here');
+                        $("#customLaunchModalBackdrop").addClass('slds-backdrop--open');
+                        $('#customLaunchModal').addClass('slds-fade-in-open');
+                        $('[id$="feedback_error"]').text(error_msg);
+                    }
+                }
+                function hideVError(){
+                    $("#customLaunchModalBackdrop").removeClass('slds-backdrop--open');
+                    $('#customLaunchModal').removeClass('slds-fade-in-open');
+                }
+            </script>
+
+        </apex:define>
+
+    </apex:composition>
+
+</apex:page>

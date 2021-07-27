@@ -1,0 +1,234 @@
+<aura:component
+  implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+  access="global"
+>
+  <aura:attribute name="iconList" type="List" default="[{
+        title: 'Add to plan',
+        icon: 'action:add_relationship'
+      },
+      {
+        title: 'Enrol',
+        icon: 'standard:actions_and_buttons'
+      },
+      {
+        title: 'Pay',
+        icon: 'action:update'
+      },
+      {
+        title: 'Start course',
+        icon: 'utility:setup_assistant_guide'
+      },
+      {
+        title: 'Complete course',
+        icon: 'action:update_status'
+      }]" />
+  <!--Attribute-->
+  <aura:attribute name="selectedTab" type="String" default="planned" />
+  <aura:attribute name="mainCPDData" type="AsCPDPlanner__c" />
+  <aura:attribute name="plannedSummary" type="AsCPD_Learning_Summary__c[]" />
+  <aura:attribute name="enrolledSummary" type="AsCPD_Learning_Summary__c[]" />
+  <aura:attribute name="progressSummary" type="AsCPD_Learning_Summary__c[]" />
+  <aura:attribute name="group1DefaultImage" type="String" />
+  <aura:attribute name="group2DefaultImage" type="String" />
+
+  <!--Handler-->
+  <aura:handler event="force:navigateToSObject" action="{!c.navigate}" />
+  <!--Starts Here-->
+  <div class="container">
+    <div class="uiOutputRichText">
+        <h2>Learn</h2>
+      <c:IconGrid title="Your Learning Journey" iconList="{!v.iconList}" />
+      
+        <p>Your CPD plan is automatically created upon becoming a PSA member and
+        at the start of each new CPD year to keep track of your yearly CPD
+        progress. All online CPD activities, and accredited events that you
+        attend are automatically recorded into your CPD plan.
+      </p>
+      <h3>Need help?</h3>
+      <p
+        >If you have any questions or need support during your learning journey,
+        our Member Services Team is here to help you every step of the way.
+        Contact us via email membership@psa.org.au or call 1300 369 772</p
+      >
+    </div>
+    <div class="slds-tabs_default course-body__tabs">
+      <ul class="slds-tabs_default__nav" role="tablist">
+        <li
+          onclick="{!c.plantabClick}"
+          title="Item One"
+          role="presentation"
+          class="{!(v.selectedTab == 'planned') ? 'slds-tabs_default__item slds-is-active' : 'slds-tabs_default__item' }"
+        >
+          <a
+            class="slds-tabs_default__link"
+            href="javascript:void(0);"
+            role="tab"
+            tabindex="0"
+            aria-selected="true"
+            aria-controls="tab-default-1"
+            id="tab-default-1__item"
+          >
+            <span>Planned</span> Not yet enrolled
+          </a>
+        </li>
+        <li
+          onclick="{!c.enrollClick}"
+          title="Item One"
+          role="presentation"
+          class="{!(v.selectedTab == 'enrolled') ? 'slds-tabs_default__item slds-is-active' : 'slds-tabs_default__item' }"
+        >
+          <a
+            class="slds-tabs_default__link"
+            href="javascript:void(0);"
+            role="tab"
+            tabindex="0"
+            aria-selected="true"
+            aria-controls="tab-default-1"
+            id="tab-default-1__item"
+          >
+            <span>Enrolled</span> Not yet started
+          </a>
+        </li>
+        <li
+          onclick="{!c.progressClick}"
+          title="Item One"
+          role="presentation"
+          class="{!(v.selectedTab == 'progress') ? 'slds-tabs_default__item slds-is-active' : 'slds-tabs_default__item' }"
+        >
+          <a
+            class="slds-tabs_default__link"
+            href="javascript:void(0);"
+            role="tab"
+            tabindex="0"
+            aria-selected="true"
+            aria-controls="tab-default-1"
+            id="tab-default-1__item"
+          >
+            <span>In Progress</span> To be completed
+          </a>
+        </li>
+      </ul>
+      <div
+        id="tab-default-0"
+        class="slds-tabs_default__content slds-show"
+        role="tabpanel"
+        aria-labelledby="tab-default-0__item"
+      >
+        <aura:if isTrue="{!v.selectedTab=='planned'}">
+          <div class="row">
+            <aura:iteration items="{!v.plannedSummary}" var="item">
+              <!--aura:if isTrue="{!item.Status__c =='Planned'}"-->
+              <div class="col-12 col-md-6 col-lg-4 card-wrapper">
+                <a
+                  id="{!item.AS_Training_Plan_Record_ID__c}"
+                  onclick="{!c.navigate}"
+                  class="card card--course card--learn"
+                >
+                  <div class="card__header">
+                    <div class="card__img-placeholder"></div>
+                   <aura:if isTrue="{!not(empty(item.Eligible_Image__c))}"> 
+                    <ui:outputRichText
+                      value="{!item.Eligible_Image__c}"
+                      class="card__badge"/>
+                      </aura:if>
+                      <aura:if isTrue="{!and(empty(item.Eligible_Image__c),item.Group__c=='Group 1')}">
+                      <ui:outputRichText
+                      value="{!v.group1DefaultImage}" class="card__badge"/>
+                      </aura:if>
+                      <aura:if isTrue="{!and(empty(item.Eligible_Image__c),item.Group__c=='Group 2')}">
+                      <ui:outputRichText
+                      value="{!v.group2DefaultImage}" class="card__badge"/>
+                      </aura:if>
+                       <aura:if isTrue="{!and(empty(item.Eligible_Image__c),item.Group__c=='Group 3')}">
+                     	<img src="{!$Resource.PSAFED + '/dist/images/group3-blanklogo.gif'}" class="card__badge"/>
+                      </aura:if>
+                    <!--img src="{!$Resource.PSAFED + '/dist/images/credit-badge-group-1.png'}" class="card__badge"/-->
+                  </div>
+                  <div class="card__body">
+                    <p class="card__title">{!item.Name}</p>
+                  </div>
+                </a>
+              </div>
+              <!--/aura:if-->
+            </aura:iteration>
+          </div>
+        </aura:if>
+        <aura:if isTrue="{!v.selectedTab=='enrolled'}">
+          <div class="row">
+            <aura:iteration items="{!v.enrolledSummary}" var="item">
+              <div class="col-12 col-md-6 col-lg-4 card-wrapper">
+                <a
+                  id="{!item.AS_Training_Plan_Record_ID__c}"
+                  onclick="{!c.navigate}"
+                  class="card card--course card--learn"
+                >
+                  <div class="card__header">
+                    <div class="card__img-placeholder"></div>
+                    <aura:if isTrue="{!not(empty(item.Eligible_Image__c))}"> 
+                    <ui:outputRichText
+                      value="{!item.Eligible_Image__c}"
+                      class="card__badge"/>
+                      </aura:if>
+                      <aura:if isTrue="{!and(empty(item.Eligible_Image__c),item.Group__c=='Group 1')}">
+                      <ui:outputRichText
+                      value="{!v.group1DefaultImage}" class="card__badge"/>
+                      </aura:if>
+                      <aura:if isTrue="{!and(empty(item.Eligible_Image__c),item.Group__c=='Group 2')}">
+                      <ui:outputRichText
+                      value="{!v.group2DefaultImage}" class="card__badge"/>
+                      </aura:if>
+                      <aura:if isTrue="{!and(empty(item.Eligible_Image__c),item.Group__c=='Group 3')}">
+                         <img src="{!$Resource.PSAFED + '/dist/images/group3-blanklogo.gif'}" class="card__badge"/>
+
+                      </aura:if>
+                    <!--img src="{!$Resource.PSAFED + '/dist/images/credit-badge-group-1.png'}" class="card__badge"/-->
+                  </div>
+                  <div class="card__body">
+                    <p class="card__title">{!item.Name}</p>
+                  </div>
+                </a>
+              </div>
+            </aura:iteration>
+          </div>
+        </aura:if>
+        <aura:if isTrue="{!v.selectedTab=='progress'}">
+          <div class="row">
+            <aura:iteration items="{!v.progressSummary}" var="item">
+              <div class="col-12 col-md-6 col-lg-4 card-wrapper">
+                <a
+                  id="{!item.AS_Training_Plan_Record_ID__c}"
+                  onclick="{!c.navigate}"
+                  class="card card--course card--learn"
+                >
+                  <div class="card__header">
+                    <div class="card__img-placeholder"></div>
+                    <aura:if isTrue="{!not(empty(item.Eligible_Image__c))}"> 
+                    <ui:outputRichText
+                      value="{!item.Eligible_Image__c}"
+                      class="card__badge"/>
+                      </aura:if>
+                      <aura:if isTrue="{!and(empty(item.Eligible_Image__c),item.Group__c=='Group 1')}">
+                      <ui:outputRichText
+                      value="{!v.group1DefaultImage}" class="card__badge"/>
+                      </aura:if>
+                      <aura:if isTrue="{!and(empty(item.Eligible_Image__c),item.Group__c=='Group 2')}">
+                      <ui:outputRichText
+                      value="{!v.group2DefaultImage}" class="card__badge"/>
+                      </aura:if>
+                       <aura:if isTrue="{!and(empty(item.Eligible_Image__c),item.Group__c=='Group 3')}">
+                         <img src="{!$Resource.PSAFED + '/dist/images/group3-blanklogo.gif'}" class="card__badge"/>
+                      </aura:if>
+                    <!--img src="{!$Resource.PSAFED + '/dist/images/credit-badge-group-1.png'}" class="card__badge"/-->
+                  </div>
+                  <div class="card__body">
+                    <p class="card__title">{!item.Name}</p>
+                  </div>
+                </a>
+              </div>
+            </aura:iteration>
+          </div>
+        </aura:if>
+      </div>
+    </div>
+  </div>
+</aura:component>

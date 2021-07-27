@@ -1,0 +1,135 @@
+<aura:component controller="AsEnrollmentEventController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:registerEvent name="Enrolment_Event" type="c:EnrolmentActiveStep"/>
+    <aura:attribute name="EnrollmentId" type="String" /> 
+    <aura:attribute name="status" type="String" /> 
+ 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="EventUnits" Type="Object" />
+    <aura:attribute name="theMap" type="Map" default="{}"/>
+    <!-- Added Juniel PRI - 198 -->
+    <aura:attribute name="parametermap" type="Object"/>
+
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+ 
+    <div class="AsElecCoreContainer slds-container">
+        <div class="as-event-instance-container">
+            <h2>Event Selection</h2>
+            <aura:iteration items="{!v.EventUnits}" var="item">
+                <div class="as-event-instance">
+                    <h3>Please select an instance of {!item.UnitName}</h3>
+                    <aura:iteration items="{!item.EventSession}" var="EventItem">
+
+                            <aura:if isTrue="{!EventItem.eventSession.Space_Remaining__c != 0}">
+                                 
+                                <label class="AsLabel-OnClick"> 
+                                    <input type="{!item.InputType}" disabled="{!EventItem.isEnabled}" checked="{!EventItem.isAttened}"  class="inputSelected" name="{!item.Group}"  data-event-session="{!EventItem.eventSession.Id}" data-tplan="{!EventItem.learningPackageUnit.AS_Unit__r.AS_Training_Plan__c}" aura:id="slds-event-selection" />
+                                    <div class="AsEventContainer">   
+                                        <div class="AsSchedCont"> 
+                                            <div> 
+                                                <div class="AsDateCont">
+                                                    <h1>{!EventItem.eventSession.dayOfSD}</h1>
+                                                    <h4>{!EventItem.eventSession.monthOfSD}</h4>
+                                                </div>
+                                                <div class="AsTimeCont">
+                                                    <div class="AsTime">
+                                                        <h6>Start time</h6>
+                                                        <h5>{!EventItem.eventSession.st}</h5>
+                                                    </div>
+                                                    <div class="AsTime">
+                                                        <h6>End time</h6>
+                                                        <h5>{!EventItem.eventSession.et}</h5>
+                                                    </div>
+                                                </div> 
+                                            </div> 
+                                        </div>
+                                        <div class="AsDescCont">
+                                            <p>{!EventItem.eventSession.Name}</p>
+                                            <div>
+                                                <h3>{!EventItem.eventSession.AS_Location__c}</h3>
+                                                <h5>Spaces remaining:{!EventItem.eventSession.Space_Remaining__c} </h5>
+                                            </div>
+                                        </div>
+                                        <div class="AsCustomCheckbox"></div>
+                                    </div> 
+                                </label>
+
+                                <aura:set attribute="else">
+    
+                                    <label class="AsLabel-OnClick">
+                                        <div class="AsEventContainer AsSoldOutcont">
+                                            <div class="AsSchedCont">
+                                                <div> 
+                                                    <div class="AsDateCont">
+                                                        <h1>{!EventItem.eventSession.dayOfSD}</h1>
+                                                        <h4>{!EventItem.eventSession.monthOfSD}</h4>
+                                                    </div>
+                                                    <div class="AsTimeCont">
+                                                        <div class="AsTime">
+                                                            <h6>Start time</h6>
+                                                            <h5>{!EventItem.eventSession.st}</h5>
+                                                        </div>
+                                                        <div class="AsTime">
+                                                            <h6>End time</h6>
+                                                            <h5>{!EventItem.eventSession.et}</h5>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                            <div class="AsDescCont">
+                                                <p>{!EventItem.eventSession.Name}</p>
+                                                <div>
+                                                    <h3>{!EventItem.eventSession.AS_Location__c}</h3>
+                                                    <h5 class="AsSpaceRemaining">Spaces remaining: 16</h5>
+                                                    <h5 class="AsSoldOut">SOLD OUT</h5>
+                                                </div>
+                                            </div>
+                                            <div class="AsCustomCheckbox"></div>
+                                        </div> 
+                                    </label>
+                
+                                </aura:set>
+                            </aura:if> 
+                    </aura:iteration>
+                </div> 
+            </aura:iteration>
+
+        </div>
+        <div>
+
+        <div class="slds-m-top_xx-large slds-btn-content">
+                <div class="slds-float_left">
+                    <lightning:button variant="Neutral" class="slds-back-btn" label="Back" title="Back" onclick="{!c.backCallback}"/>
+                    <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{!c.cancelCallback}"/>
+                </div>
+                <div class="slds-float_right">
+
+                        <aura:if isTrue="{!'Draft' == v.status}">
+                    
+                                <!-- email button -->
+                            <lightning:button variant="Neutral" class="slds-save-email-btn"  label="Save &amp; Email me a link" title="Save &amp; Email me a link" onclick="{!c.saveSendLink}"/> 
+                            
+                        </aura:if> 
+                        
+                        <!-- save button -->
+                        <lightning:button variant="brand"  class="slds-save-btn" label="Save and Continue" title="Save &amp; Continue" onclick="{!c.saveRecord}"/>
+            
+                </div>
+            </div>
+            <!-- <button class="AsContinueBtn" onclick="{!c.onSave}" >Save &amp; Continue</button>
+            <button class="AsEmailBtn" onclick="{!c.onSave}" >Save &amp; Email me a link</button>
+            <button class="AsCancelBtn">Cancel</button> -->
+        </div>
+    </div>
+
+      <!-- spinner -->
+      <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+     <!-- spinner -->
+</aura:component>

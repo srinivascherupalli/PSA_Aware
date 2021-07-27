@@ -1,0 +1,111 @@
+<!-- 
+    *Author : Jet R. Compayan
+    *Description : This  Component will Display all the Domains   of Cpd Planning Tool  
+    *Date Created : Apr 26,2018
+    *Last Modified By : Cristelle Do-ong
+    *Date Last Modified : July 30, 2018
+    *Related Meta Data : User
+-->
+
+<!-- AsPsaCdpPage2 -->
+<apex:component controller="AsCPDPlanner">
+	<div id="cdp_component2" class="cdp-wrapper-container-box slds-box cdp-component">
+		<div class="cdp-box-container">
+			<div class="slds-grid  ">
+				<div class="slds-col slds-size_5-of-12 domains-tiles">
+
+					<div class="cdp-container-rotate-box">
+						<div class="cdp-option-boxes cdp-box-options1 cpd-domain3-checkbox">
+							<p> Domain 3:<br/>
+							Medicines management and <br/>
+							patient care </p>
+						</div>
+
+						<div class="cdp-option-boxes cdp-box-options2 cpd-domain4-checkbox" >
+							<p> Domain 4:<br/>
+							Leadership and management<br/>
+							</p>
+						</div>
+
+						<div class="cdp-option-boxes cdp-box-options3 cpd-domain cpd-domain5-checkbox">
+							<p> Domain 5:<br/> 
+							Education and research </p>
+						</div>	
+					</div>
+
+					<div class="cdp-container-rotate-box-none">
+						<div class="cdp-option-boxes-bottom cdp-box">
+							<p> Domain 4<br/>
+								Leadership and management<br/>
+							 </p>
+						</div>
+						<div class="cdp-option-boxes-bottom cdp-box">
+							<p> Domain 2:<br/> 
+							Communication and collaboration </p>
+						</div>	
+						<div class="cdp-option-boxes-bottom cdp-box">
+							<p> Domain 1:<br/>
+								Professional and ethics
+							</p>
+						</div>
+					</div>
+ 
+
+				</div>
+				<div class="slds-col slds-size_7-of-12 ">
+					<div class="cpd-domain-container-box-1">
+
+						<p style="font-size: 16px;font-weight: 600;padding-bottom: 17px;">
+							You have selected Domain <span id="domainNumber">3</span>.
+						</p>
+
+                        <p id="domainDesc" style="font-size: 16px; padding-bottom: 17px;line-height: 18px;">
+                            Domain 3 considers medicines management and patient care and includes those standards where pharmacists apply their expertise to promote wellness or work in direct consultation with patients on in collaboration with other health professionals to improve health.
+                        </p>
+                        
+						<p style="font-size: 16px;font-weight: 600;padding-bottom: 17px;">
+							Select those standards that are relevant to your current role or scope of practice:
+						</p>
+                        
+
+						<div class="cdp-domain-box">
+							<div class="cdp-domain-list" id="cpd-display-domains">
+							</div>
+						</div>
+
+					</div>
+					<div class="cpd-domain-container-box-2">
+						<p style="font-size: 16px; font-weight: 600; padding-bottom: 17px;line-height: 18px;">
+							Well done, you have established your unique scope of practice.
+                        </p>
+                        <p style="font-size: 16px; padding-bottom: 17px;line-height: 18px;">
+							Now that you have reflected on your role, it’s time to identify knowledge gaps or learning opportunities that you can address through professional development.
+                        </p>
+						<p style="font-size: 16px; padding-bottom: 17px;line-height: 18px;">
+							Click next when you are ready to continue.
+						</p>
+					</div>
+					<div class="cdp-btn-group-procced">
+						<div class="slds-form-element">
+							<div class="slds-form-element__icon slds-align-middle">
+								<a href="https://my.psa.org.au/s/article/CPD-UserGuide" target="_blank"><button class="slds-button slds-button_icon slds-button slds-button_icon cdp-btn-helper-bottom" aria-describedby="help" title="Help">
+									<svg class="slds-button__icon" aria-hidden="true">
+										<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use>
+									</svg>
+									<span class="slds-assistive-text">Help</span>
+<!-- 									<div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help">
+										<div class="slds-popover__body">Need help? Access the full National Competency Standards Framework and view user guides and tutorial videos to assist you.</div>
+									</div> -->
+								</button>
+								</a> 
+								<button class="slds-button slds-button_brand cpd-back-select">Previous</button>
+								<button class="slds-button slds-button_brand cpd-btn-select cdp-next-select">Next</button>
+							</div>
+						</div> 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</apex:component>

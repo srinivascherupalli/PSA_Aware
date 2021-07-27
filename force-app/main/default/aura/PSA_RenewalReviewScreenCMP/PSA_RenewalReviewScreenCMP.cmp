@@ -1,0 +1,232 @@
+<aura:component extends="c:PSA_Base" controller="PSA_RenewalScreenContoller">
+    
+    <aura:attribute name="invLine" type="Object" default="{}"/>
+    <aura:attribute name="billingInfo" type="Object"/>
+    <aura:attribute name="cardNumber" type="String" access="private" default=""/>
+    <aura:attribute name="Address" type="Object" access="private" default="{}"/>
+    <aura:attribute name="isReadTerms" type="Boolean" default="false"/>
+	
+    <aura:handler event="c:PSA_NavigationEvent" action="{!c.handleBackButtonClick}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.billingInfo.gate}" action="{!c.handleBillingChange}" />
+
+    <aura:attribute name="paymentStatus" type="String" default="Draft"/>
+    <aura:attribute name="accountId" type="String" default=""/>
+
+    <aura:attribute name="currentUser" type="User"/>
+    <aura:attribute name="isLoadingMsg" type="Boolean" default="false"/>
+
+    <aura:attribute type="Double" name="pollingCount" default="0"/>
+    <aura:attribute name="invLinePrice" type="Map"/>
+
+    <force:recordData aura:id="recordLoader" recordId="{!$SObjectType.CurrentUser.Id}"  fields="Profile.Name" targetFields="{!v.currentUser}"/>
+    
+    <force:recordData aura:id="forceRecord"
+                      recordId="{!v.invoiceId}" 
+                      layoutType="FULL"
+                      targetFields="{!v.invoiceRecord}"
+                      targetError="{!v.recordLoadError}"
+                      recordUpdated="{!c.recordUpdated}" />
+
+    <aura:attribute name="product_Name" type="String"/>
+    <aura:attribute name="frequency" type="String"/>
+
+    
+                     <!--  {!v.currentUser.Profile.Name} -->
+	<aura:if isTrue="{!v.isLoadingMsg}">
+        <h3 class="loaderMsg">
+            Please wait while we are processing your payment...
+        </h3>
+    </aura:if>
+    <aura:if isTrue="{! or(v.paymentStatus == 'Draft', v.paymentStatus == 'Fail') }">                  
+        <div class="psa-heading text-center">
+            <h1>Review and Confirm</h1>
+        </div>
+    <hr class="psa-hori-line" />
+    <div class="membership-package-info">
+        <div class="box-membership-package">
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="membership-package-subheading">
+                        <p>Your package</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="membership-package-advantage">
+                        <h3>{!v.product_Name}</h3>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="membership-package-advantage-value text-right">
+                        <h3><span><lightning:formattedNumber value="{!v.payment.total}" style="currency" currencyCode="AUD" maximumFractionDigits="2"/></span><span class="freq"> {!v.frequency}</span></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<!--         <hr class="psa-hori-line" />
+        <div class="membership-package-info">
+            <div class="box-membership-package">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-subheading">
+                            <p>{!v.invLine.blng__Product__r.Family}</p>
+                        </div>
+                    </div>
+                </div>
+                <aura:iteration items="{!v.invLinePrice}" var="item" indexVar="index">
+
+                      <div>{!item.Name}</div>
+
+                      <div class="text-right"><lightning:formattedNumber value="{!item.blng__Invoice__r.blng__TotalAmount__c}" style="currency" currencyCode="AUD" minimumFractionDigits="2" maximumFractionDigits="2"/></div>
+                      <div>{!item.blng__BillingFrequency__c}</div>
+                  </aura:iteration>
+                
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-subheading">
+                            <p>Your package</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-advantage">
+                            <h3>Advantage</h3>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-advantage-value text-right">
+                            <h3><span><lightning:formattedNumber value="{!v.payment.total}" style="currency" currencyCode="AUD" maximumFractionDigits="2"/></span> yearly</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <hr class="psa-hori-line" />
+        <div class="box-review-confirm-details">
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="review-confirm-sub-heading">
+                        <h3>Payment Details</h3>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="psa-edit-details text-right">
+                        <p><i class="fas fa-pencil-alt"></i> <a href="javascript:void(0);" onclick="{!c.handleBackButtonClick}">Edit</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div class="review-and-confirm-details review-and-confirm-payment-details">
+                        <h4>Card number</h4>
+                        <p aura:id="svgSpan-Token"></p>
+                    </div>
+                    
+                </div>
+                <div class="col-sm-4 col-sm-offset-1 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-1">
+                    <div class="review-and-confirm-details">
+                        <h4>Billing address</h4>
+                        <p>{!v.Address.name}<span>{!v.Address.addressLine1},</span> <span>{!v.Address.city}, {!v.Address.state}&nbsp;{!v.Address.postalCode}</span> <span>{!v.Address.country}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="psa-hori-line" />
+        <div class="psa-sub-heading total-info">
+            <h3><i class="fas fa-folder-open"></i> Payment Total</h3>
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="total-addi-info">
+                        <p>Subtotal</p>
+                        <p>GST</p>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="total-addi-info text-right">
+                        <p><lightning:formattedNumber value="{!v.payment.subtotal}" style="currency" currencyCode="AUD" maximumFractionDigits="2"/></p>
+                        <p><lightning:formattedNumber value="{!v.payment.tax}" style="currency" currencyCode="AUD" maximumFractionDigits="2"/></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="your-total-heading">
+                        <h3>Your total</h3>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="your-total-heading text-right">
+                        <h3><lightning:formattedNumber value="{!v.payment.total}" style="currency" currencyCode="AUD" maximumFractionDigits="2"/></h3>
+                       <!--  <p>12 monthly installments of $41.59</p> -->
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <!--<hr class="psa-hori-line" />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group-payment-method">
+                    <lightning:input 
+                        aura:id="tcCheck"
+                        class="form-input" 
+                        type="checkbox" 
+                        label="The Pharmaceutical Society of Australia annual membership susbscriptions are non-refundable and by selecting an installment payment option you are agreeing to pay the complete annual subscription." 
+                        name="psa-checkbox-1" 
+                        checked="{!v.isReadTerms}" 
+                        required="true"
+                        onchange="{!c.handleTc}"
+                    />
+                </div>
+            </div>
+        </div> -->
+    </aura:if>
+
+    <aura:if isTrue="{!v.paymentStatus == 'Fail' }">    
+        <hr class="psa-hori-line" />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="fail-banner slds-align_absolute-center">
+                    <lightning:icon iconName="utility:error" alternativeText="error" title="error" size="large" class="slds-icon slds-icon-text-default"/>
+                    <span>An error has occured, please try again later.</span>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+
+    <aura:if isTrue="{!v.paymentStatus == 'Success' }">    
+        <hr class="psa-hori-line" />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="success-banner slds-align_absolute-center">
+                    <lightning:icon iconName="utility:success" alternativeText="success" title="success" size="large" class="slds-icon slds-icon-text-default"/>
+                    <span>Thank you! Your payment has been received.</span>
+                </div>
+            </div>
+        </div>
+        <hr class="psa-hori-line" />
+    </aura:if>
+
+    <aura:if isTrue="{!v.paymentStatus != 'Success' }">
+        <hr class="psa-hori-line" />
+        <div class="row">
+            <div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
+                <div class="btn-border">
+                    <a href="javascript:void(0);" onclick="{!c.handleBackButtonClick}">Back</a>
+                </div>
+            </div>
+            <div class="col-xs-8 col-sm-6 col-md-6 col-lg-6">
+                <div class="btn-background-border text-right">
+                    <a href="javascript:void(0);" onclick="{!c.handleButtonClick}">Confirm and Pay</a>
+
+                  <!--   <a href="javascript:void(0);" onclick="{!c.handleButtonPoll}">Confirm and Pay poll</a> -->
+                </div>
+            </div>
+        </div>
+    </aura:if>                       
+</aura:component>

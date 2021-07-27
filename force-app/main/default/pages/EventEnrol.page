@@ -1,0 +1,34 @@
+<apex:page showHeader="false" standardStylesheets="false">
+    <apex:includeLightning /> 
+    <div id="lightning" />
+     <script>
+        $Lightning.use("c:EventEnrollApp",   // name of the Lightning app
+            function() {
+                $Lightning.createComponent("c:EventEnrolPage", 
+                  {},
+                  "lightning",
+                  function(cmp) {
+                    // do some stuff
+                  });
+        }               
+     );
+    </script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script>
+        var $jk = jQuery.noConflict();
+    //window.onunload  = closingCode;
+    
+    	var trainingplanId;
+    
+        $jk(document).ready(function(){
+            console.log('isEvent');
+            var url = new URL(window.location.href);
+			trainingplanId = url.searchParams.get("id");
+        });
+        function closingCode(){
+           	var url = window.location.origin;
+        	url = url+'/s/sfdcpage/%2Fapex%2FTrainingPlanPreview%3Fid='+trainingplanId+'&p=reg';
+           	parent.window.location = url;
+        }
+   </script>
+</apex:page>

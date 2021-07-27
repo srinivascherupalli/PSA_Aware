@@ -1,0 +1,188 @@
+<aura:component
+  implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+  access="global"
+>
+  <!--Atrributes-->
+  <aura:attribute name="recordId" type="string" />
+  <aura:attribute name="openForm" type="Boolean" default="false" />
+  <aura:attribute name="formSubmitted" type="Boolean" default="false" />
+  <!--Startshere-->
+
+  <div class="uiOutputRichText">
+    <h2>Self-record Non-PSA CPD activities</h2>
+    <p
+      >Any PSA CPD activity that you complete is automatically recorded into
+      your CPD Plan.</p
+    >
+    <p
+      >You can record non-PSA CPD activities using the self-record form below
+      and add to your CPD Plan.</p
+    >
+  </div>
+    <hr/>
+  <div class="uiOutputRichText">
+    <h3 class="text-coolGrey">CPD How to Guides</h3>
+    <p
+      >If you have further questions about documenting your CPD activities or
+      allocating your CPD credits, please read our supporting documents
+      below:</p
+    >
+    <ul>
+      <a target="_blank"
+        href="https://my.psa.org.au/s/article/Allocating-CPD-Credits-Reference-Card"
+        ><li>Allocating CPD Credits reference card</li></a
+      >
+      <a target="_blank"
+        href="https://my.psa.org.au/s/article/Guide-to-documenting-group-3-CPD-credits"
+        ><li>Guide to documenting Group 3 CPD credits</li></a
+      >
+      <a  target="_blank" href="https://my.psa.org.au/s/article/CPD-Group-3-Template"
+        ><li>PSA CPD Group 3 template</li></a
+      >
+    </ul>
+  </div>
+  <div class="course-body__general course-body__general--cta text-left">
+    <aura:if isTrue="{!v.formSubmitted==false}">
+      <span class="course-body__attribute-icon-wrapper">
+        <lightning:icon iconName="utility:note" />
+      </span>
+      <aura:set attribute="else">
+        <span class="course-body__attribute-icon-wrapper">
+          <lightning:icon iconName="utility:check" />
+        </span>
+      </aura:set>
+    </aura:if>
+    <div class="uiOutputRichText">
+      <aura:if isTrue="{!v.formSubmitted==false}">
+        <h3>Self Record your CPD</h3>
+        <p
+          >Any PSA CPD activity that you complete is automatically recorded in
+          to your CPD Plan.</p
+        >
+        <p
+          >You can record non-PSA CPD activities using the self-record form
+          below and add to your CPD Plan.</p
+        >
+        <br />
+        <aura:set attribute="else">
+          <h3>Well done! Your Self Record has been submitted </h3>
+          <p
+            >Any PSA CPD activity that you complete is automatically recorded in
+            to your CPD Plan.</p
+          >
+          <p
+            >You can record non-PSA CPD activities using the self-record form
+            below and add to your CPD Plan.</p
+          >
+          <br />
+        </aura:set>
+      </aura:if>
+      <aura:if isTrue="{!v.openForm==false}">
+        <lightning:button
+          aura:id="selfRecordButton"
+          class="btn"
+          variant="brand"
+          label="Start Self Recording"
+          name="{!v.recordId}"
+          onclick="{!c.openForm}"
+        />
+      </aura:if>
+      <aura:if isTrue="{!v.openForm==true}">
+        <h4>Self Record</h4>
+        <p>Fill out the form and save your Self Recorded Activity to your CPD Year</p>
+        <br />
+        <lightning:recordEditForm
+          objectApiName="AsCPD_Learning_Summary__c"
+          onsuccess="{!c.handleOnSuccess}"
+        >
+          <lightning:messages />
+
+          <lightning:inputField
+            aura:id="field"
+            fieldName="Name"
+            variant="label-stacked" label="zz"
+            required="true"
+          />
+          <lightning:inputField
+            aura:id="field"
+            fieldName="CPD_Category__c"
+            variant="label-stacked"
+          />
+          <lightning:inputField
+            aura:id="field"
+            fieldName="Group_1_CPD__c"
+            variant="label-stacked"
+          />
+          <lightning:inputField
+            aura:id="field"
+            fieldName="Group_2_CPD__c"
+            variant="label-stacked"
+          />
+          <lightning:inputField
+            aura:id="field"
+            fieldName="Group_3_CPD__c"
+            variant="label-stacked"
+          />
+          <lightning:inputField
+            aura:id="field"
+            fieldName="AS_Reflections__c"
+            variant="label-stacked"
+          />
+
+          <lightning:inputField
+            aura:id="field"
+            fieldName="CPD_Accreditation_Number__c"
+            variant="label-stacked"
+          />
+          <lightning:inputField
+            aura:id="field"
+            fieldName="X2016_Competencies__c"
+            variant="label-stacked"
+          />
+          <lightning:inputField
+            aura:id="field"
+            fieldName="Provider__c"
+            variant="label-stacked"
+          />
+          <div class="slds-grid">
+            <div class="slds-col slds-size_1-of-2">
+              <lightning:inputField
+                aura:id="field"
+                fieldName="Start_Date__c"
+                variant="label-stacked"
+              />
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+              <lightning:inputField
+                aura:id="field"
+                fieldName="End_Date__c"
+                variant="label-stacked"
+              />
+            </div>
+          </div>
+          <lightning:inputField
+            aura:id="field"
+            fieldName="AS_Topics__c"
+            variant="label-stacked"
+          />
+          <lightning:inputField
+            fieldName="CPD_Planner__c"
+            value="{!v.recordId}"
+            class="cd-mcd-hide"
+          />
+          <lightning:inputField
+            fieldName="Status__c"
+            value="Complete"
+            class="cd-mcd-hide"
+          />
+            <br/>
+          <lightning:button
+            
+            type="submit" variant="brand" class="btn"
+            label="Save my Self Recorded Activity"
+          />
+        </lightning:recordEditForm>
+      </aura:if>
+    </div>
+  </div>
+</aura:component>

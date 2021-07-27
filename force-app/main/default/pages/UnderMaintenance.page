@@ -1,0 +1,10 @@
+<apex:page sidebar="false" showHeader="false" docType="html-5.0">
+    <div style="width: 50%;margin: auto;margin-top: 10%;border-radius: 5px;border-width: 1px;border-style: solid;">
+        <div style="padding:5%">
+            <h1><b style="font-size: 2rem;">We'll be back soon!</b></h1>
+            <br/>
+            <br/>
+            <p style="font-size: 1rem;">Sorry for the inconvenience but we're performing some maintenance at the moment.</p>
+        </div>
+    </div>
+</apex:page>

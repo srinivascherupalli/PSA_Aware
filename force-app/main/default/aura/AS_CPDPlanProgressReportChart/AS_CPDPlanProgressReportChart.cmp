@@ -1,0 +1,22 @@
+<aura:component controller="AS_ReportChartsController" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    	
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="isMember" type="boolean" />
+    <aura:attribute name="ready" type="Boolean" default="false" />
+    <aura:if isTrue="{!v.isMember}">
+        <ltng:require scripts="/resource/ChartJS23" afterScriptsLoaded="{!c.AS_PsaActionPlan}"/>
+        <div class="slds-grid slds-wrap slds-grid--pull-padded ">
+            <div class="PSA_main_container">
+                <div class="PSA_CPD_ASR">
+                    <p>CPD Plan Progress Report</p>
+                </div>
+                <div class="PSA_canvas_container" style="width:auto">
+                    <div style="margin:auto">
+                        <canvas aura:id="AS_psachart" height="280" width="330"></canvas>
+                    </div>
+                    <div id="legend" dir="rtl"></div>
+                </div>
+            </div>
+        </div>	
+    </aura:if>
+</aura:component>

@@ -1,0 +1,71 @@
+<aura:component controller="AsUploadDocumentController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,forceCommunity:themeLayout" access="global">
+    
+    <aura:attribute name="parentId" type="String" />
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    <aura:attribute name="EnrollmentStatus" type="String"  />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> 
+    <aura:attribute name="priceBooksList" type="List" />
+    <aura:attribute name="isReadOnly" type="Boolean" default="false" /> 
+    <div class="slds-box AsUploadDocContainer slds-container">  
+        <p class="AsHeader">Please upload supporting documentation here.</p>
+
+        <aura:iteration items="{!v.priceBooksList}" var="item">
+            <div class="AsUpload slds-text-body_regular">Please upload {!item}</div>
+            <div class="slds-box AsBoxContainer">
+                <div class="slds-form-element">  
+                    <div class="slds-form-element__control">
+                         
+                            <!-- <input type="file" class="slds-file-selector__input slds-assistive-text" accept="image/png" id="file-upload-input-01" aria-labelledby="file-selector-primary-label file-selector-secondary-label" />
+                            <label class="slds-file-selector__body" for="file-upload-input-01" id="file-selector-secondary-label">
+                            <span class="AsBtnBrows slds-file-selector__button slds-button slds-button_neutral">Browse</span>
+                            <span class="AsBtnLabel slds-file-selector__text slds-medium-show">or drop the files here</span>
+                            </label> -->
+                        <c:AsUploadItems fileName="{!item}" parentId="{!v.parentId}" EnrollmentStatus="{!v.EnrollmentStatus}" />
+ 
+                        <div class="AsHint">Accepted formats: jpg, png, pdf, docx</div>
+                        
+                    </div>
+                </div> 
+            </div>  
+        </aura:iteration> 
+       
+         <!-- buttons here! -->
+        <div class="slds-m-top_xx-large slds-btn-content">
+            <div class="slds-float_left">
+                <lightning:button variant="Neutral" class="slds-back-btn" label="Back" title="Back" onclick="{!c.backCallback}"/>
+                <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{!c.cancelCallback}"/>
+            </div>
+            <div class="slds-float_right">
+                
+                <aura:if isTrue="{!'Draft' == v.EnrollmentStatus}">
+                    
+                    <!-- email button -->
+                    <lightning:button variant="Neutral" class="slds-save-email-btn"  label="Save &amp; Email me a link" title="Save &amp; Email me a link" onclick="{!c.saveSendLink}"/> 
+                    
+                </aura:if> 
+                
+                <!-- save button -->
+                <lightning:button variant="brand"  class="slds-save-btn" label="Save and Continue" title="Save &amp; Continue" onclick="{!c.saveRecord}"/>
+                
+            </div>
+        </div>
+
+    </div>
+    
+     <!-- spinner -->
+    <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+     <!-- spinner -->
+
+
+ 
+
+</aura:component>

@@ -1,0 +1,223 @@
+<aura:component
+  implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+  access="global"
+  controller="PSA_Progress"
+>
+  <aura:attribute name="isModalOpen" type="boolean" default="false" />
+  <aura:attribute name="refAdded" type="boolean" default="false" />
+  <aura:attribute name="modalId" type="AsCPD_Learning_Summary__c" />
+  <aura:attribute name="completedSummary" type="AsCPD_Learning_Summary__c[]" />
+  <aura:attribute name="group1DefaultImage" type="String" />
+  <aura:attribute name="group2DefaultImage" type="String" />
+
+
+  <div class="uiOutputRichText">
+    <h2>CPD activity reflections</h2> <p>As a pharmacist you must:</p>
+    <ul>
+      <li
+        >Keep detailed and verifiable records of CPD undertaken during the
+        previous full CPD periods</li
+      >
+      <li
+        >Reflect on whether the activities undertaken have enabled you to
+        achieve your CPD goals</li
+      >
+    </ul>
+  </div>
+    <!--Accordian-->
+  <c:reflectAccordian />
+
+  <div class="course-body__courses">
+    <div class="uiOutputRichText">
+      <h2>Add reflection</h2>
+      <p
+        >Add reflections to your completed CPD activities by clicking on the
+        activity tiles below. Add a reflection to a completed CPD activity by
+        clicking on the + symbol in the activity tile. A green tick indicates
+        the reflection for the activity is complete.</p
+      >
+      <div class="row">
+        <aura:iteration items="{!v.completedSummary}" var="item">
+          <div class="col-12 col-md-6 col-lg-4 card-wrapper">
+            <a class="card card--course card--reflection">
+              <div class="card__header">
+                <div class="card__img-placeholder"></div>
+                 <div class="card__badge uiOutputRichText">
+                    <aura:if isTrue="{!item.RecordTypeId == '0127F000000K1c5QAC'}">
+                        <img src="{!$Resource.PSAFED + '/dist/images/SelfRecorded-icon.png'}" class="card__badge"/>
+                        <aura:set attribute="else">
+                            <aura:if isTrue="{!not(empty(item.Eligible_Image__c))}">
+                                <ui:outputRichText value="{!item.Eligible_Image__c}" class="card__badge"/>
+                            </aura:if>
+                            <aura:if isTrue="{!and(empty(item.Eligible_Image__c),item.Group__c=='Group 1')}">
+                                <ui:outputRichText value="{!v.group1DefaultImage}" class="card__badge"/>
+                            </aura:if>
+                            <aura:if isTrue="{!and(empty(item.Eligible_Image__c),item.Group__c=='Group 2')}">
+                                <ui:outputRichText value="{!v.group2DefaultImage}" class="card__badge"/>
+                            </aura:if>
+                            <aura:if isTrue="{!and(empty(item.Eligible_Image__c),item.Group__c=='Group 3')}">
+                          <img src="{!$Resource.PSAFED + '/dist/images/group3-blanklogo.gif'}" class="card__badge"/>
+                            </aura:if>
+                        </aura:set>
+                    </aura:if> 
+                </div>
+              </div>
+              <div class="card__body">
+                  <a id="{!item.Id}" onclick="{!c.navigate}">
+                <p class="card__title">{!item.Name}</p>
+                      </a>
+                <aura:if isTrue="{!empty(item.AS_Reflections__c)}">
+                  <dl
+                    class="slds-progress-bar__text slds-progress-bar__text--relfection-todo"
+                  >
+                    
+                    <lightning:button
+                      value="{!item}"
+                      label="Add Reflection"
+                      onclick="{!c.openModel}"
+                      class="reflection-button reflection-button--add"
+                    >
+                      <lightning:icon
+                        iconName="utility:add"
+                        title="Add Reflection"
+                      />
+                      <span>Add reflection</span>
+                    </lightning:button>
+                  </dl>
+                </aura:if>
+                <aura:if isTrue="{!not(empty(item.AS_Reflections__c))}">
+                  <dl
+                    class="slds-progress-bar__text  slds-progress-bar__text--relfection-complete"
+                  >
+                    <lightning:button
+                      value="{!item}"
+                      label="Reflection Added"
+                      onclick="{!c.openModel}"
+                      class="reflection-button reflection-button--added"
+                    >
+                      <lightning:icon
+                        iconName="utility:check"
+                        title="Reflection Added"
+                      />
+                      <span>Reflection Added</span>
+                    </lightning:button>
+
+                    <!--<lightning:button
+                        variant="base"
+                        label="Reflection Added"
+                        value="{!item}"
+                        title="Base action"
+                        onclick="{!c.openModel}"
+                        ><lightning:icon
+                          iconName="action:approval"
+                          size="xx-small"
+                      /></lightning:button>
+                      <span>Reflection Added</span>-->
+                  </dl>
+                </aura:if>
+              </div>
+            </a>
+          </div>
+        </aura:iteration>
+      </div>
+      <aura:if isTrue="{!v.isModalOpen}">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <section
+                role="dialog"
+                tabindex="-1"
+                aria-labelledby="modal-heading-01"
+                aria-modal="true"
+                aria-describedby="modal-content-id-1"
+                class="slds-modal slds-fade-in-open"
+              >
+                <div class="slds-modal__container">
+                  <header class="slds-modal__header">
+                    <lightning:buttonIcon
+                      iconName="utility:close"
+                      onclick="{! c.closeModel }"
+                      alternativeText="close"
+                      variant="bare-inverse"
+                      class="slds-modal__close"
+                    />
+                    <h2
+                      id="modal-heading-01"
+                      class="slds-modal__title slds-hyphenate"
+                    >
+                      <lightning:icon iconName="utility:note" /> Add your
+                      reflection
+                    </h2>
+                    <p class="slds-m-top_x-small"
+                      >Reflecting on your CPD activities means taking time to think about what you have learnt, how it applies to your practice and whether and how you could change your practice to improve patient outcomes</p
+                    >
+                  </header>
+                  <header class="slds-modal__header slds-modal__header__group">
+                    <div
+                      class="card__badge uiOutputRichText"
+                      dir="ltr"
+                      data-aura-rendered-by="36:215;a"
+                      data-aura-class="uiOutputRichText"
+                    >
+                      <p data-aura-rendered-by="37:215;a">
+                          <aura:if isTrue="{!v.modalId.RecordTypeId == '0127F000000K1c5QAC'}">
+                              <img src="{!$Resource.PSAFED + '/dist/images/SelfRecorded-icon.png'}" class="card__badge"/>
+                              <aura:set attribute="else">
+                                  <aura:if isTrue="{!not(empty(v.modalId.Eligible_Image__c))}">
+                                      <ui:outputRichText value="{!v.modalId.Eligible_Image__c}" class="card__badge"/>
+                                  </aura:if>
+                                  <aura:if isTrue="{!and(empty(v.modalId.Eligible_Image__c),v.modalId.Group__c=='Group 1')}">
+                                      <ui:outputRichText value="{!v.group1DefaultImage}" class="card__badge"/>
+                                  </aura:if>
+                                  <aura:if isTrue="{!and(empty(v.modalId.Eligible_Image__c),v.modalId.Group__c=='Group 2')}">
+                                      <ui:outputRichText value="{!v.group2DefaultImage}" class="card__badge"/>
+                                  </aura:if>
+                                  <aura:if isTrue="{!and(empty(v.modalId.Eligible_Image__c),v.modalId.Group__c=='Group 3')}">
+                          <img src="{!$Resource.PSAFED + '/dist/images/group3-blanklogo.gif'}" class="card__badge"/>
+                                  </aura:if>
+                              </aura:set>
+                          </aura:if> 
+                         </p
+                      ><!--render facet: 37:215;a--></div
+                    >
+                    <h2
+                      id="modal-heading-01"
+                      class="slds-modal__title slds-hyphenate"
+                    >
+                      {!v.modalId.Name}
+                    </h2>
+                  </header>
+                  <div
+                    class="slds-modal__content slds-p-around_medium"
+                    id="modal-content-id-1"
+                  >
+                    <h4>Reflection</h4>
+
+                    <lightning:textarea
+                      aura:id="refText"
+                      name="{!v.modalId.Id}" value="{!v.modalId.AS_Reflections__c}"
+                      label="{!empty(v.modalId.AS_Reflections__c) ? 'Write your reflection for this completed activity' : 'Update your reflection for this completed activity'}"
+                    />
+                  </div>
+                  <footer class="slds-modal__footer">
+                    <lightning:button
+                      variant="neutral"
+                      label="Cancel"
+                      title="Cancel"
+                      onclick="{!c.closeModel }"
+                    />
+                    <lightning:button
+                      variant="brand"
+                      label="{!empty(v.modalId.AS_Reflections__c) ? 'Add Reflection' : 'Update Reflection'}"
+                      title="OK"
+                      onclick="{!c.saveGoal}"
+                    />
+                  </footer>
+                </div>
+              </section>
+              <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+          </div> </div
+      ></aura:if> </div
+  ></div>
+</aura:component>

@@ -1,0 +1,520 @@
+<aura:component extends="c:PSA_Base" controller="PSA_MemberShipController" implements="forceCommunity:availableForAllPageTypes" >
+   <aura:attribute name="profileDetail" type="Map"/>
+   <aura:attribute name="selectedRole" type="String" />
+   <aura:attribute name="otherInsurance" type="String" />
+   <aura:attribute name="startDate" type="String" />
+   <aura:attribute name="renewalDate" type="String" />
+   <aura:attribute name="chkPSADetails" type="Boolean" default="false"/>
+   <aura:attribute name="frequency" type="String"/>
+   <aura:attribute name="freq" type="String"/>
+   <aura:attribute name="premium" type="Object"/>
+   <aura:attribute name="premiumGst" type="String"/>
+   <aura:attribute name="stampDuty" type="String"/>
+   <aura:attribute name="adminFee" type="String"/>
+   <aura:attribute name="adminFeeGst" type="String"/>
+   <aura:attribute name="totalCost" type="String"/>
+   <aura:attribute name="isSignUp" type="Boolean" default="false"/>
+   <aura:attribute name="otherCover" type="List" default="[
+      { 'label' : 'Yes', 'value' : 'true' },
+      { 'label' : 'No', 'value' : 'false' }
+      ]"/>
+   <aura:attribute name="otherCoverValue" type="String" default="false"/>
+   <aura:attribute name="previousClaim" type="List" default="[
+      { 'label' : 'Yes', 'value' : 'true' },
+      { 'label' : 'No', 'value' : 'false' }
+      ]"/>
+   <aura:attribute name="previousClaimValue" type="String" default="false"/>
+
+   <aura:attribute name="subscriptionLine" type="Object"/>
+   <aura:attribute name="selectedPackage" type="Object"/>
+   <aura:attribute name="selectedList" type="List"/>
+   <aura:attribute name="premiumBundleList" type="List"/>
+   <aura:attribute name="premiumBundleCodes" type="String"/>
+   <aura:attribute name="mode" type="String" default="" />
+   <aura:attribute name="userMemberhip" type="Object"/>
+   <aura:attribute name="contractId" type="String"/>
+   <aura:attribute name="quoteLinesPremiumParent" type="String" default=""/>
+
+   <aura:attribute name="accountId" type="String" />
+   <aura:attribute name="quoteId" type="String" />
+   <aura:attribute name="sessionId" type="String" />
+   <aura:attribute name="orderId" type="String" />
+   <aura:attribute name="invoiceId" type="String" />
+   <aura:attribute name="navObj" type="Object" />
+   <aura:attribute name="isAutoRenew" type="Boolean" default="true"/>
+   <aura:attribute name="productName" type="String" />
+   <aura:attribute name="callCount" type="Integer" default="0"/>
+   <aura:attribute name="isValidDate" type="Boolean" default="false"/>
+   <aura:attribute name="isError" type="Boolean" default="false"/>
+
+<!--    <aura:handler event="c:PSA_NavigationEvent" action="{!c.onContinue}"/> -->
+   <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+   <aura:if isTrue="{!v.isLoading == true}">
+    <h3 class="loaderMsg">
+      We are finalising a few details - this may take a few minutes. We look forward to see what you achieve in your career with your PSA Membership. We never settle in our pursuit of excellence and with our support you won't have to either
+    </h3>
+    </aura:if>
+
+   <div class="psa-heading text-center">
+      <h1>PSA Member Professional Indemnity Insurance</h1>
+   </div>
+   <hr class="psa-hori-line" />
+   <aura:if isTrue="{!and(v.selectedRole !='Pharmacy Student',v.selectedRole!='Pharmacy Intern')}">
+      <aura:if isTrue="{!!v.isSignUp}">
+         <div class="psa-sub-heading">
+            <p>Customised coverage for now, and as your pharmacist career evolves.</p>
+            <ul>
+               <li>
+                  <lightning:icon iconName="utility:check" alternativeText="check" title="check" size="small"/>
+                  Low cost, competitive cover, only up to $182.60 per year*
+               </li>
+               <li>
+                  <lightning:icon iconName="utility:check" alternativeText="check" title="check" size="small"/>
+                  Complete the sign up form in minutes
+               </li>
+               <li>
+                  <lightning:icon iconName="utility:check" alternativeText="check" title="check" size="small"/>
+                  Choose your start date, and only pay for cover from your chosen start date,  until your membership renewal date
+               </li>
+               <li>
+                  <lightning:icon iconName="utility:check" alternativeText="check" title="check" size="small"/>
+                  Comprehensive cover for any practice setting
+               </li>
+            </ul>
+         </div>
+         <br></br>
+         <br></br>
+         <div class="psa-sub-heading">
+            <p>PSA Member Insurance keeps things simple by letting you renew your PSA membership and PSA Member Insurance at the same time.</p>
+         </div>
+         <br></br>
+         <br></br>
+         <div class="psa-sub-heading">
+            <p>Signing up is easy and only takes a couple of minutes:</p>
+            <ol class="slds-list_ordered">
+               <li>Tell us when you want your PSA Member Insurance to commence</li>
+               <li>Let us know if you have pending claims, or additional insurance needs</li>
+               <li>You will be able to pay for your insurance monthly, quarterly or annually, the same as your membership</li>
+            </ol>
+         </div>
+         <br></br>
+         <br></br>
+         <div class="psa-sub-heading">
+            <p>Would you like to take advantage of our PSA Member Professional Indemnity Insurance and sign up now?</p>
+         </div>
+         <br></br>
+         <br></br>
+         <aura:if isTrue="{!v.isError}">    
+            <hr class="psa-hori-line" />
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="fail-banner slds-align_absolute-center">
+                        <lightning:icon iconName="utility:error" alternativeText="error" title="error" size="large" class="slds-icon slds-icon-text-default"/>
+                        <span>An error has occured, please try again later.</span>
+                    </div>
+                </div>
+            </div>
+            <hr class="psa-hori-line" />
+            <br></br>
+            <br></br>
+        </aura:if>
+         <div class="row">
+            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                <div class="btn-border text-left">
+                    <a href="javascript:void(0);" onclick="{!c.handleBackButton}">Back</a>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+               <div class="btn-background-border text-right">
+                  <a href="javascript:void(0);" onclick="{!c.signMeUp}" aura:id="yes" class="btn yesAction">Yes, sign me up!</a>
+               </div>
+            </div>
+            <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+               <div class="btn-background-border text-right">
+                  <a href="javascript:void(0);" onclick="{!c.onContinue}" aura:id="no" class="btn noAction">No, Thank you</a>
+               </div>
+            </div>
+         </div>
+      </aura:if>
+      <aura:if isTrue="{!v.isSignUp}">
+         <div class="psa-sub-heading">
+            <p>Let’s get started:</p>
+            <ol class="slds-list_ordered">
+               <li>
+                  <div>Please select your preferred start date for your policy. This might be the last date of cover from your current policy, or the date you wish to switch between policies.</div>
+                  <br></br>
+                  <div class="row flex-align-center-desktop block-mobile">
+                     <div class="col-sm-12 col-md-4 col-lg-4">
+                        <div class="startDate">
+                           <lightning:input aura:id="forminput" value="{!v.startDate}" onchange="{!c.dateChange}" class="form-input" type="date" name="sDate" label="Start date" required="true" messageWhenValueMissing="Start date is required."/>
+                        </div>
+                     </div>
+                     <div class="col-sm-12 col-md-8 col-lg-8">
+                        <p>Your insurance end date will align with your membership end date, so you can conveniently renew your PSA Member Insurance and PSA Membership at the same time.</p>
+                     </div>
+                  </div>
+                  <br></br>
+               </li>
+               <li>
+                  <div>Tell us if you want to talk to a BMS insurance specialist about other insurance cover you might need. PSA Member Insurance covers pharmacist, student and intern PSA members for pharmacist practice but if you provide other health services, for example in a different field such as occupational therapy, then please let us know so that BMS can contact you to discuss your needs:</div>
+                  <br></br>
+                  <div class="slds-p-bottom_x-small slds-form-control">
+                     <lightning:radioGroup 
+                        aura:id="otherCover"
+                        name="otherCover"
+                        label="Do you require other cover?"
+                        options="{!v.otherCover}"
+                        value="{!v.otherCoverValue}"
+                        class="slds-otherCover-label"
+                        type="button"
+                        />
+                     <!--  <lightning:helptext class="slds-help-text" content="Disability in this context does not include short-term disabling health conditions such as a fractured leg, influenza, or corrected physical conditions such as impaired vision managed by wearing glasses or lenses."/> -->
+                  </div>
+                  <br></br>
+                  <div class="slds-p-bottom_x-small slds-form-control">
+                     <lightning:input aura:id="forminput" value="{!v.otherInsurance}" class="form-input" name="otherInsurance" label="Let us know what other insurance cover you might need." placeholder=""/>
+                  </div>
+                  <br></br>
+               </li>
+               <li>
+                  <div>You will be able to pay for your insurance monthly, quarterly or annually, the same as your membership</div>
+                  <br></br>
+                  <div class="slds-p-bottom_x-small slds-form-control">
+                     <lightning:radioGroup 
+                        aura:id="previousClaim"
+                        name="previousClaim"
+                        label="Have you had any claims or notifications in the last 5 years? Please let us know so that the friendly BMS team can discuss this with you."
+                        options="{!v.previousClaim}"
+                        value="{!v.previousClaimValue}"
+                        class="slds-previousClaim-label"
+                        type="button"
+                        />
+                  </div>
+               </li>
+            </ol>
+         </div>
+         <aura:if isTrue="{!v.isValidDate}">
+         <div class="row">
+            <div class="col-xs-12">
+               <div class="form-group-payment-method">
+                  <label class="same-contact-label">
+                  <input type="checkbox" name="psa-checkbox-1" class="psa-checkbox-1" id="psa-checkbox-1" value="{!v.chkPSADetails}" onchange="{!c.psaCodechanged}" />
+                  <span></span>
+                  <span>I confirm that all the details provided above are accurate</span>
+                  </label>
+               </div>
+            </div>
+         </div>
+        </aura:if>
+         <aura:if isTrue="{!v.chkPSADetails}">
+            <div class="psa-sub-heading">
+               <p>The details below are based on the start date provided above, and the end date aligned with your membership. As a reminder, you have chosen to pay your Membership subscription {!v.freq}</p>
+            </div>
+            <div class="psa-sub-heading">
+               <aura:if isTrue="{!v.frequency=='monthly'}">
+                  <p>A pro-rated portion of the below amounts will be charged with your Membership subscription payment in the month including your start date. The following months will include the full amount below.</p>
+               </aura:if>
+               <aura:if isTrue="{!v.frequency=='quarterly'}">
+                  <p>A pro-rated portion of the below amounts will be charged with your Membership subscription payment in the quarter including your start date. The following quarters will include the full amount below.</p>
+               </aura:if>
+               <aura:if isTrue="{!v.frequency=='annual'}">
+                  <p>The below amounts will be charged with your Membership subscription payment. Your renewal will include annual costs and be based on cover for 12 months.</p>
+               </aura:if>
+            </div>
+            <div class="membership-package-info">
+               <div class="box-membership-package">
+                  <div class="row">
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-subheading">
+                           <p>Policy Start Date</p>
+                           <p class="subLine">Your PSA Insurance policy will commence at 4pm on</p>
+                        </div>
+                     </div>
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-advantage">
+                           <h3>
+                              <lightning:formattedDateTime value="{!v.startDate}" year="numeric" month="numeric" day="numeric"/>
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-subheading">
+                           <p>Policy Renewal Date</p>
+                           <p class="subLine">Your PSA Insurance policy will be renewed on</p>
+                        </div>
+                     </div>
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-advantage">
+                           <h3>
+                              <lightning:formattedDateTime value="{!v.renewalDate}" year="numeric" month="numeric" day="numeric"/>
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-subheading">
+                           <p>Premium</p>
+                        </div>
+                     </div>
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-advantage">
+                           <h3>${!v.premium}&nbsp;{!v.freq}</h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-subheading">
+                           <p>Premium GST</p>
+                        </div>
+                     </div>
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-advantage">
+                           <h3>${!v.premiumGst}&nbsp;{!v.freq}</h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-subheading">
+                           <p>Stamp Duty*</p>
+                        </div>
+                     </div>
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-advantage">
+                           <h3>${!v.stampDuty}&nbsp;{!v.freq}</h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-subheading">
+                           <p>Administration fee</p>
+                        </div>
+                     </div>
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-advantage">
+                           <h3>${!v.adminFee}&nbsp;{!v.freq}</h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-subheading">
+                           <p>Administration fee GST</p>
+                        </div>
+                     </div>
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-advantage">
+                           <h3>${!v.adminFeeGst}&nbsp;{!v.freq}</h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-subheading">
+                           <p>Total cost</p>
+                        </div>
+                     </div>
+                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="membership-package-advantage">
+                           <h3>${!v.totalCost}&nbsp;{!v.freq}</h3>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <p class="subLine">*please note that stamp duty is specific to your State/Territory.</p>
+            <br></br>
+            <aura:if isTrue="{!v.isError}">    
+                <hr class="psa-hori-line" />
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="fail-banner slds-align_absolute-center">
+                            <lightning:icon iconName="utility:error" alternativeText="error" title="error" size="large" class="slds-icon slds-icon-text-default"/>
+                            <span>An error has occured, please try again later.</span>
+                        </div>
+                    </div>
+                </div>
+                <hr class="psa-hori-line" />
+                <br></br>
+            </aura:if>
+
+            <div class="row">
+               <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                  <div class="btn-border text-left">
+                     <a href="javascript:void(0);" onclick="{!c.cancel}" aura:id="cancel" class="cancel">Cancel Insurance Application</a>
+                  </div>
+               </div>
+               <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                  <div class="btn-background-border text-right">
+                     <a href="javascript:void(0);" onclick="{!c.onContinue}" aura:id="continue" class="continue">Continue</a>
+                  </div>
+               </div>
+            </div>
+         </aura:if>
+         <br></br>
+         <br></br>
+
+         <aura:if isTrue="{!!v.isValidDate}">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-12">
+                <div class="btn-border text-left">
+                    <a href="javascript:void(0);" onclick="{!c.cancel}" aura:id="cancel" class="cancel">Cancel Insurance Application</a>
+                </div>
+                </div>
+            </div>
+        </aura:if>
+
+      </aura:if>
+   </aura:if>
+
+
+   <!-- Students -->
+   <aura:if isTrue="{!v.selectedRole =='Pharmacy Student'}">
+      <div class="psa-sub-heading">
+         <p>You're covered, including while you're on placement!</p>
+      </div>
+      <br></br>
+      <br></br>
+      <div class="psa-sub-heading">
+         <p>We’re thrilled to be able to offer you a new member benefit -PSA Member Professional Indemnity Insurance. We’re here to support you as your pharmacist career evolves and we’ve partnered with BMS to offer you PSA Member Insurance cover that’s tailored for your career, no matter your practice setting.</p>
+      </div>
+      <br></br>
+      <br></br>
+      <div class="psa-sub-heading">
+         <p>As a PSA student member, you now benefit from complimentary PSA Member Insurance. What's great about PSA Member Insurance? With PSA Member Insurance you'll receive:</p>
+         <ul>
+            <li>
+               <lightning:icon iconName="utility:check" alternativeText="check" title="check" size="small"/>
+               Coverage including while you’re on placement
+            </li>
+            <li>
+               <lightning:icon iconName="utility:check" alternativeText="check" title="check" size="small"/>
+               Complimentary cover for PSA Student Members
+            </li>
+            <li>
+               <lightning:icon iconName="utility:check" alternativeText="check" title="check" size="small"/>
+               Convenient cover that can be renewed with your membership
+            </li>
+         </ul>
+      </div>
+      <br></br>
+      <br></br>
+      <div class="row">
+         <div class="col-xs-12">
+            <div class="form-group-payment-method">
+               <label class="same-contact-label">
+               <input type="checkbox" name="psa-checkbox-4" class="psa-checkbox-2"/>
+               <span></span>
+               <span>I would like to opt out of complimentary PSA Member Insurance</span>
+               </label>
+            </div>
+         </div>
+      </div>
+
+      <aura:if isTrue="{!v.isError}">    
+        <hr class="psa-hori-line" />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="fail-banner slds-align_absolute-center">
+                    <lightning:icon iconName="utility:error" alternativeText="error" title="error" size="large" class="slds-icon slds-icon-text-default"/>
+                    <span>An error has occured, please try again later.</span>
+                </div>
+            </div>
+        </div>
+        <hr class="psa-hori-line" />
+    </aura:if>
+    <br></br>
+    <br></br>
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="btn-border text-left">
+                <a href="javascript:void(0);" onclick="{!c.handleBackButton}">Back</a>
+            </div>
+        </div>
+         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="btn-background-border text-right">
+               <a href="javascript:void(0);" onclick="{!c.onContinue}" aura:id="continue" class="continue">Continue</a>
+            </div>
+         </div>
+      </div>
+   </aura:if>
+
+
+   <!-- Graduates -->
+   <aura:if isTrue="{!v.selectedRole =='Pharmacy Intern'}">
+      <div class="psa-sub-heading">
+         <p>You're covered!</p>
+      </div>
+      <br></br>
+      <br></br>
+      <div class="psa-sub-heading">
+         <p>We’re thrilled to be able to offer you a new member benefit -PSA Member Professional Indemnity Insurance. We’re here to support you as your pharmacist career evolves and we’ve partnered with BMS to offer you PSA Member Insurance cover that’s tailored for your career, no matter your practice setting.</p>
+      </div>
+      <br></br>
+      <br></br>
+      <div class="psa-sub-heading">
+         <p>As a PSA graduate member, you now benefit from complimentary PSA Member Insurance. What's great about PSA Member Insurance? With PSA Member Insurance you'll receive:</p>
+         <ul>
+            <li>
+               <lightning:icon iconName="utility:check" alternativeText="check" title="check" size="small"/>
+               Customised coverage no matter your practice setting
+            </li>
+            <li>
+               <lightning:icon iconName="utility:check" alternativeText="check" title="check" size="small"/>
+               Complimentary cover for PSA Graduate Members
+            </li>
+            <li>
+               <lightning:icon iconName="utility:check" alternativeText="check" title="check" size="small"/>
+               Convenient cover that you can renew with your membership
+            </li>
+         </ul>
+      </div>
+      <br></br>
+      <br></br>
+      <div class="row">
+         <div class="col-xs-12">
+            <div class="form-group-payment-method">
+               <label class="same-contact-label">
+               <input type="checkbox" name="psa-checkbox-3" class="psa-checkbox-2"/>
+               <span></span>
+               <span>I would like to opt out of complimentary PSA Member Insurance</span>
+               </label>
+            </div>
+         </div>
+      </div>
+
+      <aura:if isTrue="{!v.isError}">    
+        <hr class="psa-hori-line" />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="fail-banner slds-align_absolute-center">
+                    <lightning:icon iconName="utility:error" alternativeText="error" title="error" size="large" class="slds-icon slds-icon-text-default"/>
+                    <span>An error has occured, please try again later.</span>
+                </div>
+            </div>
+        </div>
+        <hr class="psa-hori-line" />
+    </aura:if>
+    <br></br>
+    <br></br>
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="btn-border text-left">
+                <a href="javascript:void(0);" onclick="{!c.handleBackButton}">Back</a>
+            </div>
+        </div>
+         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="btn-background-border text-right">
+               <a href="javascript:void(0);" onclick="{!c.onContinue}" aura:id="continue" class="continue">Continue</a>
+            </div>
+         </div>
+      </div>
+   </aura:if>
+   <hr class="psa-hori-line" />
+</aura:component>

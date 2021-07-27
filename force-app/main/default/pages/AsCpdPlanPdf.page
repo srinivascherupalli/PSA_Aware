@@ -1,0 +1,314 @@
+<!-- 
+    *Author : Jet R. Compayan
+    *Description : This Page is Render as PDF of the CPD Plan
+    *Date Created : Apr 17,2018
+    *Last Modified By : Theressa
+    *Date Last Modified : Aug 01, 2018
+    *Related Meta Data : User
+-->
+
+<apex:page standardController="AsCPDPlanner__c" extensions="AsCPDPlannerExt"  showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" renderAs="pdf">
+    <head>
+        <style>
+            body {
+                font-family: Arial,Helvetica,sans-serif; font-size: 12px;   
+            }
+            @page {
+                size: 11.69in 8.27in;/* width height */
+                margin-top: 30px;
+                margin-left: 5px;
+                margin-right: 5px;
+                margin-bottom: 0.8cm;
+            }
+            @page {
+                @bottom-left {
+                    content: element(footer);
+                }
+            }
+            div.footer {
+             display: block;
+             padding: 5px;
+             position: running(footer);
+            }
+            .pagenumber:before {
+             content: counter(page);
+            }
+            .pagecount:before {
+             content: counter(pages);
+            }
+
+            table.cpd-table {
+                width: 100%;
+                table-layout: fixed;
+                word-wrap: break-word;
+            }
+            table.cpd-table td:first-child {
+            
+            }
+
+            table.cpd-table ,  table.cpd-table td  {
+             border=bottom : 1px solid ;
+            }
+            table.cpd-table td {
+                width: 50px;
+                vertical-align: text-top;
+                padding-top: 4px;
+                padding-left: 15px;
+                padding-right: 12px;
+            }
+
+
+            table.cpd-details-table  td.cpd-label {
+                width:100%;
+            }
+            td {
+                font-weight: 100;
+            }
+            td.cpd-label{
+                font-weight: 600;
+            }
+            
+            table {
+                font-size: 12px;
+            }
+            table.cpd-domain-title td {
+                font-size: 18px;
+                font-weight: 700;
+                padding-bottom: 5px;
+            }
+            table.cpd-domain-Item-title td {
+                font-size: 17px;
+                font-weight: 700;
+                padding-bottom: 2px;
+            }
+            .cpd-table tr:first-child td {
+                background: rgb(0, 61, 121);
+                color: #FFF;
+                text-align: center;
+            }
+            /*.cpd-table tr:first-child td:first-child {
+            width: 180px !important;
+            }*/
+            .cpd-header{
+                color: rgb(127, 127, 127);
+            }
+            hr.style-two {
+                border: 0;
+                height: 0;
+                border-top: 1px solid rgb(127, 127, 127);
+                border-bottom: 1px solid rgba(127, 127, 127, 0.1);
+            }
+
+            div.pagebreak{
+               page-break-before: always;
+            }  
+        </style> 
+    </head>
+    <body>
+
+        <table>
+            <tr>
+                <td ><apex:image url="{!URLFOR($Resource.AS_membersignup_slice,'psa-member-signup-slices/PSA-logo.png')}" width="200" /></td>
+                <td style="vertical-align: text-bottom;" >
+                    <h2 style="color: rgb(0, 61, 121);">CPD PLAN {! AsCPDPlanner__c.AS_Plan_Year__c} - {! AsCPDPlanner__c.AsUser__r.Name } | 
+                    </h2>
+                </td>
+                <td style="vertical-align: text-bottom;{!IF( AsCPDPlanner__c.AsUser__r.Account.PSA_PSA_ID__c == '', 'display: none', '')}" >
+                    <p style="margin-top:0px;font-size: 12px;" class="cpd-header" >PSA ID: {! AsCPDPlanner__c.AsUser__r.Account.PSA_PSA_ID__c }</p>
+                </td>
+                <td style="vertical-align: text-bottom;{!IF( AsCPDPlanner__c.AsUser__r.Account.ASAHPRA_ID__pc == '', 'display: none', '')}">
+                    <p style="margin-top:0px;font-size: 12px;" class="cpd-header" > | AHPRA:{! AsCPDPlanner__c.AsUser__r.Account.ASAHPRA_ID__pc }</p>
+                </td>
+            </tr>
+            
+        </table>
+         
+        
+        <div class="cpd-details-container">
+            <table cellspacing="0" class="cpd-details-table">
+                    <tr>
+                        <td style="color: rgb(0, 61, 121);">Effective:&nbsp; 
+                            <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                <apex:param value="{! AsCPDPlanner__c.AsStartDate__c }"/> 
+                            </apex:outputText> -&nbsp;
+                            <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                <apex:param value="{! AsCPDPlanner__c.AsEndDate__c }"/> 
+                            </apex:outputText>
+                            | Group 1 CPD Achieved :&nbsp;
+                                <apex:outputText value="{0, number, 0.00}">
+                                    <apex:param value="{!group1Db}"/> 
+                                </apex:outputText>
+                            | Group 2 CPD Achieved :&nbsp;
+                                <apex:outputText value="{0, number, 0.00}">
+                                    <apex:param value="{!group2Db}"/> 
+                                </apex:outputText>
+                            | Group 3 CPD Achieved :&nbsp;
+                                <apex:outputText value="{0, number, 0.00}">
+                                    <apex:param value="{!group3Db}"/> 
+                                </apex:outputText>
+                            | Total CPD Achieved :&nbsp;
+                                <apex:outputText value="{0, number, 0.00}">
+                                    <apex:param value="{!totalGroupdb}"/>
+                                </apex:outputText>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <hr class="style-two"/>
+            <p style="margin-top:0px;font-size: 12px;{!IF( AsCPDPlanner__c.AS_My_Plan_Goals__c == '', 'display: none', '')}" class="cpd-header"> My goals: {! AsCPDPlanner__c.AS_My_Plan_Goals__c }</p>
+            <br/>
+             
+            <div >
+                <h2 style="color: rgb(0, 61, 121);">Completed Activities</h2>
+                <table width="100%" class="cpd-table" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid #ccc; line-height: 1.8em;">
+                        <td class="cpd-label">Competencies addressed</td>
+                        <td class="cpd-label">CPD<br/>Activities</td>
+                        <td class="cpd-label" >Start Date</td>
+                        <td class="cpd-label">Finish Date</td>
+                
+                        <td class="cpd-label">Type</td>
+                        <td colspan="2" class="cpd-label">Topics</td>
+
+                        <td class="cpd-label">Provider</td>
+
+                        <td class="cpd-label">Accreditation</td>
+                       
+                        <td class="cpd-label">CPD activty group</td>
+                        <td class="cpd-label">CPD credits assigned</td>
+                        <td colspan="2" class="cpd-label">Impact of activity on practice</td>
+                    </tr>
+                    <apex:repeat value="{!allLearningSummaryCom}" var="r"  >
+                        <tr style="border-bottom: 1.5px solid #000; line-height: 1.8em;">
+                            <td style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.competency }</td>
+                            <td style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.name }</td>
+                            <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">
+                                <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                    <apex:param value="{! r.startDate }"/> 
+                                </apex:outputText>
+                            </td>
+                            <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">
+                                <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                    <apex:param value="{! r.endDate }"/> 
+                                </apex:outputText>
+                            </td>
+             
+                            <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.cpdType }</td>
+                             <td colspan="2" class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.description }</td>
+                            <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.prov }</td>
+                            <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.accreNum }</td>
+                           
+                            <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.category }</td>
+                            <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.credits}</td>
+                            <td colspan="2" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;width:13%;">{! r.notes}</td>
+                        </tr>
+                    </apex:repeat>
+                </table>
+            </div>
+
+        <br/>
+        <br/>
+        <br/>
+       <div class="pagebreak">
+            <h2 style="color: rgb(0, 61, 121);" >In Progress Activities</h2>
+            <table width="100%" class="cpd-table" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #ccc; line-height: 1.8em;">
+                    <td class="cpd-label">Competencies addressed</td>
+                    <td class="cpd-label">CPD<br/>Activities</td>
+                    <td class="cpd-label" >Start Date</td>
+                    <td class="cpd-label">Finish Date</td>
+            
+                    <td class="cpd-label">Type</td>
+                    <td colspan="2" class="cpd-label">Topics</td>
+
+                    <td class="cpd-label">Provider</td>
+
+                    <td class="cpd-label">Accreditation</td>
+                   
+                    <td class="cpd-label">CPD activty group</td>
+                    <td class="cpd-label">CPD credits assigned</td>
+                    <td colspan="2" class="cpd-label">Impact of activity on practice</td>
+                </tr>
+                <apex:repeat value="{!allLearningSummaryInProg}" var="r"  >
+                    <tr style="border-bottom: 1.5px solid #000; line-height: 1.8em;">
+                        <td style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.competency }</td>
+                        <td style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.name }</td>
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">
+                            <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                <apex:param value="{! r.startDate }"/> 
+                            </apex:outputText>
+                        </td>
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">
+                            <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                <apex:param value="{! r.endDate }"/> 
+                            </apex:outputText>
+                        </td>
+         
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.cpdType }</td>
+                        <td colspan="2" class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.description }</td>
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.prov }</td>
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.accreNum }</td>
+                       
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.category }</td>
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.credits}</td>
+                        <td colspan="2" width="25" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.notes}</td>
+                    </tr>
+                </apex:repeat>
+
+            </table>
+       </div>
+      
+
+        <br/>
+        <br/>
+        <br/>
+
+        <div class="pagebreak">
+            <h2 style="color: rgb(0, 61, 121);" >Planned Activities</h2>
+            <table width="100%" class="cpd-table" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #ccc; line-height: 1.8em;">
+                    <td class="cpd-label">Competencies addressed</td>
+                    <td class="cpd-label">CPD<br/>Activities</td>
+                    <td class="cpd-label" >Start Date</td>
+                    <td class="cpd-label">Finish Date</td>
+            
+                    <td class="cpd-label">Type</td>
+                    <td colspan="2" class="cpd-label">Topics</td>
+                    <td class="cpd-label">Provider</td>
+                    <td class="cpd-label">Accreditation</td>
+                    <td class="cpd-label">CPD activty group</td>
+                    <td class="cpd-label">CPD credits assigned</td>
+                    <td colspan="2" class="cpd-label">Impact of activity on practice</td>
+                </tr>
+                <apex:repeat value="{!allLearningSummaryPlan}" var="r"  >
+                    <tr style="border-bottom: 1.5px solid #000; line-height: 1.8em;">
+                        <td style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.competency }</td>
+                        <td style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.name }</td>
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">
+                            <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                <apex:param value="{! r.startDate }"/> 
+                            </apex:outputText>
+                        </td>
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">
+                            <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                <apex:param value="{! r.endDate }"/> 
+                            </apex:outputText>
+                        </td>
+         
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.cpdType }</td>
+                        <td colspan="2" class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.description }</td>
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.prov }</td>
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.accreNum }</td>
+                       
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.category }</td>
+                        <td class="td-center" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;">{! r.credits}</td>
+                        <td colspan="2" style="border: 1px solid #ccc;padding: 7px; line-height: 1.8em;width:13%;">{! r.notes}</td>
+                    </tr>
+                </apex:repeat>
+
+            </table>
+        </div>
+        
+    </body>
+</apex:page>

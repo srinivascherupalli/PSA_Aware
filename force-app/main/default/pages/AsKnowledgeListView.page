@@ -1,0 +1,54 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0" >
+	<!-- AsPsaCdpPlanningTool -->
+	<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+
+		<head> 
+			<title>Knowledge List View</title>
+			<apex:stylesheet value="{!URLFOR($Resource.AsSldsPsaCdp, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+			<c:AsKnowledgeStyleCss />
+		</head>      
+ 
+		<body>    
+			<!-- REQUIRED SLDS WRAPPER -->
+			<div class="slds">
+				<div class="psa-knowledge-wrap">
+					<div style="text-align: center;width: 100%;" >
+						<h1 class="slds-text-heading_large" style="font-weight: 600;"> Knowledge Base and Resources </h1>
+					</div>
+					<div class="slds-grid slds-wrap slds-grid--pull-padded slds-p-bottom_xx-large">
+		<!-- 				<div class="slds-col--padded slds-size--1-of-1">
+							<h1 class="slds-text-heading--large slds-text-align_center slds-p-bottom_large" id="knowledge-title--articlename" ></h1>	 
+						</div> -->
+						<div class="slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-large-size--3-of-12 "> 
+							<c:AsKnowledgeCategories />
+						</div>
+						<div class="slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-large-size--9-of-12 "> 
+							<div class="psa-knowledge-sorting"> <c:AsKnowledgeSorting /> </div>
+
+							<div class="psa-knowledge-list--content slds-m-left_x-large" id="knowledge-aritcles-list">
+							</div>
+							<div class="psa-knowledge-pagination slds-m-left_x-large"> 
+								<p id="page-para"> Page 1 of 1 </p>
+								<div class="slds-button-group " role="group">
+									<button class="slds-button slds-button_neutral slds-text-align_right knowledeg-btn-pagination" knowledeg-page="prev" id="page-prev" >Prev</button>
+									<button class="slds-button slds-button_neutral slds-text-align_right knowledeg-btn-pagination" knowledeg-page="next" id="page-next" >Next</button>
+								</div>
+							</div> 
+						</div>
+					</div>
+				</div>
+			</div>
+		</body>  
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	 	<script src="{!URLFOR($Resource.almond_uilib,  '/js/jquery.min.js')}"></script>
+	 	<script src="{!URLFOR($Resource.almond_uilib, '/js/almondutils.min.js')}"></script>
+		<c:AsKnowledgeJS />
+		
+		<script type="text/javascript">
+			jQuery(document).ready(function($){
+				var as = new AsKnowledge();
+				as.ArticleListView(); 
+			});
+		</script>
+	</html>
+</apex:page>

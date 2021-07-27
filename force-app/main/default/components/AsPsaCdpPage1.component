@@ -1,0 +1,43 @@
+<!-- 
+    *Author : Jet R. Compayan
+    *Description : This is the Menu Component of Cpd Planning Tool  
+    *Date Created : Apr 26,2018
+    *Last Modified By : 
+    *Date Last Modified : 
+    *Related Meta Data : User
+-->
+
+<!-- AsPsaCdpPage1 -->
+<apex:component controller="AsCPDPlanner">
+    <div id="cdp_component1" class="cdp-wrapper-container-box slds-box cdp-component">
+        <div class="cdp-box-container">
+            <h1 class="cdp-box-header-title slds-text-heading--large slds-m-bottom--x-small"> PSA CPD Planning Tool </h1>
+            <p class="cdp-box-paragraph"> PSA’s CPD planning tool will guide you step-by-step through the process of developing your CPD plan.</p>
+            <p class="cdp-box-paragraph"> This tool helps you to:</p>
+            <ul class="cdp-box-paragraph">
+                <li>Use the Competency Standards to identify your scope of practice as a pharmacist</li>
+                <li>Find a broad range of professional development that's relevant to you</li>
+                <li>Choose CPD that will address your specific, professional development needs.</li>
+            </ul>
+            <p class="cdp-box-paragraph"> Save time planning and spend more time learning. Select an option below to get started.</p>
+            <div class="cdp-box-btn-group">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_12-of-12">
+                        <button class="slds-button slds-button_neutral cdp-group-btn" id="cdp-reflect" > <span> </span> <label><b>Start planning</b> by identifying your Scope of Practice</label></button>
+                    </div>
+                    <div class="slds-col slds-size_12-of-12">
+                        <!-- {!URLFOR($Resource.AsCpdMenuIconSprites)} -->
+                        <button class="slds-button slds-button_neutral cdp-group-btn" id="cdp-review">  <span> </span> <label><b>Find updated CPD</b> activities based on your Scope of Practice</label></button>
+                    </div> 
+                    <div class="slds-col slds-size_12-of-12">
+                       <!-- <a href="https://my.psa.org.au/s/article/CPD-UserGuide" target="_blank" ><button class="slds-button slds-button_neutral cdp-group-btn" id="cdp-tutor-abd-help">  <span> </span> <label><b>Tutorials and help</b> - how-to videos and quick guides</label></button>
+                        </a> -->
+                    </div>
+                    <div class="slds-col slds-size_6-of-12">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</apex:component>

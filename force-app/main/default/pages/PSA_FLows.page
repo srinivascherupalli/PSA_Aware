@@ -1,0 +1,5 @@
+<apex:page controller="FlowController"  >
+
+      <flow:interview name="AS_Test_Flow" interview="{!myFlow}" finishLocation="{!OID}" />
+ 
+</apex:page>

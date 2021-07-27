@@ -1,0 +1,13 @@
+.THIS {
+    font-size : 135%;
+    background-size: 100%;
+    background-color: whitesmoke;
+    height: 150%;
+}
+
+.THIS lightning-icon.refresh_Icon > lightning-primitive-icon :hover{
+    color: #4389f9;
+    fill: #4389f9;
+    cursor: pointer;
+    cursor: hand;
+}

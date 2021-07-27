@@ -1,0 +1,9 @@
+<!-- AsKnowledgeComp -->
+<aura:component controller="AsKnowledgeController"  implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+	<aura:attribute name="Type" Type="String" />
+
+    <iframe src="{!'https://dev-pharmaaust.cs72.force.com/membership/AsKnowledgeArticle?artType='+ v.Type +'artId='+ v.recordId  }" width="100%" height="1000px;" frameBorder="0"/>
+ 	 
+</aura:component>

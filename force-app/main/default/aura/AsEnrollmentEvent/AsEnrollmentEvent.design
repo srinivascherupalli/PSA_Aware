@@ -1,0 +1,3 @@
+<design:component label="AS Enrollment Page">
+    <design:attribute name="EnrollmentId"/>  
+</design:component>

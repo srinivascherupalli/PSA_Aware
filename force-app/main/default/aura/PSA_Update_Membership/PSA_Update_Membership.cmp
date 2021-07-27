@@ -1,0 +1,96 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" extends="c:PSA_Base" access="global" controller="PSA_MemberShipController">  
+
+    <aura:attribute name="menuItems" type="List" /> 
+    <aura:attribute name="screenName" type="String" default="" />
+    <aura:attribute name="quoteId" type="String" />
+    <aura:attribute name="invoiceRecord" type="Object"/>
+    <aura:attribute name="billingInfo" type="Object"/>
+    <aura:attribute name="isLoading" type="Boolean" />
+
+    <aura:attribute name="invoiceStatus" type="String" default="Draft"/>
+
+    <aura:attribute name="frequency" type="String" default="monthly" />
+    <aura:attribute name="selectedRole" type="String" />
+    <aura:attribute name="selectedList" type="List"/>
+    <aura:attribute name="profileDetail" type="Map"/>
+    <aura:attribute name="accountId" type="String"/>
+    <aura:attribute name="selectedPackage" type="Object"/>
+    <aura:attribute name="userMemberhip" type="Object"/>
+    <aura:attribute name="contractId" type="String"/>
+    <aura:attribute name="premiumCustomer" type="Boolean" default="false" />
+
+    <aura:handler name="change" value="{!v.userMemberhip}" action="{!c.handleUserMembership}" />
+    
+    <!--init handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!-- Resources CMP-->
+    <c:PSA_PaymentScreenResourceCMP />
+    <!-- Logo Section Starts -->
+    <c:PSA_SiteHeaderCMP />
+    <!-- Logo Section Ends -->
+    
+    <!-- Banner and Desktop Menu Section Starts -->
+    <c:PSA_NavigationHeaderCMP menuItems="{!v.menuItems}" screenName="{!v.screenName}" aura:id="headerNav"/>
+    <!-- Banner and Desktop Menu Section Ends -->
+    
+    <!-- Payment Method Section Starts -->
+    <div class="container-fluid bg-psa">
+        <aura:if isTrue="{!v.isLoading == true}">
+            <div class="base-spinner">
+                <lightning:spinner variant="brand" alternativeText="Loading" size="large" />
+            </div>
+        </aura:if>
+        <div class="psa-top-center-circle-heading">
+          	<div class="circle-icon-heading"><i class="fas fa-folder-open"></i></div>
+        </div>
+        <div class="row">
+            <div class="container bg-container-psa">
+                <div class="row">
+                    <div class="col-xs-12">
+                        
+                        <aura:renderIf isTrue="{!v.premiumCustomer}">
+                            <div class="psa-heading text-center">
+                                <h1>Congratulations! Your subscription already has premium insurance package added.</h1>
+                            </div>
+                        <aura:set attribute="else">
+                            <aura:if isTrue="{!v.screenName == 'screen1b'}">
+
+                                <c:PSA_InsuranceScreenCMP 
+                                isLoading="{!v.isLoading}" 
+                                selectedRole="{#v.profileDetail.role}" 
+                                frequency="{#v.frequency}" 
+                                userMemberhip="{!v.userMemberhip}"
+                                profileDetail="{!v.profileDetail}" 
+                                selectedList="{#v.selectedList}" 
+                                accountId="{#v.accountId}"
+                                contractId="{#v.contractId}"
+                                quoteId="{!v.quoteId}"
+                                mode="amendment"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.screenName == 'screen2'}">
+                                <c:PSA_PaymentScreenCMP 
+                                    quoteId="{!v.quoteId}" 
+                                    screenName="{!v.screenName}" 
+                                    invoiceRecord="{!v.invoiceRecord}" 
+                                    billingInfo="{!v.billingInfo}"
+                                    isLoading="{!v.isLoading}"
+                                    />
+                            </aura:if>
+                            <aura:if isTrue="{!v.screenName == 'screen3'}">
+                            <c:PSA_ReviewAndConfirmScreenCMP 
+                                quoteId="{!v.quoteId}" 
+                                screenName="{!v.screenName}" 
+                                invoiceRecord="{!v.invoiceRecord}"
+                                billingInfo="{!v.billingInfo}"
+                                isLoading="{!v.isLoading}"
+                                />
+                            </aura:if>
+                        </aura:set>
+                        </aura:renderIf>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

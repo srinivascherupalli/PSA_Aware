@@ -1,0 +1,89 @@
+<aura:component implements="forceCommunity:themeLayout" access="global" description="Custom Theme Layout" controller="PSA">
+    <aura:attribute name="search" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="profileMenu" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="navBar" type="Aura.Component[]" required="false"/>
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    <aura:attribute name="userInfo" type="user"/>
+    <aura:attribute name="screenHeight" type="String"/>
+    <aura:attribute name="cdURL" type="String"/>
+    
+    <div class="slds-grid slds-wrap cd-header">
+        <div class="slds-size_4-of-12 slds-col cd-logo-col">
+            <div class="cd-logo">
+                <a class="logoContainer" title="PSA Community"></a>
+            </div>
+        </div>
+        <div class="slds-size_5-of-12 slds-col cd-search-col">
+            <div class="cd-search">
+                {!v.search}
+            </div>
+        </div>
+        <div class="slds-size_3-of-12 slds-col cd-profile-menu-col">
+            <div class="cd-profile-menu">
+                {!v.profileMenu}
+            </div>
+        </div>
+    </div>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_12-of-12 slds-col">
+            <aura:if isTrue="{!v.userInfo.ProfileId != '00e7F000000ZqTwQAK'}">
+                <div class="cd-nav-bar">
+                    {!v.navBar}
+                </div>
+                <aura:set attribute="else">
+                    <div class="cd-nav-bar cd-not-login-nav-bar">
+                        {!v.navBar}
+                    </div>
+                </aura:set>
+            </aura:if>
+            <aura:if isTrue="{!v.userInfo.ProfileId != '00e7F000000ZqTwQAK'}">
+                <span class="cd-mobile-sidebar" onclick="{!c.openSidebar}">&#9776;</span>
+                <div aura:id="cdSidebar" class="sidenav">
+                    <a href="javascript:void(0)" class="closebtn" onclick="{!c.closeSidebar}">&times;</a>
+                    <ul>
+                        <li><a class="active" href="/"><lightning:icon iconName="utility:home" alternativeText="activity" size="small"/>Home</a></li>
+                        <li><a onclick="{!c.closeSidebar}" href="/s/my-cpd-dashboard"><lightning:icon iconName="utility:apps" alternativeText="Connected" size="small"/>My CPD Dashboard</a></li>
+                        <li><a onclick="{!c.closeSidebar}" href="/s/sfdcpage/%2Fapex%2FMyTraining"><lightning:icon iconName="utility:knowledge_base" alternativeText="Connected" size="small"/>My Courses &amp; Training</a></li>
+                        <li><a onclick="{!c.closeSidebar}" href="/s/education-catalogue"><lightning:icon iconName="utility:activity" alternativeText="Connected" size="small"/>Browse CPD Catalogue</a></li>
+                        <li><a target="_blank" href="https://www.psa.org.au/wp-login.php?redirect_to=https://shop.psa.org.au"><lightning:icon iconName="utility:cart" alternativeText="Connected" size="small"/>Shop</a></li>
+                        <li><a target="_blank" href="https://www.australianpharmacist.com.au/"><lightning:icon iconName="utility:company" alternativeText="Australian Pharmacist" size="small"/>Australian Pharmacist</a></li>
+                        <li><a target="_blank" href="https://apf.psa.org.au/"><lightning:icon iconName="utility:world" alternativeText="Connected" size="small"/>APF Online</a></li>
+                        <li><a target="_blank" href="https://www.psa.org.au/practice-support-industry/resources/"><lightning:icon iconName="utility:page" alternativeText="Connected" size="small"/>PSA Standards and Guidelines</a></li>
+                        <li><a href="/s/order/Order/00B7F00000DVQl2UAH"><lightning:icon iconName="utility:work_order_type" alternativeText="Connected" size="small"/>My Invoices</a></li>
+                    </ul>
+                </div>
+            </aura:if>
+        </div>
+    </div>
+    <div class="cd-main-content">
+        <aura:if isTrue="{!v.userInfo.ProfileId != '00e7F000000ZqTwQAK'}">
+            <div class="cd-sidebar">
+                <ul>
+                    <li aura:id="cdMenuHome" onclick="{!c.onClickMenuHome}" class="active"><a href="/"><lightning:icon iconName="utility:home" alternativeText="activity" size="small"/>Home</a></li>
+                    <li aura:id="cdMenuMyCPD" onclick="{!c.onClickMenuMyCPD}"><a href="/s/my-cpd-dashboard"><lightning:icon iconName="utility:apps" alternativeText="Connected" size="small"/>My CPD Dashboard</a></li>
+                    <li aura:id="cdMenuMyCT" onclick="{!c.onClickMenuMyCT}"><a href="/s/sfdcpage/%2Fapex%2FMyTraining"><lightning:icon iconName="utility:knowledge_base" alternativeText="Connected" size="small"/>My Courses &amp; Training</a></li>
+                    <li aura:id="cdMenuBC" onclick="{!c.onClickMenuBC}"><a href="/s/education-catalogue"><lightning:icon iconName="utility:activity" alternativeText="Connected" size="small"/>Browse CPD Catalogue</a></li>
+                    <li><a target="_blank" href="https://www.psa.org.au/wp-login.php?redirect_to=https://shop.psa.org.au"><lightning:icon iconName="utility:cart" alternativeText="Connected" size="small"/>Shop</a></li>
+                    <li><a target="_blank" href="https://www.australianpharmacist.com.au/"><lightning:icon iconName="utility:company" alternativeText="Australian Pharmacist" size="small"/>Australian Pharmacist</a></li>
+                    <li><a target="_blank" href="https://apf.psa.org.au/"><lightning:icon iconName="utility:world" alternativeText="Connected" size="small"/>APF Online</a></li>
+                    <li><a target="_blank" href="https://www.psa.org.au/practice-support-industry/resources/"><lightning:icon iconName="utility:page" alternativeText="Connected" size="small"/>PSA Standards and Guidelines</a></li>
+                    <li aura:id="cdMenuMyInvoices" onclick="{!c.onClickMenuMyInvoices}"><a href="/s/order/Order/00B7F00000DVQl2UAH"><lightning:icon iconName="utility:work_order_type" alternativeText="Connected" size="small"/>My Invoices</a></li>
+                </ul>
+            </div>
+        </aura:if>
+        <div class="cd-body">
+            {!v.body}
+            <aura:if isTrue="{!v.cdURL == 'https://my.psa.org.au/s/'}">
+                <aura:if isTrue="{!v.userInfo.ProfileId == '00e7F000000ZqTwQAK'}">
+                    <div class="cd-login-btn" style="{!'min-height: '+v.screenHeight+'px;'}">
+                        <div class="login-box">
+                            <h2>You’re not logged in!</h2>
+                            <h3>Login now to access your education and benefits.</h3>
+                            <a href="/s/login/" class="slds-button slds-button_brand">Login</a>
+                        </div>
+                    </div>
+                </aura:if>
+            </aura:if>
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,106 @@
+<aura:component controller="AsEnrollmentListController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,forceCommunity:themeLayout" access="global">
+    
+    <aura:attribute name="accountId" type="String"/>
+    <aura:attribute name="data" type="object"/>
+	<aura:attribute name="subdata" type="object"/>
+    <aura:attribute name="ExpandIcon" type="String" default="transform: rotate(0deg);"/>
+    <aura:attribute name="showtable" type="Boolean" default="false" />
+    <aura:handler name="init" action="{!c.displayData}" value="{!this}" />
+	
+    <div class="slds-container">
+
+        <div class="slds-page-header slds-custom-head">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-tit le">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-standard-opportunity" title="opportunity">
+                               	<lightning:icon iconName="custom:custom55" size="medium" />
+                                <span class="slds-assistive-text">enrolment</span>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate" title="Rohde Corp - 80,000 Widgets">Enrolments</span>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-tablelist-container">
+            <table class="enroltable slds-table slds-table_cell-buffer slds-table_header-hidden">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Learning Package">Learning Package</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Status">Status</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:if isTrue="{!v.showtable}">
+                        <aura:iteration items="{!v.data}" var="item">
+                            <tr>
+                                <th data-label="Learning Package" scope="row">
+                                    
+                                    <div class="slds-truncate" title="{!item.AS_Learning_Package__c}">
+                                        <lightning:button variant="base" iconName="utility:chevronright" onclick="{! c.ShowInfo }" name="{!item.Id}" value="false" label="{!item.AS_Learning_Package__r.Name}" class="slds-title-btn"/>
+                                    </div>
+                                    
+                                    <table style="display: none;">
+                                        <tbody>
+                                            <aura:iteration items="{!v.subdata}" var="sub">
+                                                <aura:if isTrue="{!item.Id == sub.enrolid}">
+                                                    <tr>
+                                                        <td>{!sub.Unit}</td>
+                                                        <td>
+                                                            <aura:if isTrue="{!item.Enrolment_Status__c != 'Pending Payment'}" >
+                                                                <aura:if isTrue="{!item.Enrolment_Status__c != 'Pending'}" >
+                                                                    <aura:if isTrue="{!item.Enrolment_Status__c != 'Continue with your application'}" >
+                                                                        <aura:if isTrue="{!or(or(item.Enrolment_Status__c == 'In Progress', item.Enrolment_Status__c == 'Approved' ),  item.Enrolment_Status__c == 'Completed' )}">
+                                                                            <lightning:button onclick="{! c.launchCallback }" class="slds-primary-btn" label="Launch" name="{!sub.AS_Unit__r.AS_Training_Plan__c}" />
+                                                                        <aura:set attribute="else">
+                                                                            {!sub.AS_Status__c}
+                                                                        </aura:set>
+                                                                        </aura:if>
+                                                                    </aura:if>
+                                                                </aura:if>
+                                                            </aura:if>
+                                                        </td>
+                                                    </tr>
+                                                </aura:if>
+                                            </aura:iteration>
+                                    </tbody>
+                                </table>
+                                
+                            </th>
+                            <th data-label="Status" scope="row">
+                                <div class="slds-truncate" title="{!item.Enrolment_Status__c}">
+                                    <aura:if isTrue="{!or(or(item.Enrolment_Status__c == 'In Progress', item.Enrolment_Status__c == 'Approved' ),  item.Enrolment_Status__c == 'Completed' )}">
+                                        <lightning:button iconName="action:approval" class="slds-outer-text" variant="base" label="{!item.Enrolment_Status__c}" />
+                                        <aura:set attribute="else">
+                                        <lightning:button onclick="{! c.statusCallback }" label="{!item.Enrolment_Status__c}" value="{!item.Id}" class="{!item.class}" name="{!item.AS_Learning_Package__c}" />
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                            </th>
+                        </tr>
+                    </aura:iteration>
+                    <aura:set attribute="else">
+                        <tr>
+                            <td colspan="2"><lightning:spinner alternativeText="Loading" size="small" class="slds-table-loader" /></td>
+                        </tr>
+                    </aura:set>
+                    </aura:if>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</aura:component>

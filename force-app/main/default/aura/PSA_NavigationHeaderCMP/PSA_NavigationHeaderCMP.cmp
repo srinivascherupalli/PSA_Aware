@@ -1,0 +1,37 @@
+<aura:component >
+     
+    <aura:attribute name="menuItems" type="List" default="[]"/>
+    <aura:attribute name="screenName" type="String"/>
+    <aura:attribute name="items" type="List" default="[]" access="private"/>
+    
+    <!--change handler-->
+    <aura:handler name="change" value="{!v.menuItems}" action="{!c.doInit}"/>
+
+    <!--Event-->
+    <aura:registerEvent name="navEvent" type="c:PSA_NavigationEvent"/>
+    <aura:handler event="c:PSA_NavigationEvent" action="{!c.handleScreenNavigation}"/>
+
+    <aura:method name="doInit" action="{!c.doInit}" access="PUBLIC"/> 
+    
+	<!-- Banner and Desktop Menu Section Starts -->
+    <div class="container-fluid bg-banner-menu-desktop">
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="navbar-menu-desktop">
+                            <aura:if isTrue="{!v.items.length &gt; 0}">
+                                <ul class="menu-listing-desktop" onclick="{!c.handleNavigation}">
+                                    <aura:iteration items="{!v.items}" var="item">
+                                        <li class="{!item.active ? 'active' : '' }"><a href="javascript:void(0);" id="{!item.id}"><i class="{!item.class}"></i>{!item.label}</a></li>
+                                    </aura:iteration>
+                                </ul>
+                            </aura:if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Banner and Desktop Menu Section Ends -->
+</aura:component>

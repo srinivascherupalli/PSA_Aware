@@ -1,0 +1,9 @@
+<aura:component controller="AsCPDPdfController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+ 	<h1>A certificate will now be generated for your Activity Summary and will appear under "Notes and Attachments" as a PDF. This may take a few minutes to process - please do not exit or click back from this page.If the attachment does not appear automatically, please refresh the page. 
+Please note that a certificate will only be generated if your Activity Summary is complete.</h1>
+	<br/>
+	<h1>If the attachment does not appear automatically, please refresh the page. </h1>
+	<br/>
+    	<lightning:button label="Print Certificate" onclick="{!c.handleClick}"/> 
+    <br/>
+</aura:component>

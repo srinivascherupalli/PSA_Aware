@@ -1,0 +1,135 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  access="global"
+>
+  <!--Attribute-->
+  <aura:attribute
+    name="pageStateWrapper"
+    type="TrainingPlanPreviewController_Lightning.pageStateWrapper"
+  />
+  <aura:attribute name="durationSectionMap" type="Map" />
+  <aura:attribute name="valueTime" type="string" />
+  <aura:attribute name="openModal" type="boolean" default="false" />
+  <aura:attribute name="ifmsrc" type="String" />
+  <aura:attribute name="modalWrapper" type="Object" />
+  <!--Handler-->
+
+  <!--Starts Here-->
+  <aura:if isTrue="{!v.pageStateWrapper.userEnrolled==true}">
+      <div class="slds-text-heading--medium">Activities</div>
+      <div class="required-asterisk-panel"><span class="required_asterisk">*</span>= Required</div>
+    <aura:iteration items="{!v.pageStateWrapper.tPlan.sections}" var="item">
+      <div class="row align-items-center pb-1">
+        <div class="col-12 col-lg-4">
+          <h5>{!item.trainingPlanSection.Name}</h5>
+        </div>
+        <div class="col-12 col-lg-4">
+          <lightning:progressBar
+            value="{!item.totalProgress}"
+            size="large"
+            variant="circular"
+            class="{!item.totalProgress == 100 ? 'success' : ''}"
+          />
+        </div>
+        <div class="col-12 col-lg-2 text-lg-right">
+          <strong style="font-size: 14px;">{!item.totalDuration}</strong>
+        </div>
+      </div>
+          
+      <aura:iteration items="{!item.items}" var="item2">
+        <div class="row align-items-center pb-1">
+          <div class="col-12 col-lg-4">
+            <aura:if
+              isTrue="{!item2.trainingPlanSectionItem.Optional__c==false}"
+            >
+              <span class="required_asterisk">*</span>
+            </aura:if>
+            <p style="display:inline-block">{!item2.learning.Name}</p>
+          </div>
+          <div class="col-12 col-lg-2">
+            <lightning:progressBar
+              value="{!item2.latestAssignment.Progress_Percentage__c}"
+              size="large"
+              variant="circular"
+              class="{!item2.latestAssignment.Progress_Percentage__c == 100 ? 'success' : ''}"
+            />
+          </div>
+         
+          <div class="col-12 col-lg-4 text-lg-right">
+            <aura:if isTrue="{!or(item2.learning.RecordType.DeveloperName=='Moodle',item2.learning.RecordType.DeveloperName=='Resource')}">
+                
+                <lightning:button
+                                  variant="brand-outline"
+                                  class="btn btn--small"
+                                  aura:id="{!item2.Id}"
+                                  value="{!item2}"
+                                  label="Launch"
+                                  title="Brand action"
+                                  
+                                  onclick="{!and(or((item2.previousSectionItemInProgress==true),(item.previousSectionInProgress==True)),(v.pageStateWrapper.tPlan.trainingPlan.Enforce_Sequence__c==True)) ? c.previousCourseInProgress : c.handleClick}"
+                                  />
+                <aura:set attribute="else">
+                    <lightning:button class="btn btn--small btn--disabled" label="Registered"/>
+                    
+                </aura:set>
+            </aura:if>
+
+       </div>
+     </div>
+
+  	</aura:iteration>
+     
+    </aura:iteration>
+    <!--- MODAL-->
+    <aura:if isTrue="{!v.openModal==true}">
+      <!--Launch modal-->
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <section
+              role="dialog"
+              tabindex="-1"
+              aria-labelledby="modal-heading-01"
+              aria-modal="true"
+              aria-describedby="modal-content-id-1"
+              class="slds-modal slds-fade-in-open"
+            >
+              <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                  <lightning:buttonIcon
+                    iconName="utility:close"
+                    onclick="{! c.closeModel }"
+                    alternativeText="close"
+                    variant="bare-inverse"
+                    class="slds-modal__close"
+                  />
+                  <div class="slds-modal__content slds-p-around--medium">
+                    <div style="text-align:center;width:100%;">
+                        
+                      <a
+                        id="contentLink"
+                        target="_blank"
+                        href="{!v.ifmsrc}"
+                        >Open In New Window</a
+                      >
+                    </div>
+                    <div id="contentIframeWrapper" style="padding:10px 0;">
+                      <iframe
+                        id="contentIframe"
+                        style="width:100%;height:400px;border: none;"
+                        src="{!v.ifmsrc}"
+                      />
+                    </div>
+					
+                  </div>
+                </header>
+              </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+          </div>
+        </div>
+      </div>
+    </aura:if>
+    <!--Modal -->
+  </aura:if>
+</aura:component>

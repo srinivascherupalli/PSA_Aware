@@ -1,0 +1,55 @@
+<!-- 
+    *Author : Jet R. Compayan
+    *Description : This Page for the Cpd Planning Tool(AsPsaCdpPlanningTool)
+    *Date Created : Apr 26,2018
+    *Last Modified By : 
+    *Date Last Modified : 
+    *Related Meta Data : User
+-->
+
+<apex:page controller="AsCPDPlanner" showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">   
+<!-- AsPsaCdpPlanningTool -->
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+
+<head>
+    <title>CPD Planner</title>
+    <apex:stylesheet value="{!URLFOR($Resource.PSAFED, 'dist/css/app.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.AsSldsPsaCdp, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+    <c:AsPsaCdpStyles />
+</head>    
+ 
+<body>    
+        <apex:outputPanel rendered="{!If(isAuthorized==true,true,false)}">
+    <!-- REQUIRED SLDS WRAPPER -->
+    <div class="slds" id="cdp">    
+        <div class="cdp-wrapper page-wrapper">
+            <div class="cdp-wrapper-container">
+                <c:AsPsaCdpPage1 />
+                <c:AsPsaCdpPage01 />
+                <c:AsPsaCdpPage02 />
+                <c:AsPsaCdpPage2 />
+                <c:AsPsaCdpPage3 /> 
+                <c:AsPsaCdpPage4 />
+                <c:AsPsaCdpPage5 />
+                <c:AsPsaCdpPage6 />
+            </div>
+        </div>      
+    </div>
+    <div id="psa-spinner" class="psa-spinner-loading">
+        <div class="psa-contiainer">
+            <apex:image id="theImage" value="{! URLFOR($Resource.AS_slds,'assets/images/spinners/slds_spinner_brand.gif') }" alt="Loading..." />
+        </div>
+    </div>
+    <!-- / REQUIRED SLDS WRAPPER -->  
+    </apex:outputPanel>  
+    
+    <apex:outputPanel rendered="{!If(isAuthorized==false,true,false)}">   
+        <div class="unAuthorized">
+        In order to access the CPD Planning Tool, please <a href='{!theFullurl}'>sign up</a> to become a PSA Member.
+      </div>     
+    </apex:outputPanel> 
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<c:AsPsaCdpControllerJs />
+</html>
+</apex:page>

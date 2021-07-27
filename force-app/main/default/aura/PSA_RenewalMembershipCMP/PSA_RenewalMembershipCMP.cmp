@@ -1,0 +1,159 @@
+<aura:component extends="c:PSA_Base" implements="forceCommunity:availableForAllPageTypes" controller="PSA_RenewalScreenContoller">
+	<aura:attribute name="invLine" type="Map" default="{}"/>
+    <aura:attribute name="acceptAndContinue" type="boolean" default="false"/>
+    
+    <aura:attribute name="invoiceStatus" type="String"/>
+
+    <aura:attribute name="invLinePrice" type="Map"/>
+
+    <aura:attribute name="membershipNames" type="String"/>
+
+    <aura:handler event="c:PSA_NavigationEvent" action="{!c.handleButtonClick}"/>
+
+        <!--init handler-->
+        <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <force:recordData aura:id="forceRecord"
+                      recordId="{!v.invoiceId}"
+                      layoutType="FULL"
+                      targetFields="{!v.invoiceRecord}"
+                      targetError="{!v.recordLoadError}"
+                      recordUpdated="{!c.recordUpdated}" />
+
+    <!-- Component Start -->
+    <aura:if isTrue="{! v.invoiceStatus == 'Draft' }">
+    <div class="psa-heading text-center">
+        <h1>PSA Subscription Renewal</h1>
+    </div>
+    
+    <hr class="psa-hori-line" />
+
+    <div class="row">
+        <div class="col-xs-12">
+            <p>It’s time to renew your {!v.invLine.blng__Product__r.Family} subscription.</p>
+        </div>
+    </div>
+    <!-- 'product benefits field' -->
+    <div class="row" style="margin-bottom:2rem;">
+        <div class="col-xs-12">
+            <div class="form-group-payment-method">
+            	<p>Your annual subscription to {!v.invLine.blng__Product__r.Family} is due to renew on the <lightning:formattedDateTime value="{!v.invLine.blng__DueDate__c}" year="numeric" month="numeric" day="numeric"/>.</p>
+            </div>
+        </div>
+    </div>
+<!--     <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group-payment-method">
+            	<p>Your 12 month subscription to {!v.invLine.Name} is due to renew on the
+                    <lightning:formattedDateTime value="{!v.invLine.blng__DueDate__c}" year="numeric" month="numeric" day="numeric"/>.</p>
+
+            </div>
+        </div>
+    </div> -->
+
+<!--     <hr class="psa-hori-line" /> -->
+        <h3 class="familyHead" style="margin-bottom:2rem; font-size:24px;">Your subscription details:</h3>
+        
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col" class="text-right">Unit Price</th>
+                <th scope="col" class="text-right">Quantity</th>
+                <th scope="col" class="text-right">Total price</th>
+              </tr>
+            </thead>
+            <tbody>
+                
+            <aura:iteration items="{!v.invLinePrice}" var="item" indexVar="index">
+              <tr>
+                <th scope="row">{!index+1}</th>
+                <td>{!item.Name}</td>
+                <td class="text-right"><lightning:formattedNumber value="{!item.blng__UnitPrice__c}" style="currency" currencyCode="AUD" minimumFractionDigits="2" maximumFractionDigits="2"/></td>
+                <td class="text-right">{!item.blng__Quantity__c}</td>
+                <td class="text-right"><lightning:formattedNumber value="{!item.blng__Invoice__r.blng__TotalAmount__c}" style="currency" currencyCode="AUD" minimumFractionDigits="2" maximumFractionDigits="2"/> (with tax)</td>
+              </tr>
+            </aura:iteration>
+            </tbody>
+          </table>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group-payment-method">
+            	<p>Your subscription is currently set up for {!v.invLine.blng__BillingFrequency__c} billing and your payment amount of <lightning:formattedNumber value="{!v.invLine.blng__TotalAmount__c}" style="currency" currencyCode="AUD" minimumFractionDigits="2" maximumFractionDigits="2"/> is now due.</p>
+            </div>
+        </div>
+    </div>
+    <form>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group-payment-method tc" aura:id="tcSection">
+                <aura:if isTrue="{! v.invLine.blng__Product__r.Family == 'Membership' }">
+                    <label class="same-contact-label">
+                        <input type="checkbox" id="terms" name="psa-checkbox-1" class="psa-checkbox-1" onchange="{!c.termsChanged}"/>
+                        <span></span>
+                        <span>By renewing PSA membership, you are agreeing to accept the <a href="https://www.psa.org.au/about/terms-of-use/" target="_blank">Terms and Conditions</a>, abide by <a href="https://www.psa.org.au/practice-support-industry/ethics/" target="_blank">the PSA Code of Ethics</a>  and <a href="https://www.psa.org.au/about/governance/" target="_blank">the Constitution</a>.
+                            
+                        </span>
+                    </label>
+                    <p class="slds-form-element__help">Complete this field.</p>
+
+                    <p>The Pharmaceutical Society of Australia annual membership subscriptions are non-refundable and by selecting an instalment payment option you are agreeing to pay the complete annual subscription.</p>
+                </aura:if>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group-payment-method">
+                <label class="same-contact-label">
+                    <input type="checkbox" name="psa-checkbox-2" class="psa-checkbox-2"/>
+                    <span></span>
+                    <span>I would like to auto-renew my subscription for next year. By checking this box you are agreeing to PSA’s direct debit <a href="https://www.psa.org.au/about/terms-of-use/direct-debit-request/" target="_blank">Terms and Conditions</a></span>
+                </label>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+<!--         <div class="col-xs-12">
+            <div class="form-group-payment-method">
+            	<p>Take advantage of PSA Member benefits and continue to be part of the peak body at the forefront of advancing practice for pharmacists. Find out more about PSA member benefits <a href="https://www.psa.org.au/membership-benefits/" target="_blank">here.</a></p>
+            </div>
+        </div> -->
+        <div class="col-xs-12">
+            <div class="form-group-payment-method">
+            	<p>If you would like to discuss any changes, please call the membership team on 1300 369 772.</p>
+            </div>
+        </div>
+    </div>
+
+    <hr class="psa-hori-line" />
+
+    <div class="row">
+        <div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
+            <!-- <div class="btn-border">
+                <a href="javascript:void(0);">Back</a>
+            </div> -->
+        </div>
+        <div class="col-xs-8 col-sm-6 col-md-6 col-lg-6">
+            <div class="btn-background-border text-right">
+                <a href="javascript:void(0);" onclick="{!c.handleButtonClick}" aura:id="screen_2">Accept and Continue</a>
+            </div>
+        </div>
+    </div>
+</form>
+</aura:if>
+<aura:if isTrue="{! v.invoiceStatus == 'Other' }">
+    <hr class="psa-hori-line" />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="fail-banner slds-align_absolute-center">
+                    <lightning:icon iconName="utility:error" alternativeText="error" title="error" size="large" class="slds-icon slds-icon-text-default"/>
+                    <span>An error has occured, please try again later or call the customer service at 123-123-1234.</span>
+                </div>
+            </div>
+        </div>
+    <hr class="psa-hori-line" />
+    </aura:if>
+</aura:component>

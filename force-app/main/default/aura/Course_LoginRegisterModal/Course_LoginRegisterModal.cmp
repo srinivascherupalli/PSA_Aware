@@ -1,0 +1,31 @@
+<aura:component>
+    <lightning:navigation aura:id="navService"/>
+
+    <aura:attribute name="modalType" type="String" default=""/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <div>
+        <center>
+            <aura:if isTrue="{!v.modalType=='Register'}">    
+                    <p> In order to access this course, please <b>Sign Up</b> to become a PSA member.</p>
+                    <br/>
+                    <button class="slds-button slds-button--neutral" style="height:45px;width:260px;" onclick="{! c.goToMemberSignup }">Sign Up</button>
+                    <br/>
+                    <br/>
+                <aura:set attribute="else">
+                    <p>You need to be logged in to enrol. To continue, please <b>login</b> or <b>register</b>.</p>
+                    <br/>
+                    <button class="slds-button slds-button--neutral" style="height:45px;width:260px;" onclick="{! c.goToLogin }">Login</button>
+                    <br/>
+                    <br/>
+                    <button class="slds-button slds-button--neutral" style="height:45px;width:260px;" onclick="{! c.goToRegister }">Register</button>
+                    <br/>
+                    <br/>
+                </aura:set>
+            </aura:if>
+        </center>
+    </div>
+
+    <!-- <lightning:button variant="brand-outline" label="Brand Outline" title="Brand action" onclick="{! c.handleClick }" />  -->
+
+</aura:component>

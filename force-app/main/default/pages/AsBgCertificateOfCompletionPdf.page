@@ -1,0 +1,65 @@
+<!-- AsBgCertificateOfCompletionPdf -->
+<apex:page standardController="AS_BG_Course_Enrolment__c" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" renderAs="pdf">
+	<head>
+		<style>
+			@page {
+				size: 11in 8.5in;/* width height */
+				margin-top: 50px;
+				margin-left: 120px;
+				margin-right: 120px;
+			} 
+			body {
+				font-family: Arial,Helvetica,sans-serif; font-size: 12px;	
+			}
+			.bg-cert-wrapp .bg-cert-content , .bg-image-spon{
+				text-align: center;
+			}
+			.bg-text {
+				font-weight:300;
+			}
+			.bg-text-tin {
+				font-weight:100;
+			}
+			.bg-text-color-blue {
+				color:#000bde;
+			}
+		</style>
+	</head>
+	<div class="bg-cert-wrapp" >
+		<div class="bg-cert-content">
+			<h1 
+				style="font-size: 70px;margin-bottom:50px;"
+				class="bg-text" >
+				Certificate of Completion
+			</h1>
+			<h3 
+				style="font-size: 28px;"
+				class="bg-text-tin bg-text-color-blue" >
+				This Certificate is presented to
+			</h3>
+			<h3 style="font-size: 38px;margin-bottom:70px;" >
+				{!AS_BG_Course_Enrolment__c.AS_Contact__r.Name}
+			</h3>
+			<h3 
+				style="font-size: 28px;"
+				class="bg-text-tin bg-text-color-blue" > 
+				For successfully completing 
+			</h3>
+			<h3 style="font-size: 28px;" >
+				{!AS_BG_Course_Enrolment__c.AS_Banner_Group_Course__r.Name}
+			</h3>
+		</div>
+
+		<div class="bg-cert-footer" style="margin-top:90px">
+			 <p style="font-size: 18px;color:#0070c0 "  > Date of Completion </p>
+			 <p style="font-size: 18px;margin-top:60px;margin-bottom:20px;border-bottom: 1px solid;text-align: center;width:30%"> 
+				<apex:outputText value="{0, date, d MMMM yyyy}">
+					<apex:param value="{! AS_BG_Course_Enrolment__c.AS_Completed_On__c }" /> 
+				</apex:outputText>
+			 </p>
+			 <div class="bg-image-spon">
+			  	<apex:image style="width: 75%;" url="{!URLFOR($Resource.AsBgImagesStaticResources,'BgImagesResources/qwerty-alt.jpg')}"  />
+			 </div> 
+		</div>
+	</div> 
+</apex:page>

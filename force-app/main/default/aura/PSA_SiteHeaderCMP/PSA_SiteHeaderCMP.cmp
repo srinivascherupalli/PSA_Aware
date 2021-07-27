@@ -1,0 +1,13 @@
+<aura:component > 
+	<!-- Logo Section Starts -->
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-1 slds-p-around_xx-large">
+            <div class="header-logo-desktop text-center">
+                <a href="#" >
+                    <img src="{!$Resource.PSAPayment + '/psa/images/logo.png'}" class="img-responsive" alt="" />
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Logo Section Ends -->
+</aura:component>

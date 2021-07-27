@@ -1,0 +1,455 @@
+<apex:page controller="AsPsaSettings"  standardStylesheets="false"   docType="html-5.0" action="{!loadisRunning}" >    
+
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+
+<head>
+  <title> Psa Settings </title>
+  <apex:stylesheet value="{!URLFOR($Resource.AsSldsPsaCdp, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+  <style type="text/css">
+    .psa-setting-wrap  h1, .psa-setting-wrap h2,.psa-setting-wrap  h3,.psa-setting-wrap  h4,.psa-setting-wrap  h5,.psa-setting-wrap  h6,.psa-setting-wrap  p,.psa-setting-wrap  a {
+        color: #4e4e4e;
+    }
+    .psa-setting-wrap label, .slds-form-element__label {
+        color: #949494;
+        font-weight: 100;
+    }
+    .psa-setting-wrap {
+      margin: 1% auto;
+      width: 97%;
+    }
+    .psa-setting-header {
+      padding: 23px;
+      padding-left: 0%;
+      margin-bottom: 2%;
+    }
+    .psa-set-section {
+      margin-bottom: 2%;
+      padding-bottom: 30px;
+    }
+    .psa-set-section-header{
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+    .psa-setting-wrap .slds-icon-standard-account {
+      background-color: #8099af;
+    }
+    .psa-setting-title {
+      margin-left: 12px;
+    }
+    .psa-title-and-icon {
+      vertical-align: middle;
+    }
+    .psa-setting-wrap .slds-input {
+      padding: 8px;
+    }
+    .psa-setting-wrap .slds-input-small-width {
+        width: 13%;
+    }
+    .psa-setting-wrap .slds-input-large-width {
+        width: 50%;
+    }
+    .psa-setting-wrap .psa-setting-button {
+      padding: 8px;
+      width: 9%;
+    }
+    #mRunBatch, .successmsg { color: #4CAF50; }
+    .btn-abort { background: #c30c0c;}
+    .btn-abort .slds-checkbox_faux{ color: #fff; }
+    #errmsg {
+      color: #ce2626;
+    }
+  </style>
+</head>    
+
+<body>    
+
+  <!-- REQUIRED SLDS WRAPPER -->
+  <div class="psa-setting-wrap" >
+    <div class="slds">    
+  
+        <!-- MASTHEAD -->
+        <div class="psa-setting-header slds-border--bottom" >
+            <span class="slds-icon_container slds-icon-standard-account psa-title-and-icon" title="Description of icon when needed">
+                <svg class="slds-icon" aria-hidden="true">
+                  <use xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'/assets/icons/standard-sprite/svg/symbols.svg#custom')}"></use>
+                </svg>
+                <span class="slds-assistive-text">Description of icon when needed</span>
+            </span>
+            <h1 class="slds-text-heading_large psa-title-and-icon">
+              <span class="psa-setting-title"> PSA Setttings </span>
+            </h1>
+        </div>
+        <!-- / MASTHEAD -->   
+
+        <div class="psa-set-section slds-border--bottom"> 
+            <div class="psa-set-section-header">
+              <h3>BATCH CREATE CPD &nbsp; <span class="successmsg"></span> </h3>
+            </div>
+             <div class="psa-set-section-body">
+               <div class="slds-form-element">
+                  <label class="slds-form-element__label" for="text-input-id-1">Year &nbsp; <span id="errmsg"></span> </label>
+                  <div class="slds-form-element__control ">
+                    <input type="text"  class="slds-input slds-input-small-width psa-title-and-icon slds-text-align_center slds-m-right_x-small" id="batchCreateCpdYear" placeholder="Year" />
+                    <button class="slds-button slds-button_brand psa-setting-button psa-title-and-icon psa-batch-create-cpd-run">
+                      Run Batch
+                    </button>
+                  </div>
+                </div>
+                <div class="slds-form-element slds-m-top_x-small">
+                  <div class="slds-form-element__control">
+                    <span class="slds-checkbox">
+                      <input type="checkbox" name="options"  id="batchCreateCpdCurrent" />
+                      <label class="slds-checkbox__label" for="batchCreateCpdCurrent">
+                        <span class="slds-checkbox_faux"></span>
+                        <span class="slds-form-element__label">Current</span>
+                      </label>
+                    </span>
+                  </div>
+                </div>
+             </div>
+        </div>
+
+        <div class="psa-set-section slds-border--bottom slds-m-top_medium">
+            <div class="psa-set-section-header">
+              <h3>  Membership Renewal </h3>
+            </div>
+             <div class="psa-set-section-body">
+                
+                <fieldset class="slds-form-element">
+                  <legend class="slds-form-element__legend slds-form-element__label">Manual Run Batch: <span id="mRunBatch" > </span> </legend>
+                  <div class="slds-form-element__control">
+                    <div class="slds-checkbox_button-group">
+                      <span class="slds-button slds-checkbox_button psa-membership-renewal-run-batch" data-value="t1">
+                        <label class="slds-checkbox_button__label"  >
+                          <span class="slds-checkbox_faux">T1</span>
+                        </label>
+                      </span>
+                      <span class="slds-button slds-checkbox_button psa-membership-renewal-run-batch"  data-value="t2t3t4">
+                        <label class="slds-checkbox_button__label" >
+                          <span class="slds-checkbox_faux">T2 T3 T4</span>
+                        </label>
+                      </span>
+                      <span class="slds-button slds-checkbox_button psa-membership-renewal-run-batch" data-value="end">
+                        <label class="slds-checkbox_button__label"  >
+                          <span class="slds-checkbox_faux">End</span>
+                        </label>
+                      </span>
+                      <span class="slds-button slds-checkbox_button psa-membership-renewal-run-batch"  data-value="t5t5t7">
+                        <label class="slds-checkbox_button__label"  >
+                          <span class="slds-checkbox_faux">T5 T6 T7</span>
+                        </label>
+                      </span>
+                      <span class="slds-button slds-checkbox_button psa-membership-renewal-run-batch" data-value="t8">
+                        <label class="slds-checkbox_button__label"  >
+                          <span class="slds-checkbox_faux">T8</span>
+                        </label>
+                      </span>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <apex:outputPanel id="resultScheduler">
+                  <fieldset class="slds-form-element slds-m-top_medium">
+                    <legend class="slds-form-element__legend slds-form-element__label">Membership Renewal Scheduler </legend>
+                    <div class="slds-form-element__control">
+                      <div class="slds-checkbox_button-group">
+                        <span class="slds-button slds-checkbox_button psa-membership-renewal-run-scheduler  {!btnclass}">
+                          <label class="slds-checkbox_button__label" >
+                            <span class="slds-checkbox_faux">{!btnName}</span>
+                          </label>
+                        </span>
+                      </div>
+                    </div>
+                  </fieldset>
+               </apex:outputPanel>
+             </div>
+        </div>
+        
+        <div class="psa-set-section slds-border--bottom slds-m-top_medium">
+            <div class="psa-set-section-header">
+              <h3>  Training Track Registration and Moodle Syncing Batch </h3>
+            </div>
+             <div class="psa-set-section-body">
+                <apex:outputPanel id="trackResultScheduler">
+                  <fieldset class="slds-form-element slds-m-top_medium">
+                    <!--egend class="slds-form-element__legend slds-form-element__label">Training Track Registration and Moodle Syncing Scheduler </legend-->
+                    <div class="slds-form-element__control">
+                      <div class="slds-checkbox_button-group">
+                        <span class="slds-button slds-checkbox_button psa-training-track-run-scheduler  {!trainTrackBtnClassStr}">
+                          <label class="slds-checkbox_button__label" >
+                            <span class="slds-checkbox_faux">{!trainTrackBtnNameStr}</span>
+                          </label>
+                        </span>
+                      </div>
+                    </div>
+                  </fieldset>
+               </apex:outputPanel>
+             </div>
+        </div>
+        
+        <div class="psa-set-section slds-border--bottom slds-m-top_medium">
+            <div class="psa-set-section-header">
+              <h3>  Ap Integration Batch Process </h3>
+            </div>
+             <div class="psa-set-section-body">
+                <apex:outputPanel id="apIntegrationResultScheduler">
+                  <fieldset class="slds-form-element slds-m-top_medium">
+                    <!--egend class="slds-form-element__legend slds-form-element__label">Training Track Registration and Moodle Syncing Scheduler </legend-->
+                    <div class="slds-form-element__control">
+                      <div class="slds-checkbox_button-group">
+                        <span class="slds-button slds-checkbox_button ap-integration-run-scheduler  {!apIntegrationBtnClassStr}">
+                          <label class="slds-checkbox_button__label" >
+                            <span class="slds-checkbox_faux">{!apIntegrationBtnNameStr}</span>
+                          </label>
+                        </span>
+                      </div>
+                    </div>
+                  </fieldset>
+               </apex:outputPanel>
+             </div>
+        </div>
+ 
+        <apex:outputPanel id="resultOtherSettings">
+          <div class="psa-set-section slds-border--bottom">
+              <div class="psa-set-section-header">
+                <h3>  Other Settings {!PSAOtherSettings} </h3>
+              </div>
+               <div class="psa-set-section-body">
+                 <div class="slds-form-element slds-m-bottom_small">
+                    <label class="slds-form-element__label" >Invoice Pdf Url</label>
+                    <div class="slds-form-element__control otherSettings-form" data-value="{!otherSettingsPdfUrlStr}"  data-inputId="pdfUrl" >
+                     <!--  <input type="text" id="pdfUrl" value="{!otherSettingsPdfUrlStr}" class="slds-input slds-input-large-width" placeholder="Url" /> -->
+                      <p>{!otherSettingsPdfUrlStr}</p>
+                    </div>
+                  </div>
+                  <div class="slds-form-element slds-m-bottom_small">
+                    <label class="slds-form-element__label"  >Login Url</label>
+                    <div class="slds-form-element__control  otherSettings-form" data-value="{!otherSettingsLoginUrlStr}"  data-inputId="loginUrl">
+                    <!--   <input type="text" id="loginUrl" value="{!otherSettingsLoginUrlStr}" class="slds-input slds-input-large-width" placeholder="Url" /> -->
+                       <p>{!otherSettingsLoginUrlStr}</p>
+                    </div>
+                  </div> 
+                  <button class="slds-button slds-button_brand psa-setting-button psa-title-and-icon otherSetting-update" id="otherSettingsId">Update</button>
+               </div>
+          </div> 
+         </apex:outputPanel>
+
+    <!--Load Spinner -->
+        <div class="slds-spinner_container" id="psa-setting-spinner">
+          <div role="status" class="slds-spinner slds-spinner_medium">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+          </div>
+        </div>
+     <!--End Load Spinner -->
+
+    </div>
+    <!-- / REQUIRED SLDS WRAPPER -->    
+  </div>
+  <apex:form >
+
+    <apex:actionFunction action="{!MemberRenewalRunBatchByProcedure}" name="MemberRenewalRunBatchByProcedure" rerender="resultsPanel" >
+      <apex:param name="MemberRenewalRunBatchType" assignTo="{!MemberRenewalRunBatchType}" value="" />
+    </apex:actionFunction>
+
+    <apex:actionFunction action="{!MemberRenewalRunScheduler}" name="MemberRenewalRunScheduler" rerender="resultScheduler" >
+    </apex:actionFunction>
+    
+    <apex:actionFunction action="{!trainTrackAndMoodleRunScheduler}" name="trainTrackAndMoodleRunScheduler" rerender="trackResultScheduler" >
+    </apex:actionFunction>
+    
+    <apex:actionFunction action="{!apIntegrationRunScheduler}" name="apIntegrationRunScheduler" rerender="apIntegrationResultScheduler" >
+    </apex:actionFunction>
+
+    <apex:actionFunction action="{!BatchCreateCpdRun}" name="BatchCreateCpdRun" rerender="resultsPanel" >
+      <apex:param name="BatchCreateCpdYearStr" assignTo="{!BatchCreateCpdYearStr}" value="" />
+      <apex:param name="BatchCreateCpdCurrentBool" assignTo="{!BatchCreateCpdCurrentBool}" value="" />
+    </apex:actionFunction>
+
+    <apex:actionFunction action="{!OtherSettingSave}" name="OtherSettingSave" rerender="resultOtherSettings" >
+      <apex:param name="otherSettingsPdfUrlStr" assignTo="{!otherSettingsPdfUrlStr}" value="" />
+      <apex:param name="otherSettingsLoginUrlStr" assignTo="{!otherSettingsLoginUrlStr}" value="" />
+    </apex:actionFunction>
+ 
+    <apex:outputPanel id="resultsPanel">
+<!--    {!BatchCreateCpdYearStr}
+        {!BatchCreateCpdCurrentBool}
+        {!otherSettingsPdfUrlStr} 
+        {!otherSettingsLoginUrlStr} -->
+    </apex:outputPanel>
+
+  </apex:form> 
+ 
+
+</body> 
+
+  
+<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+<script type="text/javascript">
+  
+
+    $(document).ready(function(){
+ 
+        $('#psa-setting-spinner').hide();
+
+        // Manual Run Batch
+        $(document).on('click', '.psa-membership-renewal-run-batch', function(){
+
+            $('#psa-setting-spinner').show();
+
+            var MemberRenewalRunBatchType = $(this).attr('data-value'); 
+
+            MemberRenewalRunBatchByProcedure(MemberRenewalRunBatchType); 
+
+            setTimeout(function(){
+                $('#psa-setting-spinner').hide(); 
+                $('#mRunBatch').text( MemberRenewalRunBatchType.toLocaleUpperCase() +' Successfully run the batch. ');
+            }, 1000);
+
+        });
+
+        // Membership Renewal Scheduler
+        $(document).on('click', '.psa-membership-renewal-run-scheduler', function(){
+
+            $('#psa-setting-spinner').show();
+
+            MemberRenewalRunScheduler();  
+
+            setTimeout(function(){
+                $('#psa-setting-spinner').hide(); 
+            }, 1000);
+
+        });
+        
+        // Training Track and Moodle Syncing Scheduler
+        $(document).on('click', '.psa-training-track-run-scheduler', function(){
+
+            $('#psa-setting-spinner').show();
+
+            trainTrackAndMoodleRunScheduler();  
+
+            setTimeout(function(){
+                $('#psa-setting-spinner').hide(); 
+            }, 1000);
+
+        });
+        
+        // Ap Integration Scheduler
+        $(document).on('click', '.ap-integration-run-scheduler', function(){
+
+            $('#psa-setting-spinner').show();
+
+            apIntegrationRunScheduler();  
+
+            setTimeout(function(){
+                $('#psa-setting-spinner').hide(); 
+            }, 1000);
+
+        });
+
+       
+        // BATCH CREATE CPD
+        $(document).on('click', '.psa-batch-create-cpd-run', function(){
+
+            $('#psa-setting-spinner').show();
+
+                if( $('#batchCreateCpdYear').val().trim() != '' ){
+
+                    var batchCreateCpdYear = $('#batchCreateCpdYear').val();
+                    var batchCreateCpdCurrent = $('#batchCreateCpdCurrent').is(":checked");
+
+                    var date = new Date();
+                    var less= date.getFullYear() - 2;
+                    var more = date.getFullYear() + 2;
+
+                    if( batchCreateCpdYear >= less && batchCreateCpdYear <= more  ){
+                        BatchCreateCpdRun( batchCreateCpdYear , batchCreateCpdCurrent );
+                      $("#errmsg").html('').fadeOut("slow");
+                      $('.successmsg').html('Successfully run the batch');
+                    } else{
+                      $("#errmsg").html("Cpd Year must be less than 2 or more than 2 years from current year.").show();
+                    }
+
+                } else {
+                   $("#errmsg").html("Please don't leave it blank").show();
+                } 
+
+            setTimeout(function(){
+                $('#psa-setting-spinner').hide(); 
+            }, 1000);
+
+        });
+        $("#batchCreateCpdYear").keypress(function (e) {
+
+           //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+              //display error message
+                $("#errmsg").html("Digits Only").show().fadeOut("slow");
+                return false;
+
+            } else {
+              
+                if( $(this).val().length >= 4  ){
+                    $("#errmsg").html("Only 4 Digits").show(23).fadeOut("slow");
+                    return false;
+                } 
+
+            }
+
+         }); 
+
+        //Other Settings 
+        $(document).on('click', '.otherSetting-save', function(){
+
+          $('#psa-setting-spinner').show();
+
+          var pdfUrl = $('#pdfUrl').val();
+          var loginUrl = $('#loginUrl').val();
+ 
+          OtherSettingSave(pdfUrl,loginUrl);  
+
+          $('#otherSettingsId').text('Update');
+          $('#otherSettingsId').removeClass('otherSetting-save');
+          $('#otherSettingsId').addClass('otherSetting-update');
+
+          $( ".otherSettings-form" ).each(function() {
+              $(this).html('');
+              var dataValue = $(this).attr('data-value');    
+              $(this).html('<p>'+ dataValue +'</p>');
+          });
+
+          setTimeout(function(){
+            $('#psa-setting-spinner').hide(); 
+          }, 1000);
+
+
+
+
+        });
+       $(document).on('click', '.otherSetting-update', function(){
+
+          $('#otherSettingsId').text('Save');
+          $('#otherSettingsId').removeClass('otherSetting-update');
+          $('#otherSettingsId').addClass('otherSetting-save');
+
+          $( ".otherSettings-form" ).each(function() {
+              $(this).html('');
+              var dataValue = $(this).attr('data-value');
+              var dataInputId = $(this).attr('data-inputId');
+              console.log('dataValue', dataValue);      
+
+              $(this).html('<input type="text" id="'+ dataInputId +'" value="'+dataValue+'" class="slds-input slds-input-large-width" placeholder="Url" />');
+          });
+
+
+ 
+       });
+
+      
+    }); 
+
+</script>
+
+</html>
+</apex:page>

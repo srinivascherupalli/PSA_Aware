@@ -1,0 +1,85 @@
+<aura:component>
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+  <!-- Properties -->
+  <aura:attribute name="isCourse" type="boolean" default="false" />
+  <aura:attribute name="id" type="string" default="" />
+  <aura:attribute name="href" type="string" default="" />
+  <aura:attribute name="group" type="string" default="" />
+  <aura:attribute name="tag" type="string" default="" />
+  <aura:attribute name="title" type="string" default="" />
+  <aura:attribute name="duration" type="string" default="" />
+  <aura:attribute name="deliveryMethod" type="string" default="" />
+  <aura:attribute name="deliveryDescription" type="string" default="" />
+  <aura:attribute name="thumbnail" type="string" default="" />
+  <aura:attribute name="badge" type="string" default="" />
+
+  <!-- HTML attributes  -->
+  <aura:attribute name="className" type="string" default="" />
+  <aura:attribute name="attributes" type="List" default="[]" />
+
+  <!-- Qualification  -->
+  <aura:if isTrue="{!v.isCourse == false}">
+    <a href="{!v.href}" class="{!v.className}">
+      <aura:if isTrue="{!not(empty(v.tag))}">
+        <span class="card__tag">{!v.tag} </span>
+      </aura:if>
+        
+
+      <div class="card__body">
+        <ui:outputRichText value="{!v.badge}" class="card__badge" />
+
+        <p class="card__title">{!v.title}</p>
+        <aura:if isTrue="{!not(empty(v.attributes))}">
+          <dl class="card__attributes">
+            <aura:iteration items="{!v.attributes}" var="attribute">
+              <dt class="card__attribute-title">
+                <lightning:icon
+                  iconName="{!attribute.icon}"
+                  alternativeText="{!attribute.text}"
+                />
+              </dt>
+              <dd class="card__attribute-details">{!attribute.text}</dd>
+            </aura:iteration>
+          </dl>
+        </aura:if>
+      </div>
+    </a>
+    <!-- Training  -->
+    <aura:set attribute="else">
+      <a href="{!v.href}" class="{!v.className}">
+        <div class="card__header">
+          <aura:if isTrue="{!not(empty(v.tag))}">
+            <span class="card__tag">{!v.tag} </span>
+          </aura:if>
+
+          <aura:if isTrue="{!not(empty(v.thumbnail))}">
+            <ui:outputRichText value="{!v.thumbnail}" class="card__img" />
+            <aura:set attribute="else"
+              ><div class="card__img-placeholder"></div>
+            </aura:set>
+          </aura:if>
+
+          <ui:outputRichText value="{!v.badge}" class="card__badge" />
+        </div>
+        <div class="card__body">
+          <p class="card__title">{!v.title}</p>
+
+          <aura:if isTrue="{!not(empty(v.attributes))}">
+            <dl class="card__attributes">
+              <aura:iteration items="{!v.attributes}" var="attribute">
+                <dt class="card__attribute-title">
+                  <lightning:icon
+                    iconName="{!attribute.icon}"
+                    alternativeText="{!attribute.text}"
+                  />
+                </dt>
+                <dd class="card__attribute-details">{!attribute.text}</dd>
+              </aura:iteration>
+            </dl>
+          </aura:if>
+        </div>
+      </a>
+    </aura:set>
+  </aura:if>
+</aura:component>

@@ -1,0 +1,226 @@
+.THIS.slds-container {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 19px;
+    opacity: 1;
+    padding: 0 30px 30px;
+    border-radius: 7px;
+    margin-top: 20px;
+    display: inline-block;
+    width: 100%;
+}
+.THIS .as-event-instance-container h2 {
+    font-size: 20px;
+    color: #003D79;
+    /* border: 1px solid #EEEEEE; */
+    padding: 21px 0;
+    font-weight: bold;
+}
+.THIS .as-event-instance {
+    border-top: 1px solid #EEEEEE;
+    padding-top: 30px;
+    margin-bottom: 30px; 
+}
+.THIS .as-event-instance h3 {
+    font-size: 18px;
+    color: #607A91;
+    font-weight: bold;
+}
+.THIS .AsEventContainer { 
+    border: 1px solid #E1E1E1;
+    margin-bottom: 8px;
+    padding: 26px 58px 18px 21px; 
+    display: flex;
+    border-radius: 10px;
+    cursor: pointer; 
+    position: relative;
+}
+.THIS .AsEventContainer .AsSoldOut {
+    display: none;
+}
+.THIS .AsSoldOutcont {
+    opacity: 0.8;
+}
+.THIS .AsSoldOutcont .AsSpaceRemaining {
+    display: none;
+}
+.THIS .AsSoldOutcont .AsSoldOut {
+    display: block;
+    background-color: #607A91;
+    width: 125px;
+    text-align: center;
+    padding: 3px 13px;
+    margin-top: 12px;
+    color: #FFFFFF;
+}
+
+.THIS .as-event-instance .AsSchedCont {
+    width: 150px;
+    float: left;
+    border-right: 1px solid #E1E1E1;
+}
+.THIS .AsLabel-OnClick input[type="radio"] {
+    display: none;
+}
+.THIS .AsLabel-OnClick input[type="checkbox"] {
+    display: none;
+}
+
+
+.THIS .AsEventContainer .AsTimeCont {
+    padding: 0 5px;
+}
+.THIS .AsEventContainer .AsTime {
+    width: 50%;
+    float: left;
+    display: block;
+}
+.THIS .AsEventContainer .AsDateCont {
+    padding-right: 20px;
+}
+.THIS .AsEventContainer h1 {
+    font-size: 65px;
+    color: #607A91;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    line-height: 55px;
+}
+.THIS .AsEventContainer h4 {
+    font-size: 17px;
+    color: #607A91;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+}
+.THIS .AsEventContainer h6 { 
+    font-size: 9px;
+    color: #404041;
+    width: 100%;
+    text-align: left;
+}
+.THIS .AsEventContainer .AsSpaceRemaining {
+    font-size: 16px;
+    color: #404041;
+    width: 100%;
+    margin-bottom: 0;
+}
+.THIS .as-event-instance .AsDescCont {
+    width: calc(100% - 150px);
+    float: left;
+    padding: 0 36px;
+}
+.THIS .as-event-instance .AsDescCont p {
+    font-size: 21px;
+    color: #404041;
+    line-height: 22px;
+    margin-bottom: 35px;
+}
+.THIS .as-event-instance .AsLabel-OnClick h3 {
+    font-size: 18px;
+    color: #404041;
+    line-height: 15px;
+    margin-bottom: 0;
+    font-weight: normal;
+}
+.THIS .as-event-instance h5 {
+    font-size: 16px;
+    color: #404041;
+}
+
+/* Checkbox checked part */
+.THIS .AsLabel-OnClick input[type="radio"]:checked + .AsEventContainer {
+    background-color: #003D79;
+}
+.THIS .AsLabel-OnClick input[type="radio"]:checked ~ .AsEventContainer h1,
+.THIS .AsLabel-OnClick input[type="radio"]:checked ~ .AsEventContainer h3,
+.THIS .AsLabel-OnClick input[type="radio"]:checked ~ .AsEventContainer h4,
+.THIS .AsLabel-OnClick input[type="radio"]:checked ~ .AsEventContainer h5,
+.THIS .AsLabel-OnClick input[type="radio"]:checked ~ .AsEventContainer h6,
+.THIS .AsLabel-OnClick input[type="radio"]:checked ~ .AsEventContainer p {
+    color: #FFFFFF;
+}
+.THIS .AsLabel-OnClick input[type="radio"]:checked ~ .AsEventContainer{
+    box-shadow: 0px 10px 35px #E0E0E0;
+}
+
+.THIS .AsLabel-OnClick input[type="checkbox"]:checked + .AsEventContainer {
+    background-color: #003D79;
+}
+.THIS .AsLabel-OnClick input[type="checkbox"]:checked ~ .AsEventContainer h1,
+.THIS .AsLabel-OnClick input[type="checkbox"]:checked ~ .AsEventContainer h3,
+.THIS .AsLabel-OnClick input[type="checkbox"]:checked ~ .AsEventContainer h4,
+.THIS .AsLabel-OnClick input[type="checkbox"]:checked ~ .AsEventContainer h5,
+.THIS .AsLabel-OnClick input[type="checkbox"]:checked ~ .AsEventContainer h6,
+.THIS .AsLabel-OnClick input[type="checkbox"]:checked ~ .AsEventContainer p {
+    color: #FFFFFF;
+}
+.THIS .AsLabel-OnClick input[type="checkbox"]:checked ~ .AsEventContainer{
+    box-shadow: 0px 10px 35px #E0E0E0;
+}
+
+.THIS .AsCustomCheckbox {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    position: absolute;
+    right: 32px;
+    top: 15px;
+    display: none;
+}
+.THIS .AsCustomCheckbox:after {
+    content: '';
+    width: 10px;
+    height: 16px;
+    border-right: 3px solid #003D79;
+    border-bottom: 3px solid #003D79;
+    right: 14px;
+    top: 8px;
+    position: absolute;
+    transform: rotate(45deg);
+}
+.THIS .AsLabel-OnClick input[type="radio"]:checked ~ .AsEventContainer .AsCustomCheckbox {
+    display: block;
+}
+.THIS .AsLabel-OnClick input[type="checkbox"]:checked ~ .AsEventContainer .AsCustomCheckbox {
+    display: block;
+} 
+
+/* Buttons */
+.THIS button {
+    min-width: 135px;
+    height: 43px;
+    font-size: 16px;
+    border-radius: 6px;
+    padding: 0 25px;
+}
+.THIS .AsContinueBtn {
+    float: right;
+    color: #FFFFFF;
+    background-color: #003D79;
+    border: 2px solid #003D79;
+    margin-left: 18px;
+}
+.THIS .AsEmailBtn {
+    float: right;
+    color: #003D79;
+    background-color: #FFFFFF;
+    border: 2px solid #003D79;
+}
+.THIS .AsCancelBtn {
+    color: #FFFFFF;
+    background-color: #607A91;
+    border: 2px solid #607A91;  
+} 
+.THIS .AsContinueBtn:hover {
+    background-color: #FFFFFF;
+    color: #003D79;
+}
+.THIS .AsEmailBtn:hover {
+    background-color: #003D79;
+    color: #FFFFFF;
+}
+.THIS .AsCancelBtn:hover {
+    background-color: #FFFFFF;
+    color: #607A91;
+}

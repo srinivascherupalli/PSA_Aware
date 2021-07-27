@@ -1,0 +1,60 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  access="global"
+  controller="PSA_Progress"
+>
+  <aura:attribute name="mainCPDData" type="AsCPDPlanner__c" />
+  <div class="uiOutputRichText">
+    <h2 class="mb-1">About PSA’s CPD program </h2>
+    <div class="row">
+      <div class="col-12 col-sm-8">
+        <p
+          >Our CPD program provides you with quality and trusted CPD, all in one place, with a more personalised and relevant CPD experience that enables you to fulfil your career potential, while equipping you to respond to current and emerging health care needs.</p>
+        <p class="slds-form-element__label" style="margin: 0;">PSA’s CPD program enables PSA members to:</p>
+
+          <ul>
+            <li
+              >Meet the Pharmacy Board of Australia’s registration
+              requirements</li
+            >
+            <li>Access high quality, accredited and peer-reviewed content </li>
+            <li
+              >Ensure your practice is current with relevant learning, including
+              guidance on emerging health needs, and legislative or regulatory
+              updates</li
+            >
+            <li
+              >Manage all your CPD needs from planning to automated recording and reporting using our intuitive CPD Planning Tool</li
+            >
+            <li
+              >Undertake education in a variety of formats tailored to a range
+              of practice settings</li
+            >
+            <li
+              >Easily generate CPD activity reports to support your Pharmacy
+              Board of Australia, AACP and Internship reporting obligations</li
+            >
+          </ul>
+        <lightning:textarea
+          aura:id="goalsText"
+          name="{!v.mainCPDData.Id}"
+          label="My CPD Goals"
+          value="{!v.mainCPDData.AS_My_Plan_Goals__c}"
+        />
+        <lightning:button
+          variant="brand"
+          label="Save my CPD Goals"
+          title="Brand action"
+          onclick="{!c.saveGoal }"
+          class="btn"
+        />
+      </div>
+      <div class="col-12 col-sm-4">
+        <img
+          src="{!$Resource.PSAFED + '/dist/images/SideImage_1.jpg'}"
+          class="course-body__general--img h-100"
+        />
+      </div>
+    </div>
+  </div>
+</aura:component>

@@ -1,0 +1,78 @@
+.THIS div.slds-combobox>div>input {
+    color: #313f48;
+    cursor: pointer;
+    flex: 1;
+    font: 1.8rem/1.2 "Roboto-Regular";
+    letter-spacing: 0.5px;
+    padding: 18.5px 27px;
+}
+
+.THIS .slds-listbox__option {
+    font: 1.8rem/1.2 "Roboto-Regular";
+}
+
+.THIS lightning-icon.slds-icon-utility-down {
+    width: 30px;
+}
+
+.THIS .psa-border-right {
+    border-right: 1px solid #788f9f;
+}
+
+.THIS .fail-banner span {
+    margin-left: 2rem;
+}
+
+.THIS .fail-banner {
+    font-size: 2rem;
+    color: #FC100D;
+}
+
+.THIS .fail-banner svg {
+    fill: #FC100D;
+}
+
+.THIS .fail-banner lightning-icon {
+    margin-bottom: 15px;
+}
+
+.THIS.loaderMsg {
+    position: absolute;
+    top: 35%;
+    margin-top: 45%;
+    z-index: 99999;
+    font-size: 3rem;
+    width: 100%;
+    text-align: center;
+}
+
+.THIS .membership_pkgs {
+    border-left: solid 1px #788f9f;
+    margin-top: 50px;
+}
+
+.THIS .membership_pkgs:last-child,
+.THIS .membership_pkg_select_btn:last-child {
+    border-right: solid 1px #788f9f;
+}
+
+.THIS .membership_pkgs .box-membership-price-table {
+    border: none !important;
+    margin-top: 0rem !important;
+}
+
+.THIS .membership_pkg_select_btn {
+    border-left: solid 1px #788f9f;
+    border-bottom: solid 1px #788f9f;
+    padding: 20px 0px;
+}
+
+.THIS .payment_frequency > h4 {
+    color: #ffffff;
+    text-transform: capitalize;
+    font: 1.8rem/1.2 "Roboto-Regular";
+    letter-spacing: 1px;
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}

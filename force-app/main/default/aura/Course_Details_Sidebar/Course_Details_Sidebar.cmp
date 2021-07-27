@@ -1,0 +1,382 @@
+<aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,lightning:isUrlAddressable" controller="TrainingPlanPreviewController_Lightning" access="global">
+    <!-- css style sheet import -->
+    <!-- Attributes -->
+    <!--<aura:attribute name="trainingPlanData" type="TrainingPlanPreviewController_Lightning.pageStateWrapper.TrainingPlan" /-->
+    <aura:attribute name="pageStateWrapper" type="TrainingPlanPreviewController_Lightning.pageStateWrapper" />
+    <aura:attribute name="tpDuration" type="string" />
+    <aura:attribute name="deliveryMethod" type="string" />
+    <aura:attribute name="totalSectionItem" type="string" />
+    <aura:attribute name="memberPrice" type="decimal" />
+    <aura:attribute name="nonMemberPrice" type="decimal" />
+    <aura:attribute name="type" type="string" />
+    <aura:attribute name="isMember" type="boolean" />
+    <aura:attribute name="disableEnrol" type="boolean" default="false" />
+    <aura:attribute name="showSpinner" type="boolean" default="false" />
+    <aura:attribute name="badgeimage" type="string" />
+    <aura:attribute name="futureMethodCounter" type="Integer" default="0" />
+    <aura:attribute name="modalIsOpen" type="Boolean" default="false" />
+    <aura:attribute name="setIntervalId" type="Integer" />
+    <aura:attribute name="url" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="isModalOpen" type="Boolean" default="false" />
+    <aura:attribute name="disableEnrollBtn" type="Boolean" default="false" />
+
+    <aura:attribute name="isAvailableForEssential" type="Boolean" default="false" />
+    
+
+    <!-- Handlers -->
+    <!-- <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> -->
+    <!-- <aura:handler name="change" value="{!v.pageStateWrapper}" action="{!c.handleEnrolMain}" /> -->
+    <!--   <aura:handler name="render" value="{!this}" action="{!c.handleEnrolMain}"/> -->
+    <!--aura:handler event="c:CourseCardDataEvent" action="{!c.doInit}" /-->
+
+    <!-- Method to start registration process -->
+    <!--  <aura:method name="handleRegistration" action="{!c.handleEnrolMain}" access="PUBLIC"/> -->
+
+    <!-- Standard lightning navigation service -->
+    <lightning:navigation aura:id="navService" />
+    <!-- OVerlay Library to throw up the Login/Register Modal -->
+    <lightning:overlayLibrary aura:id="overlayLib" />
+
+    <!-- Spinner Div -->
+    <aura:if isTrue="{v.showSpinner}">
+        <div class="{!v.showSpinner ? 'loader loader--show' : 'loader loader--hide'}">
+            <lightning:spinner alternativeText="Loading" size="large" variant="brand" />
+        </div>
+    </aura:if>
+
+    <!--Modal Popup -->
+    <aura:if isTrue="{!v.isModalOpen}">
+
+        <!-- Modal/Popup Box starts here-->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close" onclick="{! c.closeModel }" alternativeText="close" variant="bare-inverse" class="slds-modal__close" />
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Information</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <p>This course is not available to Essential members. In order to access this course, please upgrade your membership. Please contact us to upgrade your membership.
+                    </p>
+                </div>
+                <!--Modal/Popup Box Footer Starts here-->
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{! c.closeModel }" />
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+
+    <div class="col-12 col-sm-4 col-md-3">
+        <ui:outputRichText value="{!v.badgeimage}" class="course-body__badge" />
+        <ul class="course-body__attributes">
+            <li class="course-body__attribute-wrapper">
+                <span class="course-body__attribute-icon-wrapper">
+          <lightning:icon iconName="utility:clock" size="small" />
+        </span>
+                <!-- TO-DO: Course duration field -->
+                <span class="course-body__attribute-details text-lg">{!v.tpDuration}</span
+        >
+      </li>
+      <li class="course-body__attribute-wrapper">
+        <aura:if isTrue="{!v.deliveryMethod =='Webinar'}">
+          <span class="course-body__attribute-icon-wrapper">
+            <lightning:icon iconName="utility:video" size="small" />
+          </span>
+                </aura:if>
+                <aura:if isTrue="{!v.deliveryMethod =='Blended learning'}">
+                    <span class="course-body__attribute-icon-wrapper">
+            <lightning:icon iconName="utility:adduser" size="small" />
+          </span>
+                </aura:if>
+                <aura:if isTrue="{!v.deliveryMethod =='Conference'}">
+                    <span class="course-body__attribute-icon-wrapper">
+            <lightning:icon iconName="utility:groups" size="small" />
+          </span>
+                </aura:if>
+                <aura:if isTrue="{!v.deliveryMethod =='Podcast'}">
+                    <span class="course-body__attribute-icon-wrapper">
+            <lightning:icon iconName="utility:podcast_webinar" size="small" />
+          </span>
+                </aura:if>
+                <aura:if isTrue="{!v.deliveryMethod =='Recorded session'}">
+                    <span class="course-body__attribute-icon-wrapper">
+            <lightning:icon iconName="utility:play" size="small" />
+          </span>
+                </aura:if>
+                <aura:if isTrue="{!v.deliveryMethod =='Online module'}">
+                    <span class="course-body__attribute-icon-wrapper">
+            <lightning:icon iconName="utility:desktop" size="small" />
+          </span>
+                </aura:if>
+                <aura:if isTrue="{!v.deliveryMethod =='Face-to-face'}">
+                    <span class="course-body__attribute-icon-wrapper">
+            <lightning:icon iconName="utility:date_input" size="small" />
+          </span>
+                </aura:if>
+                <span class="course-body__attribute-details text-lg">{!v.deliveryMethod}</span
+        >
+      </li>
+      <li class="course-body__attribute-wrapper">
+        <span class="course-body__attribute-icon-wrapper">
+          <lightning:icon iconName="utility:note" size="small" />
+        </span>
+                <aura:if isTrue="{!or(v.totalSectionItem ==1,v.totalSectionItem ==0)}">
+                    <span class="course-body__attribute-details text-lg">{!v.totalSectionItem} Activity
+          </span>
+                    <aura:set attribute="else">
+                        <span class="course-body__attribute-details text-lg">{!v.totalSectionItem} Activities
+            </span>
+                    </aura:set>
+                </aura:if>
+            </li>
+
+            <!-- PSA member-->
+            <aura:if isTrue="{!v.isMember == True}">
+                <aura:if isTrue="{!or(v.type =='Paid',v.type =='RTO')}">
+                    <li class="course-body__attribute-wrapper course-body__attribute-wrapper--cost">
+                        <span class="course-body__attribute-icon-wrapper">
+              <lightning:icon iconName="action:update" size="small" />
+            </span>
+
+                        <span class="course-body__attribute-details">
+              <div class="row no-gutters">
+                <div class="col text-lg">PSA Member</div>
+                <div class="col text-right">
+                  <span class="course-body__attribute-cost text-lg"
+                    >${!v.memberPrice}</span
+                  >
+                </div>
+              </div>
+              <!-- Member discount price div -->
+              <div class="row no-gutters">
+                <div class="col">
+                  <!-- TO-DO: Course prices -->
+                  <span class="course-body__attribute-members"
+                    >Members save ${!sub(v.nonMemberPrice,v.memberPrice)}</span
+                  >
+                </div>
+                <div class="col text-right">
+                  <span
+                    class="course-body__attribute-cost course-body__attribute-strikethrough text-lg"
+                    >${!v.nonMemberPrice}</span
+                  >
+                </div>
+              </div>
+            </span>
+                    </li>
+                </aura:if>
+                <!--Member benefit-->
+                <aura:if isTrue="{!or(v.type == 'Member Benefit',v.type =='Qualification')}">
+                    <li class="course-body__attribute-wrapper course-body__attribute-wrapper--cost">
+                        <span class="course-body__attribute-icon-wrapper">
+              <lightning:icon iconName="action:update" size="small" />
+            </span>
+
+                        <span class="course-body__attribute-details">
+              <div class="row no-gutters">
+                <div class="col text-lg">PSA Member</div>
+                <div class="col text-right">
+                  <span class="course-body__attribute-cost text-lg"
+                    >${!v.memberPrice}</span
+                  >
+                </div>
+              </div>
+              <!-- Member discount price div -->
+              <div class="row no-gutters">
+                <div class="col">
+                  <!-- TO-DO: Course prices -->
+                  <span class="course-body__attribute-members"
+                    >Members save ${!sub(v.nonMemberPrice,v.memberPrice)}</span
+                  >
+                </div>
+                <div class="col text-right">
+                  <span
+                    class="course-body__attribute-cost course-body__attribute-strikethrough text-lg"
+                    >${!v.nonMemberPrice}</span
+                  >
+                </div>
+              </div>
+            </span>
+                    </li>
+                </aura:if>
+
+                <aura:if isTrue="{!v.type =='Member Only (Paid)'}">
+                    <li class="course-body__attribute-wrapper course-body__attribute-wrapper--cost">
+                        <span class="course-body__attribute-icon-wrapper">
+              <lightning:icon iconName="action:update" size="small" />
+            </span>
+                        <span class="course-body__attribute-details">
+              <div class="row no-gutters">
+                <div class="col text-lg">PSA Member</div>
+                <div class="col text-right">
+                  <span class="course-body__attribute-cost text-lg"
+                    >${!v.memberPrice}</span
+                  >
+                </div>
+              </div>
+            </span>
+                    </li>
+                </aura:if>
+                <aura:if isTrue="{!or(v.type == 'Diploma',v.type == 'Intern Training Program')}">
+                    <li class="course-body__attribute-wrapper course-body__attribute-wrapper--cost">
+                        <span class="course-body__attribute-icon-wrapper">
+              <lightning:icon iconName="action:update" size="small" />
+            </span>
+
+                        <span class="course-body__attribute-details">
+              <div class="row no-gutters">
+                <div class="col text-lg">PSA Member</div>
+                <div class="col text-right">
+                  <span class="course-body__attribute-cost text-lg"
+                    >${!v.memberPrice}</span
+                  >
+                </div>
+              </div>
+              <!-- Member discount price div -->
+              <div class="row no-gutters">
+                <div class="col">
+                  <span class="course-body__attribute-members"
+                    >Members save ${!sub(v.nonMemberPrice,v.memberPrice)}</span
+                  >
+                </div>
+                <div class="col text-right">
+                  <span
+                    class="course-body__attribute-cost course-body__attribute-strikethrough text-lg"
+                    >${!v.nonMemberPrice}</span
+                  >
+                </div>
+              </div>
+            </span>
+                    </li>
+                </aura:if>
+            </aura:if>
+            <!--NON MEMBER-->
+            <aura:if isTrue="{!v.isMember == False}">
+                <aura:if isTrue="{!or(v.type == 'Paid',v.type == 'RTO')}">
+                    <li class="course-body__attribute-wrapper course-body__attribute-wrapper--cost">
+                        <span class="course-body__attribute-icon-wrapper">
+              <lightning:icon iconName="action:update" size="small" />
+            </span>
+                        <span class="course-body__attribute-details">
+              <div class="row no-gutters">
+                <div class="col text-lg">Non Member</div>
+                <div class="col text-right">
+                  <span class="course-body__attribute-cost text-lg"
+                    >${!v.nonMemberPrice}</span
+                  >
+                </div>
+              </div>
+              <!-- Member discount price div -->
+              <div class="row no-gutters">
+                <div class="col">
+                  <!-- TO-DO: Course prices -->
+                  <span class="course-body__attribute-members"
+                    >Members save ${!sub(v.nonMemberPrice,v.memberPrice)}
+                  </span>
+    </div>
+    </div>
+    </span>
+    </li>
+    </aura:if>
+    <aura:if isTrue="{!or(v.type == 'Member Benefit',v.type=='Qualification')}">
+        <li class="course-body__attribute-wrapper course-body__attribute-wrapper--cost">
+            <span class="course-body__attribute-icon-wrapper">
+              <lightning:icon iconName="action:update" size="small" />
+            </span>
+            <span class="course-body__attribute-details">
+              <div class="row no-gutters">
+                <div class="col text-lg">Non Member</div>
+                <div class="col text-right">
+                  <span class="course-body__attribute-cost text-lg"
+                    >${!v.nonMemberPrice}</span
+                  >
+                </div>
+              </div>
+              <!-- Member discount price div -->
+              <div class="row no-gutters">
+                <div class="col">
+                  <!-- TO-DO: Course prices -->
+                  <span class="course-body__attribute-members"
+                    >Members save ${!sub(v.nonMemberPrice,v.memberPrice)}
+                  </span>
+            </div>
+            </div>
+            </span>
+        </li>
+    </aura:if>
+    <aura:if isTrue="{!or(v.type == 'Diploma' ,v.type == 'Intern Training Program')}">
+        <li class="course-body__attribute-wrapper course-body__attribute-wrapper--cost">
+            <span class="course-body__attribute-icon-wrapper">
+              <lightning:icon iconName="action:update" size="small" />
+            </span>
+            <span class="course-body__attribute-details">
+              <div class="row no-gutters">
+                <div class="col text-lg">Non Member</div>
+                <div class="col text-right">
+                  <span class="course-body__attribute-cost text-lg"
+                    >${!v.nonMemberPrice}</span
+                  >
+                </div>
+              </div>
+              <!-- Member discount price div -->
+              <div class="row no-gutters">
+                <div class="col">
+                  <span class="course-body__attribute-members"
+                    >Members save ${!sub(v.nonMemberPrice,v.memberPrice)}
+                  </span>
+            </div>
+            </div>
+            </span>
+        </li>
+    </aura:if>
+    </aura:if>
+    </ul>
+    <!-- Enrol and add to plan -->
+    <!-- Enrol Now OR Select a Date depending on training plan type -->
+    <aura:if isTrue="{!and(v.pageStateWrapper.userEnrolled==false,v.pageStateWrapper.isvalidPlan==True)}">
+        <div class="course-body__btn-wrapper course-body__btn-wrapper--enrol slds-align_absolute-center">
+
+
+            <aura:if isTrue="{!v.disableEnrollBtn == false}">
+                <a role="button" class="btn btn--block course-body__enrol-btn" onclick="{!c.handleEnrol}">
+                    <span class="btn__svg-wrapper">
+            <lightning:icon iconName="utility:check" size="small" />
+          </span> {!v.pageStateWrapper.isEvent}
+                </a>
+            </aura:if>
+
+            <aura:if isTrue="{!v.disableEnrollBtn}">
+                <a class="btn btn--block course-body__enrol-btn" onclick="{!c.openModel}">
+                        Enrol Now
+                    </a>
+            </aura:if>
+            <!--<button class="slds-button slds-button_inverse">
+          <svg class="slds-button__icon slds-button__icon_left" aria-hidden="true">
+            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+          </svg>Enrol Now</button>
+        <lightning:button class="" label="Enrol Now" iconName="utility:check" iconPosition="left" variant="brand" onclick="{!c.handleEnrol}" disabled="{!v.disableButton}"/> -->
+        </div>
+        <!-- Add to Plan button -->
+        <aura:if isTrue="{!v.pageStateWrapper.isMemberser==true}">
+            <!-- Show disabled if already in plan -->
+            <aura:if isTrue="{!v.pageStateWrapper.isAlreadyInBookMark == true}">
+                <div class="course-body__btn-wrapper">
+                    <a class="btn btn--block btn--outline" onclick="{!c.addToPlan}">
+                        <span class="btn__svg-wrapper">
+                <lightning:icon iconName="utility:add" size="small" />
+              </span> Add to plan</a>
+                </div>
+            </aura:if>
+            <!-- Show available to press if not in bookmark -->
+            <aura:if isTrue="{!v.pageStateWrapper.isAlreadyInBookMark == false}">
+                <div class="course-body__btn-wrapper">
+                    <a class="btn btn--block btn--disabled"> Already in Plan </a>
+                </div>
+            </aura:if>
+        </aura:if>
+    </aura:if>
+    <!-- <lightning:button variant="brand-outline" label="Show Modal" title="Show Modal" onclick="{! c.handleEnrolMain }" /> -->
+    </div>
+</aura:component>

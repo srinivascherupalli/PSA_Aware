@@ -1,0 +1,7 @@
+<apex:page controller="sampleJRC" showHeader="false">
+ 
+
+  <H1>Thank you</H1>
+ 
+
+</apex:page>

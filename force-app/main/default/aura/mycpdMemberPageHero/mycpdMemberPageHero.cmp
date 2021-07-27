@@ -1,0 +1,65 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+	<!--Attribute-->
+    <aura:attribute name="selectedItem" type="String" />
+    <aura:attribute name="cpdPlanData" type="User" />
+    <aura:attribute name="cpageName" type="string" default=""/>
+    <!--PageHero-->
+    <section class="page-hero">
+        
+        
+         <aura:if isTrue="{!v.selectedItem =='goals'}">
+       		 <img src="{!$Resource.PSAFED + '/dist/images/My-CPD-Goals.jpg'}" class="page-hero__bg-img"/>
+        </aura:if>
+         <aura:if isTrue="{!v.selectedItem =='Plan'}">
+        	<img src="{!$Resource.PSAFED + '/dist/images/My-CPD-Year-Planning.jpg'}" class="page-hero__bg-img"/>
+        </aura:if>
+        <aura:if isTrue="{!v.selectedItem =='Self-Record'}">
+        	<img src="{!$Resource.PSAFED + '/dist/images/My-CPD-Year-Self-Record.jpg'}" class="page-hero__bg-img"/>
+        </aura:if>
+            <aura:if isTrue="{!v.selectedItem =='Reflect'}">
+        	<img src="{!$Resource.PSAFED + '/dist/images/My-CPD-Year-Reflect.jpg'}" class="page-hero__bg-img"/>
+        </aura:if>
+         <aura:if isTrue="{!v.selectedItem =='Learn'}">
+        	<img src="{!$Resource.PSAFED + '/dist/images/My_CPD_Year_Learn.jpg'}" class="page-hero__bg-img"/>
+        </aura:if>
+        <aura:if isTrue="{!v.selectedItem =='Report'}">
+        	<img src="{!$Resource.PSAFED + '/dist/images/My-CPD-Year_Report.jpg'}" class="page-hero__bg-img"/>
+        </aura:if>
+        <aura:if isTrue="{!or(v.selectedItem =='NotStarted',v.selectedItem =='InProgress')}">
+        	<img src="{!$Resource.PSAFED + '/dist/images/My_CPD_Year_In_progress.jpg'}" class="page-hero__bg-img"/>
+        </aura:if>
+         <aura:if isTrue="{!v.selectedItem =='Completed'}">
+        	<img src="{!$Resource.PSAFED + '/dist/images/My_CPD_Year_In_progress.jpg'}" class="page-hero__bg-img"/>
+        </aura:if>
+        <lightning:breadcrumbs>
+          <lightning:breadcrumb label="My PSA" href="/s/education-catalogue" />
+          <lightning:breadcrumb label="{!v.cpageName}" href="#" />
+        </lightning:breadcrumbs>
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <div class="page-hero__heading-wrapper">
+                <h1 class="page-hero__heading">
+                     <aura:if isTrue="{!v.selectedItem =='goals'}">
+                         {!v.cpdPlanData.FirstName} set your CPD goals </aura:if>
+                    <aura:if isTrue="{!v.selectedItem =='Plan'}">
+                         {!v.cpdPlanData.FirstName} plan your CPD </aura:if>
+                  	<aura:if isTrue="{!v.selectedItem =='Learn'}">
+                         {!v.cpdPlanData.FirstName} select your CPD activities </aura:if>
+                    <aura:if isTrue="{!v.selectedItem =='Self-Record'}">
+                         {!v.cpdPlanData.FirstName} add your external CPD activities to your CPD plan</aura:if>
+                 <aura:if isTrue="{!v.selectedItem =='Reflect'}">
+                         {!v.cpdPlanData.FirstName} reflect on what you have learned</aura:if>
+                   <aura:if isTrue="{!v.selectedItem =='Report'}">
+                         {!v.cpdPlanData.FirstName} complete your CPD year and report on your CPD plan</aura:if>
+                  <aura:if isTrue="{!or(v.selectedItem =='NotStarted',v.selectedItem =='InProgress',v.selectedItem =='Completed')}">
+                         {!v.cpdPlanData.FirstName} Welcome to My Education </aura:if>
+                   <aura:if isTrue="{!v.selectedItem =='Completed'}">
+                         {!v.cpdPlanData.FirstName} Welcome to My Education </aura:if>
+                  </h1>
+              </div>
+            </div>
+          </div>
+            </div>
+      </section>
+</aura:component>

@@ -1,0 +1,31 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+	<div class="course-body__faq-wrapper">
+         <h2 class="h3 course-body__section-title course-body__section-title--faq">Guidelines on writing reflections</h2>
+        <lightning:accordion  activeSectionName="" allowMultipleSectionsOpen="true">
+             <lightning:accordionSection  name="A" label="What is a reflection?">
+                <div class="uiOutputRichText">
+                    <p>Reflection is a process of evaluating what you have learnt and the impact it has had on your practice to improve patient outcomes.</p>
+                </div>
+            </lightning:accordionSection>
+            <lightning:accordionSection  name="B" label="Why is this required?">
+                <div class="uiOutputRichText">
+                    <p>To ensure that the CPD activities you have undertaken are part of a continual process of lifelong learning, and these activities have been identified based on your needs within your practice setting</p>
+                </div>
+            </lightning:accordionSection>
+            <lightning:accordionSection  name="C" label="How to write a reflection?">
+                <div class="uiOutputRichText">
+                    <p></p>
+                    <table>
+                        <tbody>
+                            <tr><td>What did I learn from the CPD activity in terms of developing my skills, knowledge and behaviours? </td></tr>
+                            <tr><td>How have I put this into practice? (Provide an example of how you applied your learning, or how the activity has impacted your practice.)</td></tr>
+                            <tr><td>Did it benefit my practice? (How did your learning affect outcomes?)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </lightning:accordionSection>
+            
+        </lightning:accordion>
+            
+    </div>
+</aura:component>

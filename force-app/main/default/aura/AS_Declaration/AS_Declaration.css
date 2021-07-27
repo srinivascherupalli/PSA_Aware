@@ -1,0 +1,152 @@
+.THIS.slds-container {
+    background: #fff;
+    padding: 50px;
+}
+
+.THIS .slds-modal__container {
+    margin: 0 auto;
+}
+
+.THIS.slds-container .slds-list--dotted {
+    color:#607A91;
+}
+
+.THIS .mainTitle {
+    color: #003D79;
+    font-size: 20px;
+}
+
+.THIS.slds-container .slds-list--dotted li {
+    margin: 15px 0;
+    font-size: 16px;
+}
+
+.THIS .digital_signature {
+    border: 3px solid #ddd;
+    border-radius: 4px;
+    margin: 20px 0;
+    position: relative;
+    padding: 10px 0;
+}
+
+.THIS .digital_signature p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #607A91;
+    font-size: 16px;
+}
+
+.THIS .slds-form-element__legend {
+    font-size: 18px;
+    color: #607A91;
+    font-weight: 400;
+}
+
+.THIS .slds-radio .slds-form-element__label {
+    color: #607A91;
+}
+
+.THIS .tickboxcontent {
+    font-size: 14px;
+    line-height: 1.25;
+    margin: 20px 0;
+    color: #607A91;
+}
+
+.THIS .tickboxcontent .uiInput--checkbox  {
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.THIS .privacyNotice {
+    color: #607A91;
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+.THIS .privacytitle {
+    margin-top: 50px;
+}
+
+.THIS .privacyNoticeContent {
+    color: #607A91;
+    font-size: 16px;
+}
+
+.THIS .privacyNoticeContent p {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.THIS .personalInfoText {
+    color: #607A91;
+    font-size: 16px;
+}
+
+/* .THIS .victorytitle {
+    display: block;
+    margin-top: 35px;
+    margin-inline-start: 2px;
+    margin-inline-end: 2px;
+    padding-block-start: 0.35em;
+    padding-inline-start: 0.75em;
+    padding-inline-end: 0.75em;
+    padding-block-end: 0.625em;
+    min-inline-size: min-content;
+    border-width: 2px;
+    border-style: groove;
+    border-color: threedface;
+    border-image: initial;
+    padding: 15px 10px;
+} */
+
+
+.THIS .victorytitle {
+    margin-top: 30px;
+}  
+
+.THIS .victorytitle legend {
+    color: #607A91;
+    font-size: 18px;
+}
+
+.THIS .victorytitle span {
+    color: #607A91;
+    font-size: 16px;
+}
+
+.THIS .slds-reset-signature {
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    color: #607a91;
+    outline: none;
+    box-shadow: none !important;
+}
+
+.THIS .slds-reset-signature:hover {
+    color: #003d79;
+}
+
+@media( max-width: 425px) {
+    .THIS.slds-container {
+        padding: 20px 15px;
+    }
+
+    .THIS .slds-btn-content .slds-float_left,
+    .THIS .slds-btn-content .slds-float_right {
+        float: none;
+    }
+
+    .THIS .slds-btn-content button {
+        margin: 5px 0;
+        width: 100%;
+    }
+
+    .THIS .slds-modal__container {
+        width: 90% !important;
+        margin: 0 5%;
+    }
+}

@@ -1,0 +1,37 @@
+<!-- AS_sampleJRC_COM -->
+<aura:component access="global" controller="AS_membershipSignUp" >
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="fileToBeUploaded" type="Object[]"/>
+    <aura:attribute name="pageNumber" type="Integer" default="0" />
+    <lightning:spinner aura:id="mySpinner" class="slds-hide"/>
+    <div class="slds">
+        <input type="hidden" id="oppParentId_aura" />   
+        <p> page number : {!v.pageNumber}  </p>
+		         
+        <div class="{!'psa-page-'+v.pageNumber }">
+        	<lightning:flow aura:id="flowData" onstatuschange="{!c.handleStatusChange}" />
+        </div>
+        
+    </div>
+    
+    <!-- 'parentId' Aura Attribute for store the Id for Parent Record where we are attach our file -->  
+    <aura:attribute name="parentId" type="Id"   />
+    <!-- 'showLoadingSpinner' attribute for show/hide the uploading image and msg in aura:if-->
+    <aura:attribute name="showLoadingSpinner" type="boolean" default="false" />
+    <!-- 'fileName' attribute for display the selected file name -->  
+    <aura:attribute name="fileName" type="String" default="No File Selected.." />
+    <!-- Lightning Input with file type and on file change call the 'handleFilesChange' controller --> 
+    
+    <div class="psa-attachment" style="display:none">
+        <lightning:input aura:id="fileId" onchange="{!c.handleFilesChange}" type="file" name="file" label="Upload Attachment" multiple="false"/>
+        <div class="slds-text-body_small slds-text-color_error">{!v.fileName} </div>
+        <!--use aura:if for show-hide the loading spinner image--> 
+        <aura:if isTrue="{!v.showLoadingSpinner}">
+            <div class="slds-text-body_small slds-text-color_error">Uploading... 
+                <img src="/auraFW/resources/aura/images/spinner.gif" class="spinner-img" alt="Loading"/>'
+            </div>
+        </aura:if>
+        <br/>
+        <button class="slds-button slds-button_brand" onclick="{!c.doSave}">Upload Attachment</button>
+    </div>
+</aura:component>

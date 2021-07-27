@@ -1,0 +1,202 @@
+<aura:component controller="AsEducationController">
+
+    <aura:attribute name="recordId" type="String" default="0019D000005AFyB"/>
+    <aura:attribute name="recordIdEnrol" type="String" default="a1i9D0000001bQk"/>
+    <!-- <aura:attribute name="recordIdQualification" type="String" default="a1j9D0000005Hk4"/> -->
+    <aura:registerEvent name="Enrolment_Event" type="c:EnrolmentActiveStep"/>
+
+    <aura:attribute name="schoolLevel" type="String[]"/>
+    <aura:attribute name="qualificationType" type="String[]"/>
+    <aura:attribute name="qualificationLevel" type="String[]"/>
+    <aura:attribute name="studyreason" type="String[]"/>
+    <aura:attribute name="tobedeleted" type="String[]"/>
+
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    <aura:attribute name="showToast" type="Boolean" default="false" />
+
+    <aura:attribute name="options" type="List" default="[
+    {'label': 'Yes', 'value': 'true'},
+    {'label': 'No', 'value': 'false'}
+    ]"/>
+
+    <aura:attribute name="qualification" type="Qualification__c[]" default="[{ 'sobjectType': 'Qualification__c',
+        'ASQualification_Name__c': '',
+        'ASQualification_Level__c': '',
+        'ASQualification_Type__c': ''}]"/>
+
+    <aura:attribute name="enrolment" type="Enrolment_Form__c" default="{
+        'sobjectType': 'Enrolment_Form__c',                                        
+        'AS_Parent_Guardian_Name__c': '',
+        'AS_second_given_name__c'  : '',
+        'AS_Parent_Guardian_Phone_Number__c': '',
+        'AS_Parent_Guardian_Email__c': '',
+        'AS_Alternate_Email__c': '',
+        'AS_Business_Pharmacy_Name__c' : '',
+        'AS_Primary_Property_name__c' : '',
+        'AS_Primary_Unit_details__c' : '',
+        'AS_Primary_Street_Number__c' : '',
+        'AS_Alternate_Property_name__c' : '',
+        'AS_Alternate_Unit_details__c' : '',
+        'AS_Alternate_Street_Number__c' : ''
+    }"/>
+
+
+    <!-- init -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <h2 class='slds-title'><b>Education Details</b></h2>
+
+
+    <div class='slds-container'>
+        
+        <lightning:layout >
+                
+            <lightning:layoutItem padding="around-small" size="12">
+ 
+                <div class="slds-form-control slds-p-bottom_small">
+                    <lightning:select disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" aura:id='education-field' name="select1" required="true" variant="label-stacked" class="picklistfield" label="What is your highest completed school level?" value="{!v.enrolment.AS_Highest_Completed_Education__c}">
+                        <option value="">-- None --</option>
+                        <aura:iteration items="{!v.schoolLevel}" var="Stpicklist">
+                            <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == v.enrolment.AS_Highest_Completed_Education__c}"></option>
+                        </aura:iteration>
+                    </lightning:select>
+                    <lightning:helptext class="helptext" content="If you are currently enrolled in secondary education, the Highest school level completed refers to the highest school level you have actually completed and not the level you are currently undertaking. For example, if you are currently in Year 10 the Highest school level completed is Year 9."/>
+                </div>
+            
+                <div class="slds-p-bottom_x-small">
+                    <lightning:radioGroup aura:id='education-field' disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" name="schoollevel"
+                                label="Are you still enrolled in secondary or senior secondary education?"
+                                class="radiobtn"
+                                options="{! v.options }"
+                                value="{!v.enrolment.AS_Currently_Enrolled_in_Secondary_Educa__c}"
+                                type="radio"
+                                required="true"/>
+                </div>
+            
+                <div class="slds-p-bottom_small">
+                    <lightning:radioGroup aura:id='education-field' disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" name="otherqualifications"
+                                label="Have you successfully completed any other qualifications?"
+                                class="radiobtn"
+                                options="{! v.options }"
+                                value="{!v.enrolment.AS_No_Previous_Qualifications__c}"
+                                type="radio"
+                                required="true"/>
+                </div>
+                
+                <div class="slds-p-bottom_small">
+                    <label class="slds-form-element__label">
+                        <span>Qualification</span>
+                    </label>
+                    <aura:iteration items="{!v.qualification}" var="qualvar" indexVar="i">
+                        
+                        <div class="slds-clearfix">
+                            <div class="psa-qual-section slds-p-bottom_small slds-float_left">
+                                <div class="slds-p-bottom_xx-small">
+                                    <lightning:input disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" type="text" required="false" variant="label-stacked" class="inputtext" label="Name" value="{!qualvar.ASQualification_Name__c}" />
+                                </div>
+                                
+                                <div class="slds-p-bottom_xx-small">
+                                    <lightning:select disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" name="select1" required="false" label="Level" variant="label-stacked" class="picklistfield" value="{!qualvar.ASQualification_Level__c}">
+                                        <option value="">-- None --</option>
+                                        <aura:iteration items="{!v.qualificationLevel}" var="Stpicklist">
+                                            <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == qualvar.ASQualification_Level__c}"></option>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </div>
+
+                                <div class="slds-p-bottom_xx-small">
+                                    <lightning:select disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" name="select1" required="false" label="Type" variant="label-stacked" class="picklistfield" value="{!qualvar.ASQualification_Type__c}">
+                                        <option value="">-- None --</option>
+                                        <aura:iteration items="{!v.qualificationType}" var="Stpicklist">
+                                            <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == qualvar.ASQualification_Type__c}"></option>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </div>
+                            </div>
+
+                            <div class="psa-qual-remove slds-float_right">
+                                <!-- save button -->
+                                <lightning:icon iconName="utility:delete" size="small" onclick="{!c.removeItem}" id="{!i}"/>
+                            </div>
+                        </div>
+
+                    </aura:iteration>
+                    
+                    <div class="slds-p-top_small">
+                        <lightning:button disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" variant="brand" label="Add" title="" iconName="utility:add" onclick="{!c.addItem}"/>
+                    </div>
+                </div>
+
+                <div class="slds-p-bottom_small">
+                    <lightning:select aura:id='education-field' disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"
+                    name="select1" required="true" 
+                    variant="label-stacked" 
+                    class="picklistfield" 
+                    label="Of the following categories, select the one which best describes the main reason you are undertaking this course/traineeship/apprenticeship" 
+                    value="{!v.enrolment.AS_Study_Reason__c}">
+                        <option value="">-- None --</option>
+                        <aura:iteration items="{!v.studyreason}" var="Stpicklist">
+                            <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == v.enrolment.AS_Study_Reason__c}"></option>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+
+                <!-- buttons here! -->
+                <div class="slds-m-top_xx-large slds-btn-content">
+                    <div class="slds-float_left">
+                        <lightning:button variant="Neutral" class="slds-back-btn" label="Back" title="Back" onclick="{!c.backCallback}"/>
+                        <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{!c.cancelCallback}"/>
+                    </div>
+                    <div class="slds-float_right">
+
+                        <aura:if isTrue="{!'Draft' == v.enrolment.Enrolment_Status__c}">
+                                
+                            <!-- email button -->
+                            <lightning:button variant="Neutral" class="slds-save-email-btn"  label="Save &amp; Email me a link" title="Save &amp; Email me a link" onclick="{!c.saveSendLink}"/> 
+
+                        </aura:if> 
+
+                         <!-- save button -->
+                         <lightning:button variant="brand"  class="slds-save-btn" label="Save and Continue" title="Save &amp; Continue" onclick="{!c.saveRecord}"/>
+
+                    </div>
+                </div>
+
+            </lightning:layoutItem>
+
+        </lightning:layout>
+
+    </div>
+
+    <!-- spinner -->
+    <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+     <!-- spinner -->
+
+    <!--toast-->
+    <aura:if isTrue="{!v.showToast}">
+        <div class="slds-notify_container">
+            <div class="{!'slds-notify slds-notify--alert slds-theme--alert-texture ' +v.toastTheme}" role="alert">
+                <button onclick="{!c.toastclose}" class="slds-button slds-notify__close slds-button--icon-inverse" title="Close">
+                    <lightning:icon iconName="utility:close" size="small" variant="inverse"/>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <div class="slds-notify__content slds-grid">
+                    <div class="slds-col slds-align-middle">
+                        <h3 class="slds-text-heading--small ">{!v.message}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div aura:id="backdrop" class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+    <!--End toast-->
+ 
+</aura:component>

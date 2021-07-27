@@ -1,0 +1,90 @@
+<apex:page standardController="AS_Subscription__c"  renderAs="pdf" > 
+     
+    <div id="mc-wrapper"  >   
+        <apex:image url="{!$Resource.AS_CertificateTamplate}" width="700" height="940"/>
+        <div  id="mc-wrapper" style="position: absolute;top: 15%;width: 100%;width: 700px;text-align: center;font-family: serif;" >
+            <p>
+                <apex:image url="{!$Resource.AS_textCertificatesforpdf}" />
+            </p>  
+            <p style="font-size: 18px;-webkit-margin-before: 0;-webkit-margin-after: 0;" >This is to certify that</p> 
+            <p style="font-size: 19px;font-weight: 600;-webkit-margin-before: 0em;-webkit-margin-after: 0em;"> {!AS_Subscription__c.Account__r.Name}</p>
+            <p style="font-size: 18px;-webkit-margin-before: 0;-webkit-margin-after: 0;">was admitted to the category:</p>    
+            <p style="font-size: 19px;font-weight: 600;-webkit-margin-before: 0em;-webkit-margin-after: 0em;">{!AS_Subscription__c.AS_Membership_Type__c}</p>
+            <p style="font-size: 18px;-webkit-margin-before: 0;-webkit-margin-after: 0;">of the</p>  
+            <p style="font-size: 18px;-webkit-margin-before: 0;-webkit-margin-after: 0;">Pharmaceutical Society of Australia Ltd</p> 
+            <p style="font-size: 18px;-webkit-margin-before: 0;-webkit-margin-after: 0;">On</p> 
+            <p style="font-size: 14px;-webkit-margin-before: 0;-webkit-margin-after: 0;"> 
+ 
+                <apex:outputText value="{0, date, d MMMM yyyy}">
+                    <apex:param value="{!AS_Subscription__c.AS_Start_Date__c}" /> 
+                </apex:outputText>
+            </p>   
+            <p style="font-size: 18px;-webkit-margin-before: 0;-webkit-margin-after: 0;">valid until:</p> 
+            
+            <p style="font-size: 14px;-webkit-margin-before: 0;-webkit-margin-after: 0;"> 
+ 
+                <apex:outputText value="{0, date, d MMMM yyyy}">
+                    <apex:param value="{!AS_Subscription__c.AS_End_Date__c}" /> 
+                </apex:outputText>
+            </p> 
+            
+        </div> 
+        <div class="footer" style="outline: 1px solid;width: 100%;position: absolute;bottom: 5%;left: 0%;">
+
+            <table style="width: 90%;margin:0% auto;" >
+                <tbody>
+                    <tr>
+                        <td>
+                            <p><img src="/resource/1517899879000/AS_signatureforPdf" style="width: 50%;"/>
+                            </p>  
+                            <p style=" font-size: 14px; font-family: serif;">
+                                <span style="font-weight: 700;"> Chris Freeman </span> <br/>
+                                <span> President  </span><br/>
+                                <span> Pharmaceutical Society of Australia </span>
+                            </p>
+                        </td> 
+                        <td style="text-align: right;" >
+                            <p><!--img src="{!$Resource.AsGrahamCattSignature}" style="width: 50%;"/--> <!-- /* code is commented and replace by the code below for ticket #PSA-415 -->
+                            <img src="{!$Resource.MarkKinselaSignature}" style="width: 30%;"/> 
+                            </p>  
+                            <p style=" font-size: 14px; font-family: serif;">
+                                <span style="font-weight: 700;"> Mark Kinsela </span> <br/>
+                                <span> Chief Executive Officer  </span><br/> 
+                                <span> Pharmaceutical Society of Australia </span>
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+<!--             <div id="mc-wrapperfooter1" style="display:inline-block;width: 50%;">
+                <p><img src="/resource/1517899879000/AS_signatureforPdf" style="width: 50%;"/>
+                </p>  
+                <p style=" font-size: 14px; font-family: serif;">
+                    <span style="font-weight: 700;"> Shane Jackson</span> <br/>
+                    <span> President  </span><br/>
+                    <span> Pharmaceutical Society of Australia </span>
+                </p>
+            </div>
+            <div id="mc-wrapperfooter2" style="display:inline-block;text-align: right;">
+               <p><img src="/resource/1517899879000/AS_signatureforPdf" style="width: 50%;"/>
+                </p>  
+                <p style=" font-size: 14px; font-family: serif;">
+                    <span style="font-weight: 700;"> Graham Catt </span> <br/>
+                    <span> Chief Executive Officer  </span><br/> 
+                    <span> Pharmaceutical Society of Australia </span>
+                </p>
+            </div> -->
+            <div  id="mc-wrapperfooter3"  >
+                <p style="
+    font-size: 11px;
+    font-family: serif;
+    font-style: italic;
+       padding-left: 20%;
+"> This certificate remains the property of PSA and can be recalled on termination of membership. </p>
+            </div> 
+        </div>
+
+
+    </div>
+</apex:page>

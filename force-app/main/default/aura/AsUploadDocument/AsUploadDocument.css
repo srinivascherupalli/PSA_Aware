@@ -1,0 +1,136 @@
+.THIS {
+    border: none;
+    background-color: #FFFFFF;
+    border-radius: 19px;
+    padding: 43px 53px;
+}
+.THIS .AsHeader {
+    color: #607A91;
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+.THIS .AsBoxContainer {
+    text-align: center;
+    padding: 25px 0;
+    background-color: #FBFBFB;
+    border: 2px solid #EEEEEE;
+    border-radius: 10px;
+    margin-bottom: 42px;
+}
+.THIS .AsMargin {
+	margin-bottom: 18px;
+}
+.THIS .AsUpload {
+    font-size: 14px;
+    color: #607A91;
+    margin-bottom: 18px;
+}
+.THIS .AsBtnBrows {
+    height: 51px;
+    padding: 0 45px;
+    font-size: 18px;
+    color: #607A91;
+    max-height: unset;
+    font-weight: 600;
+}
+.THIS .AsHint {
+    font-size: 16px;
+    color: #607A91;
+    width: 320px;
+    margin: 10px auto;
+    text-align: left;
+}
+.THIS .AsBtnLabel {
+    font-size: 18px;
+    color: #607A91;
+}
+.THIS .AsBtnContainer button {
+	width: auto;
+    padding: 0 30px;
+    height: 51px;
+    color: #ffffff;
+    background-color: #003d79;
+    font-size: 16px;
+    border: 2px solid #003D79;
+    margin-left: 5px;
+}
+.THIS .AsBtnContainer .AsBtnCancel {
+    background-color: #607A91;
+    border: 2px solid #607A91;
+}
+.THIS .AsBtnContainer button:hover {
+    background-color: #FFFFFF;
+    color: #003D79;
+}
+
+.THIS .AsBoxContainer .slds-button__icon {
+    display: none;
+}
+.THIS .slds-file-selector__dropzone {
+    border: none;
+}
+.THIS .AsBoxContainer .slds-button_neutral,
+.THIS .AsBoxContainer .slds-file-selector__text {
+    display: none;
+    /*height: 51px;
+    padding: 0 45px;
+    font-size: 18px;
+    color: #607A91;
+    max-height: unset;
+    font-weight: 600;*/
+}
+/*.THIS .slds-file-selector__body {
+    margin-bottom: 15px;
+}*/
+.THIS .slds-file-selector__body:before {
+    display: block;
+    content: "Browse";
+    height: 51px;
+    padding: 12px 45px;
+    font-size: 18px;
+    color: #607a91;
+    max-height: unset;
+    font-weight: 600;
+    border: 1px solid #EEEEEE;
+    cursor: pointer;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+}
+.THIS .slds-file-selector__body:after {
+    content: "or drop the files here";
+    font-size: 18px;
+    color: #607a91;
+    margin-left: 23px;
+}
+.THIS .slds-file-selector__text {
+    font-size: 18px;
+    color: #607A91;
+}
+
+@media only screen and (max-width: 600px) {
+    .THIS {
+        padding: 20px 22px;
+    }
+    .THIS .slds-file-selector__body {
+        margin-bottom: 15px;
+        display: block
+    }
+    .THIS .slds-file-selector__body:before {
+        margin-bottom: 22px;
+    }
+    .cAsUploadDocument .slds-file-selector__body:after {
+        margin-left: 0;
+        margin-bottom: 15px;
+    }
+    .THIS .AsBoxContainer .slds-form-element__label {
+        display: none;
+    }
+   .THIS .AsBtnContainer button {
+        width: 100%;
+        margin-bottom: 11px;
+        margin-left: 0;
+	}
+    .THIS .AsBtnContainer .AsBtnCancel {
+        margin-left: 0;
+    }
+}

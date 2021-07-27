@@ -1,0 +1,669 @@
+<!-- 
+    *Author : Jet R. Compayan
+    *Description : This is the Css Style Component of Cpd Planning Tool  
+    *Date Created : Apr 26,2018
+    *Last Modified By : Cristelle Do-ong
+    *Date Last Modified : July 27, 2018
+    *Related Meta Data : User
+-->
+<!-- AsPsaCdpStyles -->
+<apex:component >
+	<style type="text/css">
+
+		body {
+        	/*color: #767676;*/
+			color: black;
+		}
+
+		.pB {
+			font-size: 15px;
+			font-weight: 600;
+			padding-bottom: 17px;
+		}
+
+		.p {
+			font-size: 15px;
+			padding-bottom: 17px;
+			line-height: 18px
+		}
+
+		.cdp-btn-helper-bottom {
+			position: relative;
+		}
+
+		.cdp-btn-helper-bottom .slds-popover {
+			position: absolute;
+			bottom: 28px;
+			left: -17px;
+			width: 329px;
+		}
+
+		#cdp .cdp-wrapper-container-box {
+		/*	max-width: 1000px;
+			margin-top: 249px;
+			margin-left: 522px;
+			width: 802px; 
+			padding: 30px;
+			position: relative;*/
+			max-width: 1000px;
+			width: 802px;
+			padding: 30px;
+			position: relative;
+			margin: 1% auto;
+	/*		margin-top: 14%;  */
+		/*	margin-top: 2%;*/
+		}
+
+		#cdp .cdp-wrapper-container-box .cdp-box-header-title {
+		    font-size: 36px;
+		    font-weight: 600;
+		    text-align: center;
+		    padding-bottom: 56px;
+		    margin-top: 47px;
+		    color: #000048;
+		}
+
+		#cdp .cdp-wrapper-container-box .cdp-box-paragraph {
+			padding-bottom: 22px;
+		//	margin: 0 auto;
+		//	width: 602px;
+     	text-align: justify;
+     	margin-left: 8%;
+      margin-right: 9% !important;
+		}
+		
+		#cdp .cdp-wrapper-container-box ul.cdp-box-paragraph{
+			padding-left:0px;
+		}
+
+		#cdp .cdp-wrapper-container-box .cdp-box-btn-group {
+			margin-top: 20px;
+            text-align: center;
+		}
+
+		#cdp .cdp-wrapper-container-box .cdp-box-btn-group .cdp-group-btn {
+			width: 81%;
+			font-size: 16px;
+			padding: 9px;
+		}
+
+		#cdp .cdp-wrapper-container-box .cdp-box-btn-group .slds-col.slds-size_6-of-12 {
+			padding: 7px;
+		}
+
+		#cdp .slds-button_neutral {
+			transition: background-color 0.5s ease;
+		}
+
+		/*#cdp .slds-button_neutral:active,  #cdp.slds-button_neutral:active ,*/ 
+		#cdp .slds-button_neutral:hover,  #cdp.slds-button_neutral:hover {
+			background-color: #000048!important;
+			color : #fff!important; 
+		}
+
+
+		.cdp-group-btn span {
+		    padding-left: 23px;
+		    margin-right: 2px;
+		    background-image: url({!URLFOR($Resource.AsCpdMenuIconSprites)});
+			background-repeat: no-repeat;
+		}
+
+		#cdp-reflect span { 
+			background-position-x: 0px;
+		}
+
+		#cdp-reflect:hover > span {
+			background-position-y: -24px;
+		}
+ 
+		#cdp-plan span {
+		    background-position-x: -23px;
+		}
+
+		#cdp-plan:hover > span {
+			background-position-y: -24px;
+		}
+
+		#cdp-tutor-abd-help span {
+		    background-position-x: -68px;
+		}
+
+		#cdp-tutor-abd-help:hover > span {
+			background-position-y: -24px;
+		}
+
+		#cdp-review span {
+		    background-position-x: -46px;
+		}
+
+		#cdp-review:hover > span {
+			background-position-y: -24px;
+		}
+ 
+
+		#cdp .slds-button_neutral {	 
+			color: #000048 !important;
+		}
+
+		#cdp-page1 .cdp-box-container {
+			padding: 32px;
+		}
+
+
+	 /* Page 2 */
+
+	 	#cdp .cdp-container-rotate-box {
+		    min-height: 262px;
+		    transform: rotate(-90deg);
+		    width: 271px;
+	 	}
+
+		#cdp .cdp-wrapper-container-box .cdp-option-boxes {
+		    margin-bottom: 22px;
+		    height: 74px;
+		    border-radius: 4px;
+		    width: 272px;
+		}
+
+		#cdp .cdp-wrapper-container-box .cdp-option-boxes p{
+		    text-align: center;
+		    color: #fff;
+		    margin-top: 3%;
+		}
+
+		.cdp-box-options1  {
+			background-color: #661aff;
+			border: 1px solid #661aff;
+		}
+
+		.cdp-box-options2  {
+			background-color: #ca41cc;
+			border: 1px solid #ca41cc;
+		}
+
+		.cdp-box-options3  {
+			background-color: #a5cf00;
+			border: 1px solid #a5cf00;
+		}
+
+
+		#cdp .cdp-container-rotate-box-none {
+			width: 271px;
+			text-align: center;
+		}
+
+		#cdp .cdp-box {
+			border: 1px solid;
+			border-radius: 3px;
+			margin-bottom: 15px;
+			height: 67px;
+			color: #dfd5d5;
+		}
+
+		#cdp .cdp-box p{
+			margin-top: 1%;
+		}
+
+		.cdp-box-container .cdp-domain-box {
+			box-shadow: 0px 0px 12px 0px #e5e5e5;
+			border: 1px solid #e5e5e5a1;
+			padding: 20px;
+			min-height: 222px;
+		}
+
+		.cdp-domain-box .cdp-domain-list .cdp-domain-title {
+			border: 1px solid;
+			font-size: 15px;
+			color: #fff;
+			font-weight: 100;
+			text-align: center;
+			padding: 1px;
+		}
+
+		.cdp-domain-box .cdp-domain-list .cdp-domain-order-number{
+			text-align: right;
+			color: #8157d5;
+			padding-right: 3px;
+		}
+
+		.cdp-domain-box .cdp-domain-list .slds-checkbox {
+			padding-top: 7px;
+		}
+
+		.cdp-domain-box .cdp-domain-list .cdp-domain-items {
+			margin-top: 1%;
+			padding-bottom: 1%;
+		}
+
+		.cpd-domain-container-box-2{
+			margin-bottom: 77%;
+		}
+
+		#cdp_component2 .cdp-btn-group-procced, #cdp_component01 .cdp-btn-group-procced, #cdp_component02 .cdp-btn-group-procced {
+			margin-top: 5%;
+    		text-align: right;
+		}
+
+		.cdp-box-container .cdp-none-box {
+			box-shadow: 0px 0px 12px 0px #e5e5e500!important;
+			border: 1px solid #e5e5e500!important;
+		}
+
+		.cdp-domain-box .cdp-domain-list .cdp-domain-titl-dark {
+			background: #616161!important;
+		}
+
+		#cdp_component3 .slds-checkbox{
+			padding-top: 0px!important;
+		}	
+
+		.cpd-topic-items {
+			min-height: 56px;
+		}
+		
+		/* Page 4 */
+
+		#cdp_component4 .cdp-box-container {
+		    min-height: 539px;
+		}
+
+/*		#cdp_component4 .cpd-float-box {
+			position: absolute;
+			border: 1px solid #d8dde6;
+			width: 90%;
+			left: 5%;
+			top: -11%;
+			bottom: -37%;
+			background: #fff;
+			padding: 29px;
+            height: 900px;
+            overflow: auto;
+		}*/
+
+		#cdp_component4 .cpd-float-box {
+			/* position: absolute; */
+			/* border: 1px solid #d8dde6; */
+			/* width: 90%; */
+			left: 5%;
+			top: -11%;
+			bottom: -37%;
+			background: #fff;
+			/* padding: 29px; */
+			/* height: 900px; */
+		}
+
+		#cdp_component4 .cdp-domain-box .cdp-domain-list .cdp-domain-items {
+			margin-top: 0%;
+			padding-bottom: 0	
+		}
+
+		#cdp_component4	.cdp-domain-box .cdp-domain-list .slds-checkbox {
+			padding-top: 0px;
+			padding-bottom: 5px;
+		}
+
+		#cdp_component4 #cpd-display-domains_prview .cpd-domain-group {
+			margin-bottom: 4%;
+		}
+
+		#cdp_component4 .cdp-domain-box .cdp-domain-list .cdp-domain-title , .cpd-topic-titles {
+		    border: 1px solid;
+		    font-size: 14px;
+		    color: #fff;
+		    font-weight: 100;
+		    text-align: left;
+		    padding: 4px;
+		    padding-left: 15px;
+		}
+
+		#cdp_component4  .cdp-btn-group-procced {
+
+			margin-top: 10%;
+
+		}
+
+		#cdp_component5 .cdp-box-container .cdp-btn-group-procced {
+		     margin-top: 35%;
+		}
+
+		/* page 6 */
+		.cpd-module-containers {
+		    background: #16315c;
+		}
+
+		.cpd-module-containers .cpd-module-header {
+		    text-align: center;
+		    color: #fff;
+		    padding: 29px;
+		    padding-bottom: 15px;
+		}
+
+		.cpd-module-containers .cpd-module-header h4{
+			font-size: 18px;
+			padding-bottom: 14px;
+			font-weight: 600;
+		}
+
+		.cpd-module-containers .cpd-module-header p{
+		    color: #aebacc;
+		    font-size: 16px;
+		    font-weight: 100;
+		    line-height: 18px;
+		    margin: 1% auto;
+		    width: 93%;
+		}
+
+		.cpd-module-containers .cpd-module-footer {
+
+
+			left: 0%;
+			right: 2%;
+			padding: 22px;
+			background: transparent;
+		}
+
+		.cpd-module-containers .cpd-module-body , .cpd-module-containers .cpd-module-footer {
+			background: #fff;
+		}
+
+		.cpd-module-containers .cpd-module-body {
+			height: 469px;
+			overflow-y: scroll;
+			overflow-x: hidden;		
+    		padding-bottom: 6%;
+		}
+
+
+		.cpd-module-body .cpd-module-tile-containers {
+		    margin: 1% auto;
+		 //   width: 717px;
+		}
+
+		.slds-badge-info{
+			background-color: #5bc0de;
+			color: #fff;
+		}
+
+		.cpd-module-body .cpd-module-body-count-items {
+			padding: 37px;
+			padding-left: 47px;
+		}
+
+		.cpd-module-body .cpd-module-body-count-items h4{
+			font-size: 16px;
+		}
+
+		.cpd-tiles a {
+		    color: inherit;
+		    text-decoration: none;
+		    transition: color .1s linear;
+		}
+
+		.cpd-tiles a:focus,  .cpd-tiles a:hover {
+		    text-decoration: none;
+		    color: #005fb2;
+		}
+
+		.cpd-tiles {
+		 //   margin: 0 auto;
+		 //   width: 100%;
+	 //   padding: 11px;
+		    position: relative;
+     // min-height: 145px;
+		}
+
+		.cpd-tils-btn[data-is-selected="1"] {
+			background: #174c83;
+		    border-radius: 4px;
+		    border: 1px solid transparent;
+		}
+
+		.cpd-tils-btn[data-is-selected="0"] {
+			background: transparent ;
+			border: 1px solid transparent;
+		}
+
+		.cpd-tils-btn .slds-button__icon {
+		    height: 18px!important;
+		    width: 17px!important;
+		    color: #b3b3b3;
+		}
+
+		.cpd-tiles .tile-icon-image {
+			max-width: 74%;
+			height: auto;
+		}
+
+		#cpd-module-tiles-list .cpd-tiles .progress-text {
+			font-weight: 600;
+		}
+
+		#cpd-module-tiles-list .cpd-tiles .tile-type{
+			font-size: 11px;
+		}
+
+		#cpd-module-tiles-list .cpd-tiles .cpd-title-tiles-module{
+			color: #00559f;
+			font-size: 1rem; 
+			line-height: 1.25;
+		}
+
+		#cdp #cdp_component6 {
+			padding: 0px!important;
+		}
+
+		/* loading */ 
+		#psa-spinner {
+			background: #e8e8e861;
+			position: absolute;
+			top: 0%;
+			bottom: 0%;
+			left: 0%; 
+			right: 0%;
+		}
+
+		#psa-spinner .psa-contiainer {
+			position: absolute;
+			width: 3%;
+			left: 47%;
+			top: 47%;
+		}
+
+		.tooltip {
+		    position: relative;
+		    display: inline-block;
+		    border-bottom: 1px dotted black;
+		    outline: none;
+		}
+
+		.tooltip .tooltiptext {
+		    visibility: hidden;
+		    width: 152px;
+		    background-color: #16315c;
+		    color: #fff;
+		    text-align: center;
+		    border-radius: 6px;
+		    padding: 5px 0;
+		    position: absolute;
+		    z-index: 1;
+		    bottom: 125%;
+		    left: 0%;
+		    margin-left: -60px;
+		    opacity: 0;
+		    transition: opacity 0.3s;
+		    outline: none;
+		}
+
+		.tooltip .tooltiptext::after {
+		    content: "";
+		    position: absolute;
+		    top: 100%;
+		    left: 50%;
+		    margin-left: -5px;
+		    border-width: 5px;
+		    border-style: solid;
+		    border-color: #555 transparent transparent transparent;
+		    outline: none;
+		}
+
+		.tooltip:hover .tooltiptext {
+		    visibility: visible;
+		    opacity: 1;
+		    outline: none;
+		}
+        
+        /* CSS Added By Cristelle Do-ong */
+        
+        h1.cdp-box-header-title.slds-text-heading--large.slds-m-bottom--x-small {
+           background-color: #000048;
+           color: white !important;
+           padding-top: 35px;
+           padding-bottom: 35px !important;
+           margin-left: 8%;
+           margin-right: 9% !important;
+		    	margin-bottom: 30px;
+        }
+
+        button#cdp-reflect, #cdp-review, #cdp-tutor-abd-help {
+        	margin-bottom: 10px;
+            text-align: left;
+        }
+        
+        button#cdp-reflect label, #cdp-review label, #cdp-tutor-abd-help label {
+        	padding-left: 20px;
+        }
+        
+        ul.cdp-box-paragraph {
+            list-style: disc;
+            margin-left: 10% !important;
+        }
+        
+        .cpd-boxes-domain1 {
+            margin-bottom: 15px;
+            height: 74px;
+            border-radius: 4px;
+            width: 272px;
+            border: 1px solid;
+        	color: #dfd5d5;
+        	background: #f29100;
+        }
+        
+        .cpd-boxes-domain2 {
+        	margin-bottom: 15px;
+            height: 74px;
+            border-radius: 4px;
+            width: 272px;
+            border: 1px solid;
+        	color: #dfd5d5;
+        	background: #ff5e17;
+        }
+        
+        .cpd-boxes-domain4 {
+        	margin-bottom: 15px;
+            height: 74px;
+            border-radius: 4px;
+            width: 272px;
+            border: 1px solid;
+        	color: #dfd5d5;
+        	background: #ca41cc;
+        }
+        
+        .cpd-boxes-domain1 p, .cpd-boxes-domain2 p, .cpd-boxes-domain4 p {
+            text-align: center;
+            color: #fff;
+            margin-top: 3%;
+        }
+        
+        .cpd-domain-container-box-1 p, .cpd-domain-container-box-2 p, .cpd-domain-container-box-3 p, .cpd-domain-container-box-4 p {
+        	text-align: justify;
+        }
+        .cpd-modules{
+        	background: #0083cb;
+            padding-left: 11px;
+            padding-top: 11px;
+            padding-right: 11px;
+            padding-bottom: 11px;
+            border-radius: 8px 8px 0px 0px;
+            height: 102px;
+        }
+
+        .tplan_container {
+            border: 1px solid #DDD;
+            border-radius: 8px;
+            box-shadow: 0 2px 2px #DDD;
+            margin: 0 auto 20px;
+            
+        }
+        .tplan_container .tplan_cus_header {
+            color: #fff;
+            padding: 4%;
+            border-radius: 8px 8px 0px 0px;
+        }
+        .tplan_container  .tplan_cus_body{
+            min-height: 100px;
+            padding: 4%;
+        }
+        .tpl-dark-blue{
+    		background: #014076;
+    	}
+        
+        h3.tplan_cus_title {
+            font-size: 16px!important;
+            font-weight: 600!important;
+        }
+        
+        .tplan_right_side{
+            text-align: right;
+        }
+         
+        .imgSize img{
+        	height: 70px !important;
+        	width: 70px !important;
+        }
+        
+        .unAuthorized {
+        	text-align: center;
+          color: #000048;
+          margin-top: 14%;
+          font-size:18px;
+        }
+
+        @media only screen and (min-width:48em) {
+
+        }
+
+        @media only screen and (min-width:64.0625em) {
+
+        }
+
+        @media only screen and (max-width:47.9375em) {
+		    #cdp .cdp-wrapper-container-box {
+				margin: 0;
+			    max-width: none;
+			    width: 100%;
+			}
+			.domains-tiles {
+				display: none;
+			}
+			#cdp_component4 .cpd-float-box{
+				top: 0;
+				bottom: 0;
+			}
+        }
+      
+      /* added by john for ticket (#PSA-308)*/
+      @media only screen and (min-device-width : 320px) and (max-device-width : 641px) {
+		    .cpd-module-footer {
+	        position: absolute;
+			    outline: 1px solid #d8dde6;
+			    z-index: 9999999999999;
+			    width: 100%;
+			    border-bottom: 1px solid #d8dde6;
+	    	}
+			}
+          
+
+        
+	</style>
+</apex:component>

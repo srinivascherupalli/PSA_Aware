@@ -1,0 +1,76 @@
+<aura:component controller="PrivacyController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+    
+    <aura:registerEvent name="Enrolment_Event" type="c:EnrolmentActiveStep"/>
+
+    <aura:attribute name="options" type="List" default="[
+        {'label': 'I agree', 'value': 'true'}
+    ]"/>
+    <aura:attribute name="enrolId" type="String"/>
+    <aura:attribute name="agree" type="String" default="true"/>
+    <aura:attribute name="showNextBtn" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+
+    <aura:attribute name="status" type="String"/>
+
+
+<div class="slds-container">
+
+    <h3 class="slds-m-bottom_large">Privacy Notice</h3>
+
+    <p class="slds-m-bottom_large">Under the Data Provision Requirements 2012, Pharmaceutical Society of Australia Ltd (PSA) is required to collect personal information about you and to disclose that personal information to the National Centre for Vocational Education Research Ltd (NCVER). Your personal information (including the personal information contained on this enrolment form and your training activity data) may be used or disclosed by the PSA for statistical, regulatory and research purposes. The PSA may disclose your personal information for these purposes to:</p>
+
+    <ul class="slds-list--dotted slds-m-bottom_large">
+        <li class="slds-m-bottom_small">Commonwealth and State or Territory government departments and authorised agencies; and NCVER.</li>
+        <li class="slds-m-bottom_small">Personal information disclosed to NCVER may be used or disclosed NCVER for the following purposes:</li>
+    </ul>
+
+    <p class="slds-m-bottom_large">Personal information disclosed to NCVER may be used or disclosed NCVER for the following purposes:</p>
+
+    <ul class="slds-list--dotted slds-m-bottom_large">
+        <li class="slds-m-bottom_small">Populating authenticated VET transcripts</li>
+        <li class="slds-m-bottom_small">Facilitating statistics and research relating to education, including surveys and data linkage</li>
+        <li class="slds-m-bottom_small">Pre-populating RTO student enrolment forms</li>
+        <li class="slds-m-bottom_small">Understanding how the VET market operates, for policy, workforce planning and consumer information; and</li>
+        <li class="slds-m-bottom_small">Administering VET, including programme administration, regulation, monitoring and evaluation.</li>
+    </ul>
+
+    <p class="slds-m-bottom_small">You may receive a student survey which may be administered by a government department or NCVER employee, agent or third party contractor or other authorised agencies. Please note you may opt out of the survey at the time of being contacted.</p>
+    <p class="slds-m-bottom_small">NCVER will collect, hold, use and disclose your personal information in accordance with the Privacy Act 1988 (Cth), the National VET Data policies and protocols (including those published on NCVER’s website at <a href="www.ncver.edu.au">www.ncver.edu.au</a>).</p>    
+    <p class="slds-m-bottom_small">For more information about NCVER's Privacy Policy go to <a href="https://www.ncver.edu.au/privacy">https://www.ncver.edu.au/privacy.</a></p>
+
+    <lightning:checkboxGroup
+        name="iagree"
+        options="{!v.options}"
+        value="{!v.agree}"
+        onchange="{!c.agreeCallback}"
+        disabled="{!'Draft' != v.status}"
+    />
+    
+    <div class="slds-m-top_xx-large slds-btn-content" style="display: inline-block;width:100%;">
+        <div class="slds-float_left">
+            <lightning:button variant="Neutral" class="slds-back-btn" label="Back" title="Back" onclick="{!c.backCallback}"/>
+            <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{!c.cancelFunc}"/>
+        </div>
+        <div class="slds-float_right">
+
+            <aura:if isTrue="{!v.showNextBtn}">
+                <lightning:button label="Next" title="Next" class="col slds-next-btn" onclick="{! c.nextCallback }"/>
+            </aura:if>
+
+        </div>
+    </div>
+
+</div>
+
+<aura:if isTrue="{!v.showSpinner}">
+    <div class="slds-spinner_container">
+        <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+</aura:if>
+
+</aura:component>

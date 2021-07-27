@@ -1,0 +1,6 @@
+<design:component>
+    <design:attribute name="sObj" label="Banner 1 Image URL" />
+    <design:attribute name="BannerURL" label="Banner 1 Link" />
+    <design:attribute name="field" label="Banner 2 Image URL" />
+    <design:attribute name="Banner2URL" label="Banner 2 Link" />
+</design:component>

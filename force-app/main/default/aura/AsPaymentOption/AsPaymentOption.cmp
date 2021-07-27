@@ -1,0 +1,175 @@
+<!--
+  @File Name          : AsPaymentOption.cmp
+  @Description        : 
+  @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 10/30/2019, 6:16:54 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    10/9/2019   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<aura:component controller="AsPaymentOptionController" implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <!-- Parameters -->
+    <aura:attribute name="enrolmentStatus" type="String" />
+    <aura:attribute name="accountId" type="String" />
+    <aura:attribute name="enrollmentId" type="String" />
+ 
+    <aura:registerEvent name="Enrolment_Event" type="c:EnrolmentActiveStep"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    <aura:attribute name="showToast" type="Boolean" default="false" />
+    <!-- Variables  -->
+    <aura:attribute name="priceBooksList" type="List" />
+    <aura:attribute name="learningPackageName" type="String" />
+    <aura:attribute name="unitPriceSlect" type="String"  />
+    <aura:attribute name="setDisableInput" type="boolean" />
+    <aura:attribute name="setVoucherDisable" type="boolean" />
+    <!-- attributes added by iver -->
+    <aura:attribute name="fundedPosition" type="boolean" />
+    <aura:attribute name="fundEligible" type="boolean" />
+    <aura:attribute name="oppId" type="Id" />
+    <aura:attribute name="oppAmount" type="Double" />
+    <!-- Check if opp exist, hide multiple options but show preselected -->
+    <aura:attribute name="showMultipleOptions" type="boolean" default="true" />
+    <aura:attribute name="showPreSelectedOption" type="boolean" default="false"/>
+    <aura:attribute name="oppInfoAmount" type="double"/>
+    <aura:attribute name="oppInfopBook2Id" type="Id"/>
+    <aura:attribute name="oppInfopBook2IdName" type="String"/>
+
+    <aura:attribute name="productIdVcode" type="Id"/>
+
+
+
+    <div class="slds" >
+        <div> 
+            <div class="slds-card">
+                <div class="slds-p-around_medium">
+                    <div class="payment-opt-wrapper" >
+                        <div class="payment-opt-header" >
+                            <h1> Payment Option  </h1>
+                        </div>
+                        <div class="payment-opt-body" >
+                            <div class="payment-content" >
+                                <p> You will be enrolled into the following course: </p>
+                                <p style="margin-bottom: 20px;" > <strong> {!v.learningPackageName} </strong> </p>
+                                <fieldset class="slds-form-element">
+                                <legend class="slds-form-element__legend slds-form-element__label">This Following payment options are available</legend>
+                                <div class="slds-form-element__control">
+                                <!-- show multiple options -->
+                                <aura:if isTrue="{!v.showMultipleOptions == true}" >
+                                    <!-- Iteration of the pricebook as radio button   -->
+                                    <aura:iteration items="{!v.priceBooksList}" var="item">
+                                        <span class="slds-radio">
+                                        <!-- <aura:if isTrue="{!v.enrolmentStatus !='Draft' || v.enrolmentStatus != 'Pending Payment'}"> -->
+                                                <input type="radio"  id="{!'radio-'+item.priceBookId}" value="{!'radio-'+item.priceBookId}" name="options" checked="{!item.isOnceOff}" disabled="{!v.setDisableInput}" />
+                                            <!-- <aura:set attribute="else">
+                                                <input type="radio"  id="{!'radio-'+item.priceBookId}" value="{!'radio-'+item.priceBookId}" name="options" checked="{!item.isOnceOff}" />
+                                            </aura:set>
+                                        </aura:if> -->
+                                        <!-- <aura:if isTrue="{!item.priceBookName == 'PSA Member'}" ></aura:if> -->
+                                        <label class="slds-radio__label" for="{!'radio-'+item.priceBookId}" onclick="{!c.selectPriceBook}" data-priceBookId="{!item.priceBookId}" data-unitprice="{!item.unitPrice}" data-pricebookname="{!item.priceBookName}" >
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">{!item.priceBookName}</span>
+                                        </label>
+                                        </span>
+                                    </aura:iteration>
+                                    <!-- show Single option, if opp exist -->
+                                    <aura:set attribute="else" >
+                                        <aura:if isTrue="{!v.oppId != null}" >
+                                            <span class="slds-radio">
+                                            <input type="radio"  id="{!'radio-'+v.oppInfopBook2Id}" value="{!'radio-'+v.oppInfopBook2Id}" name="options" checked="true" disabled="true" />
+                                            <label class="slds-radio__label" for="{!'radio-'+v.oppInfopBook2Id}" data-priceBookId="{!v.oppInfopBook2Id}" data-unitprice="{!v.oppInfoAmount}" data-pricebookname="{!v.oppInfopBook2IdName}" >
+                                            <span class="slds-radio_faux"></span>
+                                            <span class="slds-form-element__label">{!v.oppInfopBook2IdName}</span>
+                                            </label>
+                                            </span>
+                                        </aura:if>
+                                    
+                                    </aura:set>
+                                </aura:if>
+                                </div>
+                                </fieldset>
+                            
+                                <div class="payment-opt-costp-details" >
+                                    <p> This course will cost </p>
+                                    <aura:if isTrue="{!v.showMultipleOptions == true}" >
+                                        <p><strong>{!v.unitPriceSlect}</strong></p>
+                                        <aura:set attribute="else" >
+                                         <aura:if isTrue="{!v.oppId != null}" >
+                                            <p><strong>{!v.oppInfoAmount}</strong></p>
+                                         </aura:if>
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+        
+                            </div>
+                            <div class="payment-voucher" >
+                                <p>Do you have a token or voucher?</p>
+                                <Label> <strong> Code </strong> </Label><br/>
+                                <!-- <aura:if isTrue="{!v.showMultipleOptions == true}" > -->
+                                    <input style="padding: 9px;" type="text" disabled="{!v.setVoucherDisable}" id="VoucherCodeId"  /> &nbsp;
+                                    <aura:if isTrue="{!v.setVoucherDisable == false}" >
+                                    <lightning:button variant="Neutral" label="Validate" title="Validate" disabled="{!v.setVoucherDisable}" onclick="{!c.ValidateVoucher}" />
+                                    <aura:set attribute="else" >
+                                        <lightning:button variant="Neutral" label="Validate" title="Validate" disabled="{!v.setVoucherDisable}"/>
+                                    </aura:set>
+                                    </aura:if>
+        
+                            </div>
+                        </div>
+                        
+                        <div class="slds-m-top_xx-large slds-btn-content">
+                            <div class="slds-float_left">
+                                <lightning:button variant="Neutral" class="slds-back-btn" label="Back" title="Back" onclick="{!c.backCallback}"/>
+                                <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{!c.cancelCallback}"/>
+                            </div>
+                            <div class="slds-float_right">
+                
+                                <aura:if isTrue="{!(v.enrolmentStatus =='Draft' || v.enrolmentStatus == 'Pending Payment')}">
+                                        
+                                    <!-- email button -->
+                                    <lightning:button variant="Neutral" class="slds-save-email-btn"  label="Save &amp; Email me a link" title="Save &amp; Email me a link" onclick="{!c.saveNEmail}"/> 
+                
+                                </aura:if> 
+
+                                <aura:if isTrue="{!(v.enrolmentStatus =='Draft' || v.enrolmentStatus == 'Pending Payment')}">
+                                    <!-- save button -->
+                                    <lightning:button variant="brand"  class="slds-save-btn" label="Continue with Payment" title="Continue with Payment" onclick="{!c.continueWithPayment}"/>
+                                    <aura:set attribute="else" >
+                                        <lightning:button variant="brand"  class="slds-save-btn" label="Continue" title="Continue" onclick="{!c.continueWithPayment}"/>
+                                    </aura:set>
+                                </aura:if> 
+                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="payment-opt-foooter" >
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-1 slds-large-size_4-of-12">
+                <button class="slds-button slds-button_brand" style="width: 39%;" > Cancel </button>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-large-size_8-of-12" style="text-align:right;">
+                <button class="slds-button slds-button_outline-brand" > Save and Email me a link </button>
+                <button class="slds-button slds-button_brand" > Save and Continue </button>
+                </div>
+            </div>
+        </div> -->
+    </div>
+
+     <!-- spinner -->
+    <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+     <!-- spinner -->
+</aura:component>

@@ -1,0 +1,56 @@
+.THIS.slds-container {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 19px;
+    opacity: 1;
+    padding: 0 30px 30px;
+    border-radius: 7px;
+    margin-top: 20px;
+    display: inline-block;
+    width: 100%;
+}
+
+.THIS .selectalign{
+    padding: 0 4px;
+}
+
+.THIS .secondtitle{
+    padding-top: 3%;
+}
+.THIS .hrstyle{
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+.THIS .outputfield{
+    color: #0c467f;
+    font-weight: bold;
+}
+.THIS .outputfield .slds-form-element__label{
+    padding-top: 0px;
+    color: #0c467f;
+}
+
+.THIS .customtext{
+    padding: 0px 4px;
+    font-size: 16px;
+    color: #607A91;
+}
+
+.THIS .slds-content-wrapper label {
+    font: Bold 12px/33px Salesforce Sans;
+    letter-spacing: 0.6px;
+    color: #607A91;
+    text-transform: uppercase;
+}
+
+.THIS .slds-form-element  {
+    display: inline-block;
+}
+.THIS .slds-form-element {
+    display: inline-block;
+}
+
+.THIS .slds-form-control .slds-form-element__icon {
+    position: absolute;
+    top: 4px;
+    right: -20px;
+}

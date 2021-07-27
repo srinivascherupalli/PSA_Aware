@@ -1,0 +1,19 @@
+<!-- AsKnowledgeCategories -->
+<apex:component >
+	<div class="knowledge-category-title" style="    text-align: center;
+    color: #0070d2;">
+		<h1 class="slds-text-heading--medium ">Categories </h1>
+		<p class="slds-p-bottom_small"> Select from the categories below. then click "Show Articles" to filter your search </p>
+	</div>
+ 	<div class="slds-text-align_right  slds-m-top_x-small" style="background: #003d79; padding: 2%;">
+	 	<div  style="text-align: left;" id="knowledge-categories-filters">
+	   
+		</div> 
+		<div style="text-align: center; margin-top: 5%;
+    margin-bottom: 4%;">  
+			<button class="slds-button slds-button_brand knw-clearAll"  item-url="s/asknowledgelistpage" > Reset all filters </button> 
+			<button class="slds-button slds-button_brand knwledeg-bnt--search" item-url="s/asknowledgelistpage" > Show Articles </button> 
+		</div>
+ <!-- 		<button class="slds-button slds-button_neutral" id="knwledeg-bnt--search" item-url="{!$Page.AsKnowledgeListView}">Search</button> -->
+ 	</div> 
+</apex:component>

@@ -1,0 +1,101 @@
+.THIS.slds-container {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 19px;
+    opacity: 1;
+    padding: 20px;
+    border-radius: 7px;
+    margin-top: 20px;
+}
+
+.THIS .slds-form-element__legend,
+.THIS .slds-form-element__label {
+    font-size: 18px;
+    color: #607A91;
+    font-weight: 400;
+}
+
+.THIS .slds-radio .slds-form-element__label {
+    font-size: 14px;
+}
+
+.THIS p {
+    color: #607A91;
+    font-size: 16px;
+}
+
+.THIS .slds-cancel-btn {
+    font-size: 16px;
+    color: #fff;
+    background: #607A91 0% 0% no-repeat padding-box;
+    border-radius: 6px;
+    opacity: 1;
+    border: 2px solid #607A91;
+    transition: all .25s;
+}
+
+.THIS .slds-cancel-btn:hover,
+.THIS .slds-cancel-btn:focus {
+    background: #fff;
+    color: #607A91;
+}
+
+.THIS .slds-save-email-btn {
+    font-size: 16px;
+    color: #003D79;
+    border: 2px solid #003D79;
+    border-radius: 6px;
+    opacity: 1;
+    transition: all .25s;
+}
+
+.THIS .slds-save-email-btn:hover,
+.THIS .slds-save-email-btn:focus {
+    color: #fff;
+    background: #003D79;
+}
+
+.THIS .slds-save-btn {
+    font-size: 16px;
+    border: 2px solid #003D79;
+    background: #003D79 0% 0% no-repeat padding-box;
+    border-radius: 6px;
+    opacity: 1;
+    color: #fff;
+    transition: all .25s;
+}
+
+.THIS .slds-save-btn:hover,
+.THIS .slds-save-btn:focus {
+    background: #fff;
+    color: #003D79;
+}
+
+.THIS .slds-radio [type="radio"]:checked + .slds-radio_faux::after,
+.THIS .slds-radio [type="radio"]:checked + .slds-radio--faux::after,
+.THIS .slds-radio [type="radio"]:checked ~ .slds-radio_faux::after,
+.THIS .slds-radio [type="radio"]:checked ~ .slds-radio--faux::after,
+.THIS .slds-radio [type="radio"]:checked + .slds-radio__label .slds-radio_faux::after,
+.THIS .slds-radio [type="radio"]:checked + .slds-radio__label .slds-radio--faux::after {
+    background: #003D79;
+}
+
+.THIS select, .THIS input {
+    border-color: #DDDFE0;
+    color: #607A91;
+}
+
+@media( max-width: 425px) {
+    .THIS.slds-container {
+        padding: 20px 15px;
+    }
+
+    .THIS .slds-btn-content .slds-float_left,
+    .THIS .slds-btn-content .slds-float_right {
+        float: none;
+    }
+
+    .THIS .slds-btn-content button {
+        margin: 5px 0;
+        width: 100%;
+    }
+}

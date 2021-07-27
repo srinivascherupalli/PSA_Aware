@@ -1,0 +1,26 @@
+.THIS.slds-container {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 19px;
+    opacity: 1;
+    padding: 30px;
+    border-radius: 7px;
+    margin-top: 20px;
+    display: inline-block;
+    width: 100%;
+}
+
+.THIS lightning-helptext.helptext {
+    position: absolute;
+    top: 50px;
+    left: 306px;
+}
+
+.THIS .psa-qual-section {
+    width: 90%;
+}
+
+.THIS .psa-qual-remove {
+    width: 8%;
+    margin-top: 175px;
+    cursor: pointer;
+}

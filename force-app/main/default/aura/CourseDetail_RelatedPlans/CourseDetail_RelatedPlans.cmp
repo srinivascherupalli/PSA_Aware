@@ -1,0 +1,43 @@
+<aura:component
+  implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+  access="global"
+>
+  <!--Attribute-->
+  <aura:attribute name="title" type="string" default="Related Education" />
+  <aura:attribute name="cards" type="List" default="[]" />
+
+  <aura:if isTrue="{!not(empty(v.cards))}">
+    <!--Pre requisit courses-->
+    <section class="related-courses">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <h2
+              class="h3 course-body__section-title course-body__section-title--related"
+              >{!v.title}</h2
+            >
+          </div>
+        </div>
+        <div class="row">
+          <aura:iteration items="{!v.cards}" var="item">
+            <div class="col-12 col-sm-6 col-lg-3 card-wrapper">
+              <c:Card
+                isCourse="{!item.isCourse}"
+                id="{!item.id}"
+                href="{!item.href}"
+                group="{!item.group}"
+                tag="{!item.tag}"
+                title="{!item.title}"
+                duration="{!item.duration}"
+                deliveryMethod="{!item.deliveryMethod}"
+                deliveryDescription="{!item.deliveryDescription}"
+                thumbnail="{!item.thumbnail}"
+                badge="{!item.badge}"
+              />
+            </div>
+          </aura:iteration>
+        </div>
+      </div>
+    </section>
+  </aura:if>
+</aura:component>

@@ -1,0 +1,137 @@
+.THIS div.slds-combobox>div>input {
+    color: #313f48;
+    cursor: pointer;
+    flex: 1;
+    font: 1.8rem/1.2 "Roboto-Regular";
+    letter-spacing: 0.5px;
+    padding: 18.5px 27px;
+    border: 1px solid #9aabb7;
+}
+
+.THIS .slds-listbox__option {
+    font: 1.8rem/1.2 "Roboto-Regular";
+}
+
+.THIS abbr[title] {
+    text-decoration: none;
+}
+
+.THIS label.slds-form-element__label {
+    -webkit-align-items: center;
+    align-items: center;
+    color: #313f48;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    font: 1.8rem/1.2 "Roboto-Regular";
+    margin-bottom: 15px;
+}
+
+.THIS .form-input>div>input,
+.THIS .form-input>lightning-datepicker>div>div>input {
+    border: 1px solid #9aabb7;
+    color: #313f48;
+    font: 1.8rem/1.2 "Roboto-Regular";
+    height: 60px;
+    letter-spacing: 0.5px;
+    padding: 6px 20px;
+}
+
+.THIS svg.slds-button__icon {
+    width: 100%;
+    height: 100%;
+}
+
+.THIS .form-input>lightning-datepicker>div>div>lightning-button-icon>button {
+    width: 30px;
+    top: -10px;
+    margin-left: -25px;
+    position: absolute;
+}
+
+.THIS .slds-checkbox .slds-checkbox__label .slds-form-element__label {
+    color: #313f48;
+    font: 1.6rem/1.3 "Roboto-Light";
+    /*padding-left: 30px;*/
+    white-space: normal;
+    word-break: normal;
+}
+
+.THIS .slds-form-element .slds-checkbox [type=checkbox]+.slds-checkbox__label .slds-checkbox_faux {
+    background-color: #fff;
+    border: 1px solid #788f9f;
+    display: inline-block;
+    height: 20px;
+    left: 0;
+    position: absolute;
+    width: 20px;
+}
+
+.THIS .slds-checkbox [type=checkbox]:checked+.slds-checkbox__label .slds-checkbox_faux:after {
+    width: 1rem;
+    height: 0.5rem;
+}
+
+.THIS .slds-checkbox__label {
+    margin-top: 15px;
+}
+
+.THIS lightning-icon.slds-icon-utility-down {
+    width: 30px;
+}
+
+.THIS .slds-form-element__help {
+    font: 1.6rem/1.3 "Roboto-Light";
+}
+
+.THIS .slds-loader {
+    position: absolute;
+    float: right;
+    margin: 10px;
+}
+
+.THIS .disabled {
+    background-color: var(--lwc-colorBackgroundInputDisabled, rgb(233, 234, 236));
+    border-color: var(--lwc-colorBorderInputDisabled, rgb(196, 198, 202));
+    color: var(--lwc-colorTextInputDisabled, rgb(107, 109, 112));
+    pointer-events: none;
+}
+
+.THIS .form-input .slds-form-element__label {
+    display: inline-block;
+}
+
+.THIS lightning-helptext {
+    width: 20px;
+    display: inline-block;
+}
+
+.THIS.fail-banner,
+.THIS.fail-banner p {
+    font-size: 2rem!important;
+    color: #FC100D;
+    font-weight: 600!important;
+    text-align: center;
+}
+
+.THIS.fail-banner svg {
+    fill: #FC100D;
+}
+
+.THIS.fail-banner lightning-icon {
+    margin-bottom: 15px;
+}
+
+.THIS .info {
+    color: #005da4 !important;
+}
+
+.THIS .alert_msg {
+    color: red !important;
+}
+
+.THIS .info a {
+    color: red !important;
+    text-decoration: underline;
+}

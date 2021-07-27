@@ -1,0 +1,131 @@
+<aura:component implements="forceCommunity:themeLayout,forceCommunity:availableForAllPageTypes" extends="forceCommunity:navigationMenuBase" access="global" description="Custom Theme Layout" controller="PSA">
+    <aura:attribute name="search" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="profileMenu" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="navBar" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="userInfo" type="user"/>
+    <aura:attribute name="screenHeight" type="String"/>
+    <aura:attribute name="cdURL" type="String"/>
+    <aura:attribute name="blueBackground" type="Boolean" default="false"/>
+    <aura:attribute name="smallLogo" type="Boolean" default="false" />
+     <!-- set this attribute value to render mentioned Navigation to render on Mobile View-->
+    <aura:attribute name="navigationLinkSetId" type="string" default="Navigation" />
+   <aura:handler name="init" value="this" action="{!c.doInit}"/>
+
+    <div aura:id="navWrapper" class="navWrapper" >
+        <div class="slds-grid slds-wrap cd-header">
+            <div class="slds-size_4-of-12 slds-col cd-logo-col">
+                <div class="cd-logo">
+                    <a href="#" class="logoContainer--nav" onclick="{!c.openSidebar}"><img src="{!$Resource.PSAFED  + '/dist/images/hamburger.png'}"></img></a>
+                    <a href="https://www.psa.org.au/" class="logoContainer--mobile"><img src="{!$Resource.PSAFED  + '/dist/images/PSA-mobile-white-logo.png'}"></img></a>
+                    <a href="https://www.psa.org.au/" class="logoContainer" title="PSA Community"></a>
+                </div>
+            </div>
+            <div class="slds-size_6-of-12 slds-col cd-external-links">
+                <div class="cd-external-links--inner">
+        	        <a target="_blank" href="https://www.psa.org.au/practice-support-industry/resources/">PSA Resource Hub <img src="{!$Resource.PSAFED  + '/dist/images/external-link.png'}"></img></a>
+    	            <a target="_blank" href="https://apf.psa.org.au/">APF Online <img src="{!$Resource.PSAFED  + '/dist/images/external-link.png'}"></img></a>
+	                <a target="_blank" href="https://www.australianpharmacist.com.au/">Australian Pharmacist <img src="{!$Resource.PSAFED  + '/dist/images/external-link.png'}"></img></a>
+                	<a target="_blank" href="https://www.psa.org.au/wp-login.php?redirect_to=https://shop.psa.org.au">Shop <img src="{!$Resource.PSAFED  + '/dist/images/external-link.png'}"></img></a>
+                </div>
+            </div>
+            <div class="slds-size_2-of-12 slds-col cd-profile-menu-col">
+                <div class="cd-profile-menu">
+                    {!v.profileMenu}
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap cd-navigation">
+            <div class="slds-size_8-of-12 slds-col">
+                <aura:if isTrue="{!v.userInfo.ProfileId != '00e7F000000ZqTwQAK'}">
+                    <div class="cd-nav-bar">
+                        {!v.navBar}
+                    </div>
+                	<aura:set attribute="else">
+                    <div class="cd-nav-bar cd-not-login-nav-bar">
+                       {!v.navBar}
+                    </div>
+                	</aura:set>
+                </aura:if>
+                
+                <div class="mobileWrapper" aura:id="mobileWrapper">
+                    <div class="verticalNav">
+                        <div class="verticalNav-top">
+                            <div class="verticalNav-top__item">
+                                <a href="https://www.psa.org.au/" target="_self" title="Link to PSA.org.au">PSA.org.au</a>
+                            </div>
+                            <div class="verticalNav-top__item verticalNav-top__active">
+                                <a href="/" target="_self" title="Link to myPSA.org.au">My PSA</a>
+                            </div>        
+                        </div>
+                        <div class="verticalNav-search cd-search">
+                            <c:searchMobile></c:searchMobile>
+                        </div>
+                        
+                        <div class="cd-nav-bar">
+                            <div class="verticalNav-nav slds-grid slds-grid--vertical slds-navigation-list--vertical">
+                                 <lightning:accordion activeSectionName="" allowMultipleSectionsOpen="true">
+                                     <aura:iteration items="{!v.menuItems}" var="item">
+                                   
+                                        <aura:if isTrue="{!empty(item.subMenu)}">
+                                            <aura:if isTrue="{!item.label == 'Home'}">
+                                            <aura:set attribute="else">
+                                            <li class="{!item.active ? 'verticalNav-nav--active' : ''}">
+                                                <a data-menu-item-id="{!item.id}" href="javascript:void(0);" onclick="{!c.onClickMobile}">{!item.label}</a>
+                                            </li>
+                                            </aura:set>
+                                        	</aura:if>
+                                            
+                                            <aura:set attribute="else">
+                                                <lightning:accordionSection name="{!item.id}" label="{!item.label}">
+                                                    <ul onclick="{!c.onClickMobile}">
+                                                        <aura:iteration items="{!item.subMenu}" var="subItem">
+                                                            <li><a data-menu-item-id="{!subItem.id}" href="javascript:void(0);">{!subItem.label}</a></li>
+                                                        </aura:iteration>
+                                                    </ul>
+                                                </lightning:accordionSection>
+                                            </aura:set>
+                                        </aura:if>
+                                	</aura:iteration>
+                                 </lightning:accordion>
+                            </div>
+                        </div>
+                        
+                       <div class="verticalNav-external">
+                           <a target="_blank" href="https://www.psa.org.au/practice-support-industry/resources/">PSA Resource Hub <img src="{!$Resource.PSAFED  + '/dist/images/external-link.png'}"></img></a>
+                           <a target="_blank" href="https://apf.psa.org.au/">APF Online <img src="{!$Resource.PSAFED  + '/dist/images/external-link.png'}"></img></a>
+                           <a target="_blank" href="https://www.australianpharmacist.com.au/">Australian Pharmacist <img src="{!$Resource.PSAFED  + '/dist/images/external-link.png'}"></img></a>
+                           <a target="_blank" href="https://www.psa.org.au/wp-login.php?redirect_to=https://shop.psa.org.au">Shop <img src="{!$Resource.PSAFED  + '/dist/images/external-link.png'}"></img></a>
+                       </div>
+                   </div>
+                    <div class="cd-navigation--close" onclick="{!c.closeSidebar}">
+                        <lightning:icon iconName="utility:close" variant="close"/>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-size_4-of-12 slds-col cd-search-col">
+                <div class="cd-search">
+                    {!v.search}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+     <div class="cd-main-content">
+          <div class="cd-body">
+               {!v.body}
+            <aura:if isTrue="{!v.cdURL == 'https://my.psa.org.au/s/'}">
+                <aura:if isTrue="{!v.userInfo.ProfileId == '00e7F000000ZqTwQAK'}">
+                    <div class="cd-login-btn" style="{!'min-height: '+v.screenHeight+'px;'}">
+                        <div class="login-box">
+                            <h2>You’re not logged in!</h2>
+                            <h3>Login now to access your education and benefits.</h3>
+                            <a href="/s/login/" class="slds-button slds-button_brand">Login</a>
+                        </div>
+                    </div>
+                </aura:if>
+            </aura:if>
+        </div>
+    </div>
+
+    <ltng:require styles="{!$Resource.PSAFED  + '/dist/css/app.css'}"/>
+</aura:component>

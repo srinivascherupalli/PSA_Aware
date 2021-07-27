@@ -1,0 +1,218 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  access="global"
+  controller="PSA_Progress"
+>
+  <!--Handlers-->
+  <aura:handler name="init" value="this" action="{!c.doInit}" />
+  <aura:handler event="force:refreshView" action="{!c.doInit}" />
+  <aura:handler event="force:navigateToSObject" action="{!c.navigate}" />
+  <!--Attribute-->
+  <aura:attribute name="selectedCPDYear" type="string" />
+  <aura:attribute name="isAccreditedPharma" type="boolean" />
+  <aura:attribute name="cpdList" type="AsCPDPlanner__c[]" />
+  <aura:attribute name="mainCPDData" type="AsCPDPlanner__c" />
+  <aura:attribute name="summaryList" type="AsCPD_Learning_Summary__c[]" />
+  <aura:attribute name="plannedSummary" type="AsCPD_Learning_Summary__c[]" />
+  <aura:attribute name="enrolledSummary" type="AsCPD_Learning_Summary__c[]" />
+  <aura:attribute name="progressSummary" type="AsCPD_Learning_Summary__c[]" />
+  <aura:attribute name="completedSummary" type="AsCPD_Learning_Summary__c[]" />
+  <aura:attribute name="completedSummaryNumber" type="integer" />
+  <aura:attribute name="completedSelectedNumber" type="integer" />
+  <aura:attribute name="completedReflectedNumber" type="integer" />
+  <aura:attribute name="cpdMap" type="Map" />
+  <aura:attribute name="cpdPlanData" type="PSA_Progress.courseCatalogWrapper" />
+  <aura:attribute name="selectedItem" type="String" />
+  <aura:attribute name="selectedTab" type="String" />
+  <aura:attribute name="recordId" type="String" />
+  <aura:attribute name="planAttachments" type="List" />
+  <aura:attribute name="planAttachment" type="Attachment" />
+ <aura:attribute name="group1DefaultImage" type="String" />
+  <aura:attribute name="group2DefaultImage" type="String" />
+
+  <!--Starts here-->
+    <!--Content for Member-->
+  <aura:if
+    isTrue="{!v.cpdPlanData.userDeatils.ProfileId=='00e7F000000ZqfOQAS'}"
+  >
+    <body>
+      <div class="page-wrapper">
+        <!--PageHero-->
+        <c:mycpdMemberPageHero
+          selectedItem="{!v.selectedItem}"
+          cpdPlanData="{!v.cpdPlanData.userDeatils}" cpageName="My CPD year "
+        />
+
+        <!--Progress Bar and Selector-->
+        <section class="pb-2">
+          <div class="container">
+            <div class="row mb-2">
+              <div class="col-12">
+                <div class="row">
+                  <div
+                    class="cd-box cd-cpd-progress cd-non-member cPSA_Home col-12"
+                    data-aura-rendered-by="39:2;a"
+
+                  >
+                    <div class="cd-cpd-progress-top row">
+                      <div class="col-12 col-md-9">
+                        <h2 data-aura-rendered-by="41:2;a">My CPD Progress</h2>
+                      </div>
+                      <div class="col-12 col-md-3 pr-md-0">
+                        <div
+                          class="slds-form-element"
+                          data-aura-rendered-by="29:2;a"
+                        >
+                          <label
+                            class="slds-form-element__label"
+                            data-aura-rendered-by="30:2;a"
+                            for="26:2;a"
+                            ><!--render facet: 31:2;a--><span
+                              class=""
+                              data-aura-rendered-by="32:2;a"
+                            ></span
+                          ></label>
+                          <div
+                            class="slds-form-element__control slds-grow"
+                            data-aura-rendered-by="34:2;a"
+                          >
+                            <div
+                              class="slds-select_container"
+                              data-aura-rendered-by="35:2;a"
+                            >
+                              <lightning:select
+                                aura:id="select"
+                                name="select"
+                                label=""
+                                onchange="{!c.onChange}"
+                              >
+                                <aura:iteration items="{!v.cpdList}" var="item">
+                                  <option
+                                    value="{!item.Id}"
+                                    selected="{!item.Id == v.selectedCPDYear}"
+                                  >
+                                    {!item.CPD_Year__c}</option
+                                  >
+                                </aura:iteration>
+                              </lightning:select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+					<!--Progress bar-->
+                    <c:mycpdBar mainCPDData="{!v.mainCPDData}" />
+                  </div>
+                </div>
+              </div>
+            </div>
+              <!--Deatil Content starts here-->
+            <div class="row">
+                <!--side bar tabs-->
+              <div class="col-sm-3">
+                <div class="cd-sidebar">
+                  <ul>
+                    <li
+                      onclick="{!c.goalClick}"
+                      class="{!(v.selectedItem =='goals') ? 'active' : 
+                                                                        '' }"
+                    >
+                      <a href="javascript:void(0);">
+                        <span class="cd-sidebar__index">01</span> My CPD Goals
+                      </a>
+                    </li>
+                    <li
+                      onclick="{!c.planClick}"
+                      class="{!(v.selectedItem == 'Plan') ? 'active' : 
+                                                                      '' }"
+                    >
+                      <a href="javascript:void(0);">
+                        <span class="cd-sidebar__index">02</span> Plan
+                      </a>
+                    </li>
+                    <li
+                      onclick="{!c.learnClick}"
+                      class="{!(v.selectedItem == 'Learn') ? 'active' : '' }"
+                    >
+                      <a href="javascript:void(0);">
+                        <span class="cd-sidebar__index">03</span> Learn
+                      </a>
+                    </li>
+                    <li
+                      onclick="{!c.recordClick}"
+                      class="{!(v.selectedItem == 'Self-Record') ? 'active' : '' }"
+                    >
+                      <a href="javascript:void(0);">
+                        <span class="cd-sidebar__index">04</span> Self-Record
+                      </a>
+                    </li>
+                    <li
+                      onclick="{!c.reflectClick}"
+                      class="{!(v.selectedItem == 'Reflect') ? 'active' : '' }"
+                    >
+                      <a href="javascript:void(0);">
+                        <span class="cd-sidebar__index">05</span> Reflect
+                        <span class="cd-sidebar__count"
+                          >{!v.completedReflectedNumber}</span
+                        >
+                      </a>
+                    </li>
+                    <li
+                      onclick="{!c.reportClick}"
+                      class="{!(v.selectedItem == 'Report') ? 'active' : '' }"
+                    >
+                      <a href="javascript:void(0);">
+                        <span class="cd-sidebar__index">06</span> Report
+                       
+                      </a>
+                    </li>
+                  </ul>
+                  <div class="cd-sidebar__shadow cd-sidebar__shadow--end"></div>
+                </div>
+              </div>
+                <!--Right side content-->
+              <div class="col-sm-9">
+                <aura:if isTrue="{!v.selectedItem =='goals'}">
+                  <c:mycpdGoal mainCPDData="{!v.mainCPDData}" />
+                </aura:if>
+                <aura:if isTrue="{!v.selectedItem =='Reflect'}">
+                  <c:reflectionModal completedSummary="{!v.completedSummary}"  group2DefaultImage="{!v.group2DefaultImage}" group1DefaultImage="{!v.group1DefaultImage}"/>
+                </aura:if>
+                <aura:if isTrue="{!v.selectedItem =='Report'}">
+                  <c:mycpdReport
+                    completedSummary="{!v.completedSummary}" group2DefaultImage="{!v.group2DefaultImage}" group1DefaultImage="{!v.group1DefaultImage}"
+                    planId="{!v.recordId}"
+                    planAttachment="{!v.planAttachment}"
+                    planAttachments="{!v.planAttachments}"
+                    completedSelectedNumber="{!v.completedSelectedNumber}"
+                  />
+                </aura:if>
+                <aura:if isTrue="{!v.selectedItem =='Self-Record'}">
+                  <c:mycpdSelfRecord recordId="{!v.recordId}" />
+                </aura:if>
+                <aura:if isTrue="{!v.selectedItem =='Plan'}">
+                  <c:mycpdPlanchild />
+                </aura:if>
+                <aura:if isTrue="{!v.selectedItem =='Learn'}">
+                  <c:cpdLearn
+                    selectedTab="{!v.selectedTab}"
+                    mainCPDData="{!v.mainCPDData}" group2DefaultImage="{!v.group2DefaultImage}" group1DefaultImage="{!v.group1DefaultImage}"
+                    plannedSummary="{!v.plannedSummary}"
+                    enrolledSummary="{!v.enrolledSummary}"
+                    progressSummary="{!v.progressSummary}"
+                  />
+                </aura:if>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </body>
+  </aura:if>
+        <!--Content for Non-Member-->
+  <aura:if
+    isTrue="{!v.cpdPlanData.userDeatils.ProfileId=='00e7F000000ZqfPQAS'}"
+  >
+    <c:mycpdNonMember cpdPlanData="{!v.cpdPlanData.userDeatils}" />
+  </aura:if>
+</aura:component>

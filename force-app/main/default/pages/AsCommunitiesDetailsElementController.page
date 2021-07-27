@@ -1,0 +1,25 @@
+<apex:page docType="html-5.0" sidebar="false" showHeader="false" standardStylesheets="false" >
+    <apex:includeScript value="{!URLFOR($Resource.almond_uilib, '/js/jquery.min.js')}"/>
+    <script type="text/javascript">
+
+        searchTimeout = setTimeout(function() {
+            jQuery(window).load(function() {
+                ///setTimeout(function() {
+                    var iframe = $('iframe');
+                    if( $('.entityNameTitle', parent.document).html() == 'Training Plan' ){
+                        $('.slds-page-header.forceHighlightsStencilDesktop', parent.document).remove();
+                        $('.forceCommunityRecordDetail', parent.document).remove();
+                        $('.slds-col--padded.contentRegion.comm-layout-column', parent.document).remove(); 
+                    } 
+                    else {
+                         $('.slds-col--padded.comm-content-header.comm-layout-column .oneAlohaPage.forceCommunityVisualforcePage ', parent.document).remove();  
+                    } 
+    
+             //   }, 1500);
+            
+             }); 
+        }.bind(this),1500);
+                  
+    </script>
+    
+</apex:page>

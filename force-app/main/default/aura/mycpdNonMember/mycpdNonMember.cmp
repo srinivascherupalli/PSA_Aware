@@ -1,0 +1,210 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  access="global"
+>
+  <!--Attribute-->
+  <aura:attribute name="cpdPlanData" type="User" />
+  <aura:attribute
+    name="iconList"
+    type="List"
+    default="[{
+  'title': 'Free access to CPD, choosing from Australia\'s largest pharmacist CPD catalogue',
+  'icon': 'standard:knowledge'
+},
+{ 'title': 'Tracking their CPD quickly and easily', 'icon': 'standard:education' },
+{
+  'title': 'Saving time planning their CPD using PSA\'s CPD Planning tool',
+  'icon': 'standard:job_profile'
+},
+{
+  'title': 'Free subscription to the award winning Australian Pharmacist journal',
+  'icon': 'standard:account'
+},
+{ 'title': 'Free events, networking, book discounts and much more.', 'icon': 'standard:event' }
+]"
+  />
+  <!--PageHero-->
+  <div class="page-wrapper">
+    <section class="page-hero">
+      <img
+        src="{!$Resource.PSAFED + '/dist/images/My-CPD-Year-Non-member.jpg'}"
+        class="page-hero__bg-img"
+      />
+      <lightning:breadcrumbs>
+        <lightning:breadcrumb label="My PSA" href="/s/education-catalogue" />
+        <lightning:breadcrumb label="My CPD year" href="#" />
+      </lightning:breadcrumbs>
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <div class="page-hero__heading-wrapper">
+              <h1 class="page-hero__heading">Not a PSA member yet?</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-sm-10">
+          <div class="uiOutputRichText">
+            <p>
+              <h2>Benefit from CPD you can trust </h2>
+              <p
+                >Become a PSA Member and access relevant, evidence based and
+                trusted CPD all in one place. Experience personalised and
+                relevant CPD content that enables you to fulfil your career
+                potential, all while equipping you to respond to current and
+                emerging health care needs</p
+              >
+              <p
+                >As a PSA Member, your CPD plan is automatically created upon
+                joining and at the start of each new CPD year, so that you can
+                keep track of your CPD progress. All online CPD activities and
+                accredited events that you attend are automatically recorded in
+                your CPD plan. It’s quick and easy to add any PSA CPD material
+                to your CPD plan for access later.</p
+              >
+              <h3>Why choose PSA CPD?</h3>
+              <ul>
+                <li
+                  >Meet the Pharmacy Board of Australia’s registration
+                  requirements</li
+                >
+                <li
+                  >Access high quality, accredited and peer-reviewed content
+                  provided by the peak body for pharmacists in Australia</li
+                >
+                <li
+                  >Ensure your practice is current with relevant learning,
+                  including guidance on emerging health needs, and legislative
+                  or regulatory updates</li
+                >
+                <li
+                  >Manage all your CPD needs from planning, doing to automated
+                  recording and reporting using our intuitive CPD Planning
+                  Tool</li
+                >
+                <li
+                  >Undertake education in a variety of formats tailored to a
+                  range of practice settings</li
+                >
+                <li
+                  >Provide CPD Reports with ease for AHPRA or QCPP
+                  compliance</li
+                >
+              </ul>
+              <div class="mt-1 pt-1 border-top mb-1 border-bottom">
+                <c:IconGrid
+                  title="Not a PSA Member? Members enjoy:"
+                  iconList="{!v.iconList}"
+                />
+              </div>
+              <h3>Plus you get more</h3>
+              <ul>
+                <li
+                  ><strong>Free</strong> professional pharmacist telephone
+                  advice from a senior professional pharmacist</li
+                >
+                <li
+                  ><strong>Free</strong> and <strong>discounted</strong> events
+                  and workshops including up to <strong>$400</strong> off major
+                  conferences</li
+                >
+                <li
+                  ><strong>Free</strong> subscription to of the award-winning
+                  <i>Australian Pharmacist</i> journal</li
+                >
+                <li
+                  ><strong>Discounts</strong> on required pharmacy texts
+                  including up to <strong>$168 off</strong> the regularly
+                  updated digital APF and more</li
+                >
+                <li
+                  >Updated information on practice changes by being amongst the
+                  <strong>first to know </strong> including the latest standards
+                  and guidelines</li
+                >
+                <li
+                  >Support from the professional body that
+                  <strong> represents you </strong> and the interests of all
+                  Australian registered pharmacists including your voice to
+                  government</li
+                >
+                <li
+                  >To use the post-nominal MPS to
+                  <strong>demonstrate your commitment </strong> to the
+                  profession.
+                </li>
+              </ul>
+            </p>
+          </div>
+          <div
+            class="course-body__general course-body__general--cta text-lg text-left"
+          >
+            <span class="course-body__attribute-icon-wrapper">
+              <lightning:icon iconName="utility:note" />
+            </span>
+            <div class="uiOutputRichText">
+              <h3
+                >PSA would love to welcome you to the Australian peak body that
+                champions pharmacists.</h3
+              ><p
+                >Call our <strong>Member Services Team</strong> on
+                <strong>1300 369 772</strong>.<br /> Or sign up online now!</p
+              >
+              <p
+                ><a
+                  href="{!'https://psa.secure.force.com/membershipsignup?nonmemberaccountid='+v.cpdPlanData.AccountId}"
+                  class="btn"
+                  >Join PSA Today</a
+                ></p
+              >
+            </div>
+            <img
+              src="{!$Resource.PSAFED + '/dist/images/SideImage_3.jpg'}"
+              class="course-body__general--img"
+            />
+          </div>
+          <div
+            class="course-body__general course-body__general--blue text-lg text-center"
+          >
+            <div class="uiOutputRichText">
+              <h3>Invest in your pharmacy future</h3
+              ><p
+                >Call our<strong>Member service Team </strong> on 1300 369
+                772.</p
+              >
+              <p
+                ><a
+                  href="{!'https://psa.secure.force.com/membershipsignup?nonmemberaccountid='+v.cpdPlanData.AccountId}"
+                  class="btn btn--outline"
+                  >Join PSA Today</a
+                ></p
+              >
+            </div>
+          </div>
+
+          <div
+            class="course-body__general course-body__general--grey text-lg text-center"
+          >
+            <div class="uiOutputRichText">
+              <h3>CPD Activities</h3
+              ><p
+                >PSA provides certificates for all CPD activities completed with
+                PSA</p
+              >
+              <p
+                ><a
+                  href="/s/ascpd-learning-summary/AsCPD_Learning_Summary__c/"
+                  class="btn"
+                  >Access your Certificates</a
+                ></p
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</aura:component>

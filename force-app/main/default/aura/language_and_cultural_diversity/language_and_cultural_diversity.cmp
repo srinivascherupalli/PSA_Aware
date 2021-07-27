@@ -1,0 +1,219 @@
+<aura:component controller="languageCulturalDiversityController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+    <aura:registerEvent name="Enrolment_Event" type="c:EnrolmentActiveStep"/>
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="accountId" type="String" />
+    <aura:attribute name="enrolId" type="String" />
+
+    <aura:attribute name="countryofbirth" type="List" default="[
+    { 'label' : 'Australia', 'value' : 'Australia' },
+    { 'label' : 'Other', 'value' : 'Other' }
+    ]"/>
+
+    <aura:attribute name="options" type="List" default="[
+        { 'label' : 'Yes', 'value' : 'true' },
+        { 'label' : 'No', 'value' : 'false' }
+    ]"/>
+    <aura:attribute name="AS_Aboriginal_Torres_Strait_Islander__pc" type="Object[]"/>
+
+    <aura:attribute name="account" type="Account"  default="{
+        'sobjectType': 'Account',                                                                                   
+        'AS_Country_of_Birth__pc' : '',
+        'AS_City_of_Birth__pc' : '',
+        'AS_Australian_Citizen__pc' : '',
+        'AS_Aboriginal_Torres_Strait_Islander__pc' : '',
+        'AS_BG_Speaks_Languages_Other_Than_Englis__pc' : '',
+        'AS_Languages_spoken_other_than_English__pc' : ''
+    }"/>
+
+    <aura:attribute name="enrolment" type="Enrolment_Form__c" default="{
+        'sobjectType': 'Enrolment_Form__c',
+        'AS_Country_of_Birth__c' : '',
+        'AS_City_of_Birth__c' : '',
+        'Enrolment_Status__c' : '',
+        'AS_Languages_spoken_other_than_English__c' : '',
+        'AS_Australian_Citizen__c' : '',
+        'AS_Aboriginal_or_Torres_Strait_Islander__c' : '',
+        'AS_BG_Speaks_Languages_Other_Than_Englis__c' : ''                                                                                           
+    }"/>
+
+
+    <aura:attribute name="otherdisabilityif" type="Boolean" default="false" />
+ 
+    <aura:attribute name="otherlanguageif" type="Boolean" default="false" />
+
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+
+    <aura:attribute name="othercountry" type="String"/>
+
+    <aura:attribute name="showfreetext" type="Boolean" default="false" />
+
+    <div class="slds-container ">
+
+        <div class="slds-text-heading_small slds-title"><b>Language &amp; Cultural Diversity</b></div>
+        <hr class='hrstyle'></hr>
+
+        <form class="languageCulturalDiversityForm">
+            <aura:if isTrue="{!not(empty(v.enrolment.AS_Country_of_Birth__c))}">
+                <lightning:radioGroup 
+                    aura:id="countrybirth"
+                    label="In which country were you born?"
+                    options="{! v.countryofbirth }"
+                    value="{!v.othercountry}"
+                    type="radio"
+                    required="true"
+                    disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"
+                />
+            <aura:set attribute="else">
+                <lightning:radioGroup 
+                    aura:id="countrybirth"
+                    label="In which country were you born?"
+                    options="{! v.countryofbirth }"
+                    value="{!v.othercountry}"
+                    type="radio"
+                    required="true"
+                    disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"
+                />
+            </aura:set>
+            </aura:if>            
+
+            <aura:if isTrue="{!v.othercountry == 'Other' }">
+                <aura:if isTrue="{!not(empty(v.enrolment.AS_Country_of_Birth__c))}">
+                    <lightning:input aura:id="othercountryid" name="othercountryid" label="Please specify:" value="{! v.enrolment.AS_Country_of_Birth__c }" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                <aura:set attribute="else">
+                    <lightning:input aura:id="othercountryid" name="othercountryid" label="Please specify:" value="{! v.account.AS_Country_of_Birth__pc }" />
+                </aura:set>
+                </aura:if>
+            </aura:if>
+
+
+            <aura:if isTrue="{!not(empty(v.enrolment.AS_City_of_Birth__c))}">
+                <lightning:input aura:id="citybirth" name="citybirth" label="In which city were you born?" value="{! v.enrolment.AS_City_of_Birth__c }" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+            <aura:set attribute="else">
+                <lightning:input aura:id="citybirth" name="citybirth" label="In which city were you born?" value="{! v.account.AS_City_of_Birth__pc }" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+            </aura:set>
+            </aura:if>
+
+            <div class="slds-form-control">
+                <aura:if isTrue="{!not(empty(v.enrolment.AS_BG_Speaks_Languages_Other_Than_Englis__c))}">
+                    <lightning:radioGroup 
+                        aura:id="otherthanenglish"
+                        name="otherthanenglish"
+                        label="Do you speak a language other than English at home?"
+                        options="{! v.options }"
+                        value="{! v.enrolment.AS_BG_Speaks_Languages_Other_Than_Englis__c }"
+                        type="radio"
+                        onchange="{! c.speakChange }"
+                        required="true"
+                        disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"
+                    />
+                <aura:set attribute="else">
+                    <lightning:radioGroup 
+                        aura:id="otherthanenglish"
+                        name="otherthanenglish"
+                        label="Do you speak a language other than English at home?"
+                        options="{! v.options }"
+                        value="{! v.account.AS_BG_Speaks_Languages_Other_Than_Englis__pc }"
+                        type="radio"
+                        onchange="{! c.speakChange }"
+                        required="true"
+                        disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"
+                    />
+                </aura:set>
+                </aura:if>
+                <lightning:helptext class="slds-help-text" content="If more than one language, indicate the one that is spoken most often"/>
+            </div>
+
+            <aura:if isTrue="{!or( v.enrolment.AS_BG_Speaks_Languages_Other_Than_Englis__c == 'true', v.account.AS_BG_Speaks_Languages_Other_Than_Englis__pc == 'true' )}">
+                <aura:if isTrue="{!not(empty(v.enrolment.AS_Languages_spoken_other_than_English__c	))}">
+                    <lightning:input aura:id="otherlanague" name="otherlanague" label="Other Language" value="{! v.enrolment.AS_Languages_spoken_other_than_English__c }" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                <aura:set attribute="else">
+                    <lightning:input aura:id="otherlanague" name="otherlanague" label="Other Language" value="{! v.account.AS_Languages_spoken_other_than_English__pc }" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </aura:set>
+                </aura:if>
+            </aura:if>
+    
+
+            <aura:if isTrue="{!not(empty(v.enrolment.AS_Australian_Citizen__c))}">
+                <lightning:radioGroup 
+                    aura:id="auscitizen"
+                    name="auscitizen"
+                    label="Are you an Australian citizen?"
+                    options="{! v.options }"
+                    value="{! v.enrolment.AS_Australian_Citizen__c }"
+                    type="radio"
+                    disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"
+                />
+            <aura:set attribute="else">
+                <lightning:radioGroup 
+                    aura:id="auscitizen"
+                    name="auscitizen"
+                    label="Are you an Australian citizen?"
+                    options="{! v.options }"
+                    value="{! v.account.AS_Australian_Citizen__pc }"
+                    type="radio"
+                    disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"
+                />
+            </aura:set>
+            </aura:if>
+
+            <div class="slds-form-control">
+                <aura:if isTrue="{!not(empty(v.enrolment.AS_Aboriginal_or_Torres_Strait_Islander__c	))}">
+                    <lightning:radioGroup 
+                        aura:id="torresstraight"
+                        name="torresstraight"
+                        label="Are you of Aboriginal or Torres Strait Islander origin?"
+                        options="{! v.AS_Aboriginal_Torres_Strait_Islander__pc }"
+                        value="{! v.enrolment.AS_Aboriginal_or_Torres_Strait_Islander__c }"
+                        type="radio"
+                        disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"
+                    />
+                <aura:set attribute="else">
+                    <lightning:radioGroup 
+                        aura:id="torresstraight"
+                        name="torresstraight"
+                        label="Are you of Aboriginal or Torres Strait Islander origin?"
+                        options="{! v.AS_Aboriginal_Torres_Strait_Islander__pc }"
+                        value="{! v.account.AS_Aboriginal_Torres_Strait_Islander__pc }"
+                        type="radio"
+                        disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"
+                    />
+                </aura:set>
+                </aura:if>
+                <lightning:helptext class="slds-help-text" content="For persons of both Aboriginal and Torres Strait Islander origin, mark both ‘Yes’ boxes"/>
+            </div>
+    
+            <div class="slds-m-top_xx-large slds-btn-content">
+                <div class="slds-float_left">
+                    <lightning:button variant="Neutral" class="slds-back-btn" label="Back" title="Back" onclick="{!c.backFunc}"/>
+                    <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{!c.cancelFunc}"/>
+                </div>
+                <div class="slds-float_right">
+
+                    <aura:if isTrue="{!'Draft' == v.enrolment.Enrolment_Status__c}">
+                            
+                        <!-- email button -->
+                        <lightning:button variant="Neutral" class="slds-save-email-btn"  label="Save &amp; Email me a link" title="Save &amp; Email me a link" onclick="{!c.emailFunc}"/> 
+
+                    </aura:if> 
+
+                     <!-- save button -->
+                     <lightning:button variant="brand"  class="slds-save-btn" label="Save and Continue" title="Save &amp; Continue" onclick="{!c.saveFunc}"/>
+
+                </div>
+            </div>
+                
+        </form>
+
+    </div>
+    
+    <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+
+</aura:component>

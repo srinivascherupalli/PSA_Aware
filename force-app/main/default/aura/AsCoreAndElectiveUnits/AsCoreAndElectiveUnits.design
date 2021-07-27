@@ -1,0 +1,4 @@
+<design:component label="AS Elective And Core">
+    <design:attribute name="EnrollmentId"/> 
+    <design:attribute name="AccountId"/> 
+</design:component>

@@ -1,0 +1,24 @@
+<aura:component controller="AS_ReportChartsController" implements="forceCommunity:availableForAllPageTypes" access="global">
+   	<aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="isMember" type="boolean" />
+    
+    <aura:attribute name="ready" type="Boolean" default="false" />
+    <aura:attribute name="displayMsg" type="Boolean" default="false" />
+    <aura:attribute name="displayChart" type="Boolean" default="false" />
+    <aura:if isTrue="{!v.isMember}">
+        <ltng:require scripts="/resource/ChartJS23, /resource/ChartPieceLabel" afterScriptsLoaded="{!c.AS_PsaAction}"/>
+        <div class="slds-grid slds-wrap slds-grid--pull-padded "  >
+            <div class="PSA_main_container">
+                <div class="PSA_CPD_ASR">
+                    <p>CPD Activity Summary Report</p>
+                </div>
+                    <canvas aura:id="AS_psachart" height="200" width="200"></canvas>
+                
+                <aura:if isTrue="{!v.displayMsg}">
+                    <p style="padding-top:80px;padding-bottom:80px;">It looks like you don't have any activity summaries for this CPD plan - why not visit the Education Catalogue to find some courses you might be interested in.</p>
+                </aura:if>
+            </div>
+        </div>
+    </aura:if>
+
+</aura:component>

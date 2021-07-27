@@ -1,0 +1,126 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="PSA">
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    <aura:attribute name="userInfo" type="user"/>
+    <aura:attribute name="currentCPDTargetInfo" type="Decimal"/>
+    <aura:attribute name="currentCPDActivitiesSummaryTotalInfo" type="Integer"/>
+    <aura:attribute name="currentCPDActivitiesSummaryPercentageInfo" type="Double"/>
+    <aura:attribute name="currentCPDInfo" type="AsCPDPlanner__c"/>
+    <aura:attribute name="plansInfo" type="List"/>
+    <aura:attribute name="planId" type="String"/>
+    <aura:attribute name="isSpinner" type="Boolean" default="true" />
+    
+    <div class="cd-mcd">
+        <aura:if isTrue="{!v.userInfo.ProfileId != '00e7F000000ZqTwQAK'}">
+            <aura:if isTrue="{!v.userInfo.ProfileId == '00e7F000000ZqfOQAS'}">
+                <lightning:select label="CPD Plans" name="cd_plans" class="cd-plans" onchange="{!c.onChangePlans}">
+                    <aura:iteration var="plan" items="{!v.plansInfo}">
+                        <aura:if isTrue="{!v.planId == plan.Id}">
+                            <option value="{!plan.Id}" selected="selected">{!plan.Name}</option>
+                            <aura:set attribute="else">
+                                <option value="{!plan.Id}">{!plan.Name}</option>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:select>
+                <div class="cd-mcd-progress-bar">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_11-of-12">
+                            <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!v.currentCPDActivitiesSummaryPercentageInfo}" role="progressbar">
+                                <span class="slds-progress-bar__value" style="{!'width:'+v.currentCPDActivitiesSummaryPercentageInfo+'%'}">
+                                    <span class="slds-assistive-text"><lightning:formattedNumber value="{!v.currentCPDInfo.Total_CPD_Credits_Achieved__c}" minimumFractionDigits="2"/></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-12 cd-target">
+                            Target<br></br><lightning:formattedNumber value="{!v.currentCPDTargetInfo}" minimumFractionDigits="2"/>
+                        </div>
+                    </div>
+                    <div class="slds-form-element cd-ap-checkbox">
+                        <div class="slds-form-element__control">
+                            <div class="slds-checkbox">
+                                <aura:if isTrue="{!v.currentCPDInfo.AS_Accredited_pharmacist__c}">
+                                    <input data-id="{!v.planId}" onclick="{!c.submitAccreditedPharmacist}" type="checkbox" id="checkbox-ap" checked="checked" />
+                                    <aura:set attribute="else">
+                                        <input data-id="{!v.planId}" onclick="{!c.submitAccreditedPharmacist}" type="checkbox" id="checkbox-ap" checked="" />
+                                    </aura:set>
+                                </aura:if>
+                                <label class="slds-checkbox__label" for="checkbox-ap">
+                                    <span class="slds-checkbox_faux"></span>
+                                    <span class="slds-form-element__label">I am an accredited pharmacist.</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters cd-mcd-plan-summary">
+                        <div class="slds-col slds-size_3-of-12">
+                            <div>Group 1 Credits</div>
+                            <div class="cd-credits"><lightning:formattedNumber value="{!v.currentCPDInfo.AS_Total_Group_1_CPD__c}" minimumFractionDigits="2"/></div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <div>Group 2 Credits</div>
+                            <div class="cd-credits"><lightning:formattedNumber value="{!v.currentCPDInfo.AS_Total_Group_2_CPD__c}" minimumFractionDigits="2"/></div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <div>Group 3 Credits</div>
+                            <div class="cd-credits"><lightning:formattedNumber value="{!v.currentCPDInfo.AS_Total_Group_3_CPD__c}" minimumFractionDigits="2"/></div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <div>Total Credits</div>
+                            <div class="cd-credits"><lightning:formattedNumber value="{!v.currentCPDInfo.Total_CPD_Credits_Achieved__c}" minimumFractionDigits="2"/></div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="cd-mcd-link-tabs">
+                    <li class="cd-link-active"><a href="{!'/s/my-cpd-plan?id=' + v.planId}" title="Plan">Plan</a></li>
+                    <li><a href="{!'/s/my-cpd-do?id=' + v.planId}" title="Do">Do</a></li>
+                    <li><a href="{!'/s/my-cpd-record?id=' + v.planId}" title="Record">Record</a></li>
+                    <li><a href="{!'/s/my-cpd-reflect?id=' + v.planId}" title="Reflect">Reflect</a></li>
+                    <li><a href="{!'/s/my-cpd-report?id=' + v.planId}" title="Report">Report</a></li>
+                </ul>
+                <div class="cd-mcd-link-tab-content">
+                    <h3>Plan your CPD</h3>
+                    <p>As a member, you can use PSA’s CPD Planning tool to identify CPD activities matched to your professional development needs.</p>
+                    <p>It’s quick and easy to add any PSA CPD activities to your plan for easy access later.</p>
+                    <p>PSA’s CPD planning tool helps you to identify:</p>
+                    <ul class="cd-ul">
+                        <li>Relevant competencies for your scope of practice</li>
+                        <li>Professional development needs relevant to these identified competencies</li>
+                        <li>Suitable CPD activities which address your professional development needs</li>
+                    </ul>
+                    <p>Did you know…</p>
+                    <ul class="cd-ul">
+                        <li>That all PSA members have a CPD plan automatically created upon joining and at rollover of the CPD year?</li>
+                        <li>That members can also exclude completed activities from their plan at any stage?</li>
+                        <li>That all online CPD activities and events attended are automatically added to your CPD plan?</li>
+                    </ul>
+                    <p>Simple.</p>
+                    <p>Start planning, or continue planning by choosing from the buttons below:</p>
+                    <div class="cd-mcd-links">
+                        <a href="/s/cpd-planning-tool" class="cd-mcd-link-1"><div>Start planning by identifying your Scope of Practice</div></a>
+                        <a href="/s/cpd-planning-tool" class="cd-mcd-link-2"><div>Find updated CPD activities based on your Scope of Practice</div></a>
+                        <a href="/s/education-catalogue" class="cd-mcd-link-3"><div>Browse the Education Catalogue and Add to Plan</div></a>
+                    </div>
+                    <p>The CPD planning tool is based on the 2016 National Competency Standards Framework.</p>
+                </div>
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!v.isSpinner}">
+                        <p></p>
+                        <aura:set attribute="else">
+                            <p>Not a PSA Member? Members enjoy:</p>
+                            <ul class="cd-ul">
+                                <li> Free access to CPD, choosing from Australia’s largest pharmacist CPD catalogue</li>
+                                <li>Tracking their CPD quickly and easily</li>
+                                <li>Saving time planning their CPD using PSA’s CPD Planning tool</li>
+                                <li>Free subscription to the award winning Australian Pharmacist journal</li>
+                                <li>Free events, networking, book discounts and much more.</li>
+                            </ul>
+                            <br/>
+                            <p>PSA would love to welcome you to the Australian peak body that champions pharmacists.</p>
+                            <p><a class="slds-button slds-button_brand" target="_blank" href="https://psa.secure.force.com/membershipsignup">Join PSA today!</a> or call us on 1300 369 772.</p>
+                        </aura:set>
+                    </aura:if>
+                </aura:set>
+            </aura:if>
+        </aura:if>
+    </div>
+</aura:component>

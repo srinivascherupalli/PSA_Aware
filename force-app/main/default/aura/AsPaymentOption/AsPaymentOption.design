@@ -1,0 +1,4 @@
+<design:component label="AS Payment Option">
+    <design:attribute name="enrollmentId"/> 
+    <design:attribute name="accountId"/> 
+</design:component>

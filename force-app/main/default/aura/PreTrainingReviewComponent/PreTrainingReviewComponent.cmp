@@ -1,0 +1,237 @@
+<aura:component controller = "PreTrainingReviewController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    
+    <!--ltng:require scripts="{!join( ',',$Resource.jquerynew,$Resource.jqueryui)}"
+                  afterScriptsLoaded="{!c.afterScriptsLoaded}" /-->
+    
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="preTrainnigPreviewId" type="String" />
+    <aura:attribute name="parentId" type="String"/>
+    <aura:attribute name="enrolmentStatus" type="String"/>
+    <aura:attribute name="sortableId" type="String" default="sortable"/>
+
+    <aura:attribute name="State__c" type="String[]"/>
+    <aura:attribute name="governmentCheck" type="Boolean" default="false" />
+
+    <aura:registerEvent name="Enrolment_Event" type="c:EnrolmentActiveStep"/>
+        
+    <aura:if isTrue="{!'Draft' == v.enrolmentStatus }">
+        <ltng:require scripts="{!$Resource.sortablejs}"
+                  afterScriptsLoaded="{!c.afterScriptsLoaded}" />
+    </aura:if>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}" />
+    <aura:attribute name="pretrainingreview" type="Pre_Training_Review__c" default="{
+        'sobjectType': 'Pre_Training_Review__c',
+        'Current_Job_Role__c': '',
+        'Learning_preferences__c': '',
+        'Computer_Skills__c': '',
+        'Difficult_Assessment_Methods__c': '',
+        'Employment_duration_for_current_position__c': '',
+        'Employment_Goals__c': '',
+        'Enrolment__c': '',
+        'Government__c': '',
+        'How_do_you_like_to_learn__c': '',
+        'Qualification_Goals__c': '',
+        'S2_S3_Dispensary_Skill__c': '',
+        'Skills_and_Abilities__c': '',
+        'State__c': '',
+        'Work_Experience__c': '',
+        'Support_Required__c': ''
+    }"/>
+    
+    <aura:attribute name="options" type="List" default="[
+        { 'label' : 'Yes', 'value' : 'true' },
+        { 'label' : 'No', 'value' : 'false' }
+    ]"/>
+    
+    <aura:attribute name="Employment_duration_for_current_position__c" type="List"/>
+    <aura:attribute name="S2_S3_Dispensary_Skill__c" type="List"/>
+    <aura:attribute name="Difficult_Assessment_Methods__c" type="List"/>
+    <aura:attribute name="Computer_Skills__c" type="List"/>
+    <aura:attribute name="Support_Required__c" type="List"/>
+    <aura:attribute name="How_do_you_like_to_learn__c" type="List"/>
+    <aura:attribute name="customlist" type="List" default="['test','test2','test3']"/>
+
+    <h2 class="slds-title"><b>Pre-Training Review</b></h2>
+    
+    <div class="slds-container">
+
+        <div class = "contain">
+            <div class="slds-form-element slds-form-element_stacked">
+                <div class="slds-form-element__control">
+                    <lightning:input aura:id="slds-field-required" label="What is your current job role?" disabled="{!'Draft' != v.enrolmentStatus}" type="text" value="{!v.pretrainingreview.Current_Job_Role__c}" required="true"/>
+                </div>
+            </div>
+            
+            <lightning:radioGroup 
+                aura:id="slds-field-required"
+                name="Employment_duration_for_current_position__c"
+                label="How long have you been employed with your organization?"
+                options="{! v.Employment_duration_for_current_position__c }"
+                value="{! v.pretrainingreview.Employment_duration_for_current_position__c }"
+                type="radio"
+                disabled="{!'Draft' != v.enrolmentStatus}"
+            />
+            
+            <div class="slds-form-element slds-form-element_stacked">
+                <div class="slds-form-element__control">
+                    <lightning:textarea aura:id="slds-field-required" label="Describe your work experience over the past 5 years." disabled="{!'Draft' != v.enrolmentStatus}" placeholder="type here..." value="{!v.pretrainingreview.Work_Experience__c}" required="true"/>
+                </div>
+            </div>
+            
+            <lightning:checkboxGroup 
+                aura:id="slds-field-required"
+                name="S2_S3_Dispensary_Skill__c"
+                label="Do you have the S2/S3 or Dispensary skill set?"
+                options="{!v.S2_S3_Dispensary_Skill__c}"
+                value= "{!v.pretrainingreview.S2_S3_Dispensary_Skill__c == null ? '' : v.pretrainingreview.S2_S3_Dispensary_Skill__c}"
+                onchange="{! c.handleChange }"
+                disabled="{!'Draft' != v.enrolmentStatus}"
+            />
+            
+            <lightning:radioGroup 
+                aura:id="slds-field-required"
+                name="Government__c"
+                label="Have you received government funding for any other course?"
+                options="{! v.options }"
+                value= "{!v.pretrainingreview.Government__c}"
+                onchange="{! c.handleChangeGovernment }"
+                type="radio"
+                disabled="{!'Draft' != v.enrolmentStatus}"
+                required="true"
+            />
+
+            <aura:if isTrue="{! v.governmentCheck }">
+                <lightning:select 
+                    aura:id="slds-field-required" 
+                    name="State__c" 
+                    label="State" 
+                    value="{!v.pretrainingreview.State__c}" 
+                    disabled="{!'Draft' != v.enrolmentStatus}"
+                    required="true"
+                >
+                    <option value="">-- None --</option>
+                    <aura:iteration items="{!v.State__c}" var="Stpicklist">
+                        <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == v.pretrainingreview.State__c}"></option>
+                    </aura:iteration>
+                </lightning:select>
+            </aura:if>
+            
+            <div class="slds-form-element slds-form-element_stacked">
+                <div class="slds-form-element__control">
+                    <lightning:textarea aura:id="slds-field-required" label="What are your employment goals?" disabled="{!'Draft' != v.enrolmentStatus}" placeholder="type here..." value="{!v.pretrainingreview.Employment_Goals__c}" required="true"/>
+                </div>
+            </div>
+            <div class="slds-form-element slds-form-element_stacked">
+                <div class="slds-form-element__control">
+                    <lightning:textarea aura:id="slds-field-required" label="How do you see this qualification helping you to achieve these goals?" disabled="{!'Draft' != v.enrolmentStatus}" placeholder="type here..." value="{!v.pretrainingreview.Qualification_Goals__c}" required="true"/>
+                </div>
+            </div>
+            <div class="slds-form-element slds-form-element_stacked">
+                <div class="slds-form-element__control">
+                    <lightning:textarea aura:id="slds-field-required" label="What skills and abilities do you have that relate to this qualification?" disabled="{!'Draft' != v.enrolmentStatus}" placeholder="type here..." value="{!v.pretrainingreview.Skills_and_Abilities__c}" required="true"/>
+                </div>
+            </div>
+            <div class="slds-page-header__title" title="LearningStyleSupport">Learning Style And Support</div>
+            <hr/> 
+            
+            <div class="site-a11y-component">
+                <label class="slds-form-element__label  reoderlabel">How do you like to learn?
+                    <br/>Drag and drop to re-order according to your preference, the first being
+                    <br/>your most preferred and the last being your least preferred
+                </label>
+                
+                <ul id="sortable" class="slds-listbox slds-listbox_vertical" >
+                    <aura:iteration items="{!v.How_do_you_like_to_learn__c}" var="item">
+                        <li><span class="ui-icon ui-icon-arrowthick-2-n-s">⋮</span><p>{!item.label}</p></li>
+                    </aura:iteration>
+                </ul>
+
+            </div>
+            
+            <lightning:checkboxGroup 
+                aura:id="slds-field-required"
+                name="Difficult_Assessment_Methods__c"
+                label="Select the assessment methods that you would find difficult"
+                options="{!v.Difficult_Assessment_Methods__c}"
+                value= "{!v.pretrainingreview.Difficult_Assessment_Methods__c == null ? '' : v.pretrainingreview.Difficult_Assessment_Methods__c}"
+                onchange="{! c.handleChange }"
+                disabled="{!'Draft' != v.enrolmentStatus}"
+            />
+            
+            <lightning:checkboxGroup 
+                aura:id="slds-field-required"
+                name="Computer_Skills__c"
+                label="Can you do the following on a computer?"
+                options="{!v.Computer_Skills__c}"
+                value= "{!v.pretrainingreview.Computer_Skills__c == null ? '' : v.pretrainingreview.Computer_Skills__c}"
+                onchange="{! c.handleChange }"
+                disabled="{!'Draft' != v.enrolmentStatus}"
+            />
+
+            <lightning:checkboxGroup 
+                aura:id="slds-field-required"
+                name="Support_Required__c"
+                label="What support will you need to undertake this qualification?"
+                options="{!v.Support_Required__c}"
+                value= "{!v.pretrainingreview.Support_Required__c == null ? '' : v.pretrainingreview.Support_Required__c}"
+                onchange="{! c.handleChange }"
+                disabled="{!'Draft' != v.enrolmentStatus}"
+            />
+            
+            <!--div class = "slds_button">
+                <lightning:button label="Cancel"
+                                  class="buttoncancel"
+                                  onclick="{!c.cancel}"/>
+                
+                <div class = "buttonfloat">
+                    <lightning:button label="Save and Email me a link"
+                                      class="buttonsendemail"
+                                      onclick="{!c.SaveandEmail}"/>
+                    
+                    <lightning:button label="Save and Continue"
+                                      class="buttonsaveandcontinue"
+                                      onclick="{!c.SaveRecord}"/>
+                </div>
+            </div-->
+            
+            	
+            <!-- buttons here! -->
+            <div class="slds-m-top_xx-large slds-btn-content">
+                <div class="slds-float_left">
+                    <lightning:button variant="Neutral" class="slds-back-btn" label="Back" title="Back" onclick="{!c.backCallback}"/>
+                    <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{!c.cancelCallback}"/>
+                </div>
+                <div class="slds-float_right">
+                    
+                    <aura:if isTrue="{!'Draft' == v.enrolmentStatus}">
+                        
+                        <!-- email button --> 
+                        <lightning:button variant="Neutral" class="slds-save-email-btn"  label="Save &amp; Email me a link" title="Save &amp; Email me a link" onclick="{!c.saveSendLink}"/> 
+                        
+                    </aura:if> 
+                    
+                    <!-- save button -->
+                    <lightning:button variant="brand"  class="slds-save-btn" label="Save and Continue" title="Save &amp; Continue" onclick="{!c.saveRecord}"/>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div><!--slds-form end here-->
+    
+    <!-- spinner -->
+    <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+     <!-- spinner -->
+
+</aura:component>

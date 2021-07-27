@@ -1,0 +1,11 @@
+.THIS .bg-logo-desktop {
+    padding: 30px 15px;
+}
+.THIS .text-center {
+    text-align: center;
+}
+.THIS .img-responsive {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}

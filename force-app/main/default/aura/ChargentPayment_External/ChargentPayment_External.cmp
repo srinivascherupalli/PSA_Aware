@@ -1,0 +1,35 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+	<aura:handler name="paymentTransactionCompleted"
+              event="force:paymentTransactionCompleted"
+              action="{!c.handleTransactionResponse}"/>
+ 
+    <aura:attribute name="accountId" type="String" default="abcd"
+        description="Account to which the transaction details are related"/>
+ 
+    <aura:attribute name="gatewayId" type="String" default="1234"
+        description="Gateway to be used for the transaction"/>
+ 
+    <aura:attribute name="amount" type="Decimal" default="10"
+        description="amount to be charged for the transaction"/>
+ 
+    <aura:attribute name="paymentProvider" type="String" default='SalesforceBilling'
+        description="Payments provider for this component"/>
+ 
+    <aura:attribute name="transactionType" type="String" default='PaymentSale'
+        description="Transaction to be done after submitting the button"/>
+ 
+    <aura:attribute name="transactionParams" type="Object"
+        description="Contains details about account id and gateway id to use" default="{amount: 100, gatewayId: 'a5Y1s000000Il0AEAS'}"/> 
+ 
+    <!--aura:handler name="init" value="{!this}" action="{!c.doInit}"/-->
+ 
+    <force:cardPayment
+          paymentProvider = "{!v.paymentProvider}"
+          transactionType = "{!v.transactionType}"
+          transactionParams = "{!v.transactionParams}"
+          expiryMonthRequired = "true"
+          expiryYearRequired = "true"     
+          hideEmail = "true"                                           
+          addressLine1Label = "Street"
+          payButtonLabel="Save Card"/>
+</aura:component>

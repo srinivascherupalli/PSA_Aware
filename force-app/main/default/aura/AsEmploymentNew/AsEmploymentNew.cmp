@@ -1,0 +1,223 @@
+<aura:component controller="AsEmploymentNewController">
+    
+    <aura:attribute name="recordaccId" type="String"/>
+    <aura:attribute name="recordIdEnrol" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}" />
+
+    <!-- <aura:handler event="force:refreshView" action="{!c.init}" /> -->
+    <!--aura:attribute name="sectionFieldsEnrol" type="Object[]"  /-->
+    
+    <aura:attribute name="enrolment" type="Enrolment_Form__c" />
+    
+    <aura:attribute name="employmentState" type="String[]"/>
+    <aura:attribute name="employmentStatus" type="String[]"/>
+    <aura:attribute name="recentOccupation" type="String[]"/>
+    <aura:attribute name="industry" type="String[]"/>
+
+    <aura:attribute name="defaultindustry" type="String" />
+    
+    <!-- <aura:attribute name="showToast" type="Boolean" default="false" />
+    <aura:attribute name="message" type="String" />
+    <aura:attribute name="toastTheme" type="String" /> -->
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+
+    <h2 class='slds-title'><b>Employment Details</b></h2>
+
+    <div class='slds-container'>
+        
+        <lightning:layout >
+
+            <lightning:layoutItem padding="around-small" size="12">
+                
+                <p class='secondtitle' style='width: 50%;'><b>Where do you currently work?</b></p>
+                <aura:if isTrue="{!v.enrolment.Enrolment_Status__c != 'Draft'}">
+                    <div class="slds-p-bottom_xx-small">
+                        <lightning:input disabled="true" type="text" name=""  variant="label-stacked" class="inputtext" label="Employer/Pharmacy name:" value="{!v.enrolment.AS_Employment_Pharmacy_Name__c}" />
+                    </div>
+                    
+                    <div class="slds-p-bottom_xx-small">
+                        <lightning:input disabled="true"  type="text" name=""  variant="label-stacked" class="inputtext" label="Supervisor/Preceptor name (If applicable):" value="{!v.enrolment.AS_Supervisor_Preceptor_Name__c}" />
+                    </div>
+                    
+                    <div class="slds-p-bottom_xx-small">
+                        <lightning:input disabled="true"  type="text" name=""  variant="label-stacked" class="inputtext" label="Building/property name:" value="{!v.enrolment.AS_Employment_Property_Name__c}" />
+                    </div>
+                    
+                    <div class="slds-p-bottom_xx-small">
+                        <lightning:input disabled="true"  type="text" name=""  variant="label-stacked" class="inputtext" label="Flat/unit details:" value="{!v.enrolment.AS_Employment_Unit_Details__c}" />
+                    </div>
+                    
+                    <div class="slds-p-bottom_xx-small">
+                        <lightning:input disabled="true"  type="text" name=""  variant="label-stacked" class="inputtext" label="Street or lot number:" value="{!v.enrolment.AS_Employment_Street_Number__c}" />
+                    </div>
+                    
+                    <div class="slds-p-bottom_xx-small">
+                        <lightning:input disabled="true"  type="text" name=""  variant="label-stacked" class="inputtext" label="Street Name:" value="{!v.enrolment.AS_Employment_Street__c}" />
+                    </div>
+                    
+                    <div class="slds-p-bottom_xx-small">
+                        <lightning:input disabled="true"  type="text" name=""  variant="label-stacked" class="inputtext" label="Suburb, locality or town:" value="{!v.enrolment.AS_Employment_City__c}" />
+                    </div>
+                    
+                    <div class="slds-p-bottom_small">
+                        <lightning:select  disabled="true"  name="select1" variant="label-stacked" class="picklistfield" label="State/territory:" value="{!v.enrolment.AS_Employment_State__c}">
+                            <option value="">-- None --</option>
+                            <aura:iteration items="{!v.employmentState}" var="Stpicklist">
+                                <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == v.enrolment.AS_Employment_State__c}"></option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                    
+                    <div class="slds-p-bottom_xx-small">
+                        <lightning:input disabled="true"  type="text" name=""  variant="label-stacked" class="inputtext" label="Postcode:" value="{!v.enrolment.AS_Employment_Zip_Postal_Code__c}" />
+                    </div>
+                    
+                    <br/>
+                    
+                    <div class="slds-form-control slds-p-bottom_xx-small">
+                        <lightning:select aura:id="page7-field" disabled="true"  name="select1" required="true" variant="label-stacked" class="picklistfield" label="Of the following categories, which best describes your current employment status?" value="{!v.enrolment.AS_Employment_Status__c}">
+                            
+                            <option value="">-- None --</option>
+                            <aura:iteration items="{!v.employmentStatus}" var="Stpicklist">
+                                <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == v.enrolment.AS_Employment_Status__c}"></option>
+                            </aura:iteration>
+                        </lightning:select>
+                        <lightning:helptext class="helptext" content="For casual, seasonal, contract and shift work, use the current number of hours worked per week to determine whether full time (35 hours or more per week) or part-time employed (less than 35 hours per week)."/> 
+                    </div>
+                    
+                    <div class="slds-p-bottom_xx-small">
+                        <lightning:select aura:id="page7-field" disabled="true"  name="select1" required="true" variant="label-stacked" class="picklistfield" label="Which of the following classifications best describes your current or recent occupation?" value="{!v.enrolment.Recent_Occupation__c}">
+                            
+                            <option value="">-- None --</option>
+                            <aura:iteration items="{!v.recentOccupation}" var="Stpicklist">
+                                <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == v.enrolment.Recent_Occupation__c}"></option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                    
+                    <div class="slds-p-bottom_xx-small">
+                        <lightning:select aura:id="page7-field" disabled="true"  name="select1" required="true" variant="label-stacked" class="picklistfield" label="Which of the following classifications BEST describes the Industry of your current or previous Employer?" value="{!v.enrolment.Industry__c}">
+                            
+                            <option value="">-- None --</option>
+                            <aura:iteration items="{!v.industry}" var="Stpicklist">
+                                <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == v.enrolment.Industry__c}"></option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+               
+                    <!--EndReadOnly-->
+                    
+                    <aura:set attribute="else">
+                        
+                        <div class="slds-p-bottom_xx-small">
+                            <lightning:input disabled="false" type="text" name=""  variant="label-stacked" class="inputtext" label="Employer/Pharmacy name:" value="{!v.enrolment.AS_Employment_Pharmacy_Name__c}" />
+                        </div>
+                        
+                        <div class="slds-p-bottom_xx-small">
+                            <lightning:input disabled="false"  type="text" name=""  variant="label-stacked" class="inputtext" label="Supervisor/Preceptor name (If applicable):" value="{!v.enrolment.AS_Supervisor_Preceptor_Name__c}" />
+                        </div>
+                        
+                        <div class="slds-p-bottom_xx-small">
+                            <lightning:input disabled="false"  type="text" name=""  variant="label-stacked" class="inputtext" label="Building/property name:" value="{!v.enrolment.AS_Employment_Property_Name__c}" />
+                        </div>
+                        
+                        <div class="slds-p-bottom_xx-small">
+                            <lightning:input disabled="false"  type="text" name=""  variant="label-stacked" class="inputtext" label="Flat/unit details:" value="{!v.enrolment.AS_Employment_Unit_Details__c}" />
+                        </div>
+                        
+                        <div class="slds-p-bottom_xx-small">
+                            <lightning:input disabled="false"  type="text" name=""  variant="label-stacked" class="inputtext" label="Street or lot number:" value="{!v.enrolment.AS_Employment_Street_Number__c}" />
+                        </div>
+                        
+                        <div class="slds-p-bottom_xx-small">
+                            <lightning:input disabled="false"  type="text" name=""  variant="label-stacked" class="inputtext" label="Street Name:" value="{!v.enrolment.AS_Employment_Street__c}" />
+                        </div>
+                        
+                        <div class="slds-p-bottom_xx-small">
+                            <lightning:input disabled="false"  type="text" name=""  variant="label-stacked" class="inputtext" label="Suburb, locality or town:" value="{!v.enrolment.AS_Employment_City__c}" />
+                        </div>
+                        
+                        <div class="slds-p-bottom_small">
+                            <lightning:select  disabled="false"  name="select1" variant="label-stacked" class="picklistfield" label="State/territory:" value="{!v.enrolment.AS_Employment_State__c}">
+                                <option value="">-- None --</option>
+                                <aura:iteration items="{!v.employmentState}" var="Stpicklist">
+                                    <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == v.enrolment.AS_Employment_State__c}"></option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+                        
+                        <div class="slds-p-bottom_xx-small">
+                            <lightning:input disabled="false"  type="text" name=""  variant="label-stacked" class="inputtext" label="Postcode:" value="{!v.enrolment.AS_Employment_Zip_Postal_Code__c}" />
+                        </div>
+                        
+                        <div class="slds-form-control slds-p-bottom_xx-small" style="position: relative;">
+                            
+                            <lightning:select aura:id="page7-field" disabled="false"  name="select1" required="true" variant="label-stacked" class="picklistfield" label="Of the following categories, which best describes your current employment status?" value="{!v.enrolment.AS_Employment_Status__c}">
+                                <option value="">-- None --</option>
+                                <aura:iteration items="{!v.employmentStatus}" var="Stpicklist">
+                                    <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == v.enrolment.AS_Employment_Status__c}"></option>
+                                </aura:iteration>
+                            </lightning:select>
+                            
+                            <lightning:helptext class="helptext" content="For casual, seasonal, contract and shift work, use the current number of hours worked per week to determine whether full time (35 hours or more per week) or part-time employed (less than 35 hours per week)."/> 
+                        </div>
+                        
+                        <div class="slds-p-bottom_xx-small">
+                            <lightning:select aura:id="page7-field" disabled="false"  name="select1" required="true" variant="label-stacked" class="picklistfield" label="Which of the following classifications best describes your current or recent occupation?" value="{!v.enrolment.Recent_Occupation__c}">
+                                
+                                <option value="">-- None --</option>
+                                <aura:iteration items="{!v.recentOccupation}" var="Stpicklist">
+                                    <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == v.enrolment.Recent_Occupation__c}"></option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+                        
+                        <div class="slds-p-bottom_xx-small">
+                            <lightning:select aura:id="page7-field" disabled="false"  name="select1" required="true" variant="label-stacked" class="picklistfield" label="Which of the following classifications best describes the Industry of your current or previous Employer?" value="{!v.defaultindustry}">
+                                
+                                <option value="">-- None --</option>
+                                <aura:iteration items="{!v.industry}" var="Stpicklist">
+                                    <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == v.enrolment.Industry__c}"></option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+                    </aura:set>
+                </aura:if>
+
+                <!-- buttons here! -->
+                <div class="slds-m-top_xx-large slds-btn-content">
+                    <div class="slds-float_left">
+                        <lightning:button variant="Neutral" class="slds-back-btn" label="Back" title="Back" onclick="{!c.backCallback}"/>
+                        <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{!c.cancelCallback}"/>
+                    </div>
+                    <div class="slds-float_right">
+
+                        <aura:if isTrue="{!'Draft' == v.enrolment.Enrolment_Status__c}">
+                                
+                            <!-- email button -->
+                            <lightning:button variant="Neutral" class="slds-save-email-btn"  label="Save &amp; Email me a link" title="Save &amp; Email me a link" onclick="{!c.saveEmailLink}"/> 
+
+                        </aura:if> 
+
+                        <!-- save button -->
+                        <lightning:button variant="brand"  class="slds-save-btn" label="Save and Continue" title="Save &amp; Continue" onclick="{!c.saveRecord}"/>
+
+                    </div>
+                </div>
+
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+    </div>
+    
+    <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+
+</aura:component>

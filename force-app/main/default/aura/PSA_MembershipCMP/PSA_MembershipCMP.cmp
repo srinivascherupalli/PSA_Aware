@@ -1,0 +1,234 @@
+<aura:component controller="PSA_MemberShipController" extends="c:PSA_Base" implements="forceCommunity:availableForAllPageTypes">
+
+    <aura:attribute name="paytypeoptions" type="List" default="[
+                                                               { label : 'Pay Monthly', value: 'monthly'},
+                                                               { label : 'Pay Quarterly', value: 'quarterly'},
+                                                               { label : 'Pay Yearly', value: 'annual'}
+                                                               ]" />
+    <aura:attribute name="screenName" type="String" />
+    <aura:attribute name="selectedPackage" type="Object" />
+    <aura:attribute name="premiumBundle" type="Object" />
+    <aura:attribute name="selectedProductId" type="String" />
+    <aura:attribute name="availablePackages" type="List" />
+    <aura:attribute name="colsize" type="Integer" default="3" />
+    <aura:attribute name="frequency" type="String" default="monthly" />
+    <aura:attribute name="displayfrequency" type="String" />
+    <aura:attribute name="selectedRole" type="String" />
+    <aura:attribute name="chkTerms" type="Boolean" />
+    <aura:attribute name="chkPSACoding" type="Boolean" />
+
+    <aura:attribute name="selectedList" type="List" />
+
+    <aura:attribute name="accountId" type="String" />
+    <aura:attribute name="quoteId" type="String" />
+    <aura:attribute name="sessionId" type="String" />
+    <aura:attribute name="orderId" type="String" />
+    <aura:attribute name="invoiceId" type="String" />
+    <aura:attribute name="navObj" type="Object" />
+    <aura:attribute name="isAutoRenew" type="Boolean" default="true" />
+    <aura:attribute name="productName" type="String" />
+    <aura:attribute name="callCount" type="Integer" default="0" />
+    <aura:attribute name="isError" type="Boolean" default="false" />
+    <aura:attribute name="actualAvailablePackages" type="List" />
+    <aura:attribute name="quoteLinesInProgress" type="Boolean" default="false" />
+
+    <aura:handler event="c:PSA_NavigationEvent" action="{!c.handleButtonClick}" />
+
+    <aura:handler name="change" value="{!v.quoteId}" action="{!c.handleQuoteId}" />
+
+    <!--On init handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:renderif isTrue="{!v.isLoading == true}">
+        <h3 class="loaderMsg">
+            This may take a few minutes. We are finalising a few details, and creating your invoice. While we complete this, 
+            give yourself a pat on the back for making a great choice with a PSA membership
+        </h3>
+    </aura:renderif>
+
+    <div class="psa-heading psa-heading-desc text-center">
+        <h1>Choose your membership package</h1>
+        <p>Based on your stage in your career, we recommend the following packages for you.</p>
+    </div>
+    <hr class="psa-hori-line" />
+    <div class="row flex-align-center-desktop block-mobile">
+        <div class="col-sm-8 col-md-8 col-lg-8">
+            <div class="fee-gst-desc">
+                <p>Please note PSA membership is an annual subscription. All prices include GST.</p>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <lightning:combobox name="choosepay" variant="label-hidden" label="Choose Pay" value="{!v.frequency}" placeholder="Choose Pay" options="{! v.paytypeoptions }" onchange="{!c.handleFrequencyChange}" />
+        </div>
+    </div>
+    <div class="row no-gutters">
+        <aura:iteration items="{!v.availablePackages}" var="item" indexVar="index">
+            <div class="{!'membership_pkgs col-sm-6 col-md-' + v.colsize + ' col-lg-' + v.colsize }">
+                <div class="{!item.product.Id == v.selectedProductId ? ( v.availablePackages.length == index + 1 ? 'box-membership-price-table box-membership-price-table-1 psa-border-right': 'box-membership-price-table box-membership-price-table-1') : ( v.availablePackages.length == index + 1 ? 'box-membership-price-table box-membership-price-table-2 psa-border-right': 'box-membership-price-table box-membership-price-table-2')}">
+                    <h4>{!item.product.Name}</h4>
+                    <h2>
+                        <aura:if isTrue="{!item.netprice == '0.00'}">
+                            FREE
+                        </aura:if>
+                        <aura:if isTrue="{!item.netprice != '0.00'}">
+                            <lightning:formattedNumber value="{!item.netprice}" style="currency" currencyCode="AUD" currencyDisplayAs="symbol" />
+                            <div class="payment_frequency"><h4>{!v.displayfrequency}</h4></div>
+                        </aura:if>
+
+                    </h2>
+                    <div class="box-membership-price-table-body">
+                        <h4>Inclusion</h4>
+                        <hr class="psa-hori-line-memb" />
+                        <ul class="membership-price-table-listing membership-price-table-listing-1">
+                            <aura:iteration items="{!item.inclusions}" var="inclusion" indexVar="index">
+                                <aura:if isTrue="{!inclusion != ''}">
+                                    <li>{!inclusion}</li>
+                                </aura:if>
+                            </aura:iteration>
+                        </ul>
+                        <!--<ul class="membership-price-table-listing membership-price-table-listing-1">
+                            <li>Free CPD from Australia's largest pharmacist CPD catalogue</li>
+                            <li>PSA's CPD Planning tool</li>
+                        </ul>-->
+                        <!--<div class="btn-select-package text-center">
+                            <aura:if isTrue="{!item.product.Id == v.selectedProductId}">
+                                <a href="javascript:void(0);" name="{!index}" onclick="{!c.handleSelectPackage}">Selected Package</a>
+                                <aura:set attribute="else">
+                                    <a href="javascript:void(0);" name="{!index}" onclick="{!c.handleSelectPackage}">Select Package <i class="fas fa-arrow-right"></i></a>
+                                </aura:set>
+                            </aura:if>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </aura:iteration>
+        <!--<div class="col-sm-6 col-md-3 col-lg-3">
+            <div class="box-membership-price-table box-membership-price-table-2">
+                <h4>Student</h4>
+                <h2>Free</h2>
+                <div class="box-membership-price-table-body">
+                    <h4>Inclusion</h4>
+                    <hr class="psa-hori-line-memb" />
+                    <ul class="membership-price-table-listing membership-price-table-listing-2">
+                        <li>Free CPD from Australia's largest pharmacist CPD catalogue</li>
+                        <li>PSA's CPD Planning tool</li>
+                        <li>Australian Phramacist journal (11 issues p.a. and online access)</li>
+                    </ul>
+                    <div class="btn-select-package text-center">
+                        <a href="">Select Package <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="visible-sm clearfix"></div>
+        <div class="col-sm-6 col-md-3 col-lg-3">
+            <div class="box-membership-price-table box-membership-price-table-3">
+                <h4>Student</h4>
+                <h2>Free</h2>
+                <div class="box-membership-price-table-body">
+                    <h4>Inclusion</h4>
+                    <hr class="psa-hori-line-memb" />
+                    <ul class="membership-price-table-listing membership-price-table-listing-3">
+                        <li>Free CPD from Australia's largest pharmacist CPD catalogue</li>
+                        <li>PSA's CPD Planning tool</li>
+                        <li>Australian Phramacist journal (11 issues p.a. and online access)</li>
+                        <li>Discounts on books</li>
+                        <li>Webinars and other live digital events (6 p.a.)</li>
+                    </ul>
+                    <div class="btn-select-package text-center">
+                        <a href="">Select Package <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3 col-lg-3">
+            <div class="box-membership-price-table box-membership-price-table-4">
+                <h4>Student</h4>
+                <h2>Free</h2>
+                <div class="box-membership-price-table-body">
+                    <h4>Inclusion</h4>
+                    <hr class="psa-hori-line-memb" />
+                    <ul class="membership-price-table-listing membership-price-table-listing-4">
+                        <li>Free CPD from Australia's largest pharmacist CPD catalogue</li>
+                        <li>PSA's CPD Planning tool</li>
+                        <li>Australian Phramacist journal (11 issues p.a. and online access)</li>
+                        <li>Discounts on books</li>
+                        <li>Webinars and other live digital events (6 p.a.)</li>
+                        <li>FREE events and networking</li>
+                        <li>Discounts on conferences and workshops</li>
+                    </ul>
+                    <div class="btn-select-package text-center">
+                        <a href="">Select Package <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+
+    <div>
+        <aura:iteration items="{!v.availablePackages}" var="item" indexVar="index">
+            <div class="{!'membership_pkg_select_btn col-sm-6 col-md-' + v.colsize + ' col-lg-' + v.colsize }">
+                <div class="{!item.product.Id == v.selectedProductId ? ( v.availablePackages.length == index + 1 ? 'box-membership-price-table-1': 'box-membership-price-table-1') : ( v.availablePackages.length == index + 1 ? 'box-membership-price-table-2': 'box-membership-price-table-2')}">
+
+                    <div class="btn-select-package text-center">
+                        <aura:if isTrue="{!item.product.Id == v.selectedProductId}">
+                            <a href="javascript:void(0);" name="{!index}" onclick="{!c.handleSelectPackage}">Selected Package</a>
+                            <aura:set attribute="else">
+                                <a href="javascript:void(0);" name="{!index}" onclick="{!c.handleSelectPackage}">Select Package <i class="fas fa-arrow-right"></i></a>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+        </aura:iteration>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+            <hr class="psa-hori-line" />
+            <label class="same-contact-label">
+                <input type="checkbox" onchange="{!c.termchanged}" id="psa-checkbox-1" value="{!v.chkTerms}" class="psa-checkbox-1" />
+                <span></span>
+                <span>I have read and accept the <a target="_blank" href="https://www.psa.org.au/media-publications/australian-pharmaceutical-formulary/">Terms and Conditions</a></span>
+            </label>
+            <label class="same-contact-label">
+                <input type="checkbox" onchange="{!c.psaCodechanged}" id="psa-checkbox-2"  value="{!v.chkPSACoding}" class="psa-checkbox-2" />
+                <span></span>
+                <span>As a member of the Pharmaceutical Society of Australia, I agree to abide by the <a target="_blank" href="https://www.psa.org.au/practice-support-industry/ethics/">PSA Code of Ethics</a> and the <a target="_blank" href="https://www.psa.org.au/about/governance/">Constitution</a>.</span>
+            </label>
+            <label class="same-contact-label">
+                <input type="checkbox" onchange="{!c.psaAutoRenewchanged}" id="psa-checkbox-3"  value="{!v.isAutoRenew}" class="psa-checkbox-2" checked="{!v.isAutoRenew}"/>
+                <span></span>
+                <span>I agree to auto-renew my annual membership subscription at the end of the 12 months. Monthly and quarterly payments require agreement to auto-renewal. By proceeding, you are agreeing to PSA’s direct debit <a target="_blank" href="https://www.psa.org.au/about/terms-of-use/direct-debit-request/"> terms and conditions</a>.</span>
+            </label>
+            <aura:if isTrue="{!v.isError}">
+                <hr class="psa-hori-line" />
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="fail-banner slds-align_absolute-center">
+                            <lightning:icon iconName="utility:error" alternativeText="error" title="error" size="large" class="slds-icon slds-icon-text-default" />
+                            <span>An error has occured, please try again later.</span>
+                        </div>
+                    </div>
+                </div>
+            </aura:if>
+            <hr class="psa-hori-line" />
+            <div class="row">
+                <div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
+                    <div class="btn-border">
+                        <a href="javascript:void(0);" onclick="{!c.handleBackButton}">Back</a>
+                    </div>
+                </div>
+                <div class="col-xs-8 col-sm-6 col-md-6 col-lg-6">
+                    <div class="btn-background-border text-right">
+                        <aura:if isTrue="{!v.productName =='Student'}">
+                            <a href="javascript:void(0);" onclick="{!c.handleButtonClick}">Confirm</a>
+                            <aura:set attribute="else">
+                                <a href="javascript:void(0);" onclick="{!c.handleButtonClick}">Review &amp; Confirm</a>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

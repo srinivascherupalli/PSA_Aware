@@ -1,0 +1,307 @@
+<!-- 
+ Author : Jet R. Compayan
+ Description : the client controller via js.
+ Component name : PaymentControllerJS
+--> 
+<apex:component controller="AS_memberPayment"><script>
+
+    function AS_PaymentController ( object ) {
+        
+        /* ---- Variables ---- */
+        this.object = object;
+        
+        this.OpportunityTotal = 0;
+        
+        this.Object_Session = {
+                'PRICEBOOKID' : '', 
+                'OPPORTUNITYID' : '',
+                'ACCOUNTID' : '',
+                'SUBTOTAL'  : 0,
+                'DISCOUNT'  : {
+                    type : '',
+                    value : 0,
+                    coupon : ''
+                },
+                'PAYBY':'',
+                'CARDDETAILS':'',
+                'ACCOUNTDETAILS':'',
+                'HASDISCOUNT' : false, 
+                'TOTAL'     : 0,
+                'ACKNOWLEDGEDBRQSTSRVC' : false,
+                'CONSENTTOGIVESGNTR' : false,
+                'ONCEOFF' : false
+        };
+        
+        this.Object_Session.CardDetailsConstructor = function ( params ) {
+                    
+            this.Name_On_Card = params.Name_On_Card;
+            this.Card_Number = params.Card_Number;
+            this.Card_Type = params.Card_Type;
+            this.Card_Expiry_Month = params.Card_Expiry_Month;
+            this.Card_Expiry_Year = params.Card_Expiry_Year; 
+            this. CCV = params.CCV;
+            
+        };
+
+        this.Object_Session.AccountDetailsConstructor = function ( params ) {
+                    
+            this.Account_Name = params.Account_Name;
+            this.Account_Type = params.Account_Type;
+            this.Account_Number = params.Account_Number;
+            this.Account_Routing_Number= params.Account_Routing_Number;
+            this.First_Payment_Date = params.First_Payment_Date;
+           
+        };
+        
+        this.Object_Session.TOTALDISCOUNT = function( ) {
+
+            var val = 0;
+            if( this.DISCOUNT.type == 'Amount' ) {
+                val =  this.SUBTOTAL  -  this.DISCOUNT.value ;
+            }else{
+                val = this.SUBTOTAL - ( ( this.DISCOUNT.value / 100 ) * this.SUBTOTAL ) ;
+            } 
+            return val;
+
+        };
+        
+        /* ---- END Variables ---- */
+        
+        
+        /* ---- Utilities ---- */
+        
+        /*
+        * Author : Jet
+        * Description: to validate if its empty 
+        * Parameter : value
+        * Return : boolean 
+        */
+        this.isEmpty = function( e ) {
+
+            switch ( e ) {
+                case "":
+                case 0:
+                case "0":
+                case null:
+                case false:
+                case { }:
+                case typeof this == "undefined":
+                    return true;
+                default:
+                    return false;
+            }
+
+        }
+        
+        /*
+        * Author : Jet
+        * Description: taoster configuration
+        * Parameter : none
+        * Return : taoster 
+        */
+        this.initTaost = function( ) { 
+
+            toastr.options = {
+              "closeButton": true,
+              "debug": false,
+              "newestOnTop": true,
+              "progressBar": false,
+              "positionClass": "toast-top-right",
+              "preventDuplicates": false,
+              "onclick": null,
+              "showDuration": "300",
+              "hideDuration": "1000",
+              "timeOut": "5000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+
+        };
+        
+        /*
+        * Author : Jet
+        * Description: use to get the variable value in the url.
+        * Parameter : name of the variable.
+        * Return : Opportuninty Id. 
+        */
+        this.getUrlVar = function ( name ) {
+
+             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+             var regexS = "[\\?&]" + name + "=([^&#]*)";
+             var regex = new RegExp(regexS);
+             var results = regex.exec(window.location.href);
+             if (results == null){
+                return "";
+             }else{
+                return results[1];
+             }
+
+        };
+        
+        /*
+        * Author : Jet
+        * Description: use to convert the value to currency.
+        * Parameter : number , currency symble
+        * Return : Currency.
+        */
+        this.convertToCurrency = function ( n, currency ) {
+
+            return currency + "" + n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+
+        }
+        
+        /* ---- END Utilities ---- */
+        
+        
+        /* ---- Controller ---- */
+        
+        /*
+        * Author : Jet
+        * Description : use to get all data from the server side apex via remote.
+        * Parameter : none.
+        * Return : Account , Opportuninty and Opportunintylineitem.
+        */
+        this.getAllRecords = function ( isFound , AccountDetails , OpportunityDetails ) {
+
+            var param = [ ]; 
+            param[ 0 ] = this.getUrlVar( 'oppId' );
+            Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.AS_memberPayment.paymentAllData}' , param , function( result, event ) {
+                isFound( result );
+                if( result.theOpportunityLineItem.length != 0 ){
+                    OpportunityDetails( result.theOpportunity,result ); 
+                } 
+                AccountDetails( result.theAccount,result ); 
+            } ); 
+
+        };
+                
+    
+        /*
+        * Author : Jet
+        * Description: use to submit data into the server side (apex controller). 
+        * Parameter : JSON String.
+        * Return :  Object .
+        */
+        this.submitAllData = function ( params , processData ) {
+           
+            var param  = params;
+            Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.AS_memberPayment.processData}', param, function( result, event ) {
+                processData( params , result );  
+            });
+            
+        }
+       
+        
+        /*
+        * Author : Jet
+        * Description: use to check the status of the payment. 
+        * Parameter : JSON String.
+        * Return :  Object .
+        */
+        this.checkStatusPayment = function ( paymentStatus ) {
+            
+            var param = []; 
+            param[0] = this.getUrlVar('oppId'); 
+            Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.AS_memberPayment.checkPaymentStatus}', param, function( result, event ) {
+                paymentStatus( result );
+            });  
+            
+        }
+        
+        /*
+        * Author : Jet
+        * Description: use to update the opportunity stage to CLOSE WON. 
+        * Parameter : JSON String.
+        * Return :  Object .
+        */
+        //this.convertToCloseWon = function ( paymentSource  , callBack ) {
+        this.convertToCloseWon = function (callBack) { 
+            
+            var param = []; 
+            param[0] = this.getUrlVar('oppId'); 
+            // param[1] = paymentSource;
+            Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.AS_memberPayment.convertToCloseWon}', param, function( result, event ) {
+                 
+                callBack( result );
+                
+            });  
+            
+        } 
+        
+        this.queueForProcessing = function (callBack) { 
+            var param = []; 
+            param[0] = this.getUrlVar('oppId'); 
+            // param[1] = paymentSource;
+            Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.AS_memberPayment.queueForProcessing}', param, function( result, event ) {
+                callBack( result );
+            });  
+        } 
+        
+        /*
+        * Author : John 
+        * Description: use to update membership, opportunity, order and etc. when doing once off payment of opportunity
+        * Parameter : 
+        * Return :  Object .
+        */
+        this.successOnceOff = function ( onceOffData  , callBack ) {
+            console.log(onceOffData);
+            Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.AS_memberPayment.successOnceOff}', onceOffData, function( result, event ) {
+                 
+                callBack( result );
+                
+            });  
+            
+        }
+
+        /*
+        * Author : Jet
+        * Description: use to update the opportunity stage to CLOSE WON. 
+        * Parameter : JSON String.
+        * Return :  Object .
+        */
+        this.convertToSubEndDate = function ( PSubscriptionId  , callBack ) {
+            
+            var param = []; 
+            param[0] = PSubscriptionId;
+            // param[1] = paymentSource;
+            Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.AS_memberPayment.convertSubsEndDate}', param, function( result, event ) {
+                 
+                callBack( result );
+                
+            });  
+             
+        } 
+				
+				 
+        /*
+        * Author : Jet
+        * Description: use to update the opportunity stage to CLOSE WON. 
+        * Parameter : []
+        	0. PricebookId (Id)
+        	1. coupon code (string)
+        * Return :  Object .
+        */
+        this.addVoucher = function(vCode ,callback){
+        		var param = []; 
+						param[0] = this.getUrlVar('oppId'); 
+						param[1] = vCode[0]; // this is the pricebook Id
+            param[2] = vCode[1]; // this is the coupon code
+            param[3] = this.getUrlVar('tPlanId'); 
+            Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.AS_memberPayment.addVoucher}', param, function( result, event ) {
+                 
+                callback(result);
+                 
+            });  
+
+        } 
+        
+        
+        
+        /* ---- END Controller ---- */
+
+    }
+    
+</script></apex:component>

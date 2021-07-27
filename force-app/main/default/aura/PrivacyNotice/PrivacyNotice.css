@@ -1,0 +1,37 @@
+.THIS.slds-container {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 19px;
+    opacity: 1;
+    padding: 40px 30px 20px;
+    border-radius: 7px;
+    margin-top: 20px;
+}
+
+.THIS h3,
+.THIS .slds-form-element__label {
+    font-size: 18px;
+    color: #607A91;
+    font-weight: bolder;
+}
+
+.THIS p, .THIS li {
+    color: #607A91;
+    font-size: 16px;
+    font: Regular 16px/21px Salesforce Sans;
+}
+
+.THIS .slds-next-btn {
+    font-size: 16px;
+    border: 2px solid #003D79;
+    background: #003D79 0% 0% no-repeat padding-box;
+    border-radius: 6px;
+    opacity: 1;
+    color: #fff;
+    transition: all .25s;
+}
+
+.THIS .slds-next-btn:hover,
+.THIS .slds-next-btn:focus {
+    background: #fff;
+    color: #003D79;
+}

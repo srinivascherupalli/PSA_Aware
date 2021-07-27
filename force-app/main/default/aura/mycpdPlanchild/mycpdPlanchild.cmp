@@ -1,0 +1,52 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  access="global"
+>
+  <div class="uiOutputRichText">
+    <h2>Plan your CPD</h2
+    ><p
+      >Your CPD plan is automatically created upon becoming a PSA member and at
+      the start of each new CPD year to keep track of your yearly CPD progress.
+      All online CPD activities, and accredited events that you attend are
+      automatically recorded into your CPD plan.
+    </p>
+    <div
+      class="course-body__general course-body__general--cta text-left"
+    >
+      <span class="course-body__attribute-icon-wrapper">
+        <lightning:icon iconName="utility:note" />
+      </span>
+      <div class="uiOutputRichText">
+        <h3>CPD Planning Tool</h3>
+        <p>PSA’s CPD Planning Tool helps you to:</p>
+        <ul>
+          <li>Identify relevant competencies for your scope of practice</li>
+          <li
+            >Identify professional development needs based on those competencies
+          </li>
+          <li>Match your professional development needs to CPD activities </li>
+          <li
+            >Generate CPD activity reports to support your Pharmacy Board of
+            Australia, AACP and Internship reporting obligations</li
+          >
+        </ul>
+
+        <a href="/s/cpd-planning-tool" class="btn"
+          >Access the CPD Planning Tool</a
+        >
+      </div>
+      <img
+        src="{!$Resource.PSAFED + '/dist/images/SideImage_2.jpg'}"
+        class="course-body__general--img"
+      />
+    </div>
+  </div>
+  <hr class="my-2" />
+  <div class="uiOutputRichText text-center">
+    <h3 class="mb-1 text-coolGrey">Browse the education Catalogue</h3>
+    <a href="/s/education-catalogue" class="btn"
+      ><div>Browse the Education Catalogue</div></a
+    >
+  </div>
+  <hr class="mt-2" /> <c:didYouKnow />
+</aura:component>

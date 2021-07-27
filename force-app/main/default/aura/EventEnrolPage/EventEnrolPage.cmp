@@ -1,0 +1,251 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" 
+                access="global"
+                controller="EventEnrolPageController">
+
+    <aura:attribute name="events" type="AS_Event__c[]" />
+    <aura:attribute name="learnings" type="Learning__c[]" />
+    <aura:attribute name="icon" type="String" />
+    <aura:attribute name="agreed" type="Boolean"/>
+    <aura:attribute name="activeLearns" type="String" default="true"/>
+    <aura:attribute name="learnOnlyOne" type="Boolean" default="false"/>
+    <aura:attribute name="hasEvent" type="Boolean" default="true"/>
+    <aura:attribute name="isOpen" type="boolean" default="false"/> 
+    <aura:attribute name="event" type="AS_Event__c" />
+    <aura:attribute name="priceBookEntry" type="PriceBookEntry" />
+    <aura:attribute name="eventId" type="String" />
+    <aura:attribute name="learningId" type="String" />
+    <aura:attribute name="currentEventId" type="String" />
+    <aura:attribute name="free" type="boolean" default="true"/>
+    <aura:attribute name="canProceed" type="boolean" default="false"/>
+    <aura:attribute name="proceed" type="boolean" default="true"/>
+    <aura:attribute name="remaining" type="String" default="available"/>
+    <aura:attribute name="modalShow" type="Boolean" default="false"/>
+    <aura:attribute name="member" type="Boolean" default="true"/>
+    <aura:attribute name="trainingId" type="String" />
+    <aura:attribute name="trainingplan" type="Training_Plan__c" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="attend" type="boolean" default="false"/>
+    <aura:attribute name="selected" type="boolean" default="false"/>
+    <aura:attribute name="learnCountTotal" type="Integer" default="0"/>
+    <aura:attribute name="learnCount" type="Integer" default="0"/>
+	<aura:attribute name="isGuest" type="Boolean" default="false"/>
+    <aura:attribute name="LoginModal" type="Boolean" default="false"/>
+    <aura:attribute name="url" type="String" />
+    <aura:attribute name="checkTextAgree" type="String" default="I agree to Terms and Conditions"/>
+<aura:attribute name="urlLogin" type="String" default="https://my.psa.org.au/s/login/"/>
+    <aura:attribute name="trainLearning" type="Map" default="{ a: 'label1', b: 'label2' }" /> 
+    <lightning:navigation aura:id="navService"/>    
+
+    <div class="demo-only demo-only_viewport" style="height:640px">
+
+    	<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+            <div class="slds-modal__container" aura:id="MainDiv">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.close}">
+                        <span>X</span>
+                    </button>
+                    <aura:if isTrue="{!v.LoginModal==false}">
+                    <aura:if isTrue="{!and(v.modalShow == false, v.attend != true)}">
+                        <h2 class="slds-text-heading_medium slds-hyphenate" id="modal-heading-01">Select Dates for the Courses Below</h2>
+                    </aura:if>
+                    <aura:if isTrue="{!and(v.modalShow == true, v.attend == false)}">
+                        <h2 class="slds-text-heading_medium slds-hyphenate" id="modal-heading-01">Select an Event</h2>
+                    </aura:if>
+                    <aura:if  isTrue="{!v.attend == true}">
+                        <h2 class="slds-text-heading_medium slds-hyphenate" id="modal-heading-01">Confirm event details</h2>
+                    </aura:if>
+                    </aura:if>
+                    <aura:if isTrue="{!v.LoginModal==true}">
+                        <img src="{!$Resource.psaLogo}"/>
+                    </aura:if>
+                </header>
+                 <aura:if isTrue="{!v.LoginModal==false}">
+                <aura:if  isTrue="{!v.attend == false}">
+                    
+                    <div class="slds-modal__content slds-p-around_large" aura:id="modal-content-id-1">
+                        <aura:if isTrue="{!v.modalShow == false}">
+                            <aura:if isTrue="{!v.hasEvent == true}">
+                                <aura:iteration items="{!v.learnings}" var="learnings" indexVar="index">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_1-of-12">
+                                            <lightning:input  style="margin-top: 26%;margin-left: 45px;" type="checkbox" aura:id="select" id="{!learnings.Id}" data-id="{!learnings.Id}" value="{!learnings.Id}" data-value="{!index + 1}" disabled="true"/>
+                                        </div>
+                                        <div class="slds-col slds-size_11-of-12">
+                                            <div class="slds-events"  aura:id="learns" onclick="{!c.selectLearning}" id="{!learnings.Id}" data-id="{!learnings.Id}" data-value="{!index + 1}">
+                                                {!learnings.Name}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </aura:iteration>
+                            </aura:if>
+                        </aura:if>
+                        <aura:if isTrue="{!v.hasEvent == false}">
+                            <h2 class="slds-text-heading_medium slds-hyphenate" id="modal-heading-01">No Events Found!</h2>
+                        </aura:if>
+                        <aura:if isTrue="{!v.modalShow == true}">
+                                <aura:if isTrue="{!v.member == true}">
+                                    <aura:iteration items="{!v.events}" var="events" indexVar="index">
+                                        <div class="{!if(events.Space_Remaining__c > 0, 'slds-event', 'slds-event slds-event--soldout')}" onclick="{!c.eventSelectDeselect}" id="{!events.Id}" data-id="{!events.Id}" data-learning="{!events.AS_Session_Campaign__r.Learning__c}" data-value="{!index + 1}">
+                                            <div class="slds-event__date">
+                                                <span class="slds-event__month">{!events.monthOfSD}</span>
+                                                <span class="slds-event__day">{!events.dayOfSD}</span>
+                                            </div>
+                                            <div class="slds-event__meta">
+                                                <h3 class="slds-event__name">{!events.Name}</h3>
+                                                <p class="slds-event__time">
+                                                    <lightning:icon iconName="utility:clock" size="small"/>
+                                                    <span>
+                                                        {!events.dayOfWeekSD}&nbsp;{!events.monthOfSD}&nbsp;{!events.singleDayOfSD},&nbsp;{!events.yearOfSD} @ {!events.st} - <!--{!events.et}&nbsp;&nbsp;-->{!events.dayOfEndWeekSD}&nbsp;{!events.monthOfEndSD}&nbsp;{!events.singleDayEndOfSD},&nbsp;{!events.yearOfED} @ <!--{!events.st} - -->{!events.et}
+                                                    </span>  
+                                                </p>
+                                                <p class="slds-event__location">
+                                                    <lightning:icon iconName="utility:checkin" size="small"/>
+                                                    <span>{!events.AS_Location__c}</span>
+                                                </p>
+                                                <aura:if isTrue="{!events.space == 'available'}">
+                                                    <p class="slds-event__space slds-event__space--available">
+                                                        <lightning:icon iconName="utility:user" size="small"/>
+                                                        <span><b>PLACES AVAILABLE</b></span>
+                                                    </p>
+                                                </aura:if>
+                                                <aura:if isTrue="{!events.space == 'almost_soldout'}">
+                                                    <p class="slds-event__space slds-event__space--almost-soldout">
+                                                        <lightning:icon iconName="utility:user" size="small"/>
+                                                        <span><b>ALMOST SOLD OUT</b></span>
+                                                    </p>
+                                                </aura:if>
+                                                <aura:if isTrue="{!events.space == 'soldout'}">
+                                                    <p class="slds-event__space slds-event__space--soldout">
+                                                        <lightning:icon iconName="utility:user" size="small"/>
+                                                        <span><b>SOLD OUT</b></span>
+                                                    </p>
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </aura:iteration>
+                                </aura:if>
+                                <aura:if isTrue="{!v.member == false}">
+                                    <p>You need to be a Member</p>
+                                </aura:if>
+                            </aura:if>
+                            <!--aura:if isTrue="{!v.hasEvent == false}">
+                                <h2 class="slds-text-heading_medium slds-hyphenate" id="modal-heading-01">No Events Found!</h2>
+                            </aura:if-->
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <aura:if isTrue="{!v.modalShow == false}">
+                            <aura:if isTrue="{!v.free == false}">
+                                <button class="{!if(v.proceed == false, 'slds-button slds-button_brand', 'slds-button slds-button_neutral')}" disabled="{!v.proceed}" data-event-id="{!v.currentEventId}" onclick="{!c.proceedPayment}">Proceed to Payment</button>
+                            </aura:if>
+                            <aura:if isTrue="{!v.free == true}">
+                                <button class="{!if(v.proceed == false, 'slds-button slds-button_brand', 'slds-button slds-button_neutral')}" disabled="{!v.proceed}" data-event-id="{!v.currentEventId}" onclick="{!c.proceedPayment}">Next</button>
+                            </aura:if>
+                        </aura:if>
+                        <aura:if isTrue="{!v.modalShow == true}"> 
+                            <aura:if isTrue="{!v.learnOnlyOne == false}"><button class="slds-button slds-button_back" onclick="{!c.backToLearningList}">Back</button></aura:if>
+                            <button class="{!if(v.canProceed == true, 'slds-button slds-button_brand', 'slds-button slds-button_neutral')}" data-event-id="{!v.currentEventId}" onclick="{!c.proceedToEventDetails}">Proceed</button>
+                        </aura:if>
+                    </footer>
+            	</aura:if>
+                <aura:if  isTrue="{!v.attend == true}">
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-eventd">
+                            <div class="slds-eventd__details">
+                                <span class="slds-eventd__heading--sm">COURSE INFORMATION</span>
+                                <h2 class="slds-eventd__heading--lg">{!v.trainingplan.Name}</h2>
+                                <p class="slds-eventd__text">
+                                    {!v.trainingplan.Description__c}
+                                </p>
+                                <br/><br/>
+                                <span class="slds-eventd__heading--sm">EVENT DETAILS</span>
+                                <h2 class="slds-eventd__heading--lg">{!v.event.Name}</h2>
+                                <div class="slds-eventd__meta">
+                                    <!--p class="slds-eventd__meta_date">
+                                        <lightning:icon iconName="utility:date_time" size="small"/>
+                                        <span>{!v.event.monthOfSD}&nbsp;{!v.event.singleDayOfSD}&nbsp;{!v.event.singleDayEndOfSD}&nbsp;,&nbsp;{!v.event.yearOfSD}</span>
+                                    </p-->
+                                    <p class="slds-eventd__meta_time">
+                                        <lightning:icon iconName="utility:clock" size="small"/>
+                                        <span>{!v.event.dayOfWeekSD}&nbsp;{!v.event.monthOfSD}&nbsp;{!v.event.singleDayOfSD},&nbsp;{!v.event.yearOfSD} @ {!v.event.st} - <!--{!events.et}&nbsp;&nbsp;-->{!v.event.dayOfEndWeekSD}&nbsp;{!v.event.monthOfEndSD}&nbsp;{!v.event.singleDayEndOfSD},&nbsp;{!v.event.yearOfED} @ <!--{!events.st} - -->{!v.event.et}<!--{!v.event.st} - {!v.event.et}--></span>
+                                    </p>
+                                    <p class="slds-eventd__meta_location">
+                                        <lightning:icon iconName="utility:checkin" size="small"/>
+                                        <span>{!v.event.AS_Location__c}</span>
+                                    </p>
+                                    <!--p class="slds-eventd__meta_space">
+                                        <lightning:icon iconName="utility:user" size="small"/>
+                                        <span>{!v.event.Space_Remaining__c} spots remaining</span>
+                                    </p-->
+                                    <aura:if isTrue="{!v.event.space == 'available'}">
+                                        <p class="slds-event__space slds-event__space--available">
+                                            <lightning:icon iconName="utility:user" size="small"/>
+                                            <span><b>PLACES AVAILABLE</b></span>
+                                        </p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.event.space == 'almost_soldout'}">
+                                        <p class="slds-event__space slds-event__space--almost-soldout">
+                                            <lightning:icon iconName="utility:user" size="small"/>
+                                            <span><b>ALMOST SOLD OUT</b></span>
+                                        </p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.priceBookEntry.UnitPrice != null}">
+                                        <p class="slds-eventd__meta_amount">
+                                            <lightning:icon iconName="utility:currency" size="small"/>  
+                                            <span><lightning:formattedNumber style="currency" value="{!v.priceBookEntry.UnitPrice}" maximumFractionDigits="2"/></span>
+                                        </p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.priceBookEntry.UnitPrice == null}">
+                                        <p class="slds-eventd__meta_amount">
+                                            <lightning:icon iconName="utility:currency" size="small"/>  
+                                            <span>$0</span>
+                                        </p>
+                                    </aura:if>
+                                </div>
+                                <aura:if  isTrue="{!v.event.AS_Session_Campaign__r.Description != null}">
+                                    <div class="slds-eventd__desc">Description</div>
+                                    <p class="slds-eventd__text">
+                                        {!v.event.AS_Session_Campaign__r.Description}
+                                    </p>
+                                </aura:if>
+                            </div>
+                            <aura:if isTrue="{!v.icon != null}">
+                                <div class="slds-eventd__image">
+                                    <img src="{!v.icon}"></img>
+                                </div>
+                            </aura:if>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer slds-modal__footer_directional">
+                       <button class="slds-button slds-button_back" onclick="{!c.backToEventList}">Back</button>
+                        	<ui:inputCheckbox aura:id="checked" change="{!c.onCheck}"/>&nbsp;<a href="https://my.psa.org.au/s/article/Cancellation-and-refund-policy" target="_blank" style="margin-right:5%;font-size:16px;"><b>{!v.checkTextAgree}</b></a>
+                        <button class="slds-button slds-button_brand" onclick="{!c.confirm}">Proceed</button> 
+                        <!--button class="slds-button slds-button_brand" onclick="{!c.proceedToPayments}">Proceed to Payment</button--> 
+                        <!--aura:if isTrue="{!v.free == false}">
+                            <button class="slds-button slds-button_brand" data-event-id="{!v.currentEventId}" onclick="{!c.proceedPayment}">Proceed to Payment</button>
+                        </aura:if>
+                        <aura:if isTrue="{!v.free == true}">
+                            <button class="slds-button slds-button_brand" data-event-id="{!v.currentEventId}" onclick="{!c.proceedPayment}">Proceed</button>
+                        </aura:if-->
+                    </footer>
+                </aura:if>
+                </aura:if>
+                <aura:if isTrue="{!v.LoginModal == true}">
+                    <div class="slds-modal__content slds-p-around_large" aura:id="modal-content-id-1">
+                        <center>
+                            <p>You need to be logged in to enrol. To continue, please <b>login</b> or <b>register</b>.</p>
+                            <br/>
+                            <a href="{!v.urlLogin}" class="slds-button slds-button--neutral" style="height:45px;width:260px; ">Login</a>
+                            <br/>
+                            <br/>
+                            <button class="slds-button slds-button--neutral" style="height:45px;width:260px;" onclick="{!c.goToRegister }">Register</button>
+                            <br/>
+                            <br/>
+                        </center>
+                    </div>
+                </aura:if>
+          	</div>
+		</section>
+    
+		<div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+</aura:component>

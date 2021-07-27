@@ -1,0 +1,320 @@
+<aura:component
+  implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable"
+  access="global"
+  controller="TrainingCourseViewController_Lightning"
+>
+    <!--Handlers-->
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <aura:handler event="force:navigateToSObject" action="{!c.navigate}" />
+  <!--aura:registerEvent name="loadMyEvent" type="c:CourseCardDataEvent"/-->
+  <!--aura:handler
+    event="c:CourseCardDataEvent"
+    action="{!c.getValueFromApplicationEvent}"
+  /-->
+    
+    <!--Attribute-->
+    
+  <aura:attribute
+    name="courseList"
+    type="TrainingCourseViewController_Lightning.courseCatalogWrapper"
+  />
+
+  <aura:attribute name="loading" type="boolean" default="false" />
+
+  <!-- Topic variables -->
+  <aura:attribute name="selectedTopicList" type="List" default="[]" />
+  <aura:attribute name="topicList" type="List" default="[]" />
+  <aura:attribute name="topicListShortened" type="List" default="[]" />
+  <aura:attribute name="showFullTopicList" type="boolean" default="false" />
+  <aura:attribute name="showClearTopicButton" type="boolean" default="false" />
+
+  <!-- Type variables -->
+  <aura:attribute name="selectedTypeList" type="List" default="[]" />
+  <aura:attribute name="typeList" type="List" default="[]" />
+  <aura:attribute name="typeListShortened" type="List" default="[]" />
+  <aura:attribute name="showFullTypeList" type="boolean" default="false" />
+  <aura:attribute name="showClearTypeButton" type="boolean" default="false" />
+
+  <!-- Used for calling API -->
+  <aura:attribute name="typeFilter" type="List" default="[]" />
+  <aura:attribute name="deliveryFilter" type="List" default="[]" />
+
+  <!-- Role variables -->
+  <aura:attribute name="selectedRoleList" type="List" default="[]" />
+  <aura:attribute name="roleList" type="List" default="[]" />
+  <aura:attribute name="roleListShortened" type="List" default="[]" />
+  <aura:attribute name="showFullRoleList" type="boolean" default="false" />
+  <aura:attribute name="showClearRoleButton" type="boolean" default="false" />
+
+  <aura:attribute name="showClearAllButton" type="boolean" default="false" />
+
+  <aura:attribute
+    name="accordionActiveSections"
+    type="List"
+    default="['topic','role', 'type']"
+  />
+
+  <aura:attribute name="sortBy" type="string" default="dpn" />
+  <aura:attribute type="Boolean" name="sortAsc" default="true" />
+  <aura:attribute type="String" name="sortField" default="Name" />
+
+  <div class="page-wrapper">
+    <section class="course-filter" aura:id="coureFilterWrapper">
+      <section class="page-hero">
+        <img
+          src="{!$Resource.PSAFED + '/dist/images/My-CPD-Year-Catalogue.jpg'}"
+          alt=""
+          class="page-hero__bg-img"
+        />
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <div class="page-hero__heading-wrapper">
+                <h1 class="page-hero__heading"
+                  >Find education that's right for you</h1
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="container">
+        <div class="row align-items-center course-filter__title-row">
+          <div class="col-12 col-md-3">
+            <h2 class="h3 course-filter__title d-none d-md-block">
+              <lightning:icon iconName="standard:calibration" /> Refine
+            </h2>
+
+            <div class="course-filter__refine-trigger d-md-none text-center">
+              <lightning:button
+                label="Refine results"
+                title="Refine results"
+                onclick="{! c.handleMobileRefineTriggerClick }"
+                iconName="standard:calibration"
+              />
+            </div>
+          </div>
+          <div class="col-12 col-md-9">
+            <div class="row align-items-center">
+              <div class="col-12 col-sm">
+                <p class="course-filter__result-count">
+                  <aura:if isTrue="{!v.loading}">
+                    Loading...
+                    <aura:set attribute="else">
+                      <aura:if isTrue="{!v.courseList.length > 0}">
+                        Showing {!v.courseList.length} result<aura:if
+                          isTrue="{!v.courseList.length != 1}"
+                          >s</aura:if
+                        >
+                        <aura:set attribute="else"> No results found </aura:set>
+                      </aura:if>
+                    </aura:set>
+                  </aura:if>
+                </p>
+              </div>
+              <div class="col-12 col-sm">
+                <lightning:select
+                  aura:id="select"
+                  name="select"
+                  label="sort by"
+                  onchange="{! c.onChange }"
+                >
+                  <option value="dpn">Sort by: Date Published - Newest</option>
+                  <option value="dpo">Sort by: Date Published - Oldest</option>
+                  <option value="az">Sort by: A - Z</option>
+                  <option value="za">Sort by: Z - A</option>
+                  <option value="accExDateOtoN"
+                    >Accreditation Expiry Date - Oldest to Newest</option
+                  >
+                </lightning:select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div
+            class="col-12 col-md-3 course-filter__filter-wrapper"
+            aura:id="filterWrapper"
+          >
+            <div class="d-md-none">
+              <div class="course-filter__close-trigger text-right">
+                <lightning:button
+                  title="Close refine"
+                  onclick="{! c.handleMobileRefineTriggerClick }"
+                  iconName="action:close"
+                />
+              </div>
+              <h2 class="h3 course-filter__title course-filter__title--mobile">
+                <lightning:icon iconName="standard:calibration" /> Refine
+              </h2>
+            </div>
+            <lightning:accordion
+              aura:id="filterAccordion"
+              allowMultipleSectionsOpen="true"
+              activeSectionName="{! v.accordionActiveSections }"
+            >
+              <lightning:accordionSection name="topic" label="Select a Topic">
+                <aura:if isTrue="{!v.showClearTopicButton}">
+                  <div class="course-filter__clear-section-btn-wrapper">
+                    <lightning:button
+                      label="Clear Selections"
+                      title="Clear Selections"
+                      name="Topic"
+                      onclick="{! c.handleClearSectionClick }"
+                      iconName="action:close"
+                    />
+                  </div>
+                </aura:if>
+
+                <aura:if isTrue="{!v.showFullTopicList}">
+                  <lightning:checkboxGroup
+                    name="Topic"
+                    label="Checkbox Group"
+                    options="{!v.topicList }"
+                    value="{!v.selectedTopicList}"
+                    onchange="{! c.handleCheckboxGroupChange }"
+                  />
+                  <aura:set attribute="else">
+                    <lightning:checkboxGroup
+                      name="Topic"
+                      label="Checkbox Group"
+                      options="{!v.topicListShortened }"
+                      value="{!v.selectedTopicList}"
+                      onchange="{! c.handleCheckboxGroupChange }"
+                    />
+                    <div class="expandable-area__trigger-wrapper">
+                      <lightning:button
+                        label="{!'Show (' + (v.topicList.length - v.topicListShortened.length) + ') more'}"
+                        name="Topic"
+                        onclick="{! c.handleShowMoreClick }"
+                      />
+                    </div>
+                  </aura:set>
+                </aura:if>
+              </lightning:accordionSection>
+
+              <lightning:accordionSection
+                name="type"
+                label="Select a Type or delivery Method"
+              >
+                <aura:if isTrue="{!v.showClearTypeButton}">
+                  <div class="course-filter__clear-section-btn-wrapper">
+                    <lightning:button
+                      label="Clear Selections"
+                      title="Clear Selections"
+                      name="Type"
+                      onclick="{! c.handleClearSectionClick }"
+                      iconName="action:close"
+                    />
+                  </div>
+                </aura:if>
+
+                <aura:if isTrue="{!v.showFullTypeList}">
+                  <lightning:checkboxGroup
+                    name="Type"
+                    label="Checkbox Group"
+                    options="{!v.typeList }"
+                    value="{!v.selectedTypeList}"
+                    onchange="{! c.handleCheckboxGroupChange }"
+                  />
+                  <aura:set attribute="else">
+                    <lightning:checkboxGroup
+                      name="Type"
+                      label="Checkbox Group"
+                      options="{!v.typeListShortened }"
+                      value="{!v.selectedTypeList}"
+                      onchange="{! c.handleCheckboxGroupChange }"
+                    />
+                    <div class="expandable-area__trigger-wrapper">
+                      <lightning:button
+                        label="{!'Show (' + (v.typeList.length - v.typeListShortened.length) + ') more'}"
+                        name="Type"
+                        onclick="{! c.handleShowMoreClick }"
+                      />
+                    </div>
+                  </aura:set>
+                </aura:if>
+              </lightning:accordionSection>
+              <lightning:accordionSection name="role" label="Select a Role">
+                <aura:if isTrue="{!v.showClearRoleButton}">
+                  <div class="course-filter__clear-section-btn-wrapper">
+                    <lightning:button
+                      label="Clear Selections"
+                      title="Clear Selections"
+                      name="Role"
+                      onclick="{! c.handleClearSectionClick }"
+                      iconName="action:close"
+                    />
+                  </div>
+                </aura:if>
+
+                <aura:if isTrue="{!v.showFullRoleList}">
+                  <lightning:checkboxGroup
+                    name="Role"
+                    label="Checkbox Group"
+                    options="{!v.roleList }"
+                    value="{!v.selectedRoleList}"
+                    onchange="{! c.handleCheckboxGroupChange }"
+                  />
+                  <aura:set attribute="else">
+                    <lightning:checkboxGroup
+                      name="Role"
+                      label="Checkbox Group"
+                      options="{!v.roleListShortened }"
+                      value="{!v.selectedRoleList}"
+                      onchange="{! c.handleCheckboxGroupChange }"
+                    />
+                    <div class="expandable-area__trigger-wrapper">
+                      <lightning:button
+                        label="{!'Show (' + (v.roleList.length - v.roleListShortened.length) + ') more'}"
+                        name="Role"
+                        onclick="{! c.handleShowMoreClick }"
+                      />
+                    </div>
+                  </aura:set>
+                </aura:if>
+              </lightning:accordionSection>
+            </lightning:accordion>
+            <aura:if isTrue="{!v.showClearAllButton}">
+              <div class="course-filter__clear-all-btn-wrapper">
+                <lightning:button
+                  label="Clear All Selections"
+                  title="Clear All Selections"
+                  onclick="{! c.handleClearAllClick }"
+                  iconName="action:close"
+                />
+              </div>
+            </aura:if>
+          </div>
+          <div class="col-12 col-md-9">
+            <div
+              class="{!v.loading ? 'row course-filter__card-wrapper loading' : 'row course-filter__card-wrapper'}"
+            >
+              <lightning:spinner
+                alternativeText="Loading courses"
+                size="large"
+                variant="brand"
+              />
+
+              <aura:iteration items="{!v.courseList}" var="item">
+                <div class="col-12 col-sm-6 col-md-6 col-lg-4 card-wrapper">
+                  <c:Card
+                    isCourse="{!item.isCourse}"
+                    id="{!item.id}"
+                    href="{!item.href}"
+                    group="{!item.group}"
+                    tag="{!item.tag}"
+                    title="{!item.title}"
+                    duration="{!item.duration}"
+                    deliveryMethod="{!item.deliveryMethod}"
+                    deliveryDescription="{!item.deliveryDescription}"
+                    thumbnail="{!item.thumbnail}"
+                    badge="{!item.badge}"
+                  />
+                </div>
+              </aura:iteration>
+            </div> </div></div
+      ></div>
+    </section>
+  </div>
+</aura:component>

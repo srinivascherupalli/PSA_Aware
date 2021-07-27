@@ -1,0 +1,359 @@
+<!--
+Copyright (c) 2014, salesforce.com, Inc.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+    * Neither the name of the salesforce.com, Inc. nor the names of its contributors
+    may be used to endorse or promote products derived from this software
+    without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<!--
+/*
+    *Author : Almond
+  *Description : method to get all article that belong to article type
+  *Date Created :
+  *Last Modified By : This pag is modified for jira ticket : https://jira.alphasys.com.au/browse/PSA-60. 
+  *Date Last Modified :
+  *Param : 
+  *Return : 
+  */ 
+ -->
+<apex:page controller="TrainingCatalogHomeController" readOnly="true" docType="html-5.0" sidebar="false" showHeader="{!showSFHeader}" standardStylesheets="false" cache="false">
+    
+ <style>
+    .tplan_cus_body {
+        height: 130px;
+        overflow: auto;
+        min-height: 0px !important;
+    }
+
+    /* css style for sort dropdown */
+    .sort-course-main {
+        font-family: "Salesforce Sans", Arial, sans-serif;
+    }
+
+    .sort-course-main select {
+        width: 285px;
+        border-radius: 6px;
+        border: 1px solid #FFFFFF;
+        background: transparent;
+        color: #FFFFFF !important;
+        font-size: 16px !important;
+        padding: 5px 30px 5px 5px;
+        -moz-appearance:none; /* Firefox */
+        -webkit-appearance:none; /* Safari and Chrome */
+        appearance:none;
+        cursor: pointer;
+    }
+
+    .sort-course-main .sort-course-category-res {
+        position: relative;
+        padding: 0 10px;
+    }
+
+    .sort-course-main .sort-course-category-res:before {
+        content: "";
+        display: inline-block;
+        border-bottom: 2px solid #FFFFFF;
+        border-left: 2px solid #FFFFFF;
+        position: absolute;
+        height: 10px;
+        width: 10px;
+        top: 8px;
+        left: 272px;
+        transform: rotate(-45deg);
+        pointer-events: none;
+    }
+
+    .sort-course-main select:focus {
+        outline: none;
+    }
+
+    .sort-course-main select option {
+        color: #003D79;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .sort-course-main select option p {
+        color: #003D79;
+    }
+
+    .sort-course-main .sort-course-category-count p {
+        text-align: right;
+        color: #e1e1e1;
+        font-size: 16px;
+        padding: 5px;
+    }
+
+    .sort-course-main .sort-course-category-count p span {
+        color: #FFFFFF;
+    }
+    
+    @media only screen and (max-width: 768px) {
+
+        .sort-course-main .sort-course-category-res {
+            padding: 0;
+        }
+
+        .sort-course-main .sort-course-category-res:before {
+            left: 265px;
+        }
+
+    }
+
+    @media only screen and (max-width: 425px) {
+        
+        .sort-course-main select{
+            width: 100%;
+        }
+
+        .sort-course-main .sort-course-category-res:before {
+            right: 12px;
+            left: unset;
+        }
+
+        .sort-course-main {
+            text-align: center;
+        }
+
+        .sort-course-main .sort-course-category-count p {
+            text-align: left;
+            margin-top: 10px;
+        }
+
+    }
+    @media only screen and (max-width: 425px) {
+
+        .sort-course-main .sort-course-category-res:before {
+            right: 10px;
+        }
+
+    }
+
+    /* end css sort dropdown */
+
+ </style>
+
+<apex:composition template="LMS_Template">
+
+        <apex:define name="head">
+            <title>{!$Label.ALMS_Training_Catalog}</title>
+        </apex:define>
+
+        <apex:define name="body">
+                        <c:AsOverrideTrainingCatalogHomeCss />
+                        <div class="filter">
+                            <div class="training-plan-header slds-align_absolute-center slds-border_bottom" >
+                                <h1 class="slds-text-heading_large" >Find education that's right for you </h1>  
+                            </div>
+                            <hr/> 
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-large-size--4-of-12 ">
+                                    <h3 class="th-text--default th-text--bold th-color--sand cour-cat-filter-title">
+                                     Select a Role or Career Pathway
+                                    </h3>
+                                    <button class="clear-course clear-role">Clear</button>
+                                    <ul class="inline tag-filter-list tag-filter-list-overflow slds-p-bottom_x-large" data-filter-type="products">
+                                        <apex:repeat value="{!filterTargetAudience}" var="tar">
+                                            <li>
+                                                <a class="label filter-tag target-audience" trainingplan-value="{!filterTargetAudience[tar]}"  href="javascript:void(0)">
+                                                    {!tar}
+                                                </a>
+                                            </li> 
+                                        </apex:repeat>
+                                    </ul>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-large-size--4-of-12 ">
+                                    <h3 class="th-text--default th-text--bold th-color--sand cour-cat-filter-title">
+                                    Select a type or delivery method
+                                    </h3>
+                                    <button class="clear-course clear-type">Clear</button>
+                                    <ul class="inline tag-filter-list tag-filter-list-overflow" data-filter-type="products">
+                                        <apex:repeat value="{!filterTrainingPlanType}" var="type">
+                                            <li>
+                                                <a class="label filter-tag course-type" trainingplan-value="{!filterTrainingPlanType[type]}" href="javascript:void(0)">
+                                                    {!type}
+                                                </a>
+                                            </li>
+                                        </apex:repeat>
+                                         <apex:repeat value="{!filterMethod}" var="del">
+                                            <li>
+                                                <a class="label filter-tag delivery-type" trainingplan-value="{!filterMethod[del]}" href="javascript:void(0)">
+                                                    {!del}
+                                                </a>
+                                            </li>
+                                        </apex:repeat>
+                                    </ul>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-large-size--4-of-12 ">
+                                    <h3 class="th-text--default th-text--bold th-color--sand cour-cat-filter-title">
+                                    Select a Topic
+                                    </h3>
+                                    <button class="clear-course clear-topic">Clear</button>
+                                    <ul class="inline tag-filter-list tag-filter-list-overflow" data-filter-type="products">
+                                        <apex:repeat value="{!filterCategory}" var="cat">
+                                            <li>
+                                                <a class="label filter-tag category" trainingplan-value="{!filterCategory[cat]}" href="javascript:void(0)">
+                                                    {!cat}
+                                                </a>
+                                            </li>
+                                        </apex:repeat>
+                                    </ul>
+                                </div>
+                        </div>
+                        <div class="clear-all-course-div"> 
+                            <button class="clear-all-course">Reset all Filters</button>
+                        </div>
+                        <hr/>
+
+                        <!-- start sort Dropdown
+                        This is use for sorting training plan and training track record.-->
+
+                        <div class="sort-course-main slds-grid slds-wrap">
+                            <div class="sort-course-category-res slds-col slds-size_1-of-2 slds-small-size_1-of-1">
+                                <select id="sort-field-input" >
+                                    <option value="dpn" >Sort: <p>by Date Published - Newest</p></option>
+                                    <option value="dpo" >Sort: <p>by Date Published - Oldest</p></option>
+                                    <option value="az" >Sort: <p>by Name - A to Z</p></option>
+                                    <option value="za" >Sort: <p>by Name - Z to A</p></option>
+                                    <option value="accExDateOtoN" >Accreditation Expiry Date - Oldest to Newest</option>
+                                </select>
+                            </div>
+                            <div class="sort-course-category-count slds-col slds-size_1-of-2 slds-small-size_1-of-1">
+                                <p>Showing Results <span id="train-plan-x-result" ></span> out of <span id="train-plan-y-result" ></span></p>
+                            </div>
+                        </div> 
+
+                        <!-- end sort dropdown -->
+
+                    </div>
+                     
+                    <div class="training-plan-wrap">
+                        
+                        <div class="slds-section slds-is-open" id="lms-section-1">
+                          <h3 class="slds-section__title">
+                            <button aria-controls="expando-unique-id" data-section-toggle-id="#lms-section-1" aria-expanded="true" class=" slds-section__title-action lms-btn-section">
+                                    <span class="slds-truncate" title="Section Title">Courses</span>
+                                    <svg  class="slds-button__icon section-icon-switch" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#switch')}"></use>
+                                    </svg> 
+                                    <svg  class="slds-button__icon section-icon-chevronright" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#chevronright')}"></use>
+                                    </svg> 
+                                    
+                                </button>
+                            </h3>
+                            <div aria-hidden="false" class="slds-section__content lms-section-content" id="expando-unique-id">
+
+                                <div class="slds-grid slds-wrap  slds-p-bottom_xx-large" id="training-plan-box">
+                                </div>
+
+                            </div>
+                        </div> 
+            
+                        <div class="slds-section slds-is-open" id="lms-section-2">
+                          <h3 class="slds-section__title">
+                            <button aria-controls="expando-unique-id" data-section-toggle-id="#lms-section-2" aria-expanded="true" class=" slds-section__title-action lms-btn-section">
+                                    <span class="slds-truncate" title="Section Title">Qualifications</span>
+                                    <svg  class="slds-button__icon section-icon-switch" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#switch')}"></use>
+                                    </svg> 
+                                    <svg  class="slds-button__icon section-icon-chevronright" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#chevronright')}"></use>
+                                    </svg> 
+                                    
+                                </button>
+                            </h3>
+                            <div aria-hidden="false" class="slds-section__content lms-section-content" id="expando-unique-id">
+
+                                <div class="slds-grid slds-wrap  slds-p-bottom_xx-large" id="training-track-box">
+                                </div>
+
+                            </div>
+                        </div> 
+
+              
+
+                    </div>
+
+
+            <apex:actionStatus id="status">
+                <apex:facet name="start">
+                    <apex:outputPanel >
+                        <c:LMSStatus statusComponentId="{!$Component.status}"/>
+                    </apex:outputPanel>
+                </apex:facet>
+            </apex:actionStatus>
+    <apex:includeScript value="{!URLFOR($Resource.almond_uilib, '/js/jquery.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.almond_uilib, '/js/almondutils.min.js')}"/>
+            <script type="text/javascript">
+                    // diri magsugod
+                jQuery(document).ready(function($){
+
+                    $(document.body).delegate('.categoryItem', 'click', function(){
+                        var itemUrl = $(this).attr('item-url');
+                        console.log( itemUrl );
+                        //Retain navigation history
+                        almond.redirectHandlerWithStatus(itemUrl,false);
+                    });
+
+                    jQuery('.lms-btn-section').on('click', function(){
+                        var sectionId = jQuery(this).attr('data-section-toggle-id');
+                        if( jQuery( sectionId+'.slds-is-open' ).length == 1 ){
+                            jQuery( sectionId ).removeClass( 'slds-is-open' );
+                        } else {
+                            jQuery( sectionId ).addClass( 'slds-is-open' );
+                        }
+                    });
+                    
+                    var text_truncate = function(str, length, ending) {
+                        if (length == null) {
+                          length = 100;
+                        }
+                        if (ending == null) {
+                          ending = '...';
+                        }
+                        if (str.length > length) {
+                          return str.substring(0, length - ending.length) + ending;
+                        } else {
+                          return str;
+                        }
+                    };
+
+                    setTimeout(function(){
+                        $('.tplan_cus_desciption').each( function() {
+
+                           var newDescription = text_truncate( $(this).text(), 99 );
+                           $(this).text( newDescription );
+
+                       } );
+                    }, 1000);
+    
+                });
+            </script>
+
+            <c:AsOverrideTrainingCatalogHomeJs />
+
+        </apex:define>
+    </apex:composition>
+</apex:page>

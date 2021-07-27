@@ -1,0 +1,63 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0" >
+	<!-- AsPsaCdpPlanningTool -->
+	<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+
+		<head>
+			<title>Knowledge List View</title>
+			<apex:stylesheet value="{!URLFOR($Resource.AsSldsPsaCdp, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+
+			<c:AsKnowledgeStyleCss />
+		</head>    
+
+		<body>    
+			<!-- REQUIRED SLDS WRAPPER -->  
+			<div class="slds"> 
+				  
+				 
+				<div class="psa-knowledge-wrap">
+					<div class="slds-grid slds-wrap slds-grid--pull-padded slds-p-bottom_xx-large">
+						<div class="slds-col--padded slds-size--1-of-1">
+							<h1 class="slds-text-heading--large  slds-p-bottom_small" id="article-title"></h1>	
+							<p id="article-type-and-date" class="slds-p-bottom_small"></p> 
+						</div>
+						<div class="slds-col--padded slds-size--1-of-2 slds-medium-size--5-of-6 slds-large-size--12-of-12 psa-kwowledge-box--category"> 
+							<div class="psa-knowledge-list--content ">
+								<div class="psa-knowledeg-Article slds-m-bottom_medium" >
+									<p id="article-summary" class="slds-p-bottom_small"></p>
+									<div id="article-exerpts" class="slds-p-bottom_small"></div>  
+									<div id="article-content" class="slds-p-bottom_small"></div> 
+									<p id="article-pdf-searchable"></p> 
+						<!-- 			<div class="slds-text-heading_small slds-p-left_large slds-p-top_xx-large slds-p-bottom_xx-large" id="knowledeg-text" >This is available for download as a PDF below: </div> -->
+									<div id="article-link" class="   slds-p-bottom_large" ></div>
+									<div id="article-pdf-embed" ></div>
+
+								</div>
+							</div> 
+							<div id="if-not-login">
+								 
+							</div> 	
+						</div>
+					</div>
+				</div>
+				<div class="containerInpu"></div>
+			</div>
+		</body>  
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	 	<script src="{!URLFOR($Resource.almond_uilib,  '/js/jquery.min.js')}"></script>
+	 	<script src="{!URLFOR($Resource.almond_uilib, '/js/almondutils.min.js')}"></script>
+
+		<c:AsKnowledgeJS />
+		<script type="text/javascript">
+
+
+			jQuery(document).ready(function($){
+
+				var as = new AsKnowledge();
+				as.Article(); 
+				
+			});
+
+			
+		</script>
+	</html>
+</apex:page>

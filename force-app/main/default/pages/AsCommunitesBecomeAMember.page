@@ -1,0 +1,26 @@
+<apex:page controller="AsCommunitiesBecomeAMember" action="{!theUserId}"  showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0" >
+	<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+		<head>
+			<apex:stylesheet value="{!URLFOR($Resource.AsSldsPsaCdp, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+			<style type="text/css">
+				body {
+					background:  #eff7fa;
+				}
+				.become-member-wrap {
+				    padding: 1%;
+				    text-align: right;
+				    max-width: 1155px;
+   					margin: 0% auto;
+
+				}
+			</style>
+		</head>
+		<body>
+			<div class="become-member-wrap">			
+    			<div class="slds">
+    				<a href="{!memberUrl}" class="slds-button slds-button_brand" >Become A Member</a>
+    			</div>  
+			</div>
+		</body>
+	</html>
+</apex:page>

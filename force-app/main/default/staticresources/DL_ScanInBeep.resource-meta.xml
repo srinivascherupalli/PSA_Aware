@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
+    <cacheControl>Public</cacheControl>
+    <contentType>audio/mpeg</contentType>
+    <description>DL_Events_Cmp Scan in beep sound</description>
+</StaticResource>

@@ -1,0 +1,39 @@
+<apex:component layout="none">
+
+    <apex:attribute name="currentSearchTerm" type="String" description="current page search term" required="false" default=""/>
+    <apex:attribute name="retainInHistory" type="String" description="retain the current page in search history" required="false" default="false"/>
+
+    <div class="slds-form-element">
+        <div class="slds-form-element__control slds-input-has-fixed-addon">
+            <input id="lms-search-input" class="slds-input" type="text" autocomplete="off" maxlength="100" placeholder="{!$Label.ALMS_Search_Users}"/>
+            <span class="slds-form-element__addon">
+                <button class="slds-button slds-button--brand" type="button" id="lms-search-button">{!$Label.ALMS_Search}</button>
+            </span>
+        </div>
+    </div>
+
+    <script>
+        jQuery(document).ready(function($){
+            $("#lms-search-input").val("{!JSENCODE(currentSearchTerm)}");
+            $( document ).on( "click", "#lms-search-button", function() {
+                doAchievementsUserSearch();
+            });
+            $( document ).on( "keypress", "#lms-search-input", function(e) {
+                if(e.which == 13){
+                    e.preventDefault();
+                    doAchievementsUserSearch();
+                }
+            });
+        });
+
+        function doAchievementsUserSearch(){
+            var searchTerm = jQuery('#lms-search-input').val();
+            var searchURL = '{!$Page.AchievementsUserSearch}?q='+encodeURIComponent(searchTerm);
+            if(searchURL){
+                //Do not retain navigation history for searches
+                almond.redirectHandlerWithStatus(searchURL,'{!JSENCODE(retainInHistory)}'=='true');
+            }
+        }
+    </script>
+
+</apex:component>

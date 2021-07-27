@@ -1,0 +1,357 @@
+<!-- AsKnowledgeJS -->
+<apex:component controller="TrainingCatalogHomeController">
+<script type="text/javascript" src="/soap/ajax/28.0/connection.js"></script>
+<script type="text/javascript">
+
+
+/*Author : Jet R. Compayan
+	*Description : this function the wrapper object of the data selected 
+	*Date Created : Apr 26,2018
+	*Last Modified By : 
+	*Date Last Modified : Apr 26,2018
+	*Related Meta Data :
+	*Param :
+	*Return : 
+*/	
+		
+var ObjectTrainingPlan = {
+   'TargetAudience'  : [],
+   'CourseType' : [],
+   'Category' : [],
+   'Delivery' : []
+}
+
+
+var  trainignCont = new AsTrainingController();
+ 
+var filterTrainingPlan = {
+	setDataToFilter : function( typeOfObject , data , methodType  ){
+		
+		if( methodType == 'add' ){
+ 			ObjectTrainingPlan[ typeOfObject ].push( data );
+		} else {
+			ObjectTrainingPlan[ typeOfObject ] = ObjectTrainingPlan[ typeOfObject ].filter(function(e) { return e !== data });
+			
+		}
+
+		var StringifyObject = JSON.stringify( ObjectTrainingPlan );
+ 
+		var param = []; 
+		param[0] = StringifyObject; 
+		param[1] = $('#sort-field-input').val();
+
+		trainignCont.getAllTrainingPlan( param , function( res ) {
+
+			trainignCont.displayAllTrainingPlan( res );
+
+		} );
+
+	},
+	clearObject : function(typeOfObject) {
+		ObjectTrainingPlan[ typeOfObject ] = [];
+		
+		var StringifyObject = JSON.stringify( ObjectTrainingPlan );
+
+		var param = []; 
+		param[0] = StringifyObject; 
+		param[1] = $('#sort-field-input').val();
+
+		trainignCont.getAllTrainingPlan( param , function( res ) {
+
+			trainignCont.displayAllTrainingPlan( res );
+
+		} );
+	},
+	clearallObject : function() {
+		ObjectTrainingPlan['TargetAudience'] = [];
+		ObjectTrainingPlan['CourseType'] = [];
+		ObjectTrainingPlan['Category'] = [];
+		ObjectTrainingPlan['Delivery'] = [];
+		
+		var StringifyObject = JSON.stringify( ObjectTrainingPlan );
+
+		var param = []; 
+		param[0] = StringifyObject; 
+		param[1] = $('#sort-field-input').val();
+
+		trainignCont.getAllTrainingPlan( param , function( res ) {
+
+			trainignCont.displayAllTrainingPlan( res );
+
+		} );
+	}
+	
+}
+
+ 
+
+jQuery(document).ready(function($){
+
+	var StringifyObject = JSON.stringify( ObjectTrainingPlan );
+	 
+	var param = []; 
+	param[0] = StringifyObject; 
+	param[1] = $('#sort-field-input').val();
+
+	trainignCont.getAllTrainingPlan( param , function( res ) {
+		trainignCont.displayAllTrainingPlan( res );
+		var traningPlanY  = 0;
+		//Count Training Plan 
+		res.forEach(function( result ) { 
+			var objectType = result.course;
+			if( objectType == 'PLAN' ){
+				traningPlanY ++;
+			}
+		});
+		$("#train-plan-y-result").text(traningPlanY);
+	 
+
+	} );	
+
+
+	 $( ".target-audience" ).click(function() {
+
+	 	var valItem = $(this).attr('trainingplan-value');
+		if($(this).hasClass("target-audience-selected")) {
+			$(this).removeClass("target-audience-selected");
+			filterTrainingPlan.setDataToFilter( 'TargetAudience' , valItem , 'remove' );
+	   	} else {
+			$(this).addClass("target-audience-selected");
+	   		filterTrainingPlan.setDataToFilter( 'TargetAudience' , valItem , 'add' );
+	   	}
+
+	});
+
+
+	$( ".course-type" ).click(function() {
+
+		var valItem = $(this).attr('trainingplan-value');
+		if($(this).hasClass("course-type-selected")) {
+			$(this).removeClass("course-type-selected");
+			filterTrainingPlan.setDataToFilter( 'CourseType' , valItem , 'remove' );
+		} else {
+			$(this).addClass("course-type-selected");
+			filterTrainingPlan.setDataToFilter( 'CourseType' , valItem , 'add' );
+		}
+
+	});
+
+	$( ".delivery-type" ).click(function() {
+
+		var valItem = $(this).attr('trainingplan-value');
+		if($(this).hasClass("delivery-type-selected")) {
+			$(this).removeClass("delivery-type-selected");
+			filterTrainingPlan.setDataToFilter( 'Delivery' , valItem , 'remove' );
+		} else {
+			$(this).addClass("delivery-type-selected");
+			filterTrainingPlan.setDataToFilter( 'Delivery' , valItem , 'add' );
+		}
+ 
+	});
+	
+	$( ".category" ).click(function() {
+
+		var valItem = $(this).attr('trainingplan-value');
+		if($(this).hasClass("category-selected")) {
+			$(this).removeClass("category-selected");
+			filterTrainingPlan.setDataToFilter( 'Category' , valItem , 'remove' );
+		} else {
+			$(this).addClass("category-selected");
+			filterTrainingPlan.setDataToFilter( 'Category' , valItem , 'add' );
+		}
+
+	});
+	
+	$( ".clear-role" ).click(function() {
+		$('.target-audience').each(function(i, obj) {
+		    if($(this).hasClass("target-audience-selected")) {
+		    	$(this).removeClass("target-audience-selected");
+		    }
+		});
+		filterTrainingPlan.clearObject('TargetAudience');
+	});
+	
+	$( ".clear-type" ).click(function() {
+		$('.course-type').each(function(i, obj) {
+   			if($(this).hasClass("course-type-selected")) {
+				$(this).removeClass("course-type-selected");
+	    	}
+		});
+
+		$('.delivery-type').each(function(i, obj) {
+   			if($(this).hasClass("delivery-type-selected")) {
+				$(this).removeClass("delivery-type-selected");
+	    	}
+		});
+
+		filterTrainingPlan.clearObject('CourseType');
+		filterTrainingPlan.clearObject('Delivery');
+	});
+
+	$( "#sort-field-input" ).change(function(){
+		
+		var StringifyObject = JSON.stringify( ObjectTrainingPlan );
+		
+		var param = []; 
+		param[0] = StringifyObject; 
+		param[1] = $('#sort-field-input').val();
+
+		trainignCont.getAllTrainingPlan( param , function( res ) {
+			trainignCont.displayAllTrainingPlan( res );
+		} );
+	});
+	
+	$( ".clear-topic" ).click(function() {
+		$('.category').each(function(i, obj) {
+		    if($(this).hasClass("category-selected")) {
+					$(this).removeClass("category-selected");
+		    }
+		});
+		filterTrainingPlan.clearObject('Category');
+	});
+	
+	$( ".clear-all-course" ).click(function() {
+		$('.filter-tag').each(function(i, obj) {
+		    if($(this).hasClass("target-audience-selected")) {
+		    	$(this).removeClass("target-audience-selected");
+		    }
+		    
+		    if($(this).hasClass("course-type-selected")) {
+					$(this).removeClass("course-type-selected");
+		    }
+		    
+		    if($(this).hasClass("category-selected")) {
+					$(this).removeClass("category-selected");
+		    }
+
+		    if($(this).hasClass("delivery-type-selected")) { 
+				$(this).removeClass("delivery-type-selected");
+	    	}
+		    
+		});
+		filterTrainingPlan.clearallObject();
+	});
+   
+});
+    
+
+    
+function AsTrainingController() {
+	/*
+	* Author : John hope
+	* Description : this is use for getting all training plan 
+	* Parameter : callback.
+	* Return : Articles
+	*/
+	this.getAllTrainingPlan = function( allFilter , callback ){
+        Visualforce.remoting.Manager.invokeAction( 
+        	'{!$RemoteAction.TrainingCatalogHomeController.allFilterTrainingPlan}',
+        	allFilter,
+        	function( result, event ) {
+        		callback( result );
+        	}
+        );  
+
+	}
+	this.displayAllTrainingPlan = function( res ){
+
+		var planHtml = '';
+		var trackHtml = '';
+		var traningPlanX  = 0;
+		res.forEach(function( result ) { 
+			var trainingHtml='';
+			var r = result.training;
+			var objectType = result.course;
+			var typeColorClass = '';
+			var componentNumberOf ='';
+            // if(jQuery(r.Description__c).text() !== 'undefined'){
+                //var validateDescription = jQuery(r.Description__c).text().substr(0,98);
+            //console.log('test:');// + validateDescription);
+            //}
+            
+			if( objectType == 'PLAN' ){
+				traningPlanX ++;
+				typeColorClass = 'tpl-light-blue';
+				trainingHtml +=' <div class="tplan_cus_box slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--3-of-6 slds-large-size--4-of-12 categoryItem" item-url="{!$Page.TrainingPlanPreview}?id='+ r.Id +'"  >';
+				componentNumberOf = (r.Total_Section_Items__c != 0 ? (r.Total_Section_Items__c == 1 ? r.Total_Section_Items__c + ' Module' : r.Total_Section_Items__c + ' Modules')  : ' Modules' );
+			} else {
+				typeColorClass = 'tpl-dark-blue';
+				trainingHtml +=' <div class="tplan_cus_box slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--3-of-6 slds-large-size--4-of-12 categoryItem" item-url="{!$Page.TrainingTrackDetail}?id='+ r.Id +'"  >';
+				componentNumberOf = (r.Total_Training_Tracks_Items__c != 0 ? (r.Total_Training_Tracks_Items__c == 1 ? r.Total_Training_Tracks_Items__c + ' Course' : r.Total_Training_Tracks_Items__c + ' Courses')  : ' Courses' ); 
+			}
+ 
+			trainingHtml +='    <div class="tplan_container"> '; 
+			trainingHtml +='        <div class="tplan_cus_header '+ typeColorClass +'">';
+			trainingHtml +='            <div class="slds-grid slds-gutters">';
+			trainingHtml +='                 <div class="slds-col slds-size_1-of-3">';
+			trainingHtml +='                         <div class="ttrack_img slds-avatar  slds-avatar--medium" style="background-color:none">';
+			if( objectType  == 'PLAN' && typeof r.Training_Plan_Achievements__r !== 'undefined' ){
+				if( typeof(r.Training_Plan_Achievements__r[0].Achievement__r) !== 'undefined'  && typeof(r.Training_Plan_Achievements__r[0].Achievement__r.Acquired_Image__c) !== 'undefined'  ){
+					trainingHtml +=  $.parseHTML(r.Training_Plan_Achievements__r[0].Achievement__r.Acquired_Image__c)[0].wholeText;
+				}else {
+					trainingHtml +=' <img src={!URLFOR($Resource.AS_membersignup_slice,'psa-member-signup-slices/140x100.png')} />'; 
+				}
+			 
+			} else if( objectType  == 'TRACK' && typeof r.Achievement__r !== 'undefined' ) {
+				if(  typeof r.Achievement__r.Acquired_Image__c !== 'undefined' ){
+				trainingHtml += $.parseHTML(r.Achievement__r.Acquired_Image__c)[0].wholeText;
+				}else{
+					trainingHtml +=' <img src={!URLFOR($Resource.AS_membersignup_slice,'psa-member-signup-slices/140x100.png')} />';
+				}
+			} else {
+				trainingHtml +=' <img src={!URLFOR($Resource.AS_membersignup_slice,'psa-member-signup-slices/140x100.png')} />';
+			}
+			trainingHtml +='                        </div>'; 
+			trainingHtml +='                </div>';
+			trainingHtml +='                <div class="slds-col slds-size_3-of-3 tplan_right_side">';
+			trainingHtml +='                    <p>  '+componentNumberOf+' </p>';
+			trainingHtml +='                	<span p="plan-due-date" style="color: #fff;padding-top: 0px;">'+  ( typeof r.PSA_Marketing_Text__c !== 'undefined' ? r.PSA_Marketing_Text__c  : '' ) +'</p>';
+			trainingHtml +='                </div>';
+			trainingHtml +='            </div>';
+			trainingHtml +='        </div>';
+			trainingHtml +='        <div class="tplan_cus_body">';
+			trainingHtml +='            <h3 class="tplan_cus_title">'+  ( typeof r.Name !== 'undefined' ? r.Name  : '' ) +'</h3>';
+			trainingHtml +='             <p class="tplan_cus_desciption">'+  ( typeof r.Description__c !== 'undefined' ? r.Description__c  : '' ) +'</p>';
+			trainingHtml +='        </div>';
+			trainingHtml +='   </div>';
+			trainingHtml +=' </div>';
+
+			if( objectType == 'PLAN' ){
+				planHtml  += trainingHtml ;
+			} else {
+				trackHtml  += trainingHtml ;
+			} 
+ 
+
+		}); 
+		$('#train-plan-x-result').text(traningPlanX);
+		$('#training-plan-box').html( planHtml );
+		$('#training-track-box').html( trackHtml );
+
+	
+		var ua = window.navigator.userAgent;
+		var is_ie = /MSIE|Trident/.test(ua);
+
+		if ( is_ie ) {
+	   		$("img").each(function(){
+			        var img = $(this);
+			        var image = new Image();
+			        image.src = $(img).attr("src");
+			        var no_image = "{!URLFOR($Resource.AS_membersignup_slice,'psa-member-signup-slices/140x100.png')}";
+			        console.log('image.naturalWidt ',image.naturalWidt);
+			        console.log('image.readyState ',image.readyState);
+			        if (image.naturalWidth == 0 || image.readyState == 'uninitialized'){
+			            $(img).unbind("error").attr("src", no_image).css({
+			                height: $(img).css("height"),
+			                width: $(img).css("width"),
+			            });
+			        }
+			  }); 
+		}
+
+
+	}
+}
+
+</script>
+</apex:component>

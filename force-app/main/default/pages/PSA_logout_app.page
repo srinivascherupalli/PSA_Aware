@@ -1,0 +1,31 @@
+<apex:page controller="AS_PSA_StoreEmail" action="{!onload}" showHeader="false" sidebar="false">
+ 	
+ 	<apex:form >
+        <body style="background: #eff7fa;">
+            <script type="text/javascript"> 
+                var ready = function ( fn ) {
+        
+                    if ( typeof fn !== 'function' ) return;
+                
+                    // If document is already loaded, run method
+                    if ( document.readyState === 'complete'  ) {
+                        return fn();
+                    }
+                
+                    // Otherwise, wait until document is loaded
+                    document.addEventListener( 'DOMContentLoaded', fn, false );
+                };
+
+                ready( function() {
+
+                    localStorage.communityLogoutEmail = '{!emailAddress}';
+
+                });
+           
+            </script> 
+        </body>
+          
+    </apex:form>
+
+    
+</apex:page>

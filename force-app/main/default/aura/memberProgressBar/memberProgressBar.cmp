@@ -1,0 +1,228 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  access="global"
+>
+  <aura:attribute name="mainCPDData" type="AsCPDPlanner__c" />
+  <div class="container">
+    <div class="row">
+      <div
+        class="cd-box cd-dashboard cd-cpd-progress cd-non-member cPSA_Home col-12"
+        data-aura-rendered-by="39:2;a"
+        data-aura-class="cPSA_Home"
+      >
+        <div class="cd-cpd-progress-top row">
+          <div class="col-12 col-md-6">
+            <h2 data-aura-rendered-by="41:2;a">My CPD Progress</h2>
+          </div>
+          <div class="col-12 col-md-6 text-md-right">
+            <h6 class="slds-options-goal align-middle"
+              >CPD Goal
+              <span>
+                <lightning:formattedNumber
+                  value="{!v.mainCPDData.Target__c}"
+                  minimumFractionDigits="2"
+                /> </span
+            ></h6>
+          </div>
+        </div>
+
+        <div class="cd-cpd-progress-inner row">
+          <div class="container" data-aura-rendered-by="43:2;a">
+            <div
+              class="slds-progress-bar row"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="40"
+              role="progressbar"
+            >
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_1_Achieved__c,11),greaterthan(v.mainCPDData.Group_1_Achieved__c,0))}"
+              >
+                <span class="slds-progress-bar__value group-1 col-1"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_1_Achieved__c,21),greaterthan(v.mainCPDData.Group_1_Achieved__c,10))}"
+              >
+                <span class="slds-progress-bar__value group-1 col-2"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_1_Achieved__c,31),greaterthan(v.mainCPDData.Group_1_Achieved__c,20))}"
+              >
+                <span class="slds-progress-bar__value group-1 col-3"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_1_Achieved__c,41),greaterthan(v.mainCPDData.Group_1_Achieved__c,30))}"
+              >
+                <span class="slds-progress-bar__value group-1 col-4"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_1_Achieved__c,51),greaterthan(v.mainCPDData.Group_1_Achieved__c,40))}"
+              >
+                <span class="slds-progress-bar__value group-1 col-5"> </span>
+              </aura:if>
+
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_1_Achieved__c,61),greaterthan(v.mainCPDData.Group_1_Achieved__c,50))}"
+              >
+                <span class="slds-progress-bar__value group-1 col-6"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_1_Achieved__c,71),greaterthan(v.mainCPDData.Group_1_Achieved__c,60))}"
+              >
+                <span class="slds-progress-bar__value group-1 col-7"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_1_Achieved__c,81),greaterthan(v.mainCPDData.Group_1_Achieved__c,70))}"
+              >
+                <span class="slds-progress-bar__value group-1 col-8"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_1_Achieved__c,91),greaterthan(v.mainCPDData.Group_1_Achieved__c,80))}"
+              >
+                <span class="slds-progress-bar__value group-1 col-9"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_1_Achieved__c,101),greaterthan(v.mainCPDData.Group_1_Achieved__c,90))}"
+              >
+                <span class="slds-progress-bar__value group-1 col-12"> </span>
+              </aura:if>
+              <!--group 2 starts here-->
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_2_Achieved__c,11),greaterthan(v.mainCPDData.Group_2_Achieved__c,0))}"
+              >
+                <span class="slds-progress-bar__value group-2 col-1"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_2_Achieved__c,21),greaterthan(v.mainCPDData.Group_2_Achieved__c,10))}"
+              >
+                <span class="slds-progress-bar__value group-2 col-2"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_2_Achieved__c,31),greaterthan(v.mainCPDData.Group_2_Achieved__c,20))}"
+              >
+                <span class="slds-progress-bar__value group-2 col-3"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_2_Achieved__c,41),greaterthan(v.mainCPDData.Group_2_Achieved__c,30))}"
+              >
+                <span class="slds-progress-bar__value group-2 col-4"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_2_Achieved__c,51),greaterthan(v.mainCPDData.Group_2_Achieved__c,40))}"
+              >
+                <span class="slds-progress-bar__value group-2 col-5"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_2_Achieved__c,61),greaterthan(v.mainCPDData.Group_2_Achieved__c,50))}"
+              >
+                <span class="slds-progress-bar__value group-2 col-6"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_2_Achieved__c,71),greaterthan(v.mainCPDData.Group_2_Achieved__c,60))}"
+              >
+                <span class="slds-progress-bar__value group-2 col-7"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_2_Achieved__c,81),greaterthan(v.mainCPDData.Group_2_Achieved__c,70))}"
+              >
+                <span class="slds-progress-bar__value group-2 col-8"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_2_Achieved__c,91),greaterthan(v.mainCPDData.Group_2_Achieved__c,80))}"
+              >
+                <span class="slds-progress-bar__value group-2 col-9"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_2_Achieved__c,101),greaterthan(v.mainCPDData.Group_2_Achieved__c,90))}"
+              >
+                <span class="slds-progress-bar__value group-2 col-12"> </span>
+              </aura:if>
+              <!--group 3 starts here-->
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_3_Achieved__c,11),greaterthan(v.mainCPDData.Group_3_Achieved__c,0))}"
+              >
+                <span class="slds-progress-bar__value group-3 col-1"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_3_Achieved__c,21),greaterthan(v.mainCPDData.Group_3_Achieved__c,10))}"
+              >
+                <span class="slds-progress-bar__value group-3 col-2"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_3_Achieved__c,31),greaterthan(v.mainCPDData.Group_3_Achieved__c,20))}"
+              >
+                <span class="slds-progress-bar__value group-3 col-3"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_3_Achieved__c,41),greaterthan(v.mainCPDData.Group_3_Achieved__c,30))}"
+              >
+                <span class="slds-progress-bar__value group-3 col-4"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_3_Achieved__c,51),greaterthan(v.mainCPDData.Group_3_Achieved__c,40))}"
+              >
+                <span class="slds-progress-bar__value group-3 col-5"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_3_Achieved__c,61),greaterthan(v.mainCPDData.Group_3_Achieved__c,50))}"
+              >
+                <span class="slds-progress-bar__value group-3 col-6"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_3_Achieved__c,71),greaterthan(v.mainCPDData.Group_3_Achieved__c,60))}"
+              >
+                <span class="slds-progress-bar__value group-3 col-7"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_3_Achieved__c,81),greaterthan(v.mainCPDData.Group_3_Achieved__c,70))}"
+              >
+                <span class="slds-progress-bar__value group-3 col-8"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_3_Achieved__c,91),greaterthan(v.mainCPDData.Group_3_Achieved__c,80))}"
+              >
+                <span class="slds-progress-bar__value group-3 col-9"> </span>
+              </aura:if>
+              <aura:if
+                isTrue="{!and(lessthan(v.mainCPDData.Group_3_Achieved__c,101),greaterthan(v.mainCPDData.Group_3_Achieved__c,90))}"
+              >
+                <span class="slds-progress-bar__value group-3 col-12"> </span>
+              </aura:if>
+            </div>
+            <div class="row slds--dots">
+              <div class="col-4 col-md-3">
+                <p
+                  ><span class="slds--dots__dot group-1">&nbsp;</span> Group
+                  1</p
+                >
+              </div>
+              <div class="col-4 col-md-3">
+                <p
+                  ><span class="slds--dots__dot group-2">&nbsp;</span> Group
+                  2</p
+                >
+              </div>
+              <div class="col-4 col-md-3">
+                <p
+                  ><span class="slds--dots__dot group-3">&nbsp;</span> Group
+                  3</p
+                >
+              </div>
+              <div class="col-6 col-md-3  total">
+                  <p class="slds-credits__heading">Total Credits</p>
+                   <p class="slds-credits__amount">
+                     <lightning:formattedNumber value="{!v.mainCPDData.Total_CPD_Credits_Achieved__c}" minimumFractionDigits="2"/> 
+                   </p>
+               </div>
+            </div>
+            <div class="cd-link" data-aura-rendered-by="48:2;a">
+              <a href="/s/mycpdyear"
+                ><strong>Click here</strong> to view My CPD Year</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</aura:component>

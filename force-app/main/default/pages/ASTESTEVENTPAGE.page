@@ -1,0 +1,16 @@
+<apex:page sidebar="false" >
+
+    <apex:includeScript value="/lightning/lightning.out.js"/>
+    <div id="account_lookup" />
+    <script>
+      function initLookup() {
+            
+            $Lightning.use("c:AsKnowledgeContainerApp", function () {
+              $Lightning.createComponent("c:AsKnowledgeComp", {
+              }, 'account_lookup', function (cmp) {});
+            });
+          }
+          
+          initLookup();
+    </script> 
+</apex:page>

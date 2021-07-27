@@ -1,0 +1,120 @@
+<!--
+Name: Jet R. Compayan
+Desciption: This page process the renewal opp from the email. -->
+<apex:page controller="AS_batchMembershipRenewalT1"  showHeader="false" sidebar="false" >
+    <apex:slds />
+
+    <style>
+        .AsPSA_MainContainer .AsPSA_Header {
+            height: 200px;
+            width: 100%;
+            text-align: center;
+        }
+        .AsPSA_MainContainer .AsPSA_Header .slds-spinner {
+            top: 35px;
+        }
+        .AsPSA_MainContainer .slds-assistive-text {
+            top: 60px;
+            clip: unset !important;
+            overflow: unset !important;
+            text-align: center;
+            width: 100% !important;
+            right: 0;
+        }
+    </style>
+
+    <div class="AsPSA_MainContainer">
+        <div class="AsPSA_Header">
+           <div class="slds-scope" style="height:6rem"> 
+                <div id="spinner" class="slds-spinner_container slds-is-relative"> 
+                    <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                    <span class="slds-assistive-text">Loading, please do not refresh the page or click on the back button.</span>
+                </div>
+            </div>
+        </div>
+        <div class="AsPSA_Body"></div>
+        <div class="AsPSA_Footer"></div>
+    </div>
+  
+
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+
+  <script> 
+
+    var InitRenewProcess = function(callback){
+
+      var param = getUrlVar('subId');  
+      Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.AS_batchMembershipRenewalT1.createRenewalOppViaButton}', param, function( result, event ) {
+           
+          callback( result );
+          
+      });  
+
+    }
+
+
+    var CheckingOpp = function(callback){
+
+      var param = getUrlVar('subId');  
+      Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.AS_batchMembershipRenewalT1.checkingOppId}', param, function( result, event ) {
+           
+          callback( result );
+          
+      });  
+
+    }
+
+
+    /*
+
+    * Description: use to get the variable value in the url.
+    * Parameter : name of the variable.
+    * Return : Opportuninty Id. 
+    */
+    getUrlVar = function ( name ) {
+
+         name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+         var regexS = "[\\?&]" + name + "=([^&#]*)";
+         var regex = new RegExp(regexS);
+         var results = regex.exec(window.location.href);
+         if (results == null){
+            return "";
+         }else{
+            return results[1];
+         }
+
+    };
+      
+
+
+    function checkingInterval(){
+      console.log('hhello');
+      CheckingOpp(function( res ){ 
+      
+        if( typeof res.AS_Opportunity__c !== 'undefined' ){
+            
+          window.location.replace("https://psa.secure.force.com/PaymentPage?oppId="+res.AS_Opportunity__c);  
+
+          clearInterval(intervalId);
+        } 
+       
+
+      });
+
+    } 
+    
+
+    InitRenewProcess(function( res ){
+      console.log( res );
+      intervalId = setInterval(checkingInterval, 5000);
+    });   
+
+
+
+  </script>
+
+</apex:page>

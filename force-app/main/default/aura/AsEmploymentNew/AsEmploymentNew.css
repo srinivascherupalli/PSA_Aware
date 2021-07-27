@@ -1,0 +1,20 @@
+.THIS.slds-container {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 19px;
+    opacity: 1;
+    padding: 30px;
+    border-radius: 7px;
+    margin-top: 20px;
+    display: inline-block;
+    width: 100%;
+}
+
+.THIS .slds-wrap {
+    position: relative;
+}
+
+.THIS .slds-helptext-wrapper {
+    position: absolute;
+    top: 0px;
+    left: 472px;
+}

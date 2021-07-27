@@ -1,0 +1,120 @@
+.THIS {
+    padding: 37px 53px;
+}
+.THIS .AsElectiveContainer {
+    margin-bottom: 55px;
+}
+.THIS h2 {
+    font-size: 20px;
+    color: #003D79;
+    font-weight: 600;
+    padding: 18px 0;
+    border-bottom: 1px solid #EEEEEE;
+    margin-bottom: 21px;
+}
+.THIS .AsElectiveCountContainer {
+    margin-bottom: 12px;
+    width: 50%;
+    display: inline-block;
+}
+.THIS h3 {
+    font-size: 18px;
+    color: #607A91;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+.THIS .AsElectiveCountContainer .AsElectiveCount {
+    width: 50%;
+    float: left;
+}
+.THIS h5 {
+    font-size: 12px;
+    color: #607A91;
+    text-transform: uppercase;
+}
+.THIS h5 span {
+    font-size: 12px;
+    color: #003D79;
+    font-weight: 600;
+}
+.THIS .AsElectiveContainer label {
+    display: inline-block;
+    width: 100%;
+}
+.THIS .AsElectiveContainer input[type="checkbox"] {
+    display: none;
+}
+.THIS .AsElectiveContainer input[type="checkbox"]:checked ~ .AsElectiveOption {
+    background-color:#003D79;
+    border: none;
+    border-radius: 5px;
+}
+.THIS .AsElectiveContainer input[type="checkbox"]:checked ~ .AsElectiveOption .AsElectiveTitle {
+    color: #FFFFFF;
+}
+.THIS .AsElectiveContainer input[type="checkbox"]:checked ~ .AsElectiveOption .AsElectiveDescription {
+    color: #FFFFFF;
+}
+.THIS .AsElectiveContainer input[type="checkbox"]:checked ~ .AsElectiveOption .AsCustomCheckbox {
+    display: block;
+}
+.THIS .AsElectiveOption {
+    padding: 35px 40px;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 13px;
+    position: relative;
+}
+.THIS .AsElectiveTitle {
+    font-size: 18px;
+    color: #607A91;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+.THIS .AsElectiveDescription {
+    font-size: 16px;
+    color: #607A91;
+}
+.THIS .AsElectiveOption .AsCustomCheckbox {
+    height: 38px;
+    width: 38px;
+    border-radius: 50%;
+    position: absolute;
+    top: 21px;
+    right: 40px;
+    background-color: #ffffff;
+    display: none;
+}
+.THIS .AsElectiveOption .AsCustomCheckbox:after {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 11px;
+    border-right: 4px solid;
+    border-bottom: 4px solid;
+    border-color: #003d79;
+    border-radius: 3px;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(40deg);
+    right: 13px;
+    top: 7px;
+}
+.THIS .AsMandatoryListContainer {
+    padding: 0 0 33px 0;
+    border-bottom: 1px solid #EEEEEE;
+    margin-bottom: 25px;
+}
+.THIS .AsMandatoryList span {
+    display: inline-block;
+    width: 20px;
+    vertical-align: top;
+    color: #607A91;
+    font-size: 16px;
+    font-weight: 600;
+}
+.THIS .AsMandatoryList .AsElectiveDescription {
+    width: calc(100% - 20px);
+    display: inline-block;
+}

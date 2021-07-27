@@ -1,0 +1,972 @@
+<!--
+Copyright (c) 2014, salesforce.com, Inc.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+    * Neither the name of the salesforce.com, Inc. nor the names of its contributors
+    may be used to endorse or promote products derived from this software
+    without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<apex:page controller="TrainingPlanPreviewController" docType="html-5.0" sidebar="false" showHeader="{!showSFHeader}" standardStylesheets="false"
+    action="{!checkAssignment}">
+    
+    <apex:outputPanel layout="none" rendered="{!tPlan != null}">
+
+        <style type="text/css">
+            [id*="lms-header"] {
+            	display: none;
+            }
+            .almond #hero-banner {
+                background-color: #ffffff!important;
+            }
+
+            .almond #hero-banner .lms-desc-border-bottom {
+                border-bottom: 1px solid #DDD;
+                margin-bottom: 2%;
+            }
+
+            .almond #hero-banner .lms-section-content {
+                border-bottom: 1px solid #DDD;
+                padding-bottom: 40px;
+                margin-left: 27px;
+            }
+
+            .almond #hero-banner .slds-section__title-action {
+                background: #fff;
+                font-weight: 300;
+                font-size: 1.75rem;
+                line-height: 1.25;
+                padding: 0;
+            }
+
+            .almond #hero-banner .slds-section__title-action span {
+                margin-left: 13px;
+                font-size: 22px
+            }
+
+            .almond-slds .slds-section {
+                margin-top: 3em!important;
+            }
+
+            .almond-slds .lms-collapse-section .slds-button:focus {
+                box-shadow: 0 0 3px #ffffff!important;
+            }
+
+            .slds-is-open .section-icon-switch {
+                display: block;
+            }
+
+            .slds-is-open .section-icon-chevronright {
+                display: none;
+            }
+
+            .section-icon-switch {
+                display: none;
+            }
+
+            .section-icon-chevronright {
+                display: block;
+            }
+
+            .title-padding-left {
+                margin-left: 25px!important;
+            }
+
+            .slds-wrap {
+                padding-top: 24px;
+            }
+
+            .slds-tabs--scoped__nav [title="Feedback"] {
+                display: none!important;
+            }
+
+            /*updated by : jrc  
+              ticket # :PSA-124
+            */
+
+            .user-carousel {
+                display: none!important;
+            }
+
+            .description-decode-css dl,
+            .description-decode-css fieldset,
+            .description-decode-css h1,
+            .description-decode-css h2,
+            .description-decode-css h3,
+            .description-decode-css h4,
+            .description-decode-css h5,
+            .description-decode-css h6,
+            .description-decode-css ol,
+            .description-decode-css p,
+            .description-decode-css ul {
+                margin: 1px!important;
+            }
+
+            .description-decode-css ul,
+            .description-decode-css ol {
+                margin: 10px 0 10px 40px!important;
+            }
+
+            .description-decode-css ul {
+                list-style-type: disc !important;
+                list-style-position: inside !important;
+            }
+
+            .description-decode-css ol {
+                list-style-type: decimal !important;
+                list-style-position: inside !important;
+            }
+
+            .description-decode-css ul ul,
+            .description-decode-css ol ul {
+                list-style-type: circle !important;
+                list-style-position: inside !important;
+                margin-left: 15px !important;
+            }
+
+            .description-decode-css ol ol,
+            .description-decode-css ul ol {
+                list-style-type: lower-latin !important;
+                list-style-position: inside !important;
+                margin-left: 15px !important;
+            }
+        </style>
+
+        <apex:composition template="LMS_HeroTemplate">
+
+            <apex:define name="head">
+                <title>{!tPlan.trainingPlan.Name}</title>
+            </apex:define>
+            
+           <apex:define name="page-banner">
+			<!--<section class="course-hero course-hero--no-group" ></section>-->
+            </apex:define>
+            
+            <apex:define name="hero-banner">
+                <div id="hb-wrap">
+
+                    <div class=" slds-m-top--small title-padding-left">
+
+                        <div class="slds-p-vertical--large slds-text-heading--large">
+                            {!tPlan.trainingPlan.Name}
+                        </div>
+
+                        <p class="lms-desc-border-bottom">
+                            <div class="description-decode-css">
+                                <apex:outputField value="{!tPlan.trainingPlan.AS_Information__c}" />
+                            </div>
+
+                        </p>
+                        <!-- Edited July 24 {!tPlan.trainingPlan.Description__c} -->
+
+                        <apex:outputPanel layout="none" rendered="{!!tPlan.trainingPlan.Hide_Chatter_Photos__c }">
+                            <div class="user-carousel">
+                                <apex:repeat value="{!lUsersWithAchievement}" var="u">
+                                    <a href="javascript:almond.redirectHandlerWithStatus('{!$Page.MyProfile}?id={!u.Id}',true)" class="user-carousel-img">
+                                        <apex:image value="{!u.SmallPhotoUrl}" />
+                                    </a>
+                                </apex:repeat>
+                            </div>
+                        </apex:outputPanel>
+                    </div>
+
+                    <div class="lms-collapse-section">
+                        <div class="slds-section slds-is-open learning-objectives" id="lms-section-1">
+                            <h3 class="slds-section__title">
+                                <button aria-controls="expando-unique-id" data-section-toggle-id="#lms-section-1" aria-expanded="true" class="slds-button slds-section__title-action lms-btn-section">
+                                    <span class="icon-wrapper">
+                                    <svg class="slds-button__icon section-icon-switch" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#switch')}"></use>
+                                    </svg>
+                                    </span>
+                                    <!--<svg class="slds-button__icon section-icon-chevronright" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#chevronright')}"></use>
+                                    </svg>-->
+                                    <span class="slds-truncate" title="Section Title">Learning objectives</span>
+                                </button>
+                            </h3>
+                            <div aria-hidden="false" class="slds-section__content lms-section-content" id="expando-unique-id">
+                                <p class="slds-p-vertical_xxx-small">
+                                    <div class="description-decode-css">
+                                        <apex:outputtext value="{!tPlan.trainingPlan.AS_Learning_Objectives__c}" escape="false" />
+                                    </div>
+                                </p>
+                            </div>
+                        </div>
+
+                        <apex:outputPanel layout="none" rendered="{! tPlan.trainingPlan.AS_CPD_Accreditation_Statement__c != null }">
+                            <div class="course-body__credits">
+                                <h2 class="h3 course-body__credits-title">CPD Credits</h2>
+                                <div class="row">
+                                     <div class="col-12 col-sm-6 col-lg text-lg">
+                                         <span class="course-body__credit-title">Accreditation Code:</span>
+                                         <span class="course-body__credit-description">{!tPlan.trainingPlan.AS_CPD_Accreditation_Number__c}</span>
+                                    </div>  
+                                    
+                                    <apex:outputPanel rendered="{!tPlan.trainingPlan.AS_Group_1_CPD__c != null}">
+                                        <div class="col-12 col-sm-6 col-lg text-lg">
+                                          <span class="course-body__credit-title">Group 1:</span>
+                                          <span class="course-body__credit-description">{!tPlan.trainingPlan.AS_Group_1_CPD__c}</span>
+                                        </div>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!tPlan.trainingPlan.AS_Group_2_CPD__c != null}">
+                                        <div class="col-12 col-sm-6 col-lg text-lg">
+                                          <span class="course-body__credit-title">Group 2:</span>
+                                          <span class="course-body__credit-description">{!tPlan.trainingPlan.AS_Group_2_CPD__c}</span>
+                                        </div>
+                                    </apex:outputPanel>
+                                    <div class="col-12 col-sm-6 col-lg text-lg">
+                                        <apex:image url="{!tPlan.trainingPlan.AS_APC_Image__c}" />
+                                    </div>
+                                    <div class="col-12">
+                                      <p class="course-body__credit-text">
+                                          <apex:outputtext value="{!tPlan.trainingPlan.AS_CPD_Accreditation_Statement__c}" escape="false" />
+                                      </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!--
+                            <div class="slds-section slds-is-open">
+                                <h3 class="slds-section__title">
+                                    <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                        <span class="slds-truncate title-padding-left" title="Section Title">CPD credits</span>
+                                    </button>
+                                </h3>
+                                <div aria-hidden="false" class="slds-section__content lms-section-content" id="expando-unique-id">
+                                    <p style="font-size: 15px;">Accreditation Code: {!tPlan.trainingPlan.AS_CPD_Accreditation_Number__c} </p>
+                                    <p class="slds-p-vertical--small">
+
+                                        <apex:outputPanel rendered="{!tPlan.trainingPlan.AS_Group_1_CPD__c != null}">
+                                            Group 1:&nbsp;&nbsp;&nbsp;
+                                            <apex:outputtext value="{!tPlan.trainingPlan.AS_Group_1_CPD__c} Credits" escape="false" />
+                                        </apex:outputPanel>
+
+                                        <br/>
+
+                                        <apex:outputPanel rendered="{!tPlan.trainingPlan.AS_Group_2_CPD__c != null}">
+                                            Group 2:&nbsp;&nbsp;&nbsp;
+                                            <apex:outputtext value="{!tPlan.trainingPlan.AS_Group_2_CPD__c} Credits" escape="false" />
+                                        </apex:outputPanel>
+
+                                    </p>
+                                    <apex:image url="{!tPlan.trainingPlan.AS_APC_Image__c}" />
+                                    <p class="slds-p-vertical--small">
+                                        <apex:outputtext value="{!tPlan.trainingPlan.AS_CPD_Accreditation_Statement__c}" escape="false" />
+                                    </p>
+                                </div>
+                            </div>
+-->
+                        </apex:outputPanel>
+
+
+                        <apex:outputPanel layout="none" rendered="{! tPlan.trainingPlan.AS_2016_Competencies__c != null }">
+                            <div class="course-body__standards">
+                                <h2
+                                  class="h3 course-body__section-title course-body__section-title--standards"
+                                >
+                                  Competency Standards (2016)
+                                </h2>
+                                <p class="text-lg course-body__standards-text"
+                                  >{!tPlan.trainingPlan.AS_2016_Competencies__c}
+                                </p>
+                              </div>
+                            
+                            <!--
+                            <div class="slds-section slds-is-open" id="lms-section-2">
+                                <h3 class="slds-section__title">
+                                    <button aria-controls="expando-unique-id" aria-expanded="true" data-section-toggle-id="#lms-section-2" class="slds-button slds-section__title-action lms-btn-section ">
+                                        <svg class="slds-button__icon section-icon-switch" aria-hidden="true">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#switch')}"></use>
+                                        </svg>
+                                        <svg class="slds-button__icon section-icon-chevronright" aria-hidden="true">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#chevronright')}"></use>
+                                        </svg>
+                                        <span class="slds-truncate" title="Section Title">2016 competencies</span>
+                                    </button>
+                                </h3>
+                                <div aria-hidden="false" style="margin-left: 27px;" class="slds-section__content " id="expando-unique-id">
+                                    <p>Competency Standards (2016) addressed: {!tPlan.trainingPlan.AS_2016_Competencies__c}</p>
+                                </div>
+                            </div>
+-->
+
+                        </apex:outputPanel>
+
+                        <apex:outputPanel layout="none" rendered="{! tPlan.trainingPlan.AS_2010_Competencies__c != null }">
+							<div class="course-body__standards">
+                                <h2
+                                  class="h3 course-body__section-title course-body__section-title--standards"
+                                >
+                                  Competency Standards (2010)
+                                </h2>
+                                <p class="text-lg course-body__standards-text"
+                                  >{!tPlan.trainingPlan.AS_2010_Competencies__c}
+                                </p>
+                              </div>
+                            <!--
+                            <div class="slds-section slds-is-open" id="lms-section-3">
+                                <h3 class="slds-section__title">
+                                    <button aria-controls="expando-unique-id" data-section-toggle-id="#lms-section-3" aria-expanded="true" class="slds-button slds-section__title-action lms-btn-section">
+                                        <svg class="slds-button__icon section-icon-switch" aria-hidden="true">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#switch')}"></use>
+                                        </svg>
+                                        <svg class="slds-button__icon section-icon-chevronright" aria-hidden="true">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'assets/icons/utility-sprite/svg/symbols.svg#chevronright')}"></use>
+                                        </svg>
+                                        <span class="slds-truncate" title="Section Title">2010 competencies</span>
+                                    </button>
+                                </h3>
+                                <div aria-hidden="false" class="slds-section__content lms-section-content" id="expando-unique-id">
+                                    <p>Competency Standards (2010) addressed: {!tPlan.trainingPlan.AS_2010_Competencies__c}</p>
+                                </div>
+                            </div>
+-->
+
+                        </apex:outputPanel>
+
+                        <apex:outputPanel layout="none" rendered="{! tPlan.trainingPlan.AS_Content_Sponsor__c != null }">
+
+                            <div class="slds-section slds-is-open">
+                                <!--                          <h3 class="slds-section__title">
+                                    <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                        <span class="slds-truncate title-padding-left" title="Section Title">Sponsor </span>
+                                    </button>
+                                </h3> -->
+                                <div aria-hidden="false" style="border-top: 1px solid #DDD" class="slds-section__content lms-section-content" id="expando-unique-id">
+                                    <p class="slds-p-vertical--small">
+                                        <apex:outputtext value="{!tPlan.trainingPlan.AS_Content_Sponsor__c}" escape="false" />
+                                    </p>
+                                </div>
+                            </div>
+
+                        </apex:outputPanel>
+
+                    </div>
+
+
+                </div>
+            </apex:define>
+
+            <apex:define name="hero-banner-badge">
+                <div id="hb-right" class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--4-of-12 slds-large-size--3-of-12">
+                    <div class="badge-container">
+                        <apex:outputfield value="{!tPlan.mainAchievement.Acquired_Image__c}" rendered="{!tPlan.mainAchievement.Work_Badge_Image_URL__c == null}"
+                        />
+                        <apex:image url="{!tPlan.mainAchievement.Work_Badge_Image_URL__c}" rendered="{!tPlan.mainAchievement.Work_Badge_Image_URL__c != null}"
+                        />
+                    </div>
+                    
+                           <!-- <apex:outputPanel id="lms-rendere-this-btn">
+
+                            <apex:outputPanel rendered="{! isMemberser }">
+                                <apex:outputPanel rendered="{!isAlreadyInBookMark}">
+                                    <button type="button" class="slds-button slds-button--brand btn-lg" id="cpd-add-to-cpd-plan">Add to Plan </button>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+
+                            <button type="button" class="slds-button slds-button--brand btn-lg enrolBtn" onclick="doRegistration()">{!isEvent}</button>
+
+                            <apex:outputPanel rendered="{! isMemberser }">
+                                <apex:outputPanel rendered="{! isAlreadyInBookMark == false }">
+                                    <p style="color: #003D79;"> This course is included in your current CPD Plan </p>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+
+                        </apex:outputPanel>-->
+                </div>
+            </apex:define>
+<!--
+            <apex:define name="hero-banner-footer">
+                <span style="padding:0 1rem;">
+                    <apex:outputPanel layout="none" rendered="{!tPlan.trainingPlan != null && tplan.trainingPlan.Hide_After_End_Date__c && tplan.trainingPlan.End_Date__c != null}">
+                        <span>
+                            <b>{!$Label.ALMS_Training_Plan_Due}</b> :&nbsp;
+                            <apex:outputField value="{!tPlan.trainingPlan.End_Date__c}"
+                            /> /</span>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="none" rendered="{!tPlan.totalMins != null && tPlan.totalMins > 0}">
+                        <span>
+                            <b>{!$Label.ALMS_Duration}</b> : {!tPlan.TotalDuration}</span>
+                    </apex:outputPanel>
+                </span>
+            </apex:define>
+-->
+            <apex:define name="hero-info-link">
+                <apex:outputPanel layout="none" rendered="{!tPlan != null}">
+                    <div class="slds-p-horizontal--small slds-size--1-of-1" style="text-align:center;padding:10px 0;">
+                        <!--                         <button type="button" class="slds-button slds-button--brand btn-lg" onclick="doRegistration()">Enrol Now</button>
+                        <apex:outputText rendered="{!TrackType != null}">
+                            <a href="https://www.google.com/" target="_blank" class="slds-button slds-button--brand btn-lg">{!$Label.ALMS_Register_Button}</a>
+                        </apex:outputText> -->
+
+                    </div>
+                </apex:outputPanel>
+            </apex:define>
+
+            <apex:define name="body">
+
+                <div class="slds-tabs--scoped">
+                    <apex:outputPanel layout="none" rendered="{!tPlan != null }">
+                        <ul class="slds-tabs--scoped__nav" role="tablist">
+                            <li class="slds-tabs--scoped__item slds-text-title--caps slds-active" title="{!$Label.ALMS_Detail}" role="presentation">
+                                <a class="slds-tabs--scoped__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-scoped-1">
+                                    {!$Label.ALMS_Detail}
+                                </a>
+                            </li>
+                            <apex:outputPanel layout="none" rendered="{!tPlan.trainingPlan.Intro_Video_URL__c != null }">
+                                <li class="slds-tabs--scoped__item slds-text-title--caps" title="{!$Label.ALMS_Intro_Video}" role="presentation">
+                                    <a class="slds-tabs--scoped__link" href="javascript:launchLearning('{!tPlan.trainingPlan.Intro_Video_URL__c}','iframe')"
+                                        role="tab" tabindex="0" aria-selected="true" aria-controls="tab-scoped-1">
+                                        {!$Label.ALMS_Intro_Video}
+                                    </a>
+                                </li>
+                            </apex:outputPanel>
+                            <li class="slds-tabs--scoped__item slds-text-title--caps" title="{!$Label.ALMS_Feedback}" role="presentation">
+                                <a class="slds-tabs--scoped__link" href="javascript:almond.redirectHandlerWithStatus('{!$Page.TrainingPlanFeedback}?id={!tplan.trainingPlan.Id}&preview=1')"
+                                    role="tab" tabindex="0" aria-selected="true" aria-controls="tab-scoped-1">
+                                    {!$Label.ALMS_Feedback}
+                                </a>
+                            </li>
+                        </ul>
+                    </apex:outputPanel>
+                    <div id="tab-scoped-1" class="slds-tabs--scoped__content slds-show" role="tabpanel" aria-labelledby="tab-scoped-1__item">
+                        <apex:form id="trainingPreviewForm" styleClass="tplan-preview-form">
+
+                            <apex:outputPanel layout="none" id="pageMessages">
+                                <apex:outputPanel layout="none" rendered="{!hasMessages}">
+                                    <div class="slds-notify slds-notify--toast slds-theme--error" style="width: 100%;margin: 0;" role="alert">
+                                        <div class="slds-notify__content slds-grid">
+                                            <div class="slds-col slds-align-middle">
+                                                <apex:pageMessages />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+
+                            <apex:outputPanel layout="none" id="resultsPanel">
+                                <apex:inputHidden id="redirectURL" value="{!redirectURL}" />
+                                <apex:inputHidden id="validationError" value="{!UserValidation_error}" />
+                                <apex:inputHidden id="ErrorMsg" value="{!userErrorMessage}" />
+                                <apex:inputHidden id="redirectExtURL" value="{!redirectExtURL}" />
+                                <apex:inputHidden id="isGuest" value="{!isGuest}" />
+                            </apex:outputPanel>
+
+                            <!-- JRC -->
+                            <apex:actionFunction action="{!createTrainingPlanBookmark}" name="createTrainingPlanBookmark_JS" rerender="lms-rendere-this-btn,pageMessages,resultsPanel"
+                                oncomplete="showVError()" />
+
+                            <apex:actionFunction name="eventEnrol" action="{!EventEnrol}" rerender="pageMessages,resultsPanel" status="status" oncomplete="doRedirection(),showVError()"
+                            />
+                            <apex:actionFunction name="registerForTraining" action="{!registerForTrainingPlan}" rerender="pageMessages,resultsPanel"
+                                status="status" oncomplete="doRedirection(),showVError()" />
+                            <apex:actionFunction name="fetchPlanInfo" action="{!fetchTrainingPlanInfo}" status="status" rerender="itemModalPanel" oncomplete="return showLaunchModal();"
+                            />
+
+
+                            <apex:actionFunction name="redirectToDetail" action="{!custom_redirectToDetail}" />
+                            <apex:actionFunction name="redirectToCommDetail" action="{!redirectToPlanDetailPage}" />
+
+
+                            <div class="slds-text-heading--medium"> {!$Label.ALMS_Activities}</div>
+
+                            <div class="required-asterisk-panel">
+                                <span class="required_asterisk">*</span> = {!$Label.ALMS_Required}</div>
+
+                            <apex:repeat value="{!tPlan.sections}" var="o">
+                                <div class="activity-section-wrap" style="border-bottom: 1px solid #D2D3D5;padding-bottom: 11px;">
+                                    <div class="slds-grid slds-wrap slds-grid--pull-padded">
+
+                                        <apex:outputPanel layout="none" rendered="{!o.mainAchievement.Work_Badge_Image_URL__c == null && o.mainAchievement.Acquired_Image__c == null}">
+                                            <div class="slds-p-horizontal--small slds-size--1-of-12 learn-icon-offset">
+                                            </div>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel layout="none" rendered="{!o.mainAchievement.Work_Badge_Image_URL__c != null || o.mainAchievement.Acquired_Image__c != null}">
+                                            <div class="slds-p-horizontal--small slds-size--1-of-12 learn-icon">
+                                                <apex:outputPanel layout="none" rendered="{!o.mainAchievement.Work_Badge_Image_URL__c == null}">
+                                                    <apex:outputField value="{!o.mainAchievement.Acquired_Image__c}" rendered="{!o.sectionAssignment.Status__c == 'Completed'}"
+                                                    />
+                                                    <apex:outputField value="{!o.mainAchievement.Eligible_Image__c}" rendered="{!o.sectionAssignment.Status__c != 'Completed'}"
+                                                    />
+                                                </apex:outputPanel>
+                                                <apex:outputPanel layout="none" rendered="{!o.mainAchievement.Work_Badge_Image_URL__c != null}">
+                                                    <apex:image url="{!o.mainAchievement.Work_Badge_Image_URL__c}" styleClass="{!IF(o.sectionAssignment.Status__c != 'Completed','badge-disabled','')}"
+                                                    />
+                                                </apex:outputPanel>
+                                            </div>
+                                        </apex:outputPanel>
+
+                                        <div class="slds-p-horizontal--small slds-size--4-of-12 title">
+                                            <div class="slds-text-heading--small">
+                                                <apex:outputField value="{!o.trainingPlanSection.Name}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="slds-p-horizontal--small slds-size--3-of-12 prog-status">
+                                            <div class="progress-bar" title="0%" style="width:140px;">
+                                                <div class="progress-bar-value progress-bar-value-default" style="width:0%"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="slds-p-horizontal--small slds-size--2-of-12 prog-status">
+                                            <div class="progresshours">
+                                                <apex:outputText value="{!o.totalDuration}" rendered="{!o.totalMins != null && o.totalMins > 0}" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <apex:repeat value="{!o.items}" var="i">
+                                        <div class="activity-section-learning slds-grid slds-wrap slds-grid--pull-padded slds-m-bottom--large slds-m-top--large">
+
+                                            <div class="slds-p-horizontal--small slds-size--1-of-12 learn-icon" style="text-align:center;">
+                                                <div xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                    <svg aria-hidden="true" class="slds-button__icon slds-button__icon--medium sldsicon">
+                                                        <apex:outputPanel layout="none" rendered="{!i.learning.RecordType.DeveloperName == 'Task'}">
+                                                            <use xlink:href="{!URLFOR($Resource.almond_uilib, '/slds/icons/utility-sprite/svg/symbols.svg')}#task"></use>
+                                                        </apex:outputPanel>
+                                                        <apex:outputPanel layout="none" rendered="{!i.learning.RecordType.DeveloperName == 'Quiz'}">
+                                                            <use xlink:href="{!URLFOR($Resource.almond_uilib, '/slds/icons/utility-sprite/svg/symbols.svg')}#help"></use>
+                                                        </apex:outputPanel>
+                                                        <apex:outputPanel layout="none" rendered="{!i.learning.RecordType.DeveloperName == 'Resource'}">
+                                                            <use xlink:href="{!URLFOR($Resource.almond_uilib, '/slds/icons/utility-sprite/svg/symbols.svg')}#world"></use>
+                                                        </apex:outputPanel>
+                                                        <apex:outputPanel layout="none" rendered="{!i.learning.RecordType.DeveloperName != 'Task' && i.learning.RecordType.DeveloperName != 'Quiz' && i.learning.RecordType.DeveloperName != 'Resource'}">
+                                                            <use xlink:href="{!URLFOR($Resource.almond_uilib, '/slds/icons/utility-sprite/svg/symbols.svg')}#right"></use>
+                                                        </apex:outputPanel>
+                                                    </svg>
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-p-horizontal--small slds-size--10-of-12 slds-medium-size--4-of-12 slds-large-size--4-of-12 title ls-learning-wrapper"
+                                                style="position: relative;">
+                                                <apex:outputPanel layout="none" rendered="{!!i.trainingPlanSectionItem.Optional__c}">
+                                                    <div class="requiredItem">*</div>
+                                                </apex:outputPanel>
+                                                <apex:outputField value="{!i.learning.Name}" />
+                                            </div>
+
+                                            <div class="mobile-learning-wrapper slds-p-horizontal--small slds-size--1-of-1 slds-m-top--medium slds-m-bottom--medium title"
+                                                style="position:relative;">
+                                                <apex:outputPanel layout="none" rendered="{!!i.trainingPlanSectionItem.Optional__c}">
+                                                    <div class="requiredItem">*</div>
+                                                </apex:outputPanel>
+                                                <apex:outputField value="{!i.learning.Name}" />
+                                            </div>
+
+                                            <div class="slds-p-horizontal--small slds-size--3-of-12 prog-status">
+                                                <div class="progress-bar" title="0%">
+                                                    <div class="progress-bar-value progress-bar-value-default" style="width:0%"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-p-horizontal--small slds-size--2-of-12 prog-status">
+                                                <div class="progresshours">
+                                                    <apex:outputField value="{!i.trainingPlanSectionItem.Duration_hours__c}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-p-horizontal--small slds-size--2-of-12 learn-action">
+                                                <!-- Button trigger modal -->
+                                                <apex:outputPanel rendered="{!i.assignments != null}" layout="none">
+                                                    <!-------------for lunch button---------------------->
+                                                    <a href="javascript:void(0)" lms-data-sectionId="{!o.trainingPlanSection.Id}" lms-data-itemId="{!i.trainingPlanSectionItem.Id}"
+                                                        class="launch-learning-btn slds-button slds-button--brand small-btn">{!$Label.ALMS_Launch}</a>
+                                                    <a href="javascript:void(0)" class="launch-btn-mobile"></a>
+                                                </apex:outputPanel>
+                                            </div>
+
+                                        </div>
+                                        <!-- activity-section-learning -->
+                                        <!-- end repeat for section itmes html -->
+                                    </apex:repeat>
+
+                                </div>
+                                <!-- activity-section-wrap -->
+                                <!-- end repeat for section html -->
+                            </apex:repeat>
+
+                            <!-- Modal -->
+                            <apex:outputPanel id="itemModalPanel">
+                                <div id="myLaunchModal" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal ">
+                                    <div class="slds-modal__container">
+                                        <div class="slds-modal__header" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <button class="slds-button slds-modal__close slds-button--icon-inverse" onclick="return hideLaunchModal();">
+                                                <svg aria-hidden="true" class="slds-button__icon slds-button__icon--large">
+                                                    <use xlink:href="{!URLFOR($Resource.almond_uilib, '/slds/icons/utility-sprite/svg/symbols.svg')}#close"></use>
+                                                </svg>
+                                            </button>
+                                            <h3 id="header43" class="slds-text-heading--medium">{!tPlan.trainingPlan.Name}</h3>
+                                        </div>
+                                        <div class="slds-modal__content slds-p-around--medium">
+                                            <apex:outputPanel layout="none" rendered="{!existingRequest == null }">
+                                                <div class="slds-p-around--medium">
+                                                    <p>{!tPlan.trainingPlan.Description__c}</p>
+                                                </div>
+
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" for="commentsField">{!$Label.ALMS_TPlan_Request_Comments}</label>
+                                                    <apex:inputField value="{!dummyRequest.Comments__c}" styleClass="slds-textarea" />
+                                                </div>
+
+                                                <article class="slds-card slds-m-top--large">
+                                                    <div class="slds-card__body slds-text-align--left slds-p-around--large" style="text-align:center;">
+                                                        <apex:commandLink value="{!$Label.ALMS_TPlan_Request_Access_Button}" action="{!requestAccessForTrainingPlan}" styleClass="slds-button slds-button--brand btn-lg btn-block"
+                                                            status="status" rerender="pageMessages" oncomplete="hideModal()"
+                                                        />
+                                                    </div>
+                                                </article>
+
+                                            </apex:outputPanel>
+
+                                            <apex:outputPanel layout="none" rendered="{!existingRequest != null }">
+                                                <div class="alert alert-info">{!$Label.ALMS_TPlan_Request_Submitted_Message}</div>
+                                                <b>{!$Label.ALMS_TPlan_Access_Request_Status}</b> : {!existingRequest.Status__c}
+                                            </apex:outputPanel>
+                                        </div>
+                                        <div class="slds-modal__footer">
+                                            <button class="slds-button slds-button--neutral" onclick="return hideLaunchModal();">{!$Label.ALMS_Close}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="myLaunchModalBackdrop" class="slds-backdrop "></div>
+                            </apex:outputPanel>
+
+                            <!-- Custom modal-->
+                            <!--div id="customLaunchModal" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal">
+                                  <div class="slds-modal__container">
+                                    <div class="slds-modal__header" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                      <button class="slds-button slds-modal__close slds-button--icon-inverse" onclick="return hideVError();">
+                                        <svg aria-hidden="true" class="slds-button__icon slds-button__icon--large">
+                                          <use xlink:href="{!URLFOR($Resource.almond_uilib, '/slds/icons/utility-sprite/svg/symbols.svg')}#close"></use>
+                                        </svg>
+                                      </button>
+                                      <h3 id="header43" class="slds-text-heading--medium">Error</h3>
+                                    </div>
+                                    <div class="slds-modal__content slds-p-around--medium">
+                                        <h3 id="feedback_error"></h3>
+                                    </div>
+                                    <div class="slds-modal__footer">
+                                        <button class="slds-button slds-button--neutral btnLbl" onclick="return proceedRedirect();">Login/Register</button>
+                                        <button class="slds-button slds-button--neutral" onclick="return hideVError();">{!$Label.ALMS_Close}</button>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div id="customLaunchModalBackdrop" class="slds-backdrop"></div-->
+
+                            <div id="customLaunchModal" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal">
+                                <div class="slds-modal__container" style="width:400px;">
+                                    <div class="slds-modal__header" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <button class="slds-button slds-modal__close slds-button--icon-inverse" onclick="return hideVError();">
+                                            <svg aria-hidden="true" class="slds-button__icon slds-button__icon--large">
+                                                <use xlink:href="{!URLFOR($Resource.almond_uilib, '/slds/icons/utility-sprite/svg/symbols.svg')}#close"></use>
+                                            </svg>
+                                        </button>
+                                        <img src="/resource/1533774613000/psaLogo" />
+                                    </div>
+                                    <div class="slds-modal__content slds-p-around--medium">
+                                        <p style="font-size:20px;font-color:gray;margin-left:10px;">You need to be logged in to enrol. To continue, please
+                                            <b>login</b> or
+                                            <b>register</b>.</p>
+                                        <br/>
+                                        <br/>
+                                        <footer>
+                                            <center>
+                                                <button class="slds-button slds-button--neutral btnLbl" style="height:45px;width:260px;" onclick="return login();">LOGIN</button>
+                                                <br/>
+                                                <br/>
+                                                <button class="slds-button slds-button--neutral" style="height:45px;width:260px;" onclick="return register();">REGISTER</button>
+                                            </center>
+                                        </footer>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="customLaunchModalBackdrop" class="slds-backdrop"></div>
+
+                            <!-- Modal Content Preview -->
+                            <apex:outputPanel id="contentModalPanel">
+                                <div id="myContentModal" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal">
+                                    <div class="slds-modal__container">
+                                        <div class="slds-modal__header" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <button class="slds-button slds-modal__close slds-button--icon-inverse" onclick="return hideContentModal();">
+                                                <svg aria-hidden="true" class="slds-button__icon slds-button__icon--large">
+                                                    <use xlink:href="{!URLFOR($Resource.almond_uilib, '/slds/icons/utility-sprite/svg/symbols.svg')}#close"></use>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="slds-modal__content slds-p-around--medium">
+                                            <a id="contentLink" href="javascript:void(0)">{!$Label.ALMS_Open_New_Window}</a>
+                                            <div id="contentIframeWrapper" style="padding:10px 0;">
+                                                <iframe id="contentIframe" style="width:100%;border: 0;" />
+                                            </div>
+                                        </div>
+                                        <div class="slds-modal__footer">
+                                            <button class="slds-button slds-button--neutral" onclick="return hideContentModal();">{!$Label.ALMS_Close}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="myContentModalBackdrop" class="slds-backdrop"></div>
+                            </apex:outputPanel>
+
+                            <script>
+                                var $jk = jQuery.noConflict();
+
+                                var allowReg = false;
+                                function checkParams() {
+                                    var url = new URL(window.location.href);// 'http://demo.com?id=100&topic=main');
+                                    var query_string = url.search;
+                                    var search_params = new URLSearchParams(query_string);
+                                    var p = search_params.get('p');
+                                    if (p == 'reg') allowReg = true;//registerForTraining();
+                                    // output : 100
+                                    console.log(window.location);
+                                }
+
+
+                                function formatAMPM(date) {
+                                    var dateForm = date.getDate() + "/"
+                                        + (date.getMonth() + 1) + "/"
+                                        + date.getFullYear() + " ";
+                                    var hours = date.getHours();
+                                    var minutes = date.getMinutes();
+                                    var ampm = hours >= 12 ? 'pm' : 'am';
+                                    hours = hours % 12;
+                                    hours = hours ? hours : 12; // the hour '0' should be '12'
+                                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                                    var strTime = hours + ':' + minutes + ' ' + ampm;
+                                    return dateForm + strTime;
+                                }
+
+                                var cnt = 0;
+                                var currentdate = formatAMPM(new Date());
+
+                                function processDonation() {
+                                    console.log('called reprocessing');
+                                    var userId = '{!$User.Id}', tplanId = '{!$CurrentPage.parameters.id}'
+                                    setTimeout(Visualforce.remoting.Manager.invokeAction(
+                                        '{!$RemoteAction.TrainingPlanPreviewController.check_futureJobComplete}',
+                                        userId, tplanId, currentdate,
+                                        function (result, event) {
+                                            console.log(result);
+                                            if (result == null) {
+                                                if (cnt < 120) {
+                                                    console.log('reprocess');
+                                                    processDonation();
+                                                }
+                                                else {
+                                                    alert('Enrolment failed!');
+                                                }
+                                                cnt++;
+                                            } else {
+                                                console.log('redirecting');
+                                                var url = window.location.origin;
+                                                // LToohey Davanti - update to community page reference
+                                                // url = url + '/s/sfdcpage/%2Fapex%2FTrainingPlanDetail%3Fid=' + tplanId + '&p=reg';
+                                                url = url + '/s/training-plan/' + tplanId;
+                                                parent.window.location = url;
+                                            }
+                                        }), 2000);
+                                }
+
+                                $jk(document).ready(function () {
+                                    checkParams();
+                                    //color change on banner
+                                    var bkcolor = "{!JSENCODE(tPlan.trainingPlan.Background_Color__c)}";
+                                    var txtcolor = "{!JSENCODE(tPlan.trainingPlan.Text_Color__c)}";
+                                    var bkimage = "url('{!JSENCODE(tPlan.trainingPlan.Background_Image_URL__c)}')";
+                                    $jk('#hero-banner').css('background-color', bkcolor);
+                                    $jk('#hero-banner').css('color', txtcolor);
+                                    $jk('#hero-banner').css('background-image', bkimage);
+
+                                    console.log('process : ' + '{!processStatus}');
+                                    console.log('allowReg : ' + allowReg);
+                                    if ('{!processStatus}' == 'Success' || allowReg == true) {
+                                        $jk('.enrolBtn').hide();
+                                        registerForTraining(); //MLO 
+                                        //console.log('nonmember : ' + '{!nonMember_memberBenefit}');
+                                        //console.log('tplan type: ' + '{!tPlan.trainingPlan.Type__c}');
+                                        if (!('{!nonMember_memberBenefit}' == 'Paid' && '{!tPlan.trainingPlan.Type__c}' == 'Member Benefit') && '{!tPlan.trainingPlan.Type__c}' != 'Paid') {
+                                            setTimeout(function () { processDonation(); }, 1000);
+                                        }
+                                    }else{
+                                        // REDIRECT TO NEW COMMUNITY PAGE /s/training-plan/trainingPlanId
+                                        console.log('attempting to redirect to new page');
+                                        //redirectToCommDetail();
+                                    }
+
+                                    $jk('.lms-btn-section').on('click', function () {
+                                        var sectionId = $jk(this).attr('data-section-toggle-id');
+                                        if ($jk(sectionId + '.slds-is-open').length == 1) {
+                                            $jk(sectionId).removeClass('slds-is-open');
+                                        } else {
+                                            $jk(sectionId).addClass('slds-is-open');
+                                        }
+                                    });
+
+                                    /* JRC */
+                                    $jk('#cpd-add-to-cpd-plan').on('click', function () {
+                                        if (confirm('You are about to add this course to your current CPD Plan. Click OK if you wish to continue.')) {
+                                            createTrainingPlanBookmark_JS();
+                                        }
+                                    });
+
+                                    // if( parseInt('{! tPlan.sections.size }') == 0 ){
+                                    //     $jk('.lms-body-container').hide();
+                                    // }
+
+
+                                });
+
+                                function doRedirection() {
+                                    var retUrl = document.getElementById('{!$Component.redirectURL}').value;
+                                    if (retUrl && retUrl.length > 0) {
+                                        almond.redirectHandlerWithStatus(retUrl, false);
+                                    }
+                                }
+
+                                function showLaunchModal() {
+                                    $jk("#myLaunchModalBackdrop").addClass('slds-backdrop--open');
+                                    $jk('#myLaunchModal').addClass('slds-fade-in-open');
+                                }
+                                function hideLaunchModal() {
+                                    $jk('#myLaunchModal').removeClass('slds-fade-in-open');
+                                    $jk("#myLaunchModalBackdrop").removeClass('slds-backdrop--open');
+                                    return false;
+                                }
+
+                                function showContentModal() {
+                                    $jk("#myContentModalBackdrop").addClass('slds-backdrop--open');
+                                    $jk('#myContentModal').addClass('slds-fade-in-open');
+                                }
+                                function hideContentModal() {
+                                    $jk('#contentIframe').prop('src', '');
+                                    $jk('#myContentModal').removeClass('slds-fade-in-open');
+                                    $jk("#myContentModalBackdrop").removeClass('slds-backdrop--open');
+                                    return false;
+                                }
+
+                                function proceedRedirect() {
+                                    var isGuest = $('[id$="isGuest"]').val();
+                                    var redirectExtURL = $('[id$="redirectExtURL"]').val();
+                                    console.log('proceed: ' + redirectExtURL);
+                                    if (redirectExtURL) {
+                                        if (isGuest == 'guest') parent.window.location.replace(redirectExtURL);
+                                        else window.location.replace(redirectExtURL);
+                                    }
+                                }
+
+                                function login() {
+                                    var redirectExtURL = '{!siteUrl}' + 'CommunitiesLogin';//'https://psa-my-psa.cs114.force.com/CommunitiesLogin';
+                                    parent.window.location.replace(redirectExtURL);
+                                }
+
+                                function register() {
+                                    var redirectExtURL = '{!siteUrl}' + 'CommunitiesSelfReg';//'https://psa-my-psa.cs114.force.com/CommunitiesSelfReg';
+                                    parent.window.location.replace(redirectExtURL);
+                                }
+                                function doRegistration() {
+                                    console.log($jk);
+                                    $jk('.enrolBtn').prop('disabled', true);
+
+                                    if ({!isApprovalRequired                                
+}) {
+                                    fetchPlanInfo();
+                                }else {
+                                    // registerForTraining();
+                                    console.log('call register');
+                                    setTimeout(function () {
+                                        var redirectExtURL = $('[id$="redirectExtURL"]').val();
+                                        var validation = document.getElementById('{!$Component.validationError}').value;
+                                        console.log('setTimeout');
+                                        if ($('[id$="isGuest"]').val() != 'guest' && validation != 'true') {
+                                            console.log('call eventEnrol');
+                                            if ('{!isEvent}' == 'Select Date')
+                                                eventEnrol();
+                                            else {
+                                                registerForTraining();
+                                                if (!('{!nonMember_memberBenefit}' == 'Paid' && '{!tPlan.trainingPlan.Type__c}' == 'Member Benefit') && '{!tPlan.trainingPlan.Type__c}' != 'Paid') {
+                                                    setTimeout(function () { processDonation(); }, 1000);
+                                                }
+                                            }
+                                            //window.location.replace(redirectExtURL);
+                                            //   window.open(redirectExtURL);
+                                        }
+                                        else {
+                                            $jk("#customLaunchModalBackdrop").addClass('slds-backdrop--open');
+                                            $jk('#customLaunchModal').addClass('slds-fade-in-open');
+                                        }
+                                    }, 1800);
+                                } 
+                                }
+
+
+                                function launchLearning(learningURL, target) {
+                                    hideLaunchModal();
+                                    if (target == 'iframe') {
+                                        $jk('#contentLink').unbind('click');
+                                        $jk('#contentLink').click(function () {
+                                            almond.redirectHandler(learningURL);
+                                        });
+                                        showContentModal();
+                                    } else {
+                                        almond.redirectHandler(learningURL);
+                                    }
+                                }
+                                function showVError() {
+                                    var validation = document.getElementById('{!$Component.validationError}').value;
+                                    var error_msg = document.getElementById('{!$Component.ErrorMsg}').value;
+                                    if (validation == 'true') {
+                                        $jk("#customLaunchModalBackdrop").addClass('slds-backdrop--open');
+                                        $jk('#customLaunchModal').addClass('slds-fade-in-open');
+                                        $('[id$="feedback_error"]').text(error_msg);
+                                        if ($('[id$="isGuest"]').val() != 'guest') $('.btnLbl').text('Okay');
+                                    }
+                                }
+                                function hideVError() {
+                                    $jk("#customLaunchModalBackdrop").removeClass('slds-backdrop--open');
+                                    $jk('#customLaunchModal').removeClass('slds-fade-in-open');
+                                }
+                                function sample() {
+                                    console.log('test');
+                                }
+                            </script>
+
+                            <apex:actionStatus id="status">
+                                <apex:facet name="start">
+                                    <apex:outputPanel >
+                                        <c:LMSStatus statusComponentId="{!$Component.status}" />
+                                    </apex:outputPanel>
+                                </apex:facet>
+                            </apex:actionStatus>
+
+                        </apex:form>
+                    </div>
+                </div>
+            </apex:define>
+
+        </apex:composition>
+    </apex:outputPanel>
+    <apex:outputPanel layout="none" rendered="{!tPlan == null}">
+        <apex:pageMessages />
+    </apex:outputPanel>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+</apex:page>

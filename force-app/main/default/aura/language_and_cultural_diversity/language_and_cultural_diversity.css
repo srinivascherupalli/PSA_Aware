@@ -1,0 +1,29 @@
+.THIS.slds-container {
+    background: #fff;
+    padding: 50px 35px;
+}
+
+.THIS .slds-form-element {
+    margin: 20px 0;
+}
+
+.THIS .custom-btn {
+    border: 1px solid #003d79;
+}
+
+.THIS .custom-btn-v2 {
+    background: #607a91;
+    color: #fff;
+}
+
+@media (max-width:425px) {
+    .THIS button.slds-button {
+        margin: 3px 0;
+        width: 100%;
+        height: 45px;
+    }
+    .THIS .slds-modal__container {
+        width: 88% !important;
+        margin: 0 20px;
+    }
+}

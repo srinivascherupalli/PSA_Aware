@@ -1,0 +1,65 @@
+.THIS .slds-page-header__title {
+    color: rgb(0, 64, 119) !important;
+    font-weight: 600;
+    
+}
+.THIS .slds-border_top {
+    border-top: 0px solid rgb(217, 219, 221);
+}
+.THIS .slds-border_right {
+    border-right: 0px solid rgb(217, 219, 221);
+}
+.THIS .slds-border_left {
+    border-left: 0px solid rgb(217, 219, 221);
+}
+.THIS .slds-border_bottom {
+    border-bottom: 0px solid rgb(217, 219, 221);
+}
+.THIS li {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    /*box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);*/
+    border: 2px solid white;
+    border-radius: 5px;
+    background-color: rgb(250,250,249);
+}
+.THIS .ui-icon{
+    font-weight: 800;
+    font-size: x-large;
+    padding-right: 10px;
+}
+
+.THIS .slds-form-element__legend{
+    padding-top: 15px;
+    font-weight: 400;
+}
+.THIS .slds-form-element__label {
+    padding-top: 15px;
+    
+}
+.THIS .reoderlabel{ 
+    padding-bottom: 25px;
+}
+.THIS .slds-listbox li {
+    display: table;
+    width: 100%;
+    border: 1px solid #d9dbdd;
+    margin: 5px 0;
+    cursor: grabbing;
+}
+
+.THIS .slds-listbox li:hover,
+.THIS .slds-listbox li:focus {
+    box-shadow: 0 0 5px rgba(0, 61, 121, 0.37);
+}
+
+.THIS .slds-listbox span,
+.THIS .slds-listbox p {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: left;
+}
+.THIS .slds-listbox span {
+    width: 1px;
+}

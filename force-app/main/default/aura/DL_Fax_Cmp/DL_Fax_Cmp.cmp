@@ -1,0 +1,158 @@
+<aura:component controller="DL_Fax" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:handler name="change" value="{!v.value}" action="{!c.itemsChange}"/>
+    <aura:handler name="change" value="{!v.costApproved}" action="{!c.enableSendButton}"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="iconName" type="String" default="utility:share_file"/>
+    <aura:attribute name="buttonLabel" type="String" default="Send"/>
+    <aura:attribute name="fileName" type="String" />
+    <aura:attribute name="listFileName" type="String" />
+    <aura:attribute name="fileDataURL" type="String" />
+    <aura:attribute name="faxNumbers" type="String[]" />
+    <aura:attribute name="faxNumbersLength" type="Double" default="0"/>
+    <aura:attribute name="postCodes" type="String"/>
+    <aura:attribute name="options" type="List" default="[
+        {'label': 'Individual', 'value': 'option1'},
+        {'label': 'Postcode', 'value': 'option2'},
+        {'label': 'State Select', 'value': 'option4'},
+        {'label': 'CSV', 'value': 'option3'}                                                
+    ]"/>
+    <aura:attribute name="stateOptions" type="List" default="[
+        {'label': 'ACT', 'value': 'ACT'},
+        {'label': 'NSW', 'value': 'NSW'},
+        {'label': 'VIC', 'value': 'VIC'},
+        {'label': 'QLD', 'value': 'QLD'},
+        {'label': 'WA', 'value': 'WA'},
+        {'label': 'SA', 'value': 'SA'},
+        {'label': 'NT', 'value': 'NT'},
+        {'label': 'TAS', 'value': 'TAS'}
+    ]"/>
+    <aura:attribute name="stateValue" type="List" default=""/>
+    <aura:attribute name="value" type="String" default="option1"/>
+    <aura:attribute name="uploadFinished" type="Boolean" default="false"/>
+    <aura:attribute name="individualRequired" type="Boolean" default="true"/>
+    <aura:attribute name="postCodeRequired" type="Boolean" default="true"/>
+    <aura:attribute name="listFileRequired" type="Boolean" default="true"/>
+    <aura:attribute name="stateRequired" type="Boolean" default="true"/>
+    <aura:attribute name="costApproved" type="Boolean" default='false'/>
+    <aura:attribute name="faxSent" type="Boolean" default="false"/>
+    
+    <div style="height:100%; padding-top:10%;">
+        <aura:renderIf isTrue="{!v.showSpinner}">
+            <div style="height:100%; margin:0 auto;" class="slds-spinner_container" >
+                <div class="slds-spinner_brand slds-spinner slds-spinner_large" role="alert">
+                    <span class="slds-assistive-text">Loading, Please Wait...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:renderIf>
+  
+        <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small">
+            <div class="slds-col slds-align-middle" >
+                <lightning:radioGroup name="fax_RadioGroup"
+                    label="Fax Type:"
+                    options="{!v.options}"       
+                    value="{!v.value}"
+                    type="radio"/>
+            </div>
+        </div>
+        
+        <div aura:id="individualFax_Div" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small slds-hide">
+            <div class="slds-col slds-align-middle">
+                <lightning:input type="text" aura:id="individual_fax" label="Fax Number:" placeholder="eg. 0262854682" required="{!v.individualRequired}" minlength="10"/>
+            </div>
+        </div>
+        
+        <div aura:id="postCodeFax_Div" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small slds-hide">
+            <div class="slds-col slds-align-middle" >
+                <lightning:input class="slds-p-around_x-small" type="text" aura:id="postcode_fax" label="PostCode:" required="{!v.postCodeRequired}" minlength="4"/>
+                <p style="padding-left: 7%"><b>Example:</b></p>
+                <p style="padding-left: 7%">Separated: 2906,2909,2600</p>
+                <p style="padding-left: 7%">Range: 2600-2900</p>
+            </div>
+        </div>
+
+        <div aura:id="listUpload_Div" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small slds-hide">
+            <div class="slds-col slds-align-middle">
+                <lightning:input aura:id="listFile_Uploader" name="fileUploader" type="file" label="CSV File Upload:" multiple="false" accept=".csv" onchange="{!c.handleListFilesChange}" required="{!v.listFileRequired}"/>
+            </div>
+        </div>
+
+        <div aura:id="csv_Div" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small slds-hide">
+            <div class="slds-col slds-align-middle">
+                <lightning:icon iconName="doctype:csv" alternativeText="Doc CSV" size="small" />
+            </div>
+            <div class="slds-col slds-align-middle">
+                <p>{!v.listFileName}</p>
+            </div>
+         </div>
+
+         <div aura:id="state_Div" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small slds-hide">
+            <div class="slds-col slds-align-middle">
+                <lightning:checkboxGroup name="states_CheckBoxGroup"
+                    aura:id="states_CheckBoxGroup" 
+                    label="States"
+                    options="{! v.stateOptions }"
+                    value="{! v.stateValue }"
+                    required="{!v.stateRequired}"
+                />
+            </div>
+         </div>
+     
+        <div aura:id="costCode_Div" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_medium">
+            <div class="slds-col slds-align-middle" >
+                <lightning:input type="text" aura:id="costCode" label="Charge to CostCode:" placeholder="eg. 6511-XX-XXX-XXXX" required="true" minlength="6"/>
+            </div>
+        </div>
+        
+        <div aura:id="faxNumbers_Div" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_xx-small slds-hide">
+        	<div class="slds-col slds-align-middle" id="faxNumbersText">
+            </div>
+        </div>
+        
+        <div aura:id="costQuote_Div" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_xx-small slds-hide">
+            <div aura:id="buttonQuote_Div" class="slds-col slds-align-middle" >
+                <lightning:button aura:id="button_Quote" label="Get Cost" onclick="{!c.getQuote}"/>
+            </div>
+            <div class="slds-col slds-align-middle slds-hide" aura:id="quoteText_Div" id="quoteText">
+            </div>
+            <div aura:id="refresh_Div" class="slds-col slds-align-middle slds-p-left_x-small slds-p-bottom_xx-small slds-hide" onclick="{!c.getQuote}">
+                <lightning:icon iconName="utility:refresh" alternativeText="Refresh" size="x-small" class="slds-icon_container refresh_Icon" />
+            </div>
+        </div>
+        
+        <div aura:id="approved_Div" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small slds-hide" >
+            <p class="slds-col slds-align-middle slds-p-right_x-small">Manager Approved?</p>
+            <ui:inputCheckbox aura:id="checkBox" class="slds-col slds-align-middle" change="{!c.onCheck}"/>
+        </div>
+        
+        <div aura:id="fileUploader_Div" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small">
+            <div class="slds-col slds-align-middle">
+                <lightning:input aura:id="file_Uploader" name="fileUploader" type="file" label="Fax Document Upload:" multiple="false" accept=".pdf" onchange="{! c.handleFilesChange}" required="true"/>
+            </div>
+         </div>
+        
+        <div aura:id="waiting_Div" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small slds-hide" style="height: 100%">
+        	<div class="slds-col slds-align-middle">
+        		<lightning:spinner alternativeText="Loading" size="small" />
+            </div>
+        </div>
+        
+        <div aura:id="pdf_Div" class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small slds-hide">
+            <div class="slds-col slds-align-middle">
+                <lightning:icon iconName="doctype:pdf" alternativeText="Doc PDF" size="small" />
+            </div>
+            <div class="slds-col slds-align-middle">
+                <p>{!v.fileName}</p>
+            </div>
+         </div>
+        
+        <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_x-small ">
+            <div class="slds-col slds-align-middle" >
+				<lightning:button aura:id="button_Send" label="{!v.buttonLabel}" iconName="{!v.iconName}"  disabled="true" onclick="{!c.handleClick}"/>                
+            </div>
+        </div>
+	</div>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+</aura:component>

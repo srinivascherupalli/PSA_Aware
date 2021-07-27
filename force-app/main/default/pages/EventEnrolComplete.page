@@ -1,0 +1,21 @@
+<apex:page controller="TrainingPlanPreviewController" sidebar="false" showHeader="false">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    
+    <script type="text/javascript">
+        var $jk = jQuery.noConflict();
+        $jk(document).ready(function(){        
+            //alert('site: ' + '{!siteUrl}');         
+            var url = new URL(window.location.href);
+            var trainingplanId = url.searchParams.get("id");
+             
+            if(trainingplanId != "" && trainingplanId != null){
+                var backTplan = window.location.origin;
+                backTplan = '{!siteUrl}' + 's/sfdcpage/%2Fapex%2FTrainingPlanPreview%3Fid='+trainingplanId+'&p=reg';
+                console.log('siteUrl','{!siteUrl}');
+                console.log('backTplan ',backTplan );
+                //'https://staging-my-psa.cs6.force.com/s/sfdcpage/%2Fapex%2FTrainingPlanPreview%3Fid='+trainingplanId+'&p=reg';
+                parent.window.location = backTplan; 
+            }
+        });
+    </script>
+</apex:page>

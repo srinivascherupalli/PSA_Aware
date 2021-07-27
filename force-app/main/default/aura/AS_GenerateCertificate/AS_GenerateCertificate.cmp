@@ -1,0 +1,8 @@
+<aura:component controller="AS_pdfTriggerController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<h1>Clicking 'Generate Certificate' button will create a new membership certificate for your Account, given that you're a current member. This may take a few minutes to process.</h1>
+	<br/>
+	<h1>If the attachment does not appear automatically, please refresh the page. </h1>
+	<br/>
+    	<lightning:button label="Generate Certificate" onclick="{!c.handleClick}"/> 
+    <br/>
+</aura:component>

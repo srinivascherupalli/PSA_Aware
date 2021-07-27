@@ -1,0 +1,95 @@
+<aura:component controller="AgeDetailsController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,forceCommunity:themeLayout" access="global">
+    <aura:registerEvent name="Enrolment_Event" type="c:EnrolmentActiveStep"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="enrolment" type="Enrolment_Form__c" default="{
+        'sobjectType': 'Enrolment_Form__c',
+        'As_over_age__c' : '',
+        'AS_Parent_Guardian_Name__c' : '',
+        'AS_Parent_Guardian_Phone_Number__c' : '',
+        'AS_Parent_Guardian_Email__c' : '',
+        'Enrolment_Status__c' : '',
+    }" />
+
+    <aura:attribute name="options" type="List" default="[
+        {'label': 'Yes', 'value': 'Yes'},
+        {'label': 'No', 'value': 'No'}
+    ]"/>
+
+    <aura:attribute name="showGuardianfields" type="Boolean" default="false"/>
+
+    <aura:attribute name="enrolId" type="String"/>
+
+    <aura:attribute name="accountId" type="String"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+ 
+    <div class='slds-container'>
+        <lightning:layout >
+            
+            <lightning:layoutItem padding="around-small" size="12">
+
+                <lightning:radioGroup
+                    name="radioGroup"
+                    aura:id="ageradio"
+                    label="Are you over the age of 18?"
+                    options="{! v.options }"
+                    type="radio"
+                    value="{!v.enrolment.As_over_age__c}"
+                    required="true"
+                    onchange="{!c.ageCallback}"
+                    disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"
+                />
+
+                <aura:if isTrue="{!v.showGuardianfields}">
+
+                    <div class="slds-m-top_xx-large slds-m-bottom_large slds-text-longform">
+                        <p>Parental/Guardian consent is required for all students under the age of 18.</p>
+                        <div class="slds-m-top_small slds-m-bottom_small"></div>
+                        <p>Please enter your parent/guardian details below and ensure your parent/guardian completes the rest of the form on behalf of the student. This form requires a digital signature to be provided by the parent/guardian on successful submission.</p>
+                    </div>
+                    
+                    <lightning:input name="name" aura:id="name" label="Parent/Guardian name:" value="{!v.enrolment.AS_Parent_Guardian_Name__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+
+                    <lightning:input type="tel" name="phonenumber" aura:id="phonenumber" label="Parent/Guardian phone number:" value="{!v.enrolment.AS_Parent_Guardian_Phone_Number__c}" pattern="[0-9]{2}[0-9]{4}[0-9]{4}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" />
+
+                    <lightning:input type="email" name="emailaddress" aura:id="emailaddress" label="Parent/Guardian email address:" value="{!v.enrolment.AS_Parent_Guardian_Email__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" />
+
+                </aura:if>
+
+                 <!-- buttons here! -->
+                <div class="slds-m-top_xx-large slds-btn-content">
+                    <div class="slds-float_left">
+                        <aura:if isTrue="{!'Draft' == v.enrolment.Enrolment_Status__c}">
+                            <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{!c.cancelcallback}"/>
+                        </aura:if>
+                    </div>
+                    <div class="slds-float_right">
+
+                        <aura:if isTrue="{!'Draft' == v.enrolment.Enrolment_Status__c}">
+                                
+                            <!-- email button -->
+                            <lightning:button variant="Neutral" class="slds-save-email-btn"  label="Save &amp; Email me a link" title="Save &amp; Email me a link" onclick="{!c.emailFunc}"/> 
+
+                        </aura:if> 
+
+                            <!-- save button -->
+                            <lightning:button variant="brand"  class="slds-save-btn" label="Save and Continue" title="Save &amp; Continue" onclick="{!c.saveFunc}"/>
+
+                    </div>
+                </div>
+
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+
+</aura:component>

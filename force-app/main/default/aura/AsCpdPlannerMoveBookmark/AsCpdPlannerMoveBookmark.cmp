@@ -1,0 +1,7 @@
+<!-- AsCpdPlannerMoveBookmark -->
+<aura:component controller="AsCPDPlanner" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<h1>This will copy over all planned activity summary from this CPD Plan to your current CPD Plan. Your existing activity summaries for your current CPD Plan will still remain. Click the button to continue.</h1>
+	<br/>
+    	<lightning:button label="Move Incomplete Activities" onclick="{!c.handleClick}"/> 
+    <br/>
+</aura:component>

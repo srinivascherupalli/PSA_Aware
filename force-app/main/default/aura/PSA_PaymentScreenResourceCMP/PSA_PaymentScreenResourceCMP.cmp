@@ -1,0 +1,6 @@
+<aura:component > 
+    <ltng:require styles="{!$Resource.PSAPayment + '/psa/css/bootstrap.min.css'}"/>
+	<ltng:require styles="{!$Resource.PSAPayment + '/psa/css/style.css'}" />
+    <ltng:require styles="{!$Resource.PSAPayment + '/psa/css/all.min.css'}"/>    
+    <ltng:require styles="{!$Resource.PSAPayment + '/psa/css/media.css'}"/>  
+</aura:component>

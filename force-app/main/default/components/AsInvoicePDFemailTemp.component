@@ -1,0 +1,29 @@
+<!-- AsInvoicePDFemailTemp -->
+<apex:component access="global" controller="AS_pdfTriggerController" >
+
+    <apex:attribute name="relatedObject"
+                    description="Order Id"
+                    type="Order"
+                    />
+    <div style="max-width:800px">
+
+       <apex:image value="https://psa-org--dev--c.cs72.content.force.com/servlet/servlet.ImageServer?id=0155D000000EVzQ&oid=00D5D0000004fcS&lastMod=1525939174000"/>
+
+        <p style="color:#004077;font-family: arial;font-weight: 600;">Dear {!relatedObject.Account.Name}</p>
+        <p style="color:#004077;font-family: arial;">Thank you for placing your order with PSA. The invoice for order# {!relatedObject.OrderNumber}  number is attached.</p>
+        <p style="color:#004077;font-family: arial;border-bottom: 1px dotted;padding-bottom: 22px;"> If you have any questions please contact us at 1300 369 772, quoting your PSA ID {!relatedObject.Account.PSA_PSA_ID__c}. </p>
+
+        <div>
+            <div style="float: left;">
+                <p style="color: #004077;font-size: 15px;font-family: arial;">Pharmaceutical Society of Australia <br/> Level 1, 44 Thesiger Court, Deakin ACT 2600 <br/>1300 369 772</p>
+            </div>
+            <div style="text-align: right;">
+                <apex:image style="margin: 5px;    width: 60px;" value="https://psa-org--dev--c.cs72.content.force.com/servlet/servlet.ImageServer?id=0155D000000EVzV&oid=00D5D0000004fcS&lastMod=1525939191000"/>
+                <apex:image style="margin: 5px;    width: 60px;" value="https://psa-org--dev--c.cs72.content.force.com/servlet/servlet.ImageServer?id=0155D000000EVzz&oid=00D5D0000004fcS&lastMod=1525941463000"/>
+                <apex:image style="margin: 5px;    width: 60px;" value="https://psa-org--dev--c.cs72.content.force.com/servlet/servlet.ImageServer?id=0155D000000EVza&oid=00D5D0000004fcS&lastMod=1525939214000"/>
+                <apex:image style="margin: 5px;    width: 60px;" value="https://psa-org--dev--c.cs72.content.force.com/servlet/servlet.ImageServer?id=0155D000000EVzf&oid=00D5D0000004fcS&lastMod=1525939279000"/>
+            </div>
+        </div> 
+
+    </div>
+</apex:component>

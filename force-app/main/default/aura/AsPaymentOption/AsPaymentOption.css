@@ -1,0 +1,76 @@
+.THIS, .THIS legend {
+    color:#607A91;
+    font-size: 16px;
+}
+
+.THIS .slds-form-element__label{
+     color:#607A91;
+     font-size:14px;
+}
+
+
+.THIS .payment-opt-wrapper {
+    padding: 38px;
+}
+ 
+.THIS .payment-opt-header {
+    margin-bottom: 49px;
+}
+
+.THIS .payment-opt-header  h1 { 
+    font-size: 20px;
+    border-bottom: 1px solid #eeeeee;
+    padding-bottom: 21px;
+    font-weight: 700;
+    color: #003D79;
+} 
+
+.THIS .payment-opt-costp-details {
+    margin: 30px 1px 30px 1px;
+}
+
+/* Save and continue button */
+.THIS .slds-save-btn {
+    font-size: 16px;
+    border: 2px solid #003d79;
+    background: #003d79;
+    border-radius: 6px;
+    opacity: 1;
+    color: #fff;
+    transition: all .25s;
+    min-width: 100px;
+}
+.THIS .slds-save-btn:hover,
+.THIS .slds-save-btn:focus {
+    background: #fff;
+    color: #003d79;
+}
+
+/* Save and email me a link button */
+.THIS .slds-save-email-btn {
+    font-size: 16px;
+    color: #003d79;
+    border: 2px solid #003d79;
+    border-radius: 6px;
+    opacity: 1;
+    transition: all .25s;
+    min-width: 100px;
+}
+.THIS .slds-save-email-btn:hover,
+.THIS .slds-save-email-btn:focus {
+    color: #fff;
+    background: #003d79;
+}
+ 
+.THIS .slds-button_outline-brand { 
+    border-color: #003D79;
+}
+
+.THIS .payment-opt-foooter {
+    margin: 1% auto;
+    width: 90%; 
+    padding-top: 118px; 
+}
+.THIS .payment-voucher{
+    padding-top: 10px;
+}

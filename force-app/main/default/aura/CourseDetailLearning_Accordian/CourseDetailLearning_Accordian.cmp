@@ -1,0 +1,10 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+	<aura:attribute name="learningObjectText" type="string"/>
+    <lightning:accordion aura:id="accordion" activeSectionName="B" allowMultipleSectionsOpen="true">
+           <lightning:accordionSection name="B" label="Learning Objectives">
+            <div class="uiOutputRichText">       
+			<ui:outputRichText value="{!v.learningObjectText}"/>
+			</div>
+        </lightning:accordionSection>
+    </lightning:accordion>
+</aura:component>

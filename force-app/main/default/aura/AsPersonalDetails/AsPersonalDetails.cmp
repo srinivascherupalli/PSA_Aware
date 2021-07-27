@@ -1,0 +1,345 @@
+<aura:component controller="ASPersonalDetailsClass" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,forceCommunity:themeLayout" access="global">
+    <aura:registerEvent name="Enrolment_Event" type="c:EnrolmentActiveStep"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="recordIdEnrol" type="String"/>
+    <aura:attribute name="gender" type="String[]"/>
+    <aura:attribute name="enrolDraf" type="Boolean" default="true"/>
+    <aura:attribute name="enrolmentlist" type="List"/>
+
+    <aura:attribute name="account" type="Account" default="{
+        'sobjectType' : 'Account',
+        'FirstName' : '',
+        'Salutation' : '',
+        'LastName' : '',
+        'Age__c' : '',
+        'PersonTitle' : '',
+        'AS_Middle_Name__pc' : '',
+        'Gender__pc' : '',
+        'PSA_Preferred_Name__c' : '',
+        'Date_of_Birth__c' : '',
+        'PersonEmail' : '',
+        'PersonMobilePhone' : '',
+        'PersonHomePhone' : '',
+        'PersonMailingState' : '',
+        'AS_Work_Phone__pc' : '',
+        'BillingStreet' : '',
+        'BillingCity' : '',
+        'BillingState' : '',
+        'BillingPostalCode' : '',
+        'ShippingStreet' : '',
+        'ShippingCity' : '',
+        'ShippingState' : '',
+        'ShippingPostalCode' : '',
+        'AS_Unique_Student_Identifier__c' : '',
+        'USI_Status__pc' : '',
+        'AS_VSN__c' : '' 
+    }"/>
+
+    <aura:attribute name="enrolment" type="Enrolment_Form__c" default="{
+        'sobjectType': 'Enrolment_Form__c',
+        'AS_Parent_Guardian_Name__c' : '',
+        'AS_Parent_Guardian_Phone_Number__c' : '',
+        'AS_Parent_Guardian_Email__c' : '',
+        'AS_Alternate_Email__c' : '',
+        'AS_Business_Pharmacy_Name__c' : '',
+        'AS_Primary_Property_name__c' : '',
+        'AS_Primary_Unit_details__c' : '',
+        'AS_Primary_Street_Number__c' : '',
+        'AS_Primary_Suburb_Town__c' : '',
+        'AS_Alternate_Property_name__c' : '',
+        'AS_Alternate_Unit_details__c' : '',
+        'AS_Alternate_Street_Number__c' : '',
+        'AS_same_as_above__c' : '',
+        'AS_Enrollment_State__c' : '',
+        'Enrolment_Status__c' : '',
+        'AS_Title__c' : '',
+        'AS_Given_Name__c' : '',
+        'AS_Surname__c' : '',
+        'AS_second_given_name__c' : '',
+        'AS_Preferred_Name__c' : '',
+        'AS_Date_of_Birth__c' : '',
+        'AS_Gender__c' : '',
+        'AS_Home_Phone__c' : '',
+        'AS_Work_Phone__c' : '',
+        'AS_Mobile_Phone__c' : '',
+        'AS_Email__c' : '',
+        'AS_Primary_Street__c' : '',
+        'AS_City_of_Birth__c' : '',
+        'AS_Primary_State__c' : '',
+        'AS_Primary_Postcode__c' : '',
+        'AS_Alternate_Street__c' : '',
+        'AS_Alternate_Suburb__c' : '',
+        'AS_Alternate_State__c' : '',
+        'AS_Alternate_Postcode__c' : '',
+        'AS_Unique_Student_Identifier__c' : '',
+        'AS_VSN__c' : ''
+    }"/>
+
+    <aura:attribute name="salutation" type="List"/>
+    <aura:attribute name="showToast" type="Boolean" default="false" />
+    <aura:attribute name="message" type="String" />
+    <aura:attribute name="toastTheme" type="String" />
+    <aura:attribute name="disabledUSI" type="Boolean" />
+    
+    <aura:attribute name="openEditModal" type="Boolean"  />
+    <aura:attribute name="refresh" type="Boolean"  default="true" />
+    <aura:attribute name="showSpinner" type="Boolean"/>
+    <aura:attribute name="showGuardianfields" type="Boolean" default="false" />
+    <aura:attribute name="over18val" type="String" default="Yes"/>
+    <aura:attribute name="tempModal" type="Boolean" default="false" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    
+    <h2 class='slds-title'><b>Confirm your details</b></h2>
+    <div class='slds-container'>
+        <form class='slds-form-wrapper'>
+
+            <div class="slds-field-group">
+
+                <div class="slds-grid slds-m-top_large">
+
+                    <div class="slds-col slds-size_12-of-12">
+                        <h3 class="slds-text-heading_small slds-title"><b>Personal Details</b></h3>
+                    </div>
+                </div>
+
+                <hr class='hrstyle'></hr>
+
+                <div class="slds-p-bottom_small">
+                    <lightning:select name="education-field" aura:id="slds-field-validate" required="true" variant="label-stacked" class="picklistfield selectalign" label="Title:" value="{!v.enrolment.AS_Title__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}">
+                        <option value="">-- None --</option>
+                        <aura:iteration items="{!v.salutation}" var="salute">
+                            <option value="{!salute}" text="{!salute}" selected="{!salute == v.enrolment.AS_Title__c}"></option>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+                
+                <div class="slds-p-bottom_small">
+                    <h2 class="customtext">
+                        Enter your full name <lightning:helptext content="Please write the name that you used when you applied for your Unique Student Identifier (USI), including any middle names."/>
+                    </h2>
+                </div>
+
+                <div class="slds-p-bottom_small">
+                    <lightning:input type="text" aura:id="slds-field-validate" name="education-field"  required="true" variant="label-stacked" class="inputtext" label="Family name (surname):" value="{!v.enrolment.AS_Surname__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" />
+                </div>
+
+                <div class="slds-p-bottom_small">
+                    <lightning:input type="text" aura:id="slds-field-validate" name="education-field" required="true" variant="label-stacked" class="inputtext" label="First given name:" value="{!v.enrolment.AS_Given_Name__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" />
+                </div>
+
+                <div class="slds-p-bottom_small">
+                    <lightning:input type="text" name="secondgivenname" variant="label-stacked" class="inputtext" label="Second given name (middle):" value="{!v.enrolment.AS_second_given_name__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_small">
+                    <lightning:input type="text" variant="label-stacked" class="inputtext" label="Preferred name:" value="{!v.enrolment.AS_Preferred_Name__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_small">
+                    <lightning:input type="date" required="true" aura:id="slds-field-validate"  variant="label-stacked" class="inputtext" placeholder="DD/MM/YYYY" label="Enter your birthdate" value="{!v.enrolment.AS_Date_of_Birth__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_small">
+                    <lightning:select name="editgender" aura:id="slds-field-validate" required="true" variant="label-stacked" class="picklistfield selectalign" label="Gender:" value="{!v.enrolment.AS_Gender__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}">
+                        <option value="">-- None --</option>
+                        <aura:iteration items="{!v.gender}" var="Stpicklist">
+                            <option value="{!Stpicklist}" text="{!Stpicklist}" selected="{!Stpicklist == v.enrolment.AS_Gender__c}"></option>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+            </div>
+            <div class="slds-field-group">
+
+                <div class="slds-grid slds-m-top_large">
+                    <h3 class='slds-text-heading_small slds-title'><b>Contact Details</b></h3>
+                </div>
+                <hr class='hrstyle'></hr>
+
+                <div class="slds-p-bottom_xx-small">
+                <lightning:input type="tel" variant="label-stacked" class="inputtext" label="Home phone" value="{!v.enrolment.AS_Home_Phone__c}" pattern="[0-9]{2}[0-9]{4}[0-9]{4}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" />
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="tel" variant="label-stacked" class="inputtext" label="Work phone" value="{!v.enrolment.AS_Work_Phone__c}" pattern="[0-9]{4}[0-9]{3}[0-9]{3}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" />
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="tel" required="true" variant="label-stacked" class="inputtext" label="Mobile" aura:id="slds-field-validate" name="education-field"  value="{!v.enrolment.AS_Mobile_Phone__c}" pattern="[0-9]{4}[0-9]{3}[0-9]{3}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" />
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="email" required="true" variant="label-stacked" class="inputtext" aura:id="slds-field-validate" label="Email address" value="{!v.enrolment.AS_Email__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" />
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="email" variant="label-stacked" class="inputtext" label="Alternative email address" value="{!v.enrolment.AS_Alternate_Email__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" />
+                </div>
+
+            </div>
+            <div class="slds-field-group">
+
+                <div class=" slds-m-top_large">
+                    <h3 class='slds-text-heading_small slds-title'><b>Residential Address</b></h3>
+                </div>
+
+                <hr class="hrstyle"></hr>
+
+                <div class="slds-p-bottom_small">
+                    <h2 class="customtext">
+                        What is the address of your usual residence?  <lightning:helptext content="Please provide the physical address (street number and name not post office box) where you usually reside rather than any temporary address at which you reside for training, work or other purposes before returning to your home. 
+                        If you are from a rural area use the address from your state or territory’s ‘rural property addressing’ or ‘numbering’ system as your residential street address. 
+                        Building/property name is the official place name or common usage name for an address site, including the name of a building, Aboriginal community, homestead, building complex, agricultural property, park or unbounded address site.
+                        "/>
+                    </h2>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="text" aura:id="slds-field-validate" name="primary_property_name" label="Building/property name:" variant="label-stacked" class="inputtext" value="{!v.enrolment.AS_Primary_Property_name__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="text" aura:id="slds-field-validate" name="primary_unit_details" label="Flat/unit details:" variant="label-stacked" class="inputtext" value="{!v.enrolment.AS_Primary_Unit_details__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="text" aura:id="slds-field-validate" name="primary_street_number" required="true" label="Street or lot number:" variant="label-stacked" class="inputtext" value="{!v.enrolment.AS_Primary_Street_Number__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="text" required="true" aura:id="slds-field-validate" name="billingstreet" variant="label-stacked" class="inputtext" label="Street Name:" value="{!v.enrolment.AS_Primary_Street__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="text" aura:id="slds-field-validate" name="billingcity" required="true" variant="label-stacked" class="inputtext" label="Suburb/town" value="{!v.enrolment.AS_Primary_Suburb_Town__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="text" aura:id="slds-field-validate" name="billingstate" required="true" variant="label-stacked" class="inputtext" label="State/territory:" value="{!v.enrolment.AS_Primary_State__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="tel" aura:id="slds-field-validate" name="billingpostalcode" required="true" variant="label-stacked" class="inputtext" label="Postcode" value="{!v.enrolment.AS_Primary_Postcode__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-m-top_large slds-p-bottom_xx-small">
+                    <h2 class="customtext">What is your postal address (if different from above)?</h2>
+                </div>
+
+                <div class="slds-m-top_x-small slds-p-bottom_small">
+                    <lightning:input type="checkbox" aura:id="slds-field-validate" name="boxPack" checked="{!v.enrolment.AS_same_as_above__c}" onchange="{!c.showDiffPostalAdd }" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}" label="Same as above"/>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="text" label="Building/property name:" variant="label-stacked" class="inputtext" aura:id="slds-field-validate" name="alterpropertyname" value="{!v.enrolment.AS_Alternate_Property_name__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="text" label="Flat/unit details:" variant="label-stacked" class="inputtext" aura:id="slds-field-validate" name="alterunitdetails" value="{!v.enrolment.AS_Alternate_Unit_details__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="text" required="true" label="Street or lot number:" variant="label-stacked" class="inputtext" aura:id="slds-field-validate" name="alterstreetnumber" value="{!v.enrolment.AS_Alternate_Street_Number__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="text" required="true" variant="label-stacked" class="inputtext" aura:id="slds-field-validate" name="altershippingstreet" label="Street Name:" value="{!v.enrolment.AS_Alternate_Street__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="text" required="true" variant="label-stacked" class="inputtext" aura:id="slds-field-validate" name="altershippingcity" label="Suburb, locality or town:" value="{!v.enrolment.AS_Alternate_Suburb__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="text" required="true" variant="label-stacked" class="inputtext" aura:id="slds-field-validate" name="altershippingstate" label="State/territory" value="{!v.enrolment.AS_Alternate_State__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+                <div class="slds-p-bottom_xx-small">
+                    <lightning:input type="tel" required="true" variant="label-stacked" class="inputtext" aura:id="slds-field-validate" name="alterpostalcode" label="Postcode" value="{!v.enrolment.AS_Alternate_Postcode__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+
+            </div>
+
+            <div class="slds-field-group">
+
+                <div class="slds-m-top_large slds-text-heading_medium slds-title"><b>Enrollment State</b></div>
+                <hr class='hrstyle'></hr>
+                <div class="slds-form-control">
+                    <lightning:select aura:id="slds-field-validate" name="stateselect" label="Which state will you be primarily working in?" required="true" onchange="{!c.changeEnrolState}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}">
+                        <option value="">-- None --</option>
+                        <aura:iteration items="{!v.enrolmentlist}" var="state">
+                            <option value="{!state}" selected="{!state == v.enrolment.AS_Enrollment_State__c}">{!state}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                    <lightning:helptext class="slds-help-text" content="The course you are enrolling in to may have state specific units included. Please select the state you work in."/>
+                </div>
+            </div>
+
+            
+            <div class="slds-field-group">
+                <div class="slds-m-top_large slds-p-bottom_small">
+                    <h2 class="slds-title"><b>Enter your Unique Student Identifier (USI)</b></h2> 
+                </div>
+        
+                <div class="slds-p-bottom_small">
+        
+                    <p class="slds-m-bottom_large">From 1 January 2015, we Pharmaceutical Society of Australia Ltd. can be prevented from issuing you with a nationally recognised VET qualification or statement of attainment when you complete your course if you do not have a Unique Student Identifier (USI). In addition, we are required to include your USI in the data we submit to NCVER. If you have not yet obtained a USI you can apply for it directly at <a href="https://www.usi.gov.au/students/create-your-usi/">https://www.usi.gov.au/students/create-your-usi/</a> on computer or mobile device.</p>
+        
+                    <p class="slds-m-bottom_large">You may already have a USI if you have done any nationally recognised training, which could include training at work, completing a first aid course or RSA (Responsible Service of Alcohol) course, getting a white card, or studying at a TAFE or training organisation. It is important that you try to find out whether you already have a USI before attempting to create a new one. You should not have more than one USI. To check if you already have a USI, use the ‘Forgotten USI’ link on the USI website at <a href="https://www.usi.gov.au/faqs/">https://www.usi.gov.au/faqs/</a></p>
+                </div>
+        
+                <div class="slds-p-bottom_medium">
+                    <lightning:input type="text" label="USI:" aura:id="slds-field-validate" required="true" variant="label-stacked" class="inputtext" value="{!v.enrolment.AS_Unique_Student_Identifier__c}" fieldLevelHelp="You must provide your USI on this enrolment form. Due to legislation requirements which came into effect 1 January 2015, students enrolled into an accredited unit/course must provide a USI if you do not have a USI, please create your USI via the government website: www.usi.gov.au/students/create-your-usi." disabled="{!v.disabledUSI}"/>
+                </div>
+        
+                <div class="slds-p-bottom_small">
+                    <h2 class="slds-title"><b>Enter your Victorian Student Number</b></h2> 
+                </div>
+
+                <div class="slds-p-bottom_small">
+        
+                    <p class="slds-m-bottom_large">The Victorian Student Number (VSN) is issued when the student is first enrolled in a Victorian educational provider which is usually when they start in Prep, and remains current until the student turns 25 years.</p>
+        
+                    <p class="slds-m-bottom_large">VSNs are nine-digit numbers that are similar to a tax file number, for example, 982567013. This field only applies to students studying in Victoria.</p>
+                </div>
+        
+        
+                <div class="slds-p-bottom_medium">
+                    <lightning:input type="text" label=" VSN: (if known)" variant="label-stacked" class="inputtext" value="{!v.enrolment.AS_VSN__c}" disabled="{!'Draft' != v.enrolment.Enrolment_Status__c}"/>
+                </div>
+            </div>
+
+            <div class="slds-m-top_xx-large slds-btn-content">
+                <div class="slds-float_left">
+                    <lightning:button variant="Neutral" class="slds-back-btn" label="Back" title="Back" onclick="{!c.backCallback}"/>
+                    <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{!c.cancelAction}"/>
+                </div>
+                <div class="slds-float_right">
+
+                    <aura:if isTrue="{!'Draft' == v.enrolment.Enrolment_Status__c}">
+                            
+                        <!-- email button -->
+                        <lightning:button variant="Neutral" class="slds-save-email-btn"  label="Save &amp; Email me a link" title="Save &amp; Email me a link" onclick="{!c.emailFunc}"/> 
+
+                    </aura:if> 
+
+                     <!-- save button -->
+                     <lightning:button variant="brand"  class="slds-save-btn" label="Save and Continue" title="Save &amp; Continue" onclick="{!c.saveRecordEnrol}"/>
+
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+
+</aura:component>

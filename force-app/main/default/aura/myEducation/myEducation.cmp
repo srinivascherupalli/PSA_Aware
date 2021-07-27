@@ -1,0 +1,272 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  access="global"
+  controller="PSA_MyEducation"
+>
+  <!--Handlers-->
+  <aura:handler name="init" value="this" action="{!c.doInit}" />
+  <aura:handler event="force:refreshView" action="{!c.doInit}" />
+  <aura:handler event="force:navigateToSObject" action="{!c.navigate}" />
+  <!--Attribute-->
+  <aura:attribute name="mainCPDData" type="Training_Plan_Assignment__c[]" />
+  <aura:attribute name="plannedSummary" type="AsCPD_Learning_Summary__c[]" />
+  <aura:attribute name="enrolledSummary" type="AsCPD_Learning_Summary__c[]" />
+  <aura:attribute name="progressSummary" type="AsCPD_Learning_Summary__c[]" />
+  <aura:attribute name="completedSummary" type="AsCPD_Learning_Summary__c[]" />
+  <aura:attribute name="notStartedSummaryNumber" type="integer" />
+  <aura:attribute name="ProgressSummaryNumber" type="integer" />
+  <aura:attribute name="completedSummaryNumber" type="integer" />
+  <aura:attribute name="completedSelectedNumber" type="integer" />
+  <aura:attribute name="cpdPlanData" type="PSA_MyEducation.courseCatalogWrapper" />
+  <aura:attribute name="selectedItem" type="String" />
+  <aura:attribute name="sortBy" type="string" default="az" />
+ <aura:attribute name="group1DefaultImage" type="String" />
+  <aura:attribute name="group2DefaultImage" type="String" />
+ 
+  <!--Starts here-->
+<aura:if isTrue="{!v.cpdPlanData.userDeatils.ProfileId!= '00e7F000000ZqTwQAK'}">
+
+  <body>
+    <!--PageHero-->
+    <c:mycpdMemberPageHero
+      selectedItem="{!v.selectedItem}"
+      cpdPlanData="{!v.cpdPlanData.userDeatils}" cpageName="My Education"
+    />
+
+    <section class="pb-2">
+      <div class="container">
+        <div class="row">
+            <!--Sidebar Tabs-->
+          <div class="col-sm-3">
+            <div class="cd-sidebar">
+              <ul>
+                <li
+                  onclick="{!c.notStartedClick}"
+                  class="{!(v.selectedItem =='NotStarted') ? 'active' : 
+                                                                        '' }"
+                >
+                  <a href="javascript:void(0);">
+                    <span class="cd-sidebar__index">01</span> Not Started
+                      <span class="cd-sidebar__count"
+                          >{!v.notStartedSummaryNumber}</span
+                        >
+                  </a>
+                </li>
+                <li
+                  onclick="{!c.progressClick}"
+                  class="{!(v.selectedItem == 'InProgress') ? 'active' : 
+                                                                      '' }"
+                >
+                  <a href="javascript:void(0);">
+                    <span class="cd-sidebar__index">02</span> In Progress
+                      <span class="cd-sidebar__count"
+                          >{!v.ProgressSummaryNumber}</span
+                        >
+                  </a>
+                </li>
+                <li
+                  onclick="{!c.completeClick}"
+                  class="{!(v.selectedItem == 'Completed') ? 'active' : '' }"
+                >
+                  <a href="javascript:void(0);">
+                    <span class="cd-sidebar__index">03</span> Completed
+                      
+                  </a>
+                </li>
+              </ul>
+              <div class="cd-sidebar__shadow cd-sidebar__shadow--end"></div>
+            </div>
+          </div>
+            <!--Right side content starts here-->
+          <div class="col-sm-9">
+            <aura:if isTrue="{!v.selectedItem =='NotStarted'}">
+              <div class="row align-items-center mb-1">
+                <div class="col-12 col-sm">
+                  
+                </div>
+                <div class="col-12 col-sm">
+                  <lightning:select
+                    aura:id="select"
+                    name="select"
+                    label="Sort by"
+                    onchange="{! c.onChange }"
+                  >
+                    <option value="az">Name: A to Z</option>
+                    <option value="za">Name: Z to A</option>
+                    <option value="edo">Enrolled Date: Oldest to Newest</option>
+                    <option value="edn"
+                      >Enrolled Date: Newest to Oldest
+                    </option>
+                  </lightning:select>
+                </div>
+              </div>
+
+              <div class="row">
+                <aura:iteration items="{!v.enrolledSummary}" var="item">
+                  <div class="col-12 col-md-6 col-lg-4 card-wrapper">
+                    <a
+                      id="{!item.Training_Plan__c}"
+                      onclick="{!c.navigate}"
+                      class="card card--course card--learn card--progress"
+                    >
+                      <div class="card__header">
+                        <div class="card__img-placeholder"></div>
+                         <aura:if isTrue="{!not(empty(item.Training_Plan__r.Achievement__r.Eligible_Image__c))}"> 
+                              <ui:outputRichText value="{!item.Training_Plan__r.Achievement__r.Eligible_Image__c}" class="card__badge" />
+                          </aura:if>
+                          <aura:if isTrue="{!and(empty(item.Training_Plan__r.Achievement__r.Eligible_Image__c),item.Training_Plan__r.Group__c=='Group 1')}">
+                              <ui:outputRichText value="{!v.group1DefaultImage}" class="card__badge"/>
+                          </aura:if>
+                          <aura:if isTrue="{!and(empty(item.Training_Plan__r.Achievement__r.Eligible_Image__c),item.Training_Plan__r.Group__c=='Group 2')}">
+                              <ui:outputRichText value="{!v.group2DefaultImage}" class="card__badge"/>
+                          </aura:if>
+                          <aura:if isTrue="{!and(empty(item.Training_Plan__r.Achievement__r.Eligible_Image__c),item.Training_Plan__r.Group__c=='Group 3')}">
+                          <img src="{!$Resource.PSAFED + '/dist/images/group3-blanklogo.gif'}" class="card__badge"/>
+                          </aura:if>
+                        <!--img src="{!$Resource.PSAFED + '/dist/images/credit-badge-group-1.png'}" class="card__badge"/-->
+                      </div>
+                      <div class="card__body">
+                        <p class="card__title"
+                          >{!item.Training_Plan__r.Name}
+                          </p
+                        >
+
+                        <div class="card__progress-wrapper">
+                          <span class="card__progress-text">Not started</span>
+                          <lightning:progressBar value="0" size="large" />
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </aura:iteration>
+              </div>
+            </aura:if>
+            <aura:if isTrue="{!v.selectedItem =='InProgress'}">
+                
+               <div class="row align-items-center mb-1">
+                <div class="col-12 col-sm">
+                  
+                </div>
+                <div class="col-12 col-sm">
+                  <lightning:select
+                    aura:id="selectProgress"
+                    name="selectProgress"
+                    label="Sort by"
+                    onchange="{! c.onChangeProgress }"
+                  >
+                    <option value="az">Name: A to Z</option>
+                    <option value="za">Name: Z to A</option>
+                    <option value="edo">Enrolled Date: Oldest to Newest</option>
+                    <option value="edn"
+                      >Enrolled Date: Newest to Oldest
+                    </option>
+                  </lightning:select>
+                </div>
+              </div>
+              <div class="container">
+                <div class="row">
+                  <aura:iteration items="{!v.progressSummary}" var="item">
+                    <div class="col-12 col-md-6 col-lg-4 card-wrapper">
+                      <a
+                        id="{!item.Training_Plan__c}"
+                        onclick="{!c.navigate}"
+                        class="card card--course card--learn card--progress"
+                      >
+                        <div class="card__header">
+                          <div class="card__img-placeholder"></div>
+                           <aura:if isTrue="{!not(empty(item.Training_Plan__r.Achievement__r.Eligible_Image__c))}"> 
+                              <ui:outputRichText value="{!item.Training_Plan__r.Achievement__r.Eligible_Image__c}" class="card__badge" />
+                          </aura:if>
+                          <aura:if isTrue="{!and(empty(item.Training_Plan__r.Achievement__r.Eligible_Image__c),item.Training_Plan__r.Group__c=='Group 1')}">
+                              <ui:outputRichText value="{!v.group1DefaultImage}" class="card__badge"/>
+                          </aura:if>
+                          <aura:if isTrue="{!and(empty(item.Training_Plan__r.Achievement__r.Eligible_Image__c),item.Training_Plan__r.Group__c=='Group 2')}">
+                              <ui:outputRichText value="{!v.group2DefaultImage}" class="card__badge"/>
+                          </aura:if>
+                          <aura:if isTrue="{!and(empty(item.Training_Plan__r.Achievement__r.Eligible_Image__c),item.Training_Plan__r.Group__c=='Group 3')}">
+                          <img src="{!$Resource.PSAFED + '/dist/images/group3-blanklogo.gif'}" class="card__badge"/>
+                          </aura:if>
+                          <!--img src="{!$Resource.PSAFED + '/dist/images/credit-badge-group-1.png'}" class="card__badge"/-->
+                        </div>
+                        <div class="card__body">
+                          <p class="card__title">{!item.Training_Plan__r.Name}</p>
+
+                          <div class="card__progress-wrapper">
+                            <span class="card__progress-text">In Progress</span>
+                            <lightning:progressBar value="50" size="large" />
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </aura:iteration>
+                </div>
+              </div>
+            </aura:if>
+            <aura:if isTrue="{!v.selectedItem =='Completed'}">
+              <div class="row align-items-center mb-1">
+                <div class="col-12 col-sm">
+                 
+                </div>
+                <div class="col-12 col-sm">
+                  <lightning:select
+                    aura:id="selectComplete"
+                    name="select"
+                    label="Sort by"
+                    onchange="{! c.onChangecompleted}"
+                  >
+                    <option value="az">Name: A to Z</option>
+                    <option value="za">Name: Z to A</option>
+                    <option value="edo">Enrolled Date: Oldest to Newest</option>
+                    <option value="edn"
+                      >Enrolled Date: Newest to Oldest
+                    </option>
+                  </lightning:select>
+                </div>
+              </div>
+              <div class="row">
+                <aura:iteration items="{!v.completedSummary}" var="item">
+                  <div class="col-12 col-md-6 col-lg-4 card-wrapper">
+                    <a  id="{!item.Training_Plan__c}"
+                        onclick="{!c.navigate}"
+                        class="card card--course card--progress">
+                      <div class="card__header">
+                       <div class="card__img-placeholder"></div>
+                         <aura:if isTrue="{!not(empty(item.Training_Plan__r.Achievement__r.Eligible_Image__c))}"> 
+                              <ui:outputRichText value="{!item.Training_Plan__r.Achievement__r.Eligible_Image__c}" class="card__badge" />
+                          </aura:if>
+                          <aura:if isTrue="{!and(empty(item.Training_Plan__r.Achievement__r.Eligible_Image__c),item.Training_Plan__r.Group__c=='Group 1')}">
+                              <ui:outputRichText value="{!v.group1DefaultImage}" class="card__badge"/>
+                          </aura:if>
+                          <aura:if isTrue="{!and(empty(item.Training_Plan__r.Achievement__r.Eligible_Image__c),item.Training_Plan__r.Group__c=='Group 2')}">
+                              <ui:outputRichText value="{!v.group2DefaultImage}" class="card__badge"/>
+                          </aura:if>
+                          <aura:if isTrue="{!and(empty(item.Training_Plan__r.Achievement__r.Eligible_Image__c),item.Training_Plan__r.Group__c=='Group 3')}">
+                          <img src="{!$Resource.PSAFED + '/dist/images/group3-blanklogo.gif'}" class="card__badge"/>
+                          </aura:if>
+                      </div>
+                      <div class="card__body">
+                        <p class="card__title">{!item.Training_Plan__r.Name}</p>
+
+                        <div class="card__progress-wrapper">
+                          <span class="card__progress-text">Complete</span>
+                          <lightning:progressBar
+                            value="100"
+                            size="large"
+                            class="complete"
+                          />
+                          <lightning:icon iconName="action:check" />
+                        </div>
+                       
+                      </div>
+                    </a>
+                  </div>
+                </aura:iteration>
+              </div>
+            </aura:if>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+    </aura:if>
+</aura:component>

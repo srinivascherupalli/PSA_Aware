@@ -1,0 +1,27 @@
+.THIS .AsBoxContainer .slds-button__icon {
+    display: none;
+}
+
+.THIS.upload-file-name {
+    width: 320px;
+    margin: 10px auto;
+    text-align: left;
+}
+
+.THIS.upload-file-name .slds-title {
+    margin: 0 10px;
+    width: 86%;
+    display: table-cell;
+    vertical-align: top;
+}
+
+.THIS.slds-custom-loader {
+    max-width: 320px;
+    margin: 10px auto;
+    text-align: left
+}
+
+.THIS .slds-document-icon {
+    display: table-cell;
+    vertical-align: top;
+}

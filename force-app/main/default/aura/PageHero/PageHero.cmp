@@ -1,0 +1,22 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="img" type="String" default="title-underline.svg" access="global"/>
+        <aura:attribute name="currentUser" type="User"/>
+	<force:recordData aura:id="recordLoader" recordId="{!$SObjectType.CurrentUser.Id}" fields="Name" targetFields="{!v.currentUser}"/>
+    <div class="page-wrapper">
+        <section class="page-hero">
+            <img src="{!$Resource.PSAFED + '/dist/images/banner.png'}" class="page-hero__bg-img"/>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <div class="page-hero__heading-wrapper">
+                            <h1 class="page-hero__heading">Find education that's right for you </h1>
+                        </div>
+                    </div>
+                </div>
+                <!--img src="{!$Resource.PSAFED  + '/dist/images/'+v.img}"
+                     data-src="{!$Resource.PSAFED  + '/dist/images/'+v.img}" /-->
+            </div>
+            
+        </section>
+    </div>
+</aura:component>

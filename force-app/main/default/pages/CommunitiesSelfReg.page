@@ -1,0 +1,265 @@
+<apex:page id="communitiesSelfRegPage" showHeader="false" sidebar="false" applyHTMLTag="true" controller="CommunitiesSelfRegController" title="{!$Label.site.user_registration}">
+    
+    <header>
+             <style>
+                 
+                 
+                 @font-face {
+                     font-family: 'MariadPro';
+                     src: url( {!URLFOR($Resource.AsMyriadProFonts, '/AsMyriadProFonts/MyriadPro-Regular.otf')});
+                 }
+                 
+                 <!--for error massage-->
+                
+                 #communitiesSelfRegPage\:theForm .errorM3 {
+                        margin-left: auto;
+                        margin-right: auto;
+                        max-width: 540px;
+                        border: none;
+                        background: none;
+                 }
+                 
+                 #communitiesSelfRegPage\:theForm .errorM3 table {
+                    width: 100%;
+                    padding: 12px !important;
+                    border-radius: 3px;
+                 }
+                 
+                 
+                 #communitiesSelfRegPage\:theForm .errorM3 ul li {
+                 
+                     font-family: 'MariadPro', sans-serif;  
+                     font-size: 14px;
+                     list-style: none;
+                     <!--color: #e43333;-->
+                 }
+                 
+                 <!--end error massage-->
+                 
+                 
+                 
+               <!--for body input--> 
+                 #communitiesSelfRegPage\:theForm {
+                     padding-top: 50px;
+                     background-color: #E9EBF0 !important;
+                     padding-bottom: 50px;
+                 
+                 }
+                 
+                 #communitiesSelfRegPage\:theForm input#communitiesSelfRegPage\:theForm\:submit{
+                     font-family: 'MariadPro', sans-serif;
+                     width:100% !important;
+                 
+                 } 
+             
+                .btn:hover {
+                    border-color: #004077 !important;
+                    background-color: #004077 !important;
+                }
+                .btn:active {
+                    color: #0083ca !important;
+                    border-color: #004077 !important;
+                    background-color: #004077 !important;
+                }
+                
+                .btn {
+                  
+                    font: inherit;
+                    height: 46px;
+                    padding: 10px 12px !important;
+                    color: #ffffff !important;
+                    background : None !important;
+                    background-color: #0083CA !important;
+                    box-shadow: none;
+                    white-space: nowrap;
+                    letter-spacing: 2px;
+                    text-transform:uppercase;
+                }
+                #communitiesSelfRegPage\:theForm\:error .messageText span {
+                    width: 100%;
+                    display: inline-block;
+                    margin-bottom: 13px;
+                    margin-top: 10px;
+                }
+                #communitiesSelfRegPage\:theForm input[type="text"],
+                #communitiesSelfRegPage\:theForm input[type="password"] {
+                
+                    width: 438px !important;
+                    height: 44px !important;
+                    font-size: 16px;
+                    letter-spacing: 2px;
+                    margin-bottom: 10px;
+                    padding-left: 15px;
+                    background-color: #ffffff;
+                    border: 1px solid #004077 !important;
+                    
+                }
+                #communitiesSelfRegPage\:theForm input:focus {
+                    border: 2px solid #0083CA !important;
+                    outline: unset !important; 
+                    
+                }
+                #communitiesSelfRegPage\:theForm table td {
+                
+                    display:block !important;
+                
+                }
+                
+                 <!--#communitiesSelfRegPage\:theForm table tr{
+                    height: 80px !important;
+                 }-->
+                
+                 #communitiesSelfRegPage\:theForm table label {
+                 
+                     font-family: 'MariadPro', sans-serif;
+                     font-size: 12px; 
+                     color: #004077;
+                     letter-spacing: 2px;
+                     font-weight: 600;
+                     margin-bottom: 0;
+                     text-transform:uppercase;
+                 }
+                 table{
+                     padding: 40px;
+                     padding-bottom: 20px;
+                     margin-top: 1em;
+                     background-color: #fff;
+                     box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+                 
+                 }
+                 <!--end body input--> 
+                 
+                 
+                 body{
+                    overflow-x: hidden;
+                 
+                 }
+                 
+                 <!--for header-->
+                 
+                 .headerContianer {
+                     width:100%;
+                     height: 119px;
+                 
+                 }
+                 .header{
+                     padding: 38px 30px;
+                     margin: 0px 0 10px;
+                 }
+              
+                 <!--end header-->
+                 
+                 <!--for subheader-->
+                 .sub_headerContainer {
+                     width:100%;
+                     background: #003d79;
+                 
+                 }
+                 
+                 .sub_header{
+                     padding: 0 30px;
+                     line-height: 90px;
+                
+                 
+                 }
+                 .sub_header h1{
+                     color: #ffffff !important;
+                     padding: 0 15px;
+                     font-weight: 600;
+                     font-size: 24px;
+                     letter-spacing: 2px;
+                     font-family: 'MariadPro', sans-serif;
+                 }
+                 <!--end subheader-->
+                 
+                 <!--end footerContainer-->
+                 .footerContainer{
+                     border-top: 1px solid #ddd;
+                     padding-top: 30px;
+                     padding-bottom: 20px;
+                 }
+                 <!--end footerContainer-->
+                 
+                 .subfooterContainer  {
+                     background: #e9ebf0;
+                     padding: 60px 50px;
+                     text-align: center;
+                 }
+                 
+                 .subfooterContainer
+                 .subfooter p {
+                     font-family: 'MariadPro', sans-serif;
+                     font-size: 14px;
+                     color: #6f6f6f;
+                     opacity: 0.9;
+                 }
+                 
+                 
+                 .disclaimer{
+                     font-family: 'MariadPro', sans-serif;
+                     font-size: 12px;
+                     color: #6f6f6f;
+                     width: 450px;
+                     text-align: center; 
+                     padding: 0 0 30px 0;                
+                 }
+                 
+            </style>
+        
+         <div class="headerContianer">
+             <div class="header">
+             <img width="280" height="48" src="https://psastaging.alphasys.com.au/wp-content/uploads/2018/05/cropped-psa-logo.png"/>
+             </div>
+         </div>
+        <div class="sub_headerContainer">
+          <div class="sub_header">
+              <center><h1>Sign up to become a member of the PSA Community.</h1></center>
+         </div> 
+        </div>
+    
+    </header>
+  
+        <apex:define name="body"> 
+            <center>
+                <apex:form id="theForm" forceSSL="true">
+                    <apex:pageMessages id="error" escape="false"/>
+                    <apex:panelGrid columns="2" style="margin-top:1em;">
+                        <div class="disclaimer">Use this form to sign up for a free account with PSA. This account allows you to login to my.psa.org.au and purchase registrations
+                        for events, non-member courses and online shop products. Interested in becoming a full member of PSA? <a href="https://www.psa.org.au/membership/member-benefits/">Click here to find out more.</a></div>
+                        <apex:outputLabel value="First Name" for="firstName"/>
+                        <apex:inputText required="true" id="firstName" value="{!firstName}" label="First Name"/>
+                        <apex:outputLabel value="Last Name" for="lastName"/>
+                        <apex:inputText required="true" id="lastName" value="{!lastName}" label="Last Name"/>
+                        <!--apex:outputLabel value="{!$Label.site.community_nickname}" for="communityNickname"/>
+                        <apex:inputText required="true" id="communityNickname" value="{!communityNickname}" label="{!$Label.site.community_nickname}"/ --> <!-- code is commented out for ticket #PSA-409 -->
+                        <apex:outputLabel value="{!$Label.site.email}" for="email"/>
+                        <apex:inputText required="true" id="email" value="{!email}" label="{!$Label.site.email}"/>
+                        <apex:outputLabel value="{!$Label.site.password}" for="password"/>
+                        <apex:inputSecret required="true" id="password" value="{!password}" label="Password"/>
+                        <apex:outputLabel value="{!$Label.site.confirm_password}" for="confirmPassword"/>
+                        <apex:inputSecret required="true" id="confirmPassword" value="{!confirmPassword}" label="ConfirmPassword"/>
+                        <apex:outputText value=""/>
+                        <apex:commandButton action="{!registerUser}" value="{!$Label.site.submit}" id="submit"/>
+                        <br/>
+                        <div class="disclaimer">If you would like to join as a member, <a href="https://psa.secure.force.com/membershipsignup">click here</a>.</div>
+                    </apex:panelGrid>
+                    <br/>
+                </apex:form>
+            </center>
+        </apex:define>
+    
+    <div class="footerContainer">
+        <div class="footer">
+            <center><img width="280" height="48" src="https://psastaging.alphasys.com.au/wp-content/uploads/2018/05/cropped-psa-logo.png"/></center>
+        </div>
+    </div> 
+    <div class="subfooterContainer">
+        <div class="subfooter">
+            <p>The Pharmaceutical Society of Australia (PSA) is the peak national professional pharmacy organisation, representing Australia's 29,000 pharmacists in all sectors and across all locations, working in or towards a career in pharmacy. Registered training organisation code: 122206 ABN:49 008 532 072 ACN:008 532 072.
+            </p>
+            <p>©2018 Pharmaceutical Society of Australia Ltd. All right reserved.
+            </p>
+        </div>
+    </div>
+    
+    </apex:page>

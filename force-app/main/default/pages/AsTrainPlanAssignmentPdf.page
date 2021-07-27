@@ -1,0 +1,93 @@
+<!-- 
+    *Author : Jet R. Compayan
+    *Description : This Page is Render as PDF of the Training Plan Assignment.
+    *Date Created : Apr 17,2018
+    *Last Modified By : 
+    *Date Last Modified : 
+    *Related Meta Data : User
+-->
+
+<apex:page standardController="AsCPD_Learning_Summary__c" showHeader="false" sidebar="false"  applyHtmlTag="false" applyBodyTag="false" renderAs="pdf">
+    <head>
+        <style>
+            body {
+                font-family: Arial,Helvetica,sans-serif; 
+                font-size: 15px;
+                margin: 1% auto;
+                color: #5f707d; 
+            }
+            @page {
+                size: 8.5in 12in;/* width height */
+            }
+            div.cpd-cerficate-wrapper{
+                text-align: center;
+            }
+            div.cpd-name , div.cpd-title {
+                margin-top: 60px;
+            }
+            div.cpd-title-of-certificate{
+                margin-top: 41px;
+            }
+            div.cpd-f00ter--container {
+                font-size: 10px;
+                font-weight: 600;
+            }
+        </style>
+    </head>
+    <body>
+    
+        <div class="cpd-cerficate-wrapper" >
+            <apex:image styleClass="cpdlogo" url="{!URLFOR($Resource.AS_membersignup_slice,'psa-member-signup-slices/PSA-logo.png')}" width="450" />
+            <div class="cpd-title">
+                <h3 style="font-size: 30px;font-weight: 100;"> CPD Certificate </h3>
+            </div>
+            <div class="cpd-name">
+                <h3  style="font-size: 30px;"> {!AsCPD_Learning_Summary__c.ASTraining_Plan_Assignment__r.User__r.Name} </h3>
+                <p style="margin-top:15px"> Completed </p> 
+            </div>
+            <div class="cpd-title-of-certificate">
+                <h5 style="font-size: 24px;font-weight: 100;"> {!AsCPD_Learning_Summary__c.ASTraining_Plan_Assignment__r.Training_Plan__r.Name } </h5>
+                <!-- p  style="font-size: 18px;">{!AsCPD_Learning_Summary__c.ASTraining_Plan_Assignment__r.AS_Group_2_CPD_Achieved__c } </p-->
+                
+                <apex:outputText value="{0, number, 0.00} Credits Group 1" rendered="{! If(AsCPD_Learning_Summary__c.CPD_Category__c=='Group 1' ,true,false) }">
+								    <apex:Param value="{!AsCPD_Learning_Summary__c.ASTraining_Plan_Assignment__r.AS_Group_1_CPD_Achieved__c}" />
+								</apex:OutputText>
+								<apex:outputText value="{0, number, 0.00} Credits Group 2" rendered="{! If(AsCPD_Learning_Summary__c.CPD_Category__c=='Group 2' ,true,false) }">
+								    <apex:Param value="{!AsCPD_Learning_Summary__c.ASTraining_Plan_Assignment__r.AS_Group_2_CPD_Achieved__c}" />
+								</apex:OutputText>
+								
+								
+                <p  style="margin-top: 40px;">Granted on</p>
+                <apex:outputText value="{0, date,MMMM d yyyy}">
+                    <apex:param value="{!AsCPD_Learning_Summary__c.ASTraining_Plan_Assignment__r.Completed_On__c }" /> 
+                </apex:outputText>
+            </div>
+        </div>
+        <div class="cpd-cerficate-footer" style="margin-top:150px"  >
+            <div class="cpd-f00ter--container"  style="margin-left: 489px;width: 300px;" >
+                <apex:image style="width: 120px;"  styleClass="cpdlogo" url="{!$Resource.AS_signatureforPdf}" />
+                <p> Chris Freeman </p>
+                <!--apex:image style="width: 120px;"  styleClass="cpdlogo" url="{!$Resource.AsShaneJacksonSignature}" />
+                <p> Shane Jackson </p -->
+                <p style="font-weight: 100;"> National President<br/>Pharmaceutical Society of Australia </p>
+            </div>
+        </div> 
+        <div class="cpd-cerficate-footer1" style="margin-top: 65px;"> 
+        		<apex:outputPanel rendered="{! IF(ISBLANK(AsCPD_Learning_Summary__c.ASTraining_Plan_Assignment__r.Training_Plan__r.AS_CPD_Accreditation_Number__c), FALSE, TRUE) }">
+            <div class="cpd-f00ter--container" style="float: left;width: 358px;">
+                <apex:image url="{!URLFOR($Resource.AS_membersignup_slice,'psa-member-signup-slices/Asset2.png')}" rendered="{! IF(ISBLANK(AsCPD_Learning_Summary__c.ASTraining_Plan_Assignment__r.Training_Plan__r.AS_CPD_Accreditation_Number__c), FALSE, TRUE) }" style="width:243px"  />
+                <p> Accreditation Number: {! AsCPD_Learning_Summary__c.ASTraining_Plan_Assignment__r.Training_Plan__r.AS_CPD_Accreditation_Number__c } </p>
+                <!-- p>{! AsCPD_Learning_Summary__c.ASTraining_Plan_Assignment__r.Training_Plan__r.AS_CPD_Accreditation_Statement__c } </p-->
+                <p><apex:outputText escape="false" value="{! AsCPD_Learning_Summary__c.ASTraining_Plan_Assignment__r.Training_Plan__r.AS_CPD_Accreditation_Statement__c }" /></p>
+            </div>
+            </apex:outputPanel>
+            
+            <div class="cpd-f00ter--container"  style="float: right;width: 230px;">
+                <p style="font-size: 14px;font-weight: 100;margin-top: 93px;font-style: italic;">
+                    <span style="color: #1c3f76;font-weight: 600;    font-style: normal;text-align: right;">PSA</span> 
+                    All you need for your CPD.
+                </p>
+            </div>
+        </div>
+    </body>
+</apex:page>

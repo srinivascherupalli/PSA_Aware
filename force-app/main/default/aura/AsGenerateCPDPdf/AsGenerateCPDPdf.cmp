@@ -1,0 +1,10 @@
+<aura:component controller="AsCPDPdfController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+ 	<h1>A PDF copy of your CPD Planner Summary will now be generated and will appear under "Notes and Attachments" as a PDF. This may take a few minutes to process - please do not exit or click back from this page.</h1>
+	<br/>
+	<h1>Please note that you will only be able to generate a CPD summary if you are a PSA Member. If you wish to be able to do so, please register to become a PSA member by clicking the "Become a Member" button in the portal. </h1>
+	<br/>
+	<h1>If the attachment does not appear automatically, please refresh the page.</h1>
+	<br/>
+    	<lightning:button label="Generate CPD Summary" onclick="{!c.handleClick}"/> 
+    <br/>
+</aura:component>

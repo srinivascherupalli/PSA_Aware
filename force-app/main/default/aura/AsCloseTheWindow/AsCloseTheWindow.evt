@@ -1,0 +1,6 @@
+<aura:event type="APPLICATION" description="Event template">
+    <aura:attribute name="hasErrors" type="Boolean" description="Response from calls" access="global" />
+    <aura:attribute name="messageError" type="String" description="Response from calls" access="global" />
+    <aura:attribute name="closenow" type="String" description="Response from calls" access="global" />
+    <aura:attribute name="recordId" type="Object" description="Response from calls" access="global" />
+</aura:event>

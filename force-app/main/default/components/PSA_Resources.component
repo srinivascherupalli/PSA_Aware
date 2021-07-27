@@ -1,0 +1,664 @@
+<!-- 
+Author : Jet R. Compayan
+Description : You can add your style or script.
+Component name : PSA_Resources
+-->
+<apex:component controller="AS_memberPayment">
+    <!-- PSA Style Css -->
+    <style>
+        h1,
+        h2, 
+        h3,
+        h4,
+        h5,
+        h6,
+        th,
+        .psa-total-label {
+            font-family: 'Salesforce Sans' !important;
+            color: #16325c;
+            font-size: 12px;
+        }
+
+        p,
+        div,
+        td {
+            font-family: 'Salesforce Sans' !important;
+            color: #5876a3 !important;
+            font-size: 14px !important;
+        }
+
+        a {
+            font-family: 'Salesforce Sans' !important;
+            color: 2796e0;
+            font-size: 12px;
+        }
+
+        .slds-input {
+            background: #f6f9fb;
+            border: 1px solid #d6dbde;
+        }
+
+        #psa {
+            /*background-color: #e4ecf0;*/
+            background-repeat: no-repeat;  
+         	background-image: url("{!URLFOR($Resource.AS_membersignup_slice,"psa-member-signup-slices/pharmacybg.jpg")}");  
+            padding-top: 81px;
+		    background-attachment: fixed;
+		    background-position-x: 71%;
+		    background-size: cover;
+        }
+
+        #psa .psa-header-title {
+            font-size: 27px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        #psa #psa-form-title {
+            border-bottom: 2px solid #ededed !important;
+        }
+
+        .psa-green-link {
+            color: #54d8a3;
+            font-size: 21px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+		#psa .psa-header-title {
+			line-height: 2.5em;
+		}
+		#psa .psa-container {
+		    background: #fff;
+		    min-height: 700px;
+		    padding: 50px;
+		    margin: 0% auto;
+		    width: 66%;
+		    max-width: 1000px;
+		    border-radius: 11px;
+		    box-shadow: 1px 4px 20px 0px #868484;
+		}
+
+        #psa .psa-heading-text {
+            font-weight: 500;
+        }
+
+        #psa .psa-purchase-order-summary th {
+            font-size: 13px;
+        }
+
+        #psa .psa-container .psa-sub-container {
+            margin: 1% auto;
+            width: 96%;
+        }
+
+        #psa .psa-tr-even {
+            background: #f3f6f8;
+        }
+
+        #psa .psa-purchase-order-summary .psa-total-details {
+            border-bottom: 1px solid #ededed;
+        }
+
+        #psa .psa-coupon-entry-container {
+            border: 1px solid #ededed;
+            text-align: center;
+            max-width: 470px;
+            width: 100%;
+        }
+
+        #psa .psa-total-label span {
+            font-size: 12px;
+        }
+
+        #psa .slds-m-vertical_medium .slds-grid {
+            margin: 1% auto;
+            margin-left: 3%;
+        }
+
+        #psa .psa-cuopon-input-label {
+            line-height: 30px;
+            width: 105px;
+        }
+
+        #psa .psa-cuopon-input-field {
+            padding-left: 20px;
+        }
+
+        #psa .psa-cuopon-input-btn {
+            padding-left: 10px;
+        }
+
+        #psa .psa-cuopon-input-btn button {
+            background: #2796e0;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 400;
+            width: 100px;
+        }
+
+        #psa #psa-card-details .psa-card-details-input-label {
+            width: 175px;
+        }
+
+        #psa #psa-card-details .psa-card-details-input-field {
+            width: 100%;
+        }
+
+        #psa #psa-card-details .psa-card-details-input-field .psa-full-fields {
+            padding: 4px;
+            padding-left: 15px;
+        }
+
+        #psa #psa-card-details .psa-card-details-input-label {
+            line-height: 40px;
+        }
+
+        #psa-button-submit .slds-button_neutral {
+            background: #2796e0;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 100;
+            padding: 6px;
+            width: 135px;
+        }
+
+        #psa #psa-card-expiry-fields .psa-card-expiry-div {
+            width: 39%;
+            margin-right: 2%;
+        }
+
+        .psa-error-message {
+            margin-top: 4px;
+        }
+
+        .psa-error-message span {
+            color: #f64040;
+            border-left: 2px solid #f8cfcf;
+            padding-left: 5px;
+            background: #f9efef;
+        }
+
+        .psa-error-input,
+        .psa-error-input:focus,
+        .psa-error-input:active {
+            outline: 0;
+            border-color: #ff1717 !important;
+            background-color: white;
+            box-shadow: 0 0 3px #ff1616 !important;
+        }
+
+        #psa-close-error {
+            width: 3%;
+            float: right;
+            font-weight: 100;
+            border: 1px solid rgb(249, 239, 239);
+            text-align: center;
+            border-radius: 3px;
+            transition: border-color 1s ease;
+        }
+
+        #psa-close-error:hover {
+            border: 1px solid;
+            text-align: center;
+            border-radius: 3px;
+        }
+
+        .psa-spinner-loading {
+            position: fixed;
+            border: 1px solid #FFB;
+            z-index: 999;
+            top: 0%;
+            background: #ffffff4a;
+            bottom: 0%;
+            right: 0%;
+            left: 0%;
+        }
+
+        .psa-spinner-loading .psa-contiainer {
+            text-align: center;
+            position: fixed;
+            top: 44%;
+            left: 40%;
+            right: 40%;
+        }
+
+        .psa-spinner-loading .psa-contiainer img {
+            width: 20%;
+        }
+
+          .slds-button_neutral[disabled], .slds-button--neutral[disabled] {
+            background-color: #d2d2d2!important;
+            cursor: default;
+        }
+
+        /*toastr*/
+
+        .toast-title {
+            color: #fff !important;
+        }
+
+        .toast-message {
+            color: #fff !important;
+        }
+        
+        @media only screen and (min-device-width : 320px) and (max-device-width : 760px) {
+		    #psa {
+            	padding-top: 0px!important;
+            }
+            #psa .psa-container{
+            	width:100%!important;
+            } 
+            
+		}
+        
+    </style>
+
+    <!-- PSA js script -->
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js" />
+    <!-- Taoster include script and stype -->
+    <apex:stylesheet value="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" />
+    <c:PaymentControllerJS />
+    
+    <script type="text/javascript">
+        AS_jquery = jQuery.noConflict();
+
+        AS_jquery(function($) {
+
+            /*init Class*/
+            var pc = new AS_PaymentController();
+            pc.initTaost();
+            var os = pc.Object_Session;
+
+            $('#psa-spinner').hide();
+            $('.psa-error-box').hide();
+
+            /*All Records*/
+            pc.getAllRecords(
+
+                /*isFound*/
+                function(isFound) {
+                    if (pc.isEmpty(isFound)) {
+
+                        $('.psa-error-box').fadeIn(1000);
+                        $('#psa-error-message-box').html('Oops! Sorry no Opportunity found.');
+                        $('#psa-information , #psa-purchase , #psa-card-details , #psa-button-submit').remove();
+
+                    }
+                    else if ( isFound.theOpportunity.StageName == 'Closed Won' ) {
+                        
+                        $('.psa-error-box').fadeIn(1000);
+                        $('#psa-error-message-box').html('Oops! Sorry this Opportunity is already Closed Won.');
+                        $('#psa-information , #psa-purchase , #psa-card-details , #psa-button-submit').remove();
+                        
+                    }
+                    else {
+                        os.PRICEBOOKID = isFound.thePricebook;
+                    }
+
+                },
+
+                /*AccountDetails*/
+                function(AccountDetails, isFound) {
+                    console.log(AccountDetails);
+                    if (!pc.isEmpty(isFound)) {
+
+                        var ad = AccountDetails;
+                        os.ACCOUNTID = ad.Id;
+                        
+                        /*Account Information*/
+                        $('#pas-account-fname').html(ad.FirstName);
+                        $('#pas-account-lname').html(ad.LastName);
+                        
+
+                        /*Ship to elements*/
+                        var shipTo_tag = '<p  class="slds-text-body_regular slds-p-vertical_xx-small">' + ad.Name + '</p>' +
+                            '<p  class="slds-text-body_regular slds-p-vertical_xx-small">' +  ( typeof ad.ShippingStreet !== 'undefined' ? ad.ShippingStreet : '' )   + ' </p>' +
+                            '<p  class="slds-text-body_regular slds-p-vertical_xx-small"> ' + ( typeof ad.ShippingCity !== 'undefined' ? ad.ShippingCity : '' ) + ' ' + ( typeof ad.ShippingState !== 'undefined' ? ad.ShippingState : '' ) + ' ' + ( typeof ad.ShippingPostalCode !== 'undefined' ? ad.ShippingPostalCode : '' ) + ' </p>';
+
+
+                        /*Bill to elements*/
+                        var billTo_tag = '<p  class="slds-text-body_regular slds-p-vertical_xx-small">' + ad.Name + '</p>' +
+                            '<p  class="slds-text-body_regular slds-p-vertical_xx-small">' +  ( typeof ad.BillingStreet !== 'undefined' ? ad.BillingStreet : '' )  + ' </p>' +
+                            '<p  class="slds-text-body_regular slds-p-vertical_xx-small"> ' + ( typeof ad.BillingCity !== 'undefined' ? ad.BillingCity : '' ) + ' ' + ( typeof ad.BillingState !== 'undefined' ? ad.BillingState : '' )  + ' ' + ( typeof ad.BillingPostalCode !== 'undefined' ? ad.BillingPostalCode : '' ) + ' </p>';
+
+                        /*Append Elements*/
+                        $('#psa-ship-to-details').html(shipTo_tag);
+                        $('#psa-bill-to-details').html(billTo_tag); 
+
+                    }
+
+                },
+
+                /*Opportunity Details*/
+                function(OppurtunityDetails, isFound) {
+  
+                    if (!pc.isEmpty(isFound)) {
+
+                        var html = '';
+                        var subTotal = 0;
+                        var Total = 0;
+
+
+                        os.OPPORTUNITYID = OppurtunityDetails.Id;
+                        console.log(OppurtunityDetails); 
+                        var frequency = OppurtunityDetails.Pricebook2.AS_Frequency__c;  
+                        /*OpportunityLineItem loop*/
+                        OppurtunityDetails.OpportunityLineItems.forEach(function(item) {
+                            
+                            var freqWord = '';
+                            if(frequency == 1) {
+                                freqWord = 'Yearly';
+                            } else if (frequency == 2) {
+                                freqWord = 'Every Six Months';
+                            } else if (frequency == 4) {
+                                freqWord = 'Quarterly';
+                            } else if (frequency == 12) {
+                                freqWord = 'Monthly';
+                            }
+                            
+                            html += '<tr>' + 
+                                '    <td class="slds-p-vertical_x-small">' + item.Product2.Name + '</td>' +
+                                '     <td class="psa-qty">' + item.Quantity + '</td>' +
+                                '     <td class="psa-type-of-payment"> '+ freqWord +' </td>' +
+                                '     <td>' + pc.convertToCurrency(item.UnitPrice, '$') + '</td>' +
+                                '     <td>' + pc.convertToCurrency((item.UnitPrice * item.Quantity), '$') + '</td>' +
+                                ' </tr>';
+                            /*sum up all the amount*/
+                            subTotal += (item.UnitPrice * item.Quantity);
+
+                        }); 
+
+                        var toalDisplay = 0;
+
+                        /*calculations*/
+                        os.SUBTOTAL = subTotal;
+                        os.TOTAL = OppurtunityDetails.AS_Invoiced_Amount__c;
+
+                        /*Append Elements*/
+                        $('#psa-order-body').html(html);
+                        $('#psa-order-subtotal').html(pc.convertToCurrency(os.SUBTOTAL, '$'));
+                        $('#psa-order-discount span').html(pc.convertToCurrency(OppurtunityDetails.AS_GST_Component__c, '$'));
+                        $('#psa-order-total h2').html(pc.convertToCurrency(os.TOTAL, '$'));
+                        $('#psa-order-perpayment h2').html(pc.convertToCurrency((os.TOTAL / frequency), '$'));
+
+
+                    }
+                });
+            
+ 
+            $('#psa-submit-1').prop('disabled', true); 
+            $('.psa-iacknowledge , .psa-iconsent ').change(function(){
+
+                if($( this ).is(':checked')){
+   
+                   if( $( this ).attr( 'data-type' ) == 'dbt' && ( $( '#checkbox-a1' ).is(':checked') && $( '#checkbox-a2' ).is(':checked')  ) ){
+                        $('#psa-submit-1').prop('disabled', false);
+                   }
+
+                } else {
+                   if( $( this ).attr( 'data-type' ) == 'dbt' ){
+                        $('#psa-submit-1').prop('disabled', true);
+                   }             
+                }
+
+            });
+
+
+
+            $('.psa-btn-tab-paymentform').click( function() {
+
+                $( '.slds-tabs_default__item' ).removeClass( 'slds-is-active');
+                $( '.slds-tabs_default__content' ).removeClass( 'slds-show' ).addClass( 'slds-hide' );
+
+                var tabID = $( this ).attr( "data-tabId" );
+                var tabcontent = $( this ).attr( "data-tabcontent" );
+                $('#'+tabcontent).addClass( 'slds-show' );
+                $('#'+tabID).addClass( 'slds-is-active' );
+
+                os.PAYBY = $( this ).attr( 'data-pay-by' );
+
+                if ( os.PAYBY == "CreditCard" ) {
+
+                    os.ACCOUNTDETAILS = new os.AccountDetailsConstructor({
+                        Account_Name: "",
+                        Account_Type: "",
+                        Account_Number: "",
+                        Account_Routing_Number: "",
+                        First_Payment_Date :""
+                    });
+
+                } else if ( os.PAYBY == "DirectDebit"  ){
+                    
+                    os.CARDDETAILS = new os.CardDetailsConstructor({
+                        Name_On_Card: "",
+                        Card_Type: "",
+                        Card_Number: "",
+                        Card_Expiry_Month: "",
+                        Card_Expiry_Year: "",
+                        CCV: ""
+                    });    
+
+                }
+
+            } );
+
+            var intervalId = null;
+            $('.psa-submit-btn').click(function() {
+
+                var isRequired = false;
+                var message = '<span>Error: You must enter a value.</span>';
+                $('.psa-error-message').html('');
+                $('.psa-full-fields').removeClass('psa-error-input');
+
+                if ( os.PAYBY == "CreditCard" ) {
+
+                    var name_on_card = $('#psa-name-on-card').val();
+                    var card_type = $('#psa-card-type').val();
+                    var card_number = $('#psa-card-number').val();
+                    var month = $('#psa-month-card-expiry').val();
+                    var year = $('#psa-year-card-expiry').val();
+                    var cvv = $('#psa-ccv').val();
+
+                    if (pc.isEmpty(name_on_card)) {
+                        isRequired = true;
+                        $('#psa-error-1').html(message);
+                        $('#psa-name-on-card').addClass('psa-error-input');
+                    }
+                    if (pc.isEmpty(card_number)) {
+                        isRequired = true;
+                        $('#psa-error-2').html(message);
+                        $('#psa-card-number').addClass('psa-error-input'); 
+                    }
+                    if (pc.isEmpty(month)) {
+                        isRequired = true;
+                        $('#psa-error-3').html(message);
+                        $('#psa-month-card-expiry').addClass('psa-error-input');
+                    }
+                    if (pc.isEmpty(year)) {
+                        isRequired = true;
+                        $('#psa-error-4').html(message);
+                        $('#psa-year-card-expiry').addClass('psa-error-input');
+                    }
+                    if (pc.isEmpty(cvv)) {
+                        isRequired = true;
+                        $('#psa-error-5').html(message);
+                        $('#psa-ccv').addClass('psa-error-input');
+                    }
+                    if (pc.isEmpty(card_type)) {
+                        isRequired = true;
+                        $('#psa-error-6').html(message);
+                        $('#psa-card-type').addClass('psa-error-input');
+                    }
+
+
+                    if (!isRequired) {
+                        
+                        os.CARDDETAILS = new os.CardDetailsConstructor({
+                            Name_On_Card: name_on_card,
+                            Card_Type: card_type,
+                            Card_Number: card_number,
+                            Card_Expiry_Month: month,
+                            Card_Expiry_Year: year,
+                            CCV: cvv
+                        });
+                    }
+
+                }
+                else if ( os.PAYBY == "DirectDebit" ) {
+
+
+                    var Account_Name = $('#psa-bank-account-name').val();
+                    var Account_Type = $('#psa-account-type').val();
+                    var Account_Number = $('#psa-account-number').val();
+                    var Account_Routing_Number = $('#psa-routing-number').val();
+                    var First_Payment_Date  = $('#psa-first-payment-date').val();
+
+                    if (pc.isEmpty(Account_Name)) {
+                        isRequired = true;
+                        $('#psa-error-7').html(message);
+                        $('#psa-bank-account-name').addClass('psa-error-input');
+                    }
+
+                    if (pc.isEmpty(Account_Type)) {
+                        isRequired = true;
+                        $('#psa-error-8').html(message);
+                        $('#psa-account-type').addClass('psa-error-input');
+                    }
+
+                    if (pc.isEmpty(Account_Number)) {
+                        isRequired = true;
+                        $('#psa-error-9').html(message);
+                        $('#psa-account-number').addClass('psa-error-input');
+                    }
+
+                    if (pc.isEmpty(Account_Routing_Number)) {
+                        isRequired = true;
+                        $('#psa-error-10').html(message);
+                        $('#psa-routing-number').addClass('psa-error-input');
+                    }
+                    
+                    /*if(pc.isEmpty( First_Payment_Date ) ){
+                        isRequired = true;
+                        $('#psa-error-11').html(message);
+                        $('#psa-first-payment-date').addClass('psa-error-input');
+                    }*/
+                    
+
+                    if (!isRequired) {
+
+                        os.ACCOUNTDETAILS = new os.AccountDetailsConstructor({
+                            Account_Name: Account_Name,
+                            Account_Type: Account_Type,
+                            Account_Number: Account_Number,
+                            Account_Routing_Number: Account_Routing_Number,
+                            First_Payment_Date : First_Payment_Date
+                        });
+                    }
+
+                }
+
+                if (!isRequired) {
+
+                    var result = JSON.stringify(os);
+
+                    pc.submitAllData(result,
+                        function(params, OppurtunityDetails) {
+                            var res = OppurtunityDetails;
+
+                                if (res.status == 'ERROR') {
+
+                                    $('html, body').animate({
+                                        scrollTop: 0
+                                    }, 'slow');
+                                    $('.psa-error-box').fadeIn(1000);
+                                    $('#psa-error-message-box').html(res.message);
+
+                                }
+                                if (res.status == 'SUCCESS') {
+
+                                    if ( os.PAYBY == "DirectDebit"  ){
+                                        $('#psa-spinner').show();
+                                         location.replace( "http://www.psa.org.au/" );
+
+                                    } else  if ( os.PAYBY == "CreditCard" ) {
+
+                                        $('#psa-spinner').show();
+                                        intervalId = setInterval( checkingInterval , 5000 );  
+
+                                    }
+                                }
+                        }
+                    );
+
+                } 
+            });
+            
+            var attemp = 0;
+            var checkingInterval = function (){
+                
+                pc.checkStatusPayment ( function( paymentStatus ) {
+                    
+                    console.log( ' Status Callback ' , paymentStatus );
+                        
+                    if ( attemp !=  15 ) {
+
+                        if (  paymentStatus !== null  ) { 
+                            
+                            if ( paymentStatus.ASPHPP__Payment_Status__c == 'Success' ) {
+                                setTimeout(function(){
+                                                                
+                                    pc.convertToCloseWon( paymentStatus.ASPHPP__PSubscription__r.ASPHPP__Payment_Source__c , 
+                                        function( callBack ) {
+                                            console.log(' Success heading to convert to Close won in 5 seconds... ');
+                                            clearInterval( intervalId ); 
+                                            location.replace( "http://www.psa.org.au/" );
+                                            
+                                        } 
+                                     );
+
+                                }, 
+                                
+                                5000);
+
+                            }   
+                            
+                            if ( paymentStatus.ASPHPP__Payment_Status__c == 'Failed' ) {
+                                
+                                clearInterval( intervalId );
+                                $('#psa-spinner').hide();
+                                $('html, body').animate({ scrollTop: 0}, 'slow');
+                                $('.psa-error-box').fadeIn(1000);
+                                $('#psa-error-message-box').html( 'We\'re sorry. An error occured during payment processing.' );
+                                
+                            }
+                             
+                        } else {
+                        
+                            console.log(attemp+ '.checking status for another attemp...')
+                            attemp += 1;
+                            
+                        }
+
+                    } else {
+                        
+                        clearInterval(intervalId);
+                        $('#psa-spinner').hide();
+                        $('html, body').animate( {scrollTop: 0} , 'slow' );
+                        $('.psa-error-box').fadeIn(1000);
+                        $('#psa-error-message-box').html( 'This payment takes too long to respond.' );
+                        
+                    }
+                    
+                } ); 
+                
+            }
+
+            $('#psa-close-error').click(function() {
+                $('.psa-error-box').fadeOut(1000);
+            });
+ 
+        });
+
+    </script>
+</apex:component>

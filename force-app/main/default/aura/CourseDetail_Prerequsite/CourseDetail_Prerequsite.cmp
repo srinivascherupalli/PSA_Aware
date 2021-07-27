@@ -1,0 +1,41 @@
+<aura:component
+  implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+  access="global"
+>
+  <!--Attribute-->
+  <aura:attribute
+    name="title"
+    type="string"
+    default="Pre-Requisite Training Courses"
+  />
+  <aura:attribute name="cards" type="List" default="[]" />
+
+  <aura:if isTrue="{!not(empty(v.cards))}">
+    <!--Pre requisit courses-->
+    <div class="course-body__courses">
+      <h2
+        class="h3 course-body__section-title course-body__section-title--courses"
+        >{!v.title}</h2
+      >
+      <div class="row">
+        <aura:iteration items="{!v.cards}" var="item">
+          <div class="col-12 col-lg-4 card-wrapper">
+            <c:Card
+              isCourse="{!item.isCourse}"
+              id="{!item.id}"
+              href="{!item.href}"
+              group="{!item.group}"
+              tag="{!item.tag}"
+              title="{!item.title}"
+              duration="{!item.duration}"
+              deliveryMethod="{!item.deliveryMethod}"
+              deliveryDescription="{!item.deliveryDescription}"
+              thumbnail="{!item.thumbnail}"
+              badge="{!item.badge}"
+            />
+          </div>
+        </aura:iteration>
+      </div>
+    </div>
+  </aura:if>
+</aura:component>

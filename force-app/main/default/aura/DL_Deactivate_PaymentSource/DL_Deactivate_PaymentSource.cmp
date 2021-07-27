@@ -1,0 +1,24 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" controller="DL_PaymentSource">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="lastButtonPushed" type="String" />
+    <aura:attribute name="loadingBool" type="Boolean" default="false"/>
+    <div class="slds-align_absolute-center" id="deactivateButtonDiv">
+        <lightning:button aura:id="deactivateButton" label="Deactivate Payment Source" onclick="{!c.showModal}" disabled="{!v.loadingBool}"/>
+        <lightning:button aura:id="recoverButton" label="Recover Failed Payments" onclick="{!c.showModal}" disabled="{!v.loadingBool}"/>
+    </div>
+
+    <section aura:id="confirmationModal" id="confirmationModal"  role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-hide">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header" style="background-color:rgb(0, 57, 107);">
+            <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate" style="color:white;">Are you sure?</h1>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium slds-align_center" id="modal-content-id-1" aura:id="modal-content-id-1">
+				<p>Buttons currently in development..</p>            
+          </div>
+          <footer class="slds-modal__footer">
+            <button class="slds-button slds-button_neutral" onclick="{!c.closeModal}">Cancel</button>
+            <button class="slds-button slds-button_brand" onclick="{!c.buttonHandler}">Ok</button>
+          </footer>
+        </div>
+    </section>
+</aura:component>

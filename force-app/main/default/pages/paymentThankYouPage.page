@@ -1,0 +1,18 @@
+<apex:page sidebar="false" showHeader="false" controller="AS_paymentThankYouPage" action="{!updateStudentOpp}"> 
+<!--     <apex:image id="theImage" style="    width: 100%;" value="https://sleeknote.com/wp-content/uploads/2017/02/Thank-You-Page-Twitter.jpg"/> -->
+<style>
+    .psa-spinner-loading{
+        text-align: center;
+        margin: 15% auto;
+    }
+</style>
+    <div id="psa-spinner" class="psa-spinner-loading">
+        <div class="psa-container">
+           <apex:image id="theImage" value="{! URLFOR($Resource.AS_slds,'assets/images/spinners/slds_spinner_brand.gif') }" alt="Loading..."/> 
+            <p>Processing...</p>
+        </div>
+    </div>
+<script>
+    window.location.replace("https://www.psa.org.au/payment/");
+</script>
+</apex:page>

@@ -1,0 +1,688 @@
+<aura:component controller="PSA_MemberShipController" extends="c:PSA_Base" implements="forceCommunity:availableForAllPageTypes">
+
+    <!-- Attribute start-->
+    <aura:attribute name="titleoptions" type="List" default="[
+                                                               { label : 'Mr.', value: 'Mr.'},
+                                                               { label : 'Mrs', value: 'Mrs.'},
+                                                               { label : 'Miss', value: 'Miss'},
+                                                               { label : 'Dr.', value: 'Dr.'},
+                                                               { label : 'Prof.', value: 'Prof.'}
+                                                               ]" />
+    <aura:attribute name="genderoptions" type="List" default="[
+                                                               { label : 'Male', value: 'Male'},
+                                                               { label : 'Female', value: 'Female'},
+                                                              { label : 'Not Specified/Prefer not to say', value: 'Not Specified/Prefer not to say'}
+                                                               ]" />
+    <aura:attribute name="countryoptions" type="List" default="[
+                                                               { label : 'Andorra', value: 'Andorra'},
+                                                               { label : 'Afghanistan', value: 'Afghanistan'},
+                                                               { label : 'Antigua and Barbuda', value: 'Antigua and Barbuda'},
+                                                               { label : 'Anguilla', value: 'Anguilla'},
+                                                               { label : 'Albania', value: 'Albania'},
+                                                               { label : 'Armenia', value: 'Armenia'},
+                                                               { label : 'Angola', value: 'Angola'},
+                                                               { label : 'Antarctica', value: 'Antarctica'},
+                                                               { label : 'Argentina', value: 'Argentina'},
+                                                               { label : 'Austria', value: 'Austria'},
+                                                               { label : 'Australia', value: 'Australia'},
+                                                               { label : 'Aruba', value: 'Aruba'},
+                                                               { label : 'Aland Islands', value: 'Aland Islands'},
+                                                               { label : 'Azerbaijan', value: 'Azerbaijan'},
+                                                               { label : 'Bosnia and Herzegovina', value: 'Bosnia and Herzegovina'},
+                                                               { label : 'Barbados', value: 'Barbados'},
+                                                               { label : 'Bangladesh', value: 'Bangladesh'},
+                                                               { label : 'Belgium', value: 'Belgium'},
+                                                               { label : 'Burkina Faso', value: 'Burkina Faso'},
+                                                               { label : 'Bulgaria', value: 'Bulgaria'},
+                                                               { label : 'Bahrain', value: 'Bahrain'},
+                                                               { label : 'Burundi', value: 'Burundi'},
+                                                               { label : 'Benin', value: 'Benin'},
+                                                               { label : 'Saint Barthélemy', value: 'Saint Barthélemy'},
+                                                               { label : 'Bermuda', value: 'Bermuda'},
+                                                               { label : 'Brunei Darussalam', value: 'Brunei Darussalam'},
+                                                               { label : 'Bolivia, Plurinational State of', value: 'Bolivia, Plurinational State of'},
+                                                               { label : 'Bonaire, Sint Eustatius and Saba', value: 'Bonaire, Sint Eustatius and Saba'},
+                                                               { label : 'Brazil', value: 'Brazil'},
+                                                               { label : 'Bahamas', value: 'Bahamas'},
+                                                               { label : 'Bhutan', value: 'Bhutan'},
+                                                               { label : 'Bouvet Island', value: 'Bouvet Island'},
+                                                               { label : 'Botswana', value: 'Botswana'},
+                                                               { label : 'Belarus', value: 'Belarus'},
+                                                               { label : 'Belize', value: 'Belize'},
+                                                               { label : 'Canada', value: 'Canada'},
+                                                               { label : 'Cocos (Keeling) Islands', value: 'Cocos (Keeling) Islands'},
+                                                               { label : 'Congo, the Democratic Republic of the', value: 'Congo, the Democratic Republic of the'},
+                                                               { label : 'Central African Republic', value: 'Central African Republic'},
+                                                               { label : 'Congo', value: 'Congo'},
+                                                               { label : 'Switzerland', value: 'Switzerland'},
+                                                               { label : 'Cote d’Ivoire', value: 'Cote d’Ivoire'},
+                                                               { label : 'Cook Islands', value: 'Cook Islands'},
+                                                               { label : 'Chile', value: 'Chile'},
+                                                               { label : 'Cameroon', value: 'Cameroon'},
+                                                               { label : 'China', value: 'China'},
+                                                               { label : 'Colombia', value: 'Colombia'},
+                                                               { label : 'Costa Rica', value: 'Costa Rica'},
+                                                               { label : 'Cuba', value: 'Cuba'},
+                                                               { label : 'Cape Verde', value: 'Cape Verde'},
+                                                               { label : 'Curaçao', value: 'Curaçao'},
+                                                               { label : 'Christmas Island', value: 'Christmas Island'},
+                                                               { label : 'Cyprus', value: 'Cyprus'},
+                                                               { label : 'Czech Republic', value: 'Czech Republic'},
+                                                               { label : 'Germany', value: 'Germany'},
+                                                               { label : 'Djibouti', value: 'Djibouti'},
+                                                               { label : 'Denmark', value: 'Denmark'},
+                                                               { label : 'Dominica', value: 'Dominica'},
+                                                               { label : 'Dominican Republic', value: 'Dominican Republic'},
+                                                               { label : 'Algeria', value: 'Algeria'},
+                                                               { label : 'Ecuador', value: 'Ecuador'},
+                                                               { label : 'Estonia', value: 'Estonia'},
+                                                               { label : 'Egypt', value: 'Egypt'},
+                                                               { label : 'Western Sahara', value: 'Western Sahara'},
+                                                               { label : 'Eritrea', value: 'Eritrea'},
+                                                               { label : 'Spain', value: 'Spain'},
+                                                               { label : 'Ethiopia', value: 'Ethiopia'},
+                                                               { label : 'Finland', value: 'Finland'},
+                                                               { label : 'Fiji', value: 'Fiji'},
+                                                               { label : 'Falkland Islands (Malvinas)', value: 'Falkland Islands (Malvinas)'},
+                                                               { label : 'Faroe Islands', value: 'Faroe Islands'},
+                                                               { label : 'France', value: 'France'},
+                                                               { label : 'Gabon', value: 'Gabon'},
+                                                               { label : 'United Kingdom', value: 'United Kingdom'},
+                                                               { label : 'Grenada', value: 'Grenada'},
+                                                               { label : 'Georgia', value: 'Georgia'},
+                                                               { label : 'French Guiana', value: 'French Guiana'},
+                                                               { label : 'Guernsey', value: 'Guernsey'},
+                                                               { label : 'Ghana', value: 'Ghana'},
+                                                               { label : 'Gibraltar', value: 'Gibraltar'},
+                                                               { label : 'Greenland', value: 'Greenland'},
+                                                               { label : 'Gambia', value: 'Gambia'},
+                                                               { label : 'Guinea', value: 'Guinea'},
+                                                               { label : 'Guadeloupe', value: 'Guadeloupe'},
+                                                               { label : 'Equatorial Guinea', value: 'Equatorial Guinea'},
+                                                               { label : 'Greece', value: 'Greece'},
+                                                               { label : 'South Georgia and the South Sandwich Islands', value: 'South Georgia and the South Sandwich Islands'},
+                                                               { label : 'Guatemala', value: 'Guatemala'},
+                                                               { label : 'Guinea-Bissau', value: 'Guinea-Bissau'},
+                                                               { label : 'Guyana', value: 'Guyana'},
+                                                               { label : 'Heard Island and McDonald Islands', value: 'Heard Island and McDonald Islands'},
+                                                               { label : 'Honduras', value: 'Honduras'},
+                                                               { label : 'Croatia', value: 'Croatia'},
+                                                               { label : 'Haiti', value: 'Haiti'},
+                                                               { label : 'Hungary', value: 'Hungary'},
+                                                               { label : 'Indonesia', value: 'Indonesia'},
+                                                               { label : 'Ireland', value: 'Ireland'},
+                                                               { label : 'Israel', value: 'Israel'},
+                                                               { label : 'Isle of Man', value: 'Isle of Man'},
+                                                               { label : 'India', value: 'India'},
+                                                               { label : 'British Indian Ocean Territory', value: 'British Indian Ocean Territory'},
+                                                               { label : 'Iraq', value: 'Iraq'},
+                                                               { label : 'Iran, Islamic Republic of', value: 'Iran, Islamic Republic of'},
+                                                               { label : 'Iceland', value: 'Iceland'},
+                                                               { label : 'Italy', value: 'Italy'},
+                                                               { label : 'Jersey', value: 'Jersey'},
+                                                               { label : 'Jamaica', value: 'Jamaica'},
+                                                               { label : 'Jordan', value: 'Jordan'},
+                                                               { label : 'Japan', value: 'Japan'},
+                                                               { label : 'Kenya', value: 'Kenya'},
+                                                               { label : 'Kyrgyzstan', value: 'Kyrgyzstan'},
+                                                               { label : 'Cambodia', value: 'Cambodia'},
+                                                               { label : 'Kiribati', value: 'Kiribati'},
+                                                               { label : 'Comoros', value: 'Comoros'},
+                                                               { label : 'Saint Kitts and Nevis', value: 'Saint Kitts and Nevis'},
+                                                               { label : 'Korea, Democratic People’s Republic of', value: 'Korea, Democratic People’s Republic of'},
+                                                               { label : 'Korea, Republic of', value: 'Korea, Republic of'},
+                                                               { label : 'Kuwait', value: 'Kuwait'},
+                                                               { label : 'Cayman Islands', value: 'Cayman Islands'},
+                                                               { label : 'Kazakhstan', value: 'Kazakhstan'},
+                                                               { label : 'Lao People’s Democratic Republic', value: 'Lao People’s Democratic Republic'},
+                                                               { label : 'Lebanon', value: 'Lebanon'},
+                                                               { label : 'Saint Lucia', value: 'Saint Lucia'},
+                                                               { label : 'Liechtenstein', value: 'Liechtenstein'},
+                                                               { label : 'Sri Lanka', value: 'Sri Lanka'},
+                                                               { label : 'Liberia', value: 'Liberia'},
+                                                               { label : 'Lesotho', value: 'Lesotho'},
+                                                               { label : 'Lithuania', value: 'Lithuania'},
+                                                               { label : 'Luxembourg', value: 'Luxembourg'},
+                                                               { label : 'Latvia', value: 'Latvia'},
+                                                               { label : 'Libya', value: 'Libya'},
+                                                               { label : 'Morocco', value: 'Morocco'},
+                                                               { label : 'Monaco', value: 'Monaco'},
+                                                               { label : 'Moldova, Republic of', value: 'Moldova, Republic of'},
+                                                               { label : 'Montenegro', value: 'Montenegro'},
+                                                               { label : 'Saint Martin (French part)', value: 'Saint Martin (French part)'},
+                                                               { label : 'Madagascar', value: 'Madagascar'},
+                                                               { label : 'Macedonia, the former Yugoslav Republic of', value: 'Macedonia, the former Yugoslav Republic of'},
+                                                               { label : 'Mali', value: 'Mali'},
+                                                               { label : 'Myanmar', value: 'Myanmar'},
+                                                               { label : 'Mongolia', value: 'Mongolia'},
+                                                               { label : 'Macao', value: 'Macao'},
+                                                               { label : 'Martinique', value: 'Martinique'},
+                                                               { label : 'Mauritania', value: 'Mauritania'},
+                                                               { label : 'Montserrat', value: 'Montserrat'},
+                                                               { label : 'Malta', value: 'Malta'},
+                                                               { label : 'Mauritius', value: 'Mauritius'},
+                                                               { label : 'Maldives', value: 'Maldives'},
+                                                               { label : 'Malawi', value: 'Malawi'},
+                                                               { label : 'Mexico', value: 'Mexico'},
+                                                               { label : 'Malaysia', value: 'Malaysia'},
+                                                               { label : 'Mozambique', value: 'Mozambique'},
+                                                               { label : 'Namibia', value: 'Namibia'},
+                                                               { label : 'New Caledonia', value: 'New Caledonia'},
+                                                               { label : 'Niger', value: 'Niger'},
+                                                               { label : 'Norfolk Island', value: 'Norfolk Island'},
+                                                               { label : 'Nigeria', value: 'Nigeria'},
+                                                               { label : 'Nicaragua', value: 'Nicaragua'},
+                                                               { label : 'Netherlands', value: 'Netherlands'},
+                                                               { label : 'Norway', value: 'Norway'},
+                                                               { label : 'Nepal', value: 'Nepal'},
+                                                               { label : 'Nauru', value: 'Nauru'},
+                                                               { label : 'Niue', value: 'Niue'},
+                                                               { label : 'New Zealand', value: 'New Zealand'},
+                                                               { label : 'Oman', value: 'Oman'},
+                                                               { label : 'Panama', value: 'Panama'},
+                                                               { label : 'Peru', value: 'Peru'},
+                                                               { label : 'French Polynesia', value: 'French Polynesia'},
+                                                               { label : 'Papua New Guinea', value: 'Papua New Guinea'},
+                                                               { label : 'Philippines', value: 'Philippines'},
+                                                               { label : 'Pakistan', value: 'Pakistan'},
+                                                               { label : 'Poland', value: 'Poland'},
+                                                               { label : 'Saint Pierre and Miquelon', value: 'Saint Pierre and Miquelon'},
+                                                               { label : 'Pitcairn', value: 'Pitcairn'},
+                                                               { label : 'Palestine', value: 'Palestine'},
+                                                               { label : 'Portugal', value: 'Portugal'},
+                                                               { label : 'Paraguay', value: 'Paraguay'},
+                                                               { label : 'Qatar', value: 'Qatar'},
+                                                               { label : 'Reunion', value: 'Reunion'},
+                                                               { label : 'Romania', value: 'Romania'},
+                                                               { label : 'Serbia', value: 'Serbia'},
+                                                               { label : 'Russian Federation', value: 'Russian Federation'},
+                                                               { label : 'Rwanda', value: 'Rwanda'},
+                                                               { label : 'Saudi Arabia', value: 'Saudi Arabia'},
+                                                               { label : 'Solomon Islands', value: 'Solomon Islands'},
+                                                               { label : 'Seychelles', value: 'Seychelles'},
+                                                               { label : 'Sudan', value: 'Sudan'},
+                                                               { label : 'Sweden', value: 'Sweden'},
+                                                               { label : 'Singapore', value: 'Singapore'},
+                                                               { label : 'Saint Helena, Ascension and Tristan da Cunha', value: 'Saint Helena, Ascension and Tristan da Cunha'},
+                                                               { label : 'Slovenia', value: 'Slovenia'},
+                                                               { label : 'Svalbard and Jan Mayen', value: 'Svalbard and Jan Mayen'},
+                                                               { label : 'Slovakia', value: 'Slovakia'},
+                                                               { label : 'Sierra Leone', value: 'Sierra Leone'},
+                                                               { label : 'San Marino', value: 'San Marino'},
+                                                               { label : 'Senegal', value: 'Senegal'},
+                                                               { label : 'Somalia', value: 'Somalia'},
+                                                               { label : 'Suriname', value: 'Suriname'},
+                                                               { label : 'South Sudan', value: 'South Sudan'},
+                                                               { label : 'Sao Tome and Principe', value: 'Sao Tome and Principe'},
+                                                               { label : 'El Salvador', value: 'El Salvador'},
+                                                               { label : 'Sint Maarten (Dutch part)', value: 'Sint Maarten (Dutch part)'},
+                                                               { label : 'Syrian Arab Republic', value: 'Syrian Arab Republic'},
+                                                               { label : 'Swaziland', value: 'Swaziland'},
+                                                               { label : 'Turks and Caicos Islands', value: 'Turks and Caicos Islands'},
+                                                               { label : 'Chad', value: 'Chad'},
+                                                               { label : 'French Southern Territories', value: 'French Southern Territories'},
+                                                               { label : 'Togo', value: 'Togo'},
+                                                               { label : 'Thailand', value: 'Thailand'},
+                                                               { label : 'Tajikistan', value: 'Tajikistan'},
+                                                               { label : 'Tokelau', value: 'Tokelau'},
+                                                               { label : 'Timor-Leste', value: 'Timor-Leste'},
+                                                               { label : 'Turkmenistan', value: 'Turkmenistan'},
+                                                               { label : 'Tunisia', value: 'Tunisia'},
+                                                               { label : 'Tonga', value: 'Tonga'},
+                                                               { label : 'Turkey', value: 'Turkey'},
+                                                               { label : 'Trinidad and Tobago', value: 'Trinidad and Tobago'},
+                                                               { label : 'Tuvalu', value: 'Tuvalu'},
+                                                               { label : 'Taiwan', value: 'Taiwan'},
+                                                               { label : 'Tanzania, United Republic of', value: 'Tanzania, United Republic of'},
+                                                               { label : 'Ukraine', value: 'Ukraine'},
+                                                               { label : 'Uganda', value: 'Uganda'},
+                                                               { label : 'United Arab Emirates', value: 'United Arab Emirates'},
+                                                               { label : 'United States', value: 'United States'},
+                                                               { label : 'Uruguay', value: 'Uruguay'},
+                                                               { label : 'Uzbekistan', value: 'Uzbekistan'},
+                                                               { label : 'Holy See (Vatican City State)', value: 'Holy See (Vatican City State)'},
+                                                               { label : 'Saint Vincent and the Grenadines', value: 'Saint Vincent and the Grenadines'},
+                                                               { label : 'Venezuela, Bolivarian Republic of', value: 'Venezuela, Bolivarian Republic of'},
+                                                               { label : 'Virgin Islands, British', value: 'Virgin Islands, British'},
+                                                               { label : 'Vietnam', value: 'Vietnam'},
+                                                               { label : 'Vanuatu', value: 'Vanuatu'},
+                                                               { label : 'Wallis and Futuna', value: 'Wallis and Futuna'},
+                                                               { label : 'Samoa', value: 'Samoa'},
+                                                               { label : 'Yemen', value: 'Yemen'},
+                                                               { label : 'Mayotte', value: 'Mayotte'},
+                                                               { label : 'South Africa', value: 'South Africa'},
+                                                               { label : 'Zambia', value: 'Zambia'},
+                                                               { label : 'Zimbabwe', value: 'Zimbabwe'}
+                                                               ]" />
+    <aura:attribute name="roleoptions" type="List" default="[
+                                                               { label : 'Pharmacist', value: 'Pharmacist'},
+                                                               { label : 'Pharmacy Assistant', value: 'Pharmacy Assistant'},
+                                                               { label : 'Pharmacy Intern', value: 'Pharmacy Intern'},
+                                                               { label : 'Pharmacy Student', value: 'Pharmacy Student'},
+                                                               { label : 'Health Sector Worker', value: 'Health Sector Worker'}
+                                                               ]" />
+    <aura:attribute name="workoptions" type="List" default="[
+                                                               { label : 'Full Time', value: 'Full Time'},
+                                                               { label : 'Part Time greater than 20 hours', value: 'Part Time greater than 20 hours'},
+                                                               { label : 'Part Time less than 20 hours', value: 'Part Time less than 20 hours'}
+                                                               ]" />
+    <aura:attribute name="monthoptions" type="List" default="[
+                                                               { label : 'January', value: 'January'},
+                                                               { label : 'February', value: 'February'},
+                                                               { label : 'March', value: 'March'},
+                                                               { label : 'April', value: 'April'},
+                                                               { label : 'May', value: 'May'},
+                                                               { label : 'June', value: 'June'},
+                                                               { label : 'July', value: 'July'},
+                                                               { label : 'August', value: 'August'},
+                                                               { label : 'September', value: 'September'},
+                                                               { label : 'October', value: 'October'},
+                                                               { label : 'November', value: 'November'},
+                                                               { label : 'December', value: 'December'}
+                                                               ]" />
+
+    <aura:attribute name="yearoptions" type="List" default="[]" />
+    <aura:attribute name="empAreaoptions" type="List" />
+    <aura:attribute name="profileDetail" type="Map" default="{}" />
+    <aura:attribute name="accountId" type="String" />
+    <aura:attribute name="existingEmail" type="Boolean" default="false" />
+    <aura:attribute name="showLoading" type="Boolean" default="true" />
+    <aura:attribute name="screenName" type="String" />
+    <aura:attribute name="isEmailAvailable" type="Boolean" default="false" />
+    <aura:attribute name="isDOBAvailable" type="Boolean" default="false" />
+    <aura:attribute name="isNewAcount" type="Boolean" default="false" />
+    <aura:attribute name="isFutureDate" type="Boolean" default="false" />
+    <aura:attribute name="isPastDate" type="Boolean" default="false" />
+
+
+    <aura:handler event="c:PSA_NavigationEvent" action="{!c.handleButtonClick}" />
+    <!-- Attribute Ends-->
+
+    <!--On init handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.profileDetail.primaryEmail}" action="{!c.validateEmail}" />
+
+    <!--Notification handler-->
+    <lightning:notificationsLibrary aura:id="notifLib" />
+
+
+    <!--Component Start-->
+    <div class="psa-heading text-center">
+        <aura:if isTrue="{!v.profileDetail.signedUp}">
+            <h1>Your profile</h1>
+            <aura:set attribute="else">
+                <h1>Complete your profile</h1>
+            </aura:set>
+        </aura:if>
+    </div>
+    <aura:if isTrue="{!v.profileDetail.signedUp}">
+        <hr class="psa-hori-line" />
+        <div class="fail-banner slds-align_absolute-center">
+            <lightning:icon iconName="utility:warning" alternativeText="warning" title="warning" size="large" class="slds-icon slds-icon-text-default" />
+        </div>
+        <div class="fail-banner">
+            <p>New Memberships are not available to pending, current or grace period members.</p>
+        </div>
+    </aura:if>
+    <hr class="psa-hori-line" />
+    <form>
+        <div class="psa-sub-heading">
+            <h3><i class="fas fa-map-marker-alt"></i> Account details</h3>
+        </div>
+        <div class="form-group-payment-method">
+            <lightning:input aura:id="forminput" required="true" type="email" name="email01" messageWhenPatternMismatch="Enter a valid email address" pattern="^([a-zA-Z0-9_\-\.\+]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$" value="{!v.profileDetail.email}" label="Email address"
+                messageWhenValueMissing="Email is required." onblur="{!c.checkEmailAvailability}" onkeyup="{!c.resetEmailFieldErrors}" class="form-input" disabled="{!not(empty(v.accountId))}" fieldLevelHelp="This email address will be used as your username."
+            />
+            <!--  <lightning:helptext
+        content="This email address will be used as your username."
+    /> -->
+            <aura:if isTrue="{!v.isEmailAvailable}">
+                <span class="info">It looks like an account already exists for this email. Please
+                <ui:outputURL value="login/?startURL=/s/psa-membership" label="Log in here" />. You will be returned to this form on successful login.</span>
+            </aura:if>
+
+            <aura:if isTrue="{!v.isNewAcount}">
+                <span class="info">Please create an account
+                <ui:outputURL value="../CommunitiesSelfReg?startURL=/s/psa-membership" label="here" /> before you can proceed with the form. You will be redirected back when your account is created.</span>
+            </aura:if>
+            <!--<aura:if isTrue="{!v.showLoading }">
+                <div class="slds-loader">
+                    <lightning:spinner alternativeText="Loading" size="small" />
+                </div>
+            </aura:if>-->
+        </div>
+
+
+
+        <!--         <aura:if isTrue="{!empty(v.accountId)}">
+            <div class="form-group-payment-method">
+                <lightning:input aura:id="forminput" class="form-input" required="true" type="password" name="password" value="{!v.profileDetail.password}" label="Password" messageWhenValueMissing="Password is required."/>
+            </div>
+        </aura:if> -->
+
+        <hr class="psa-hori-line" />
+        <div class="psa-sub-heading personal-details-sub-heading-pp">
+            <h3><i class="fas fa-map-marker-alt"></i> Personal details</h3>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group-payment-method">
+                    <lightning:combobox name="choosetitle" label="Title" value="{!v.profileDetail.Salutation}" placeholder="Choose Title" options="{! v.titleoptions }" disabled="{!v.profileDetail.signedUp}" />
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group-payment-method">
+                    <lightning:input aura:id="forminput" value="{!v.profileDetail.firstname}" class="form-input" name="firstname" label="First Name" placeholder="" required="true" pattern="^([^0-9]*)$" messageWhenPatternMismatch="Numbers are not allowed." messageWhenValueMissing="First Name is required."
+                        disabled="{!v.profileDetail.signedUp}" />
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group-payment-method">
+                    <lightning:input aura:id="forminput" value="{!v.profileDetail.lastname}" class="form-input" name="lastname" label="Last Name" placeholder="" required="true" messageWhenPatternMismatch="Numbers are not allowed." messageWhenValueMissing="Last Name is required."
+                        disabled="{!v.profileDetail.signedUp}" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group-payment-method">
+                    <lightning:combobox name="Gender" label="Gender" value="{!v.profileDetail.gender}" placeholder="Choose Gender" options="{! v.genderoptions }" disabled="{!v.profileDetail.signedUp}" />
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group-payment-method">
+                    <lightning:input aura:id="forminput" value="{!v.profileDetail.dobdate}" class="form-input" type="date" name="dob" label="Date of birth" required="true" messageWhenValueMissing="Date of birth is required." disabled="{!v.isDOBAvailable}" />
+                </div>
+            </div>
+        </div>
+        <hr class="psa-hori-line" />
+        <div class="psa-sub-heading">
+            <h3><i class="fas fa-map-marker-alt"></i> Contact details</h3>
+            <p>Let us know how we can best reach you.</p>
+        </div>
+        <!--         <div class="form-group-payment-method">
+            <lightning:input aura:id="forminput" disabled="{!v.profileDetail.sameAsAcountEmail}" value="{!v.profileDetail.primaryEmail}" class="form-input" required="true" type="email" name="email" messageWhenPatternMismatch="Enter a valid email address" pattern="^([a-zA-Z0-9_\-\.\+]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$" label="Primary email address" messageWhenValueMissing="Primary email is required." />
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-0 col-md-4 col-md-offset-0 col-lg-4 col-lg-offset-4">
+                <lightning:input class="form-input" type="checkbox" label="Same as account email address" name="psa-checkbox-1" checked="{!v.profileDetail.sameAsAcountEmail}" onchange="{!c.handleSameEmail}"/>
+            </div>
+        </div> -->
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group-payment-method">
+                    <lightning:input value="{!v.profileDetail.address1}" class="form-input" name="Address1" label="Address Line 1" aura:id="forminput" required="true" messageWhenValueMissing="Address Line 1 is required." disabled="{!v.profileDetail.signedUp}" />
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group-payment-method">
+                    <lightning:input value="{!v.profileDetail.address2}" class="form-input" name="Address2" label="Address Line 2" disabled="{!v.profileDetail.signedUp}" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group-payment-method">
+                    <lightning:input value="{!v.profileDetail.city}" aura:id="forminput" required="true" class="form-input" name="city" label="City" messageWhenValueMissing="City is required." disabled="{!v.profileDetail.signedUp}" />
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group-payment-method">
+                    <lightning:input value="{!v.profileDetail.state}" class="form-input" name="state" label="State" aura:id="forminput" required="true" messageWhenValueMissing="State is required." disabled="{!v.profileDetail.signedUp}" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group-payment-method">
+                    <lightning:combobox aura:id="forminput" name="Country" label="Country/region" value="{!v.profileDetail.country}" required="true" placeholder="Choose Country" options="{! v.countryoptions }" messageWhenValueMissing="Country is required." disabled="{!v.profileDetail.signedUp}"
+                    />
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group-payment-method">
+                    <lightning:input value="{!v.profileDetail.postalCode}" class="form-input" name="postalcode" label="Postal Code" aura:id="forminput" required="true" maxlength="5" pattern="^[0-9]+$" messageWhenPatternMismatch="Only numeric values are allowed." messageWhenValueMissing="PostalCode is required."
+                        disabled="{!v.profileDetail.signedUp}" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group-payment-method">
+                    <lightning:input aura:id="forminput" class="form-input" messageWhenPatternMismatch="You have entered an invalid phone number. Phone numbers must contain only digits." pattern="[0-9]*" onchange="{!c.formatPhoneNumber}" required="true" type="tel" label="Phone number"
+                        value="{!v.profileDetail.phone}" messageWhenValueMissing="Phone is required." disabled="{!v.profileDetail.signedUp}" />
+                </div>
+            </div>
+        </div>
+
+        <hr class="psa-hori-line" />
+        <div class="psa-sub-heading">
+            <h3><i class="fas fa-map-marker-alt"></i> Career details</h3>
+            <p>The details provided will help us determine the membership packages that you are eligible for.</p>
+        </div>
+        <div class="form-group-payment-method">
+            <lightning:combobox aura:id="forminput" name="role" label="Primary role" value="{!v.profileDetail.role}" required="true" placeholder="Choose Primary Role" options="{! v.roleoptions }" messageWhenValueMissing="Primary role is required." onchange="{!c.onRoleChange}"
+                disabled="{!v.profileDetail.signedUp}" />
+        </div>
+
+        <aura:if isTrue="{!v.profileDetail.role == 'Pharmacist'}">
+            <hr class="psa-hori-line" />
+            <div class="psa-sub-heading">
+                <h3><i class="fas fa-map-marker-alt"></i> Pharmacist details</h3>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group-payment-method">
+                        <lightning:combobox aura:id="forminput" name="employment" label="Primary emploment area" value="{!v.profileDetail.employment}" required="true" placeholder="Choose primary emploment area" options="{! v.empAreaoptions }" messageWhenValueMissing="Primary emploment area is required."
+                            disabled="{!v.profileDetail.signedUp}" />
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="form-group-payment-method" aura:id="monthOfQualification">
+
+                        <lightning:combobox aura:id="monthOfQualification2" name="role" label="Month Of Qualification" required="true" placeholder="Choose Month" options="{! v.monthoptions }" value="{!v.profileDetail.monthofqualification}" messageWhenValueMissing="Month of Initial Pharmacy Qualification is required."
+                            onchange="{!c.validateQualificationDate}" />
+
+                        <!--<lightning:input type="date" aura:id="forminput" value="{!v.profileDetail.dateofqualification}" onchange="{!c.setQualificationDate}" class="form-input" name="dateofqualification" label="Date of Initial Pharmacy Qualification" required="true" messageWhenPatternMismatch="Please enter valid date of qualification."
+                            messageWhenValueMissing="Date of Initial Pharmacy Qualification is required." disabled="{!v.profileDetail.signedUp}" />
+                        <div aura:id="dateOfQualificationMsg" aria-live="assertive" class="slds-form-element__help hide">Please enter a valid date of Initial Pharmacy Qualification.</div>-->
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="form-group-payment-method" aura:id="yearOfQualification2">
+                        <lightning:input class="form-input" pattern="[0-9]{4}" name="number" label="Year Of Qualification" required="true" maxlength="4" value="{!v.profileDetail.yrofqualification}" messageWhenValueMissing="Year of Initial Pharmacy Qualification is required."
+                            onkeyup="{!c.validateQualificationDate}" />
+
+                        <aura:if isTrue="{!v.isFutureDate}">
+                            <span class="alert_msg">
+                                It looks like you are still a Pharmacy Student. Please choose Pharmacy Student as your Primary role.
+                            </span>
+                        </aura:if>
+
+                        <aura:if isTrue="{!v.isPastDate}">
+                            <span class="alert_msg">
+                                It looks like you may still be a Pharmacy Intern. Please choose Pharmacy Intern as your Primary Role.
+                            </span>
+                        </aura:if>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group-payment-method">
+                        <lightning:input value="{!v.profileDetail.AHPRA}" aura:id="forminput" class="form-input" type="text" name="ahpranumber" label="AHPRA Number (if you do not have an AHPRA Number, please enter N/A)" disabled="{!v.profileDetail.signedUp}" required="true" messageWhenValueMissing="AHPRA Number is required." />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group-payment-method">
+                        <lightning:input class="form-input" type="checkbox" label="Do you hold any overseas pharmacy registrations?" name="psa-checkbox-2" checked="{!v.profileDetail.oversearegistration}" disabled="{!v.profileDetail.signedUp}" />
+                    </div>
+                </div>
+                <aura:if isTrue="{!v.profileDetail.oversearegistration}">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div class="form-group-payment-method" aura:id="monthOfQualification">
+
+                            <lightning:combobox aura:id="forminput" name="role" label="Month Of Qualification" required="true" placeholder="Choose Month" options="{! v.monthoptions }" value="{!v.profileDetail.monthofqualification}" messageWhenValueMissing="Month of Initial Pharmacy Qualification is required."
+                            />
+
+                            <!--<lightning:input type="text" aura:id="formRegYrInput" value="{!v.profileDetail.yrOfRegistration}" onchange="{!c.setQualificationDate}" class="form-input" name="dateofqualification" label="Year of Initial registration as Pharmacist in Australia" pattern="[0-9]{4}"
+                                required="true" messageWhenPatternMismatch="Please enter valid year of registration." messageWhenValueMissing="Year of Initial registration as Pharmacist is required." disabled="{!v.profileDetail.signedUp}" />-->
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div class="form-group-payment-method" aura:id="yearOfQualification">
+                            <lightning:input class="form-input" pattern="[0-9]{4}" name="number" label="Year Of Qualification" required="true" maxlength="4" value="{!v.profileDetail.yrofqualification}" messageWhenValueMissing="Year of Initial Pharmacy Qualification is required."
+                            />
+
+                        </div>
+                    </div>
+                </aura:if>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group-payment-method">
+                        <lightning:combobox aura:id="forminput" name="typeofwork" label="Hours Worked Per Week" value="{!v.profileDetail.hoursworkedperweek}" required="true" placeholder="Choose Hours Worked Per Week" options="{! v.workoptions }" messageWhenValueMissing="Hours Worked Per Week is required."
+                            disabled="{!v.profileDetail.signedUp}" />
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group-payment-method">
+                        <lightning:input class="form-input" type="checkbox" label="Are you currently on Parental Leave?" name="psa-checkbox-parental" checked="{!v.profileDetail.parentalLeave}" disabled="{!v.profileDetail.signedUp}" />
+                    </div>
+                </div>
+
+                <aura:if isTrue="{!v.profileDetail.parentalLeave}">
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group-payment-method">
+                            <lightning:input type="date" aura:id="formQualInput" value="{!v.profileDetail.returnToWorkDate}" class="form-input" name="returnToWorkDate" label="When do you expect to return to work?" required="true" messageWhenValueMissing="Return to work date is required."
+                                disabled="{!v.profileDetail.signedUp}" />
+                        </div>
+                    </div>
+                </aura:if>
+
+            </div>
+        </aura:if>
+
+        <aura:if isTrue="{!v.profileDetail.role == 'Pharmacy Student'}">
+            <hr class="psa-hori-line" />
+            <div class="psa-sub-heading">
+                <h3><i class="fas fa-map-marker-alt"></i> Pharmacy Student details</h3>
+            </div>
+            <div class="row">
+                <!--<div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group-payment-method" aura:id="dateOfGraduation">
+                        <lightning:input type="date" aura:id="forminput" value="{!v.profileDetail.dateOfGraduation}" onchange="{!c.setDateOfGraduation}" class="form-input" name="dateOfGraduation" label="Estimated date of graduation" required="true" messageWhenPatternMismatch="Please enter valid date of graduation."
+                            messageWhenValueMissing="Estimated date of graduation is required." disabled="{!v.profileDetail.signedUp}" />
+                        <div aura:id="dateOfGraduationMsg" aria-live="assertive" class="slds-form-element__help hide">Please enter a valid date of graduation.</div>
+                        <lightning:input aura:id="forminput" value="{!v.profileDetail.yrofgraduation}" class="form-input" type="text" name="yrofgraduation" label="Year of Expected Graduation" pattern="[0-9]{4}" required="true" messageWhenPatternMismatch="Please enter valid year of Expected Graduation." messageWhenValueMissing="Year of Expected Graduation is required."/>
+                    </div>
+                </div>-->
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="form-group-payment-method" aura:id="monthOfGraduation">
+
+                        <lightning:combobox aura:id="forminput" name="role" label="Expected Month Of Graduation" required="true" placeholder="Choose Month" options="{! v.monthoptions }" value="{!v.profileDetail.monthofqualification}" messageWhenValueMissing="Month of Initial Pharmacy Qualification is required."
+                            onchange="{!c.validateGraduationDate}" />
+
+                        <!--<lightning:input type="text" aura:id="formRegYrInput" value="{!v.profileDetail.yrOfRegistration}" onchange="{!c.setQualificationDate}" class="form-input" name="dateofqualification" label="Year of Initial registration as Pharmacist in Australia" pattern="[0-9]{4}"
+                            required="true" messageWhenPatternMismatch="Please enter valid year of registration." messageWhenValueMissing="Year of Initial registration as Pharmacist is required." disabled="{!v.profileDetail.signedUp}" />-->
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="form-group-payment-method" aura:id="yearOfGraduation">
+                        <lightning:input class="form-input" pattern="[0-9]{4}" name="number" label="Expected Year Of Graduation" required="true" maxlength="4" value="{!v.profileDetail.yrofqualification}" messageWhenValueMissing="Year of Initial Pharmacy Qualification is required." onkeyup="{!c.validateGraduationDate}"
+                        />
+                        <div aura:id="dateOfGraduationMsg" aria-live="assertive" class="slds-form-element__help hide">Please enter a valid date of graduation.</div>
+                        <aura:if isTrue="{!v.isPastDate}">
+                            <span class="alert_msg">
+                                Please enter a valid date of graduation.
+                            </span>
+                        </aura:if>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group-payment-method">
+                        <lightning:input aura:id="forminput" value="{!v.profileDetail.university}" class="form-input" type="text" name="university" label="Intended university of graduation" required="true" messageWhenValueMissing="Intended university of graduation is required."
+                            disabled="{!v.profileDetail.signedUp}" />
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group-payment-method">
+                        <lightning:input aura:id="forminput" value="{!v.profileDetail.studentUniversityEmail}" class="form-input" required="true" type="email" name="uniEmail" messageWhenPatternMismatch="Enter a valid email address" pattern="^([a-zA-Z0-9_\-\.\+]+)@([a-zA-Z0-9_\-\.]+)(\.edu|\.edu\.([a-zA-Z]{2,5}))"
+                            label="University email address" messageWhenValueMissing="University email is required." disabled="{!v.profileDetail.signedUp}" />
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group-payment-method">
+                        <lightning:input aura:id="forminput" value="{!v.profileDetail.studentnumber}" class="form-input" type="text" name="studentnumber" label="Student ID Number" required="true" messageWhenValueMissing="Student ID Number is required." disabled="{!v.profileDetail.signedUp}"
+                        />
+                    </div>
+                </div>
+            </div>
+        </aura:if>
+
+        <aura:if isTrue="{!v.profileDetail.role == 'Pharmacy Intern'}">
+            <hr class="psa-hori-line" />
+            <div class="psa-sub-heading">
+                <h3><i class="fas fa-map-marker-alt"></i> Pharmacy Intern details</h3>
+            </div>
+            <div class="row">
+                <!--<div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group-payment-method" aura:id="dateOfQualification2">
+                        <lightning:input type="date" aura:id="forminput" value="{!v.profileDetail.dateofqualification}" onchange="{!c.setQualificationDate}" class="form-input" name="dateofqualification" label="Date of Initial Pharmacy Qualification" required="true" messageWhenPatternMismatch="Please enter valid date of qualification."
+                            messageWhenValueMissing="Date of Initial Pharmacy Qualification is required." disabled="{!v.profileDetail.signedUp}" />
+                        <div aura:id="dateOfQualificationMsg2" aria-live="assertive" class="slds-form-element__help hide">Please enter a valid date of Initial Pharmacy Qualification.</div>
+                    </div>
+                </div>-->
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="form-group-payment-method" aura:id="monthOfQualification">
+
+                        <lightning:combobox aura:id="forminput" name="role" label="Month Of Qualification" required="true" placeholder="Choose Month" options="{! v.monthoptions }" value="{!v.profileDetail.monthofqualification}" messageWhenValueMissing="Month of Initial Pharmacy Qualification is required."
+                        />
+
+                        <!--<lightning:input type="date" aura:id="forminput" value="{!v.profileDetail.dateofqualification}" onchange="{!c.setQualificationDate}" class="form-input" name="dateofqualification" label="Date of Initial Pharmacy Qualification" required="true" messageWhenPatternMismatch="Please enter valid date of qualification."
+                            messageWhenValueMissing="Date of Initial Pharmacy Qualification is required." disabled="{!v.profileDetail.signedUp}" />
+                        <div aura:id="dateOfQualificationMsg" aria-live="assertive" class="slds-form-element__help hide">Please enter a valid date of Initial Pharmacy Qualification.</div>-->
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="form-group-payment-method" aura:id="yearOfQualification">
+                        <lightning:input class="form-input" pattern="[0-9]{4}" name="number" label="Year Of Qualification" required="true" maxlength="4" value="{!v.profileDetail.yrofqualification}" messageWhenValueMissing="Year of Initial Pharmacy Qualification is required."
+                        />
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group-payment-method">
+                        <lightning:input aura:id="forminput" value="{!v.profileDetail.university}" class="form-input" type="text" name="university" label="University of graduation" required="true" messageWhenValueMissing="University of graduation is required." disabled="{!v.profileDetail.signedUp}"
+                        />
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group-payment-method">
+                        <lightning:input value="{!v.profileDetail.AHPRA}" aura:id="forminput" class="form-input" type="text" name="ahpranumber" label="AHPRA Number (if you do not have an AHPRA Number, please enter N/A)" disabled="{!v.profileDetail.signedUp}" required="true" messageWhenValueMissing="AHPRA Number is required." />
+                    </div>
+                </div>
+
+            </div>
+        </aura:if>
+
+
+        <hr class="psa-hori-line" />
+        <div class="row">
+            <div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
+                <!--<div class="btn-border">
+                    <a href="javascript:void(0);">Back</a>
+                </div>-->
+            </div>
+            <div class="col-xs-8 col-sm-6 col-md-6 col-lg-6">
+                <div class="btn-background-border text-right">
+                    <a href="javascript:void(0);" onclick="{!c.handleButtonClick}" aura:id="screen_2" class="continueToPkg">Continue to Packages</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!--Component End-->
+</aura:component>

@@ -1,0 +1,64 @@
+<aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForRecordHome,force:hasRecordId"
+                access="global">
+
+    <!-- Css ref -->
+
+    <!-- Attributes -->
+    <aura:attribute name="code" type="string"/>
+    <aura:attribute name="group1CPD" type="double"/>
+    <aura:attribute name="group2CPD" type="double"/>
+    <aura:attribute name="statement" type="string"/>
+    <aura:attribute name="logoImage" type="string"/>
+    <!-- Handlers -->
+
+    <!-- Content start -->
+     <aura:if
+              isTrue="{!not(empty(or(v.code,v.group1CPD,v.group2CPD,v.statement,v.logoImage)))}"
+            >
+       <div class="course-body__credits">
+    <h2 class="h3 course-body__credits-title">CPD Credits</h2>
+
+    <div class="row">
+     <aura:if isTrue="{!not(empty(v.code))}"> 
+    <div class="col-12 col-sm-6 col-lg text-lg">
+    <span class="course-body__credit-title">Accreditation Code:</span>
+    <span class="course-body__credit-description">{!v.code}</span>
+    </div>
+    </aura:if> 
+    <aura:if isTrue="{!not(empty(v.group1CPD))}"> 
+    <div class="col-12 col-sm-6 col-lg text-lg">
+    <span class="course-body__credit-title">Group 1:</span>
+    <span class="course-body__credit-description">
+	<lightning:formattedNumber value="{!v.group1CPD}" minimumFractionDigits="2"/> 
+
+        </span>
+        </div></aura:if>
+       <aura:if isTrue="{!not(empty(v.group2CPD))}">  
+    <div class="col-12 col-sm-6 col-lg text-lg">
+    <span class="course-body__credit-title">Group 2:</span>
+    <span class="course-body__credit-description">
+   <lightning:formattedNumber value="{!v.group2CPD}" minimumFractionDigits="2"/> 
+        </span>
+           </div></aura:if>
+    <aura:if isTrue="{!not(empty(v.logoImage))}"> 
+    <div class="col-12 col-sm-6 col-lg">
+    <!--ADD IN STATIC RESOURCE IMAGE 
+    -->
+    <!--img src="https://psa.isobarperth.space/images/credit.png" alt="Accredited CPD logo" /-->
+   <img src="{!v.logoImage}" alt="Accredited CPD logo" />
+   
+        </div></aura:if>
+	 <aura:if isTrue="{!not(empty(v.statement))}"> 
+    <div class="col-12">
+    <p class="course-body__credit-text"> 
+      <ui:outputRichText
+                  value="{!v.statement}"
+                />  </p>
+    
+         </div></aura:if>
+    </div>
+    </div>
+    </aura:if>
+
+
+</aura:component>

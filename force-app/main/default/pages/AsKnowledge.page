@@ -1,0 +1,38 @@
+<apex:page controller="AsKnowledgeController"  showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0" >
+	<!-- AsPsaCdpPlanningTool -->
+	<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+
+	<head>
+		<title>Knowledge</title>
+		<apex:stylesheet value="{!URLFOR($Resource.AsSldsPsaCdp, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+		<c:AsKnowledgeStyleCss />
+	</head>    
+
+	<body>    
+		<!-- REQUIRED SLDS WRAPPER -->
+		<div class="slds">
+			
+			<div class="psa-knowledge-wrap" id="knowledge-categories-group">
+			
+			</div>
+
+		</div> 
+ 
+	</body>
+ 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+ 	<script src="{!URLFOR($Resource.almond_uilib,  '/js/jquery.min.js')}"></script>
+ 	<script src="{!URLFOR($Resource.almond_uilib, '/js/almondutils.min.js')}"></script>
+
+ 
+
+	<c:AsKnowledgeJS />
+	<script type="text/javascript">
+
+		$(document).ready(function($){ 
+			var as = new AsKnowledge();
+			as.CategoryTiles(); 
+		});
+	</script>
+	</html>
+
+</apex:page>

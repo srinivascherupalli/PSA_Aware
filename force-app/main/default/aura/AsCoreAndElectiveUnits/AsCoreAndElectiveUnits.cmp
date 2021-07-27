@@ -1,0 +1,137 @@
+<!--
+  @File Name          : AsCoreAndElectiveUnits.cmp
+  @Description        : 
+  @Author             : Juliver Anoos
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 11/18/2019, 10:21:18 AM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    9/4/2019   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<aura:component controller="AsCoreAndElectiveUnitsClass" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,forceCommunity:themeLayout" access="global">
+    <!--load values -->
+    <aura:handler name="init" value="{!this}" action="{!c.loadLP}"/>
+    <!--returned values -->
+    <aura:attribute name="currentUserId" type="Id" default="{!$SObjectType.CurrentUser.Id}" />
+    <aura:attribute name="getEnrolmentRec" type="AsCoreElectiveClassWrapper" />
+    <aura:attribute name="getPackgetUnitList" type="AsCoreElectiveClassWrapper" />
+    <aura:attribute name="getEnrolledUnitList" type="AsCoreElectiveClassWrapper" />
+    <aura:attribute name="getEnrollmentState" type="AsCoreElectiveClassWrapper" />
+    <aura:attribute name="countSelected" type="Integer" default="0" />
+    <aura:attribute name="countRemaining" type="Integer" default="0" />
+    <aura:attribute name="countCores" type="Integer" default="1" />
+    <!--parameters-->
+    <aura:attribute name="EnrollmentId" type="String"  />
+    <aura:attribute name="AccountId" type="String"   />
+
+    <aura:registerEvent name="Enrolment_Event" type="c:EnrolmentActiveStep"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    <aura:attribute name="showToast" type="Boolean" default="false" />
+ 
+
+    <aura:attribute name="LPId" type="Integer" default="{!v.getEnrolmentRec.LPId}" />
+    <aura:attribute name="noOfElectives" type="Integer" default="{!v.getEnrolmentRec.numberOfElectives}" />
+  
+    
+    <div class='slds-container'>
+        
+            <div class="AsElectiveContainer">
+                <h2>Elective Selection</h2>
+                <h3>Please select {!v.getEnrolmentRec.numberOfElectives} electives to continue.</h3> 
+                <div class="AsElectiveCountContainer">
+                    
+                    <div class="AsElectiveCount"><h5>Selected: <span>{!v.countSelected}</span></h5></div> 
+                    
+                    <div class="AsElectiveCount"><h5>Remaining: <span> {!v.countRemaining} </span></h5></div>  
+                
+                </div>
+                
+                <aura:iteration items="{!v.getPackgetUnitList}" var="enroLLRec" >
+                    <aura:if isTrue="{!enroLLRec.recTypeId == enroLLRec.eLec}" >
+                        <label for="{!enroLLRec.LPUId }" >
+                            <aura:if isTrue="{!'Draft' != v.getEnrollmentState.enroLLmentStatus }" >
+                            	<input name="" id="{!enroLLRec.LPUId }" value="{!enroLLRec.LPUId }" data-num="{!enroLLRec.LPUId}" type="checkbox" onclick="{!c.manageLPUnits}" disabled="true"/>
+                                <aura:set attribute="else">
+                                    <input name="" id="{!enroLLRec.LPUId }" value="{!enroLLRec.LPUId }" data-num="{!enroLLRec.LPUId}" type="checkbox" onclick="{!c.manageLPUnits}" />
+                                </aura:set>
+                            </aura:if>
+                            <div class="AsElectiveOption" >
+                                <p class="AsElectiveTitle">{!enroLLRec.AsCourseCode}&nbsp;&nbsp;{!enroLLRec.LPUName }</p>
+                                <p class="AsElectiveDescription">{!enroLLRec.LPUTPDescription }
+                                </p>
+                                <div class="AsCustomCheckbox"></div>
+                            </div>
+                        </label>
+                    </aura:if>            
+                </aura:iteration>
+            </div>
+        <div class="AsMandatoryContainer">
+            <h2>Mandatory Core Units</h2>
+            <aura:iteration items="{!v.getPackgetUnitList}" var="RecCore" >
+            <aura:if isTrue="{!RecCore.recTypeId == RecCore.core}" >
+            
+            <div class="AsMandatoryListContainer">
+                <p class="AsElectiveTitle"><span class="slds-p-right_x-small">{!RecCore.OrderNo}.</span>{!RecCore.AsCourseCode}&nbsp;&nbsp;{!RecCore.LPUName }</p>
+                <div class="AsMandatoryList">
+                    <p class="AsElectiveDescription">
+                        <span class="slds-p-right_x-small"></span>
+                        {!RecCore.LPUTPDescription }
+                    </p>
+                </div>
+            </div>
+            </aura:if>
+            </aura:iteration>
+
+            <!-- <div class="slds-clearfix AsBtnContainer">
+                <button class="slds-button slds-button_neutral AsBtnCancel">Cancel</button> 
+                <lightning:button variant="brand" label="Save &amp; Email me a link" title="Save &amp; Email me a link" class="slds-button slds-button_neutral slds-float_right" onclick="{! c.saveAndContinue }" />
+                <button class="slds-button slds-button_neutral slds-float_right" id="saveAndContinue" onclick="{! c.saveAndEmail }" >Save &amp; Continue</button>
+            </div>  -->
+
+            <!-- <div class="slds-m-top_xx-large slds-btn-content">
+                <div class="slds-float_left">
+                    <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{! c.cancelcallback }"/>
+                </div>
+                <div class="slds-float_right">
+                    <lightning:button variant="Neutral" class="slds-save-email-btn"  label="Save &amp; Email me a link" title="Save &amp; Email me a link" onclick="{! c.saveAndEmail }"/> 
+                    <lightning:button variant="brand"  class="slds-save-btn" label="Save and Continue" title="Save &amp; Continue" onclick="{! c.saveAndContinue }"/>
+                </div>
+            </div> -->
+
+            <!-- buttons here! -->
+            <div class="slds-m-top_xx-large slds-btn-content">
+                <div class="slds-float_left">
+                    <lightning:button variant="Neutral" class="slds-back-btn" label="Back" title="Back" onclick="{!c.backCallback}"/>
+                    <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{!c.cancelCallback}"/>
+                </div>
+                <div class="slds-float_right">
+
+                    <aura:if isTrue="{!'Draft' == v.getEnrollmentState.enroLLmentStatus}">
+                            
+                        <!-- email button -->
+                        <lightning:button variant="Neutral" class="slds-save-email-btn"  label="Save &amp; Email me a link" title="Save &amp; Email me a link" onclick="{!c.saveAndEmail}"/> 
+
+                    </aura:if> 
+
+                     <!-- save button -->
+                     <lightning:button variant="brand"  class="slds-save-btn" label="Save and Continue" title="Save &amp; Continue" onclick="{!c.saveAndContinue}"/>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- spinner -->
+     <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-spinner_container">
+            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+     <!-- spinner -->
+    
+</aura:component>

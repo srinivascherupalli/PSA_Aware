@@ -1,0 +1,1277 @@
+<!-- 
+*Author : Jet R. Compayan
+*Description : This is the Helper JS Component of Cpd Planning Tool  
+*Date Created : Apr 26,2018
+*Last Modified By : 
+*Date Last Modified : 
+*Related Meta Data : User 
+-->
+<!-- AsPsaCdpHelperJs -->
+<apex:component controller="AsCPDPlanner"> <script type="text/javascript">
+    
+    /*Author : Jet R. Compayan
+  *Description : this function the wrapper object of the data selected
+  *Date Created : Apr 26,2018
+  *Last Modified By :
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param :
+  *Return :
+  */
+    function DomainCollections() {
+        
+        this.Object_Session = {
+            'Competency' : {},
+            'Topic' : {},
+            'CpdId':getUrlVar('cpdId')
+        }
+        
+        this.Object_Session_last_Part = {
+            'Training':{},
+            'CpdId':getUrlVar('cpdId')
+        }
+        
+    }
+    
+    /*
+  * Author : Jet
+  * Description: use to get the variable value in the url.
+  * Parameter : name of the variable.
+  * Return : Opportuninty Id.
+  */
+    var getUrlVar = function ( name ) {
+        
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(window.parent.location.href);
+        if (results == null){
+            return "";
+        }else{
+            return results[1];
+        }
+        
+    };
+    
+    
+    
+    /*Author : Jet R. Compayan
+  *Description : This Function has kind of functions that used by deferent  feature.
+  *Date Created : Apr 26,2018
+  *Last Modified By : Cristelle Do-ong
+  *Date Last Modified : July 30, 2018
+  *Related Meta Data :
+  *Param : 0. Elements - Jquery Elements
+  *Return :
+  */
+    function PsaCdpHelper( $ ) {
+        
+        var dc = new DomainCollections();
+        var dcObject = dc.Object_Session;
+        var dcObjectLastPart = dc.Object_Session_last_Part;
+        
+        var DamainDetails = {
+            'domain 1' : {
+                color : '#f29100',
+                colorblur : '#bdb12b',
+                title : 'Professionalism and ethics',
+                unique  : 'cpd-domain1',
+                domainNumber : '1',
+                show : false ,
+                universal_app : true
+            },
+            'domain 2' : {
+                color : '#ff5e17',
+                colorblur : '#c58c11',
+                title : 'Communication and collaboration',
+                unique  : 'cpd-domain2',
+                domainNumber : '2',
+                show : false,
+                universal_app : true
+            },
+            'domain 3' : {
+                color : '#661aff',
+                colorblur : '#7f59d31f',
+                title : 'Medicines management and patient care',
+                unique  : 'cpd-domain3',
+                domainNumber : '3',
+                description : 'Domain 3 considers medicines management and patient care and includes those standards where pharmacists apply their expertise to promote wellness or work in direct consultation with patients or in collaboration with other health professionals to improve health.',
+                show : true,
+                universal_app : false
+            },
+            'domain 4.3-4.7' : {
+                color : '#ca41cc',
+                colorblur : '#f3d9f6',
+                title : 'Leadership and management',
+                unique  : 'cpd-domain4',
+                domainNumber : '4',
+                description : 'Domain 4 considers leadership and management and includes those standards addressing self-leadership by pharmacists as well as their leadership role in sharing a vision for the future and promoting the use of initiative and innovation to respond to change and drive progress.',
+                show : true,
+                universal_app : false
+            },
+            'domain 4.1-4.2' : {
+                color : '#ca41cc',
+                colorblur : '#f3d9f6',
+                title : 'Leadership and management',
+                unique  : 'excpd-domain4',
+                domainNumber : '4',
+                show : false,
+                universal_app : true
+            },
+            'domain 5' : {
+                color : '#a5cf00',
+                colorblur : '#e6f5d4',
+                title : 'Education and research',
+                unique  : 'cpd-domain5',
+                domainNumber : '5',
+                description : 'Domain 5 considers education and research and includes those standards that address the ability of the pharmacist to contribute to the education of professional colleagues. It also covers the ability to analyse and synthesise information from medical and pharmaceutical literature, identify and respond to gaps in the evidence-base by conducting research, share research findings and apply evidence in practice.',
+                show : true,
+                universal_app : false
+            }
+        }
+        
+        var DisplayDomain = {
+            'domain 1' : {
+                color : '#f29100',
+                colorblur : '#bdb12b',
+                title : 'Professionalism and ethics',
+                unique  : 'cpd-domain1',
+                domainNumber : '1',
+                show : true
+            },
+            'domain 2' : {
+                color : '#ff5e17',
+                colorblur : '#c58c11',
+                title : 'Communication and collaboration',
+                unique  : 'cpd-domain2',
+                domainNumber : '2',
+                show : true
+            },
+            'domain 4.1-4.2' : {
+                color : '#ca41cc',
+                colorblur : '#f3d9f6',
+                title : 'Leadership and management',
+                unique  : 'excpd-domain4',
+                domainNumber : '4',
+                description : 'Domain 4 considers leadership and management and includes those standards addressing self-leadership by pharmacists as well as their leadership role in sharing a vision for the future and promoting the use of initiative and innovation to respond to change and drive progress.',
+                show : true
+            }
+        }
+        
+        this.loadMethod = {};
+        
+        this.loadMethod["cdp_component1"] = function(){}
+        
+        /*Author : Jet R. Compayan
+  *Description : This Method will display all Domains
+  *Date Created : Apr 26,2018
+  *Last Modified By : Cristelle Do-ong
+  *Date Last Modified : July 30, 2018
+  *Related Meta Data :
+  *Param :  
+  *Return : 
+  */
+  this.loadMethod["cdp_component01"] = function(){
+      $('#psa-spinner').show();
+      var listDomains = [];
+      var listDomainsGetData = [];
+      var listDomainsIndexNo = [];
+      var lastIndexDomain  = 0;
+      var htmlDomains = '';
+      
+      var cpdcollectionSession = sessionStorage.getItem('cpdcollection');
+      var cpdSess = JSON.parse(cpdcollectionSession);
+      
+      allCPDPlannerCompetencies( function ( res ) {
+          
+          listDomainsGetData = res;
+          var index = 0;
+          console.log(listDomainsGetData);
+          for (var key in res) {
+              
+              if ( res.hasOwnProperty(key) ) {
+                  
+                  if( !(typeof DisplayDomain[key] == 'undefined')  ){
+                      
+                      if(  DisplayDomain[key].show == true ){
+                          
+                          listDomains.push( res[key] );
+                          listDomainsIndexNo[index] = key;
+                          index ++ ;
+                      }
+                      
+                  }
+                  
+              }
+              
+          }
+          listDomainsIndexNo.sort();
+          for ( var i = 0 ; i < listDomains.length; i++) {
+              
+              var key = listDomainsIndexNo[i];
+              var domains =  listDomainsGetData[key];
+              
+              htmlDomains +='<div id="'+ DisplayDomain[key].unique +'" class="cpd-domain-group">';
+              htmlDomains +='<div class="cdp-domain-title" style="background:'+ DisplayDomain[key].color +' " >';
+              htmlDomains += 'Domain '+DisplayDomain[key].domainNumber +': '+ DisplayDomain[key].title ;
+              htmlDomains +='</div>';
+              htmlDomains +='<div class="cdp-domain-list-container">';
+              
+              for( var j = 0 ; j < domains.length; j++ ){
+                  
+                  var r = domains[j];
+                  
+                  if( cpdSess == null ){
+                      dcObject.Competency[ r.competency.Id ] = r.selected;
+                  }
+                  
+                  htmlDomains +=' <div class="slds-grid slds-border_bottom cdp-domain-items">';
+                  htmlDomains +='     <div class="slds-col slds-size_1-of-12 cdp-domain-order-number">';
+                  htmlDomains +='         <span style=" color:'+  DisplayDomain[key].color +'"> '+     domainSplitedByFirstSpace(r.competency.Name)[0] +'</span>';
+                  htmlDomains +='     </div>';
+                  htmlDomains +='     <div class="slds-col slds-size_9-of-12" style="padding-left: 3px;">';
+                  htmlDomains +=         domainSplitedByFirstSpace(r.competency.Name)[1];
+                  htmlDomains +='     </div>';
+                  htmlDomains +='     <div class="slds-col slds-size_2-of-12 slds-text-align_center ">';
+                  htmlDomains +='         <div class="slds-form-element">';
+                  htmlDomains +='             <div class="slds-form-element__control cdp-domain-items" >';
+                  htmlDomains +='                 <span class="slds-checkbox">';
+                  
+                  htmlDomains +='                     <input type="checkbox" name="options"  checked />';
+                  
+                  
+                  htmlDomains +='                     <label class="slds-checkbox__label"  >';
+                  
+                  htmlDomains +='                         <span class="slds-checkbox_faux"></span>';
+                  htmlDomains +='                     </label>';
+                  htmlDomains +='                 </span> ';
+                  htmlDomains +='             </div>';
+                  htmlDomains +='         </div>';
+                  htmlDomains +='     </div>';
+                  htmlDomains +=' </div>';
+                  
+              }
+              
+              htmlDomains +='</div>';
+              htmlDomains +='</div>';
+              
+          }
+          
+          $('#cpd-display-domains124')
+          .html( htmlDomains );
+          
+          $('#'+DisplayDomain[listDomainsIndexNo[0]].unique)
+          .show();
+          
+          $('#psa-spinner').hide();
+          
+      });
+  }
+  this.loadMethod["cdp_component02"] = function(){}
+  
+  this.loadMethod["cdp_component2"] = function(){
+      
+      $('#psa-spinner').show();
+      
+      var listDomains = [];
+      var listDomainsGetData = [];
+      var listDomainsIndexNo = [];
+      var lastIndexDomain  = 0;
+      var htmpDomains = '';
+      
+      $('.cdp-option-boxes')
+      .removeAttr( 'style' );
+      
+      $('.cpd-btn-select')
+      .removeClass('cdp-next-page-3');
+      
+      $('.cpd-btn-select')
+      .addClass('cdp-next-select');
+      
+      $('.cpd-back-select')
+      .removeClass('cdp-prev-select');
+      
+      $('.cpd-back-select')
+      .addClass('cdp-next-select-page02');
+      
+      $('#domainNumber')
+      .text(DamainDetails['domain 3'].domainNumber);
+      $('#domainDesc')
+      .text(DamainDetails['domain 3'].description);
+      
+      
+      
+      
+      var cpdcollectionSession = sessionStorage.getItem('cpdcollection');
+      var cpdSess = JSON.parse(cpdcollectionSession);
+      
+      if( cpdSess != null ){
+          dcObject = cpdSess;
+      }
+      
+      function sortByKey(array, key) {
+          return array.sort(function(a, b) {
+              var x = a[key]; var y = b[key];
+              return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+          });
+      }
+      
+      $('.cpd-domain-container-box-2').hide();
+      allCPDPlannerCompetencies( function ( res ) {
+          
+          listDomainsGetData = res;
+          var index = 0;
+          
+          for (var key in res) {
+              
+              if ( res.hasOwnProperty(key) ) {
+                  
+                  if( !(typeof DamainDetails[key] == 'undefined')  ){
+                      
+                      if(  DamainDetails[key].show == true ){
+                          
+                          listDomains.push( res[key] );
+                          listDomainsIndexNo[index] = key;
+                          index ++ ;
+                      }
+                      
+                  }
+                  
+              }
+              
+          }
+          
+          for ( var i = 0 ; i < listDomains.length; i++) {
+              
+              var domains = listDomains[i];
+              var key = listDomainsIndexNo[i];
+              htmpDomains +='<div id="'+ DamainDetails[key].unique +'" class="cpd-domain-group">';
+              htmpDomains +='<div class="cdp-domain-title" style="background:'+ DamainDetails[key].color +' " >';
+              htmpDomains += 'Domain '+DamainDetails[key].domainNumber +': '+ DamainDetails[key].title ;
+              htmpDomains +='</div>';
+              htmpDomains +='<div class="cdp-domain-list-container">';
+              
+              for( var j = 0 ; j < domains.length; j++ ){
+                  
+                  var r = domains[j];
+                  
+                  if( cpdSess == null ){
+                      dcObject.Competency[ r.competency.Id ] = r.selected;
+                  }
+                  htmpDomains +=' <div class="slds-grid slds-border_bottom cdp-domain-items">';
+                  htmpDomains +='     <div class="slds-col slds-size_1-of-12 cdp-domain-order-number">';
+                  htmpDomains +='         <span style=" color:'+  DamainDetails[key].color +'" >'+ domainSplitedByFirstSpace(r.competency.Name)[0] +'</span>';
+                  htmpDomains +='     </div>';
+                  htmpDomains +='     <div class="slds-col slds-size_9-of-12" style="padding-left: 3px;">';
+                  htmpDomains +=         domainSplitedByFirstSpace(r.competency.Name)[1];
+                  htmpDomains +='     </div>';
+                  htmpDomains +='     <div class="slds-col slds-size_2-of-12 slds-text-align_center ">';
+                  htmpDomains +='         <div class="slds-form-element">';
+                  htmpDomains +='             <div class="slds-form-element__control cdp-domain-items" >';
+                  htmpDomains +='                 <span class="slds-checkbox">';
+                  htmpDomains +='                     <input type="checkbox" name="options" class="cdp-domain-item-checkbox" id="'+ DamainDetails[key].unique +'-'+ j +'" data-domainsf-id="'+ r.competency.Id +'"  '+
+                      (
+                      cpdSess == null ?
+                      ( r.selected == true ? 'data1 checked' : '' )
+                      :
+                      (  (typeof dcObject['Competency'][r.competency.Id] == 'undefined') ? '' : 'data2 checked' )
+                  ) +' />';
+                  
+                  htmpDomains +='                     <label class="slds-checkbox__label" for="'+ DamainDetails[key].unique +'-'+ j +'"  >';
+                  htmpDomains +='                         <span class="slds-checkbox_faux"></span>';
+                  htmpDomains +='                     </label>';
+                  htmpDomains +='                 </span> ';
+                  htmpDomains +='             </div>';
+                  htmpDomains +='         </div>';
+                  htmpDomains +='     </div>';
+                  htmpDomains +=' </div>';
+                  
+                  
+                  
+              }
+              
+              htmpDomains +='</div>';
+              htmpDomains +='</div>';
+              
+              lastIndexDomain += i;
+              
+              
+              
+          }
+          
+          registerSessionStorage( dcObject );
+          
+          $('#cpd-display-domains')
+          .html( htmpDomains );
+          
+          $('.cpd-domain-group')
+          .hide();
+          
+          $('#'+DamainDetails[listDomainsIndexNo[0]].unique)
+          .show();
+          
+          $('#psa-spinner').hide();
+          
+      });
+      
+      
+      setTimeout(function() {
+          
+          var domainIndex  = 0;
+          
+          
+          $( document ).off( "click" , ".cdp-next-select" );
+          $( document ).on('click', '.cdp-next-select' , function(){
+              
+              
+              if(domainIndex <= lastIndexDomain+1 ){
+                  
+                  var key = listDomainsIndexNo[domainIndex];
+                  var keyToShow = listDomainsIndexNo[domainIndex+1];
+                  var keyDelay = listDomainsIndexNo[domainIndex-1];
+                  domainIndex +=1;
+                  $('.cpd-domain-group')
+                  .hide();
+                  
+                  console.log('jrc =>> solod sya');
+                  
+                  if( domainIndex <= (lastIndexDomain-1) ){
+                      
+                      $('#'+DamainDetails[keyToShow].unique)
+                      .fadeIn();
+                      
+                      $('#domainNumber').text(DamainDetails[keyToShow].domainNumber);
+                      $('#domainDesc').text(DamainDetails[keyToShow].description);
+                      
+                      $('.cpd-back-select')
+                      .removeClass('cdp-next-select-page02');
+                      
+                      $('.cpd-back-select')
+                      .addClass('cdp-prev-select');
+                      
+                  } else {
+                      
+                      $('.cpd-domain-container-box-1')
+                      .hide();
+                      
+                      $('.cpd-domain-container-box-2')
+                      .show();
+                      
+                      $('.cpd-btn-select')
+                      .removeClass('cdp-next-select');
+                      
+                      $('.cpd-btn-select')
+                      .addClass('cdp-next-page-3');
+                      
+                  }
+                  
+                  if( domainIndex <= lastIndexDomain ){
+                      
+                      $('.'+DamainDetails[key].unique+'-checkbox')
+                      .css({
+                          "background-color": DamainDetails[key].colorblur,
+                          "border": "1px solid "+DamainDetails[key].colorblur
+                      });
+                      
+                  }
+                  
+              } else {
+                  domainIndex = lastIndexDomain;
+              }
+              
+              //sessionStorage.setItem('page2LastIndex',domainIndex);
+          });
+          
+          $( document ).off( "click" , ".cdp-prev-select" );
+          $( document ).on('click', '.cdp-prev-select' , function(){
+              if(domainIndex > 0){
+                  
+                  $('.cpd-domain-container-box-2')
+                  .hide();
+                  
+                  $('.cpd-domain-container-box-1')
+                  .show();
+                  
+                  domainIndex -=1;
+                  
+                  var key = listDomainsIndexNo[domainIndex];
+                  var keyDelay = listDomainsIndexNo[domainIndex];
+                  
+                  $('.cpd-domain-group').hide();
+                  $('#'+DamainDetails[key].unique).fadeIn();
+                  
+                  $('#domainNumber').text(DamainDetails[key].domainNumber);
+                  $('#domainDesc').text(DamainDetails[key].description);
+                  
+                  $('.'+DamainDetails[keyDelay].unique+'-checkbox')
+                  .css({
+                      "background-color": DamainDetails[keyDelay].color,
+                      "border": "1px solid "+DamainDetails[keyDelay].color
+                  });
+                  
+                  $('.cpd-btn-select')
+                  .removeClass('cdp-next-page-3');
+                  
+                  $('.cpd-btn-select')
+                  .addClass('cdp-next-select');
+                  
+                  if( domainIndex < 1 ){
+                      
+                      $('.cpd-back-select')
+                      .removeClass('cdp-prev-select');
+                      
+                      $('.cpd-back-select')
+                      .addClass('cdp-next-select-page02');
+                      
+                  }
+                  
+              } else {
+                  
+                  domainIndex = 0;
+                  
+              }
+              
+          });
+          
+      }, 1000);
+      
+      
+      $(document).on('change', '.cdp-domain-item-checkbox', function() {
+          
+          var domainSfId = $(this).attr('data-domainsf-id');
+          
+          if(this.checked) {
+              dcObject.Competency[domainSfId] = true;
+          } else {
+              delete dcObject.Competency[domainSfId];
+          }
+          
+          registerSessionStorage( dcObject );
+          
+      });
+      
+  }
+  
+  
+  /*Author : Jet R. Compayan
+  *Description : This Method will display all Topics
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param :  
+  *Return : 
+  */
+  this.loadMethod["cdp_component3"] = function(){
+      
+      $('#psa-spinner').show();
+      allCPDTopics(function( res ){
+          
+          var cpdcollectionSession = sessionStorage.getItem('cpdcollection');
+          var cpdSess = JSON.parse(cpdcollectionSession);
+          
+          
+          if( cpdSess != null ){
+              dcObject = cpdSess;
+          }
+          
+          if(  sessionStorage.getItem('isalreadyLoadTopics') == null ){
+              for (var i = 0; i < res.length; i++) {
+                  
+                  var r = res[i];
+                  dcObject.Topic[r.topic.Id] = r.selected;
+                  registerSessionStorage( dcObject );
+                  
+              }
+              sessionStorage.setItem('isalreadyLoadTopics',true);
+          }
+          
+          var dividedTpoics =parseInt( (res.length)/3);
+          
+          var indexTopicCounter = 0;
+          var topic_col = 0;
+          var topicHtml = '';
+          
+          for (var i = 0; i < res.length; i++) {
+              
+              var r = res[i];
+              
+              
+              indexTopicCounter +=1;
+              topicHtml   +='<div  class="slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-large-size--3-of-12 " >';
+              
+              topicHtml   +='<div class="slds-grid cpd-topic-items slds-border_bottom slds-p-bottom_xx-small">';
+              
+              topicHtml   +=' <div>                                     ';
+              topicHtml   +='     <div class="slds-form-element">';
+              topicHtml   +='         <div class="slds-form-element__control cdp-domain-items" >';
+              topicHtml   +='             <span class="slds-checkbox">';
+              
+              topicHtml   +='                 <input type="checkbox" class="cpd-select-topics" name="options" data-topicSf-id="'+ r.topic.Id +'" id="cpd-topics-item'+i+'" '+
+                  ( dcObject.Topic[ r.topic.Id ] == true ? 'checked' : '' )
+              +' />';
+              
+              topicHtml   +='                 <label class="slds-checkbox__label" for="cpd-topics-item'+i+'">';
+              topicHtml   +='                     <span class="slds-checkbox_faux"></span>';
+              topicHtml   +='                 </label>';
+              topicHtml   +='             </span> ';
+              topicHtml   +='         </div>';
+              topicHtml   +='     </div>';
+              topicHtml   +=' </div>';
+              topicHtml   +=' <div>'+ r.topic.Name +'</div>';
+              topicHtml   +='</div>';
+              topicHtml   +='</div>';
+              
+              // console.log('indexTopicCounter ', indexTopicCounter);
+              
+              // if( indexTopicCounter  ==  dividedTpoics ){
+              
+              //  topic_col +=1;
+              //  $('#cpd-topic-col-'+topic_col)
+              //  .html(topicHtml);
+              
+              //  topicHtml ='';
+              //  indexTopicCounter = 0;
+              
+              // }  else { 
+              
+              //  console.log('last nani ');
+              
+              // }                        
+          }
+          
+          $('#cpd-topic-col-1')
+          .html(topicHtml);
+          
+          $('#psa-spinner').hide();
+      });
+      
+      $(document).on('change', '.cpd-select-topics', function(){
+          
+          var domainSfId = $(this).attr('data-topicsf-id');
+          
+          if(this.checked) {
+              dcObject.Topic[domainSfId] = true;
+          } else {
+              delete dcObject.Topic[domainSfId];
+          }
+          
+          
+          registerSessionStorage( dcObject );
+          
+      });
+      
+  }
+  
+  /*Author : Jet R. Compayan
+  *Description : This method will register all the Domains and Topics in the sessionStorage
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param :  
+  *Return : 
+  */
+  this.loadMethod["cdp_component4InitDataFromDatabase"] = function(){
+      
+      var listDomains = [];
+      var listDomainsGetData = [];
+      var listDomainsIndexNo = [];
+      var lastIndexDomain  = 0;
+      var htmpDomains = '';
+      
+      allCPDPlannerCompetencies( function ( res ) {
+          
+          listDomainsGetData = res;
+          var index = 0;
+          
+          for (var key in res) {
+              
+              if ( res.hasOwnProperty(key) ) {
+                  
+                  listDomains.push( res[key] );
+                  listDomainsIndexNo[index] = key;
+                  index ++ ;
+                  
+              }
+              
+          }
+          
+          for ( var i = 0 ; i < listDomains.length; i++) {
+              
+              var domains = listDomains[i];
+              var key = listDomainsIndexNo[i];
+              
+              for( var j = 0 ; j < domains.length; j++ ){
+                  
+                  var r = domains[j];
+                  
+                  dcObject.Competency[r.competency.Id] = r.selected;
+                  
+              }
+              
+          }
+          registerSessionStorage( dcObject );
+      });
+      
+      
+      allCPDTopics(function( res ){
+          
+          var dividedTpoics = (res.length)/3;
+          
+          var topicHtml = '';
+          
+          for (var i = 0; i < res.length; i++) {
+              
+              var r = res[i];
+              dcObject.Topic[r.topic.Id] = r.selected;
+              
+          }
+          
+          registerSessionStorage( dcObject );
+          
+          $('.cpd-review-topics').html( topicHtml );
+          
+      });
+      
+  }
+  
+  /*Author : Jet R. Compayan
+  *Description : This method will Review all the selected domains and topics
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param :  
+  *Return : 
+  */
+  this.loadMethod["cdp_component4"] = function(){
+      
+      
+      var listDomains = [];
+      var listDomainsGetData = [];
+      var listDomainsIndexNo = [];
+      var lastIndexDomain  = 0;
+      var htmpDomains = '';
+      
+      var cpdcollectionSession = sessionStorage.getItem('cpdcollection');
+      var cpdSess = JSON.parse(cpdcollectionSession);
+      
+      if(  sessionStorage.getItem('previewPage') !== null ){
+          $('.cpd-for-review').show();
+          $('.cpd-for-default').hide();
+          /*$('.desc').hide();*/
+      } else {
+          $('.cpd-for-review').hide();
+          $('.cpd-for-default').show();
+      }
+      
+      
+      allCPDPlannerCompetencies( function ( res ) {
+          
+          listDomainsGetData = res;
+          
+          var index = 0;
+          for (var key in res) {
+              
+              if ( res.hasOwnProperty(key) ) {
+                  listDomains.push( res[key] );
+                  listDomainsIndexNo[index] = key;
+                  index ++ ;
+              }
+              
+          }
+          
+          console.log('listDomainsGetData ==>',listDomainsGetData);
+          
+          listDomainsIndexNo.sort();
+          for ( var i = 0 ; i < listDomains.length; i++) {
+              
+              var key = listDomainsIndexNo[i];
+              var domains =  listDomainsGetData[key];
+              
+              htmpDomains +='<div id="'+ ( typeof DamainDetails[key]  ==  'undefined' ? 'PackageDomain' : DamainDetails[key].unique ) +'" class="cpd-domain-group">';
+              
+              htmpDomains +='<div class="cdp-domain-title" style="background:'+ ( typeof DamainDetails[key]  ==  'undefined' ? '#cbcbcb' : DamainDetails[key].color ) +' " >';
+              
+              htmpDomains += 'Domain '+DamainDetails[key].domainNumber +': '+ ( typeof DamainDetails[key]  ==  'undefined' ? 'Package' : DamainDetails[key].title ) +' '+ (DamainDetails[key].universal_app ? '(universally applicable)' :'' )  ;
+              
+              htmpDomains +='</div>';
+              htmpDomains +='<div class="cdp-domain-list-container">';
+              
+              
+              for( var j = 0 ; j < domains.length; j++ ){
+                  
+                  var r = domains[j];
+                  
+                  htmpDomains +=' <div class="slds-grid slds-border_bottom cdp-domain-items">';
+                  htmpDomains +='     <div class="slds-col slds-size_1-of-12 cdp-domain-order-number">';
+                  htmpDomains +='         <span style=" color:'+  DamainDetails[key].color +'"> '+    domainSplitedByFirstSpace(r.competency.Name)[0]; +'</span>';
+                  htmpDomains +='     </div>';
+                  htmpDomains +='     <div class="slds-col slds-size_9-of-12" style="padding-left: 3px;">';
+                  htmpDomains +=            domainSplitedByFirstSpace(r.competency.Name)[1];
+                  htmpDomains +='     </div>';
+                  htmpDomains +='     <div class="slds-col slds-size_2-of-12 slds-text-align_center ">';
+                  htmpDomains +='         <div class="slds-form-element">';
+                  htmpDomains +='             <div class="slds-form-element__control cdp-domain-items" >';
+                  htmpDomains +='                 <span class="slds-checkbox">';
+                  
+                  
+                  console.log('DamainDetails[key] ==> '+ key +' ',DamainDetails[key]);
+                  
+                  if( !DamainDetails[key].show ){
+                      htmpDomains +='                     <input type="checkbox" name="options"  checked />';
+                  } else {
+                      htmpDomains +='                     <input type="checkbox" name="options"    data-domainsf-id="'+ r.competency.Id +'" '+ (  cpdSess.Competency[r.competency.Id] == true ? 'checked': 'data'  ) +' />';
+                  }
+                  
+                  htmpDomains +='                     <label class="slds-checkbox__label"  >';
+                  
+                  htmpDomains +='                         <span class="slds-checkbox_faux"></span>';
+                  htmpDomains +='                     </label>';
+                  htmpDomains +='                 </span> ';
+                  htmpDomains +='             </div>';
+                  htmpDomains +='         </div>';
+                  htmpDomains +='     </div>';
+                  htmpDomains +=' </div>';
+                  
+              }
+              
+              htmpDomains +='</div>';
+              htmpDomains +='</div>';
+              
+              lastIndexDomain = i;
+              
+          }
+          
+          $('#cpd-display-domains_prview')
+          .html( htmpDomains );
+          
+      });
+      
+      
+      allCPDTopics(function( res ){
+          
+          var dividedTpoics = (res.length)/3;
+          
+          var topicHtml = '';
+          
+          for (var i = 0; i < res.length; i++) {
+              
+              var r = res[i];
+              
+              topicHtml +='   <div class="slds-grid slds-border_bottom cdp-domain-items">  ';
+              topicHtml +='       <div class="slds-col slds-size_10-of-12" style=" padding-left: 36px;margin: 3px;"> ';
+              topicHtml +=            r.topic.Name;
+              topicHtml +='       </div>  ';
+              topicHtml +='       <div class="slds-col slds-size_2-of-12 slds-text-align_center "> ';
+              topicHtml +='           <div class="slds-form-element"> ';
+              topicHtml +='               <div class="slds-form-element__control cdp-domain-items"> ';
+              topicHtml +='                   <span class="slds-checkbox"> ';
+              topicHtml +='                       <input type="checkbox" name="options" '+ (  cpdSess.Topic[r.topic.Id] == true ? 'checked': '' ) +' />';
+              topicHtml +='                       <label class="slds-checkbox__label" > ' ;
+              topicHtml +='                           <span class="slds-checkbox_faux"></span>';
+              topicHtml +='                       </label>';
+              topicHtml +='                   </span>';
+              topicHtml +='               </div>';
+              topicHtml +='           </div>';
+              topicHtml +='       </div>';
+              topicHtml +='   </div>';
+              
+          }
+          
+          
+          $('.cpd-review-topics').html( topicHtml );
+          
+      });
+      
+      
+  }
+  
+  this.loadMethod["cdp_component5"] = function(){}
+  
+  /*Author : Jet R. Compayan
+  *Description : This method will Save the Selected Domains and Topic to the Saleforce
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param :  0. callbackFunction - the callback after saving the data in Salesforce
+  *Return : 
+  */
+  this.loadMethod["setDataToSf"] = function(callback){
+      console.log( 'setDataToSf=>' );
+      $('#psa-spinner').show();
+      
+      var cpdcollectionSession = sessionStorage.getItem('cpdcollection');
+      
+      processCPD( cpdcollectionSession , function( res ){
+          $('#psa-spinner').hide();
+          delete sessionStorage.cpdcollection;
+          sessionStorage.setItem('cpdmoduletraining', JSON.stringify(res) );
+          callback( res );
+      });
+      
+  }
+  
+  /*Author : Jet R. Compayan
+  *Description : This method will display all the Traning Modules
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param : 
+  *Return : 
+  */
+  this.loadMethod["cdp_component6"] = function(){      
+      var TrainSess = JSON.parse(sessionStorage.getItem('cpdmoduletraining'));      
+      var sessTrainingModules = JSON.parse(sessionStorage.getItem('Training'));
+      
+      if( sessTrainingModules != null ){
+          dcObjectLastPart = sessTrainingModules;
+      }
+      
+      var tilesHtml = '';
+      for (var i = 0; i < TrainSess.training.length; i++) {
+          
+          var r = TrainSess.training[i];
+          
+          //console.log('r ==> ',r);
+          
+          tilesHtml += '<div data-match-height="group" class="col-12 col-md-6 card-wrapper">';
+          tilesHtml += '  <div class="card card--course card--learn">';
+          tilesHtml += '      <div class="card__header"><div class="card__img-placeholder"></div>';
+          if(r.Achievement__r!== undefined){
+              tilesHtml += '		<div class="card__badge uiOutputRichText">'+ $.parseHTML(r.Achievement__r.Acquired_Image__c)[0].data + '</div>';
+          } 
+          else if(r.Group__c='Group 1') {
+              tilesHtml += '		<div class="card__badge uiOutputRichText card__badge--group2blank"><p>&nbsp;</p></div>';
+          }
+          else if(r.Group__c='Group 2') {
+              tilesHtml += '		<div class="card__badge uiOutputRichText card__badge--group1blank"><p>&nbsp;</p></div>';
+          }
+          else if(r.Group__c='Group 3') {
+              tilesHtml += '		<div class="card__badge uiOutputRichText card__badge--group3blank"><p>&nbsp;</p></div>';
+          }
+          else{
+              tilesHtml += '		<div class="card__badge uiOutputRichText"><p>&nbsp;</p></div>';
+          }
+          if (typeof r.PSA_Marketing_Text__c === 'undefined') {
+              tilesHtml += '             <span>'+ (r.PSA_Marketing_Text__c == 'undefined' ? r.PSA_Marketing_Text__c : '') +'</span>';
+          } else {
+              tilesHtml += '             <span class="card__tag">'+ r.PSA_Marketing_Text__c +'</span>';
+          }
+          tilesHtml += '   		</div>';
+          // bottom part of card
+          tilesHtml += '		<div class="card__body">';
+          
+
+          /*tilesHtml += '       		<a target="_blank" href="/s/training-plan/'+  r.Id +'" >';
+          
+          if (typeof r.Total_Section_Items__c === 'undefined') {
+              tilesHtml += '        	<h6 class="card__title" style="padding-top: 10px"> 0 Modules</h6>';
+          } else {
+              if (r.Total_Section_Items__c == 1) {
+                  tilesHtml += '        <h6 class="card__title" style="padding-top: 10px"> '+ r.Total_Section_Items__c +' Module</h6>';
+              } else {
+                  tilesHtml += '        <h6 class="card__title" style="padding-top: 10px"> '+ r.Total_Section_Items__c +' Modules</h6>';
+              }
+          }
+          tilesHtml += '          	</a>';*/ 
+          
+          tilesHtml += '          	<div>';
+          tilesHtml += '          		<a target="_blank" href="/s/training-plan/'+  r.Id +'" class="card__title">';
+          tilesHtml += '            		<h3>'+ r.Name +' </h6>';
+          /*if (typeof r.Description__c === 'undefined') {
+              tilesHtml += '           		<span>'+ (r.Description__c == 'undefined' ? r.Description__c : '') +'</span>';
+          } else {
+              tilesHtml += '           		<span>'+ r.Description__c +'</span>';
+          }*/
+          
+          tilesHtml += '         		</a>';
+          tilesHtml += '			</div>';
+          tilesHtml += '          	<div class="slds-large-size_12-of-12 slds-p-top_medium">';
+          tilesHtml += '            	<button class="slds-progress-bar__text cpd-tile-select-module cpd-tils-btn'+(dcObjectLastPart == null ? '' : ( typeof dcObjectLastPart['Training'][r.Id] == 'undefined' ? '' : ' active' )) +'" data-training-sfId="'+ r.Id +'" data-is-selected="'+  (
+              dcObjectLastPart == null ? '0' : ( typeof dcObjectLastPart['Training'][r.Id] == 'undefined' ? '0' : '1' )
+          ) +'" > <p><svg class="slds-progress-bar__svg" width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.25 12.5003C23.25 18.5596 18.2283 23.4986 12 23.4986C5.77173 23.4986 0.75 18.5596 0.75 12.5003C0.75 6.44099 5.77173 1.50195 12 1.50195C18.2283 1.50195 23.25 6.44099 23.25 12.5003Z" fill="white" stroke="#788F9F" stroke-width="1.5"></path><path d="M12.9805 13.22H17.0261C17.2223 13.22 17.3939 13.052 17.3939 12.8599V12.1398C17.3939 11.9477 17.2223 11.7797 17.0261 11.7797H12.9805C12.8334 11.7797 12.7353 11.6837 12.7353 11.5397V7.57883C12.7353 7.38679 12.5636 7.21875 12.3675 7.21875H11.6319C11.4358 7.21875 11.2641 7.38679 11.2641 7.57883V11.5397C11.2641 11.6837 11.166 11.7797 11.0189 11.7797H6.97326C6.7771 11.7797 6.60547 11.9477 6.60547 12.1398V12.8599C6.60547 13.052 6.7771 13.22 6.97326 13.22H11.0189C11.166 13.22 11.2641 13.316 11.2641 13.4601V17.4209C11.2641 17.6129 11.4358 17.781 11.6319 17.781H12.3675C12.5636 17.781 12.7353 17.6129 12.7353 17.4209V13.4601C12.7353 13.316 12.8334 13.22 12.9805 13.22Z" fill="#788F9F"></path></svg></p><span style="padding-left:5px;padding-top:2px">'+(dcObjectLastPart == null ? 'Add to plan' : ( typeof dcObjectLastPart['Training'][r.Id] == 'undefined' ? 'Add to plan' : ' Remove from Plan' )) +'</span></button> ';
+          tilesHtml += '          		</div>';
+          tilesHtml += '      		</div>';
+          tilesHtml += '  		</div>';
+          
+          tilesHtml += '	</div>';
+          tilesHtml += '</div>'
+      }
+      
+      setTimeout(function(){
+      	var groupName = $('[data-match-height]');
+      	var groupHeights = [];
+          
+        groupName.css('min-height', 'auto');
+        groupName.each(function() {
+          groupHeights.push($(this).outerHeight());
+        });
+          
+        var maxHeight = Math.max.apply(null, groupHeights);
+        groupName.css('min-height', maxHeight);
+      }, 1000);
+      
+      $('#cpd-count-items').text('Showing '+ TrainSess.training.length +' modules out of '+TrainSess.training.length);
+      $('#cpd-module-tiles-list').html( tilesHtml );
+      
+      
+      // $("img").each(function(){
+      //     var img = $(this);
+      //     var image = new Image();
+      //     image.src = $(img).attr("src");
+      //     var no_image = "{!URLFOR($Resource.AS_membersignup_slice,'psa-member-signup-slices/140x100.png')}";
+      //     if (image.naturalWidth == 0 || image.readyState == 'uninitialized'){
+      //         $(img).unbind("error").attr("src", no_image).css({
+      //             height: $(img).css("height"),
+      //             width: $(img).css("width"),
+      //         });
+      //     }
+      // });
+      
+      $(document).on('click', '.cpd-tile-select-module', function(){
+          
+          var modulesId = $(this).attr('data-training-sfid');
+          var isSelected = $(this).attr('data-is-selected');
+          
+          if( isSelected == 0 ) {
+              dcObjectLastPart.Training[modulesId] = true;
+              $(this).attr('data-is-selected', '1');
+              $(this).addClass('active');
+              $(this).find('span').text("Remove from Plan");
+          } else {
+              delete dcObjectLastPart.Training[modulesId];
+              $(this).attr('data-is-selected', '0');
+              $(this).removeClass('active');
+              $(this).find('span').text("Add to Plan");
+          }
+          
+          sessionStorage.setItem( 'Training', JSON.stringify(dcObjectLastPart)  );
+          
+      });
+      
+      
+  }
+  
+  /*Author : Jet R. Compayan
+  *Description : This method will save the Training Module Selected into the Salesforce
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param :  0. callbackFunction - the callback after saving the data in Salesforce
+  *Return : 
+  */
+  this.loadMethod["setDataSaveTrainingModules"] = function(callback){
+      
+      $('#psa-spinner').show();
+      
+      var cpdcollectionSession
+      cpdcollectionSession = '{"Training":{},"CpdId":'+ getUrlVar('cpdId') +'}';
+      if( sessionStorage.getItem('Training') != null ){
+          cpdcollectionSession = sessionStorage.getItem('Training');
+      }
+      
+      processTrainingBook( cpdcollectionSession , function( res ){
+          
+          $('#psa-spinner').hide();
+          
+          sessionStorage.clear();
+          console.log(getUrlVar('cpdId'));
+          if( getUrlVar('cpdId') != '' ){
+              
+              //  window.parent.location=  'https://staging-staging-pharmaaust.cs6.force.com/membership/s/ascpdplanner/'+getUrlVar('cpdId');
+              // https://staging-staging-pharmaaust.cs6.force.com/membership/s/ascpdplanner/a2YN00000011gKyMAI/test-hope-planner-201
+              window.location =  location.href;
+          } else {
+              alert('Save Complete!');
+              window.location =  location.href;
+          }
+          
+          
+      });
+      
+      
+  }
+  
+  /*Author : Jet R. Compayan
+  *Description : This method will check last session component displayed in the page 
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param : 
+  *Return : 
+  */
+  this.checklastComponent = function(){
+      
+      if( sessionStorage.getItem('lastCompnent') != null ){
+          
+          $('.cdp-component').hide();
+          $('#'+sessionStorage.getItem('lastCompnent')).show();
+          
+          return true;
+          
+      } else {
+          
+          return false;
+          
+      }
+      
+  }
+  
+  /*Author : Jet R. Compayan
+  *Description : This method display the last component displayed
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param : 0. String - the Id of the element 
+  *Return : 
+  */
+  this.displayComponent = function( target ){
+      
+      sessionStorage.setItem('lastCompnent',target);
+      $('.cdp-component').hide();
+      $('#'+target).show();
+      
+  }
+  
+  
+  /* utilities */
+  
+  /*Author : Jet R. Compayan
+  *Description : this method will get all the domains remotely in salesforce 
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param :  0. callbackFunction - This will be the return of the request in the server side in the apex.
+  *Return : 
+  */
+  var  allCPDPlannerCompetencies = function( callback ) {
+      Visualforce.remoting.Manager.invokeAction(
+          '{!$RemoteAction.AsCPDPlanner.allCPDPlannerCompetencies}',
+          getUrlVar('cpdId'),
+          function( result, event ) {
+              callback( result )
+          }
+      );
+  }
+  
+  /*Author : Jet R. Compayan
+  *Description : this method will get all the topics remotely in salesforce 
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param :  0. callbackFunction - This will be the return of the request in the server side in the apex.
+  *Return : 
+  */
+  var  allCPDTopics = function( callback ) {
+      Visualforce.remoting.Manager.invokeAction(
+          '{!$RemoteAction.AsCPDPlanner.allCPDTopics}',
+          getUrlVar('cpdId'),
+          function( result, event ) {
+              callback( result )
+          }
+      );
+  }
+  
+  /*Author : Jet R. Compayan
+  *Description : this method will save the domain and topics selected remotely into salesforce 
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param :0. String = JSON String to be save in the salesforce  
+          1. callbackFunction - This will be the return of the request in the server side in the apex.
+  *Return : 
+  */
+  var processCPD = function( jsonString , callback ) {
+      console.log('processCPD ');
+      Visualforce.remoting.Manager.invokeAction(
+          '{!$RemoteAction.AsCPDPlanner.processCPD}',jsonString,
+          function( result, event ) {
+              console.log('result ', result);
+              callback( result )
+          }
+      );
+  }
+  
+  /*Author : Jet R. Compayan
+  *Description : this method will save the Training Module selected remotely into salesforce 
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param :0. String = JSON String to be save in the salesforce  
+          1. callbackFunction - This will be the return of the request in the server side in the apex.
+  *Return : 
+  */
+  var processTrainingBook = function( jsonString , callback ) {
+      
+      Visualforce.remoting.Manager.invokeAction(
+          '{!$RemoteAction.AsCPDPlanner.processTrainingBook}',jsonString,
+          function( result, event ) {
+              callback( result )
+          }
+      );
+  }
+  
+  /*Author : Jet R. Compayan
+  *Description : This method will check last session component displayed in the page 
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param : 
+  *Return : 
+  */
+  var displayComponentInternal =  function( target ){
+      
+      sessionStorage.setItem('lastCompnent',target);
+      $('.cdp-component').hide();
+      $('#'+target).show();
+      
+  }
+  
+  /*Author : Jet R. Compayan
+  *Description :This method will register the object into the sessionStorage
+  *Date Created : Apr 26,2018
+  *Last Modified By : 
+  *Date Last Modified : Apr 26,2018
+  *Related Meta Data :
+  *Param :0. Object = Object 
+          
+  *Return : 
+  */
+  var registerSessionStorage = function( obj ){
+      
+      var objStr = JSON.stringify(obj);
+      
+      sessionStorage.setItem( 'cpdcollection', objStr );
+      var res = sessionStorage.getItem( 'cpdcollection' );
+      
+  }
+  
+  
+  var domainSplitedByFirstSpace = function( str ){
+      var arr = [];             //new storage
+      str = str.split(' ');     //split by spaces
+      arr.push(str.shift());    //add the number
+      arr.push(str.join(' '));  //and the rest of the string
+      return arr;
+  }
+  
+  
+  
+  }
+    
+    
+    
+    
+    </script> </apex:component>

@@ -1,0 +1,47 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">    
+
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+
+<head>
+	<title>PSA CDP Planning</title>
+	<apex:stylesheet value="{!URLFOR($Resource.AS_slds, 'assets/styles/salesforce-lightning-design-system.css')}" />
+	<c:AsPsaDdpStyles />
+</head>    
+
+<body>    
+
+	<!-- REQUIRED SLDS WRAPPER -->
+	<div class="slds">    
+		<div class="cdp-wrapper">
+			<div class="cdp-wrapper-container">
+				<div class="cdp-wrapper-container-box">
+					<div class="cdp-box-container">
+						<h1 class="cdp-box-header-title"> PSA CDP Planning Tool </h1>
+						<p> Lorem </p>
+						<p> Mobi </p>
+						<div class="cdp-box-btn-group">
+							<div class="slds-grid slds-wrap">
+								<div class="slds-col slds-size_6-of-12">
+									<button class="slds-button slds-button_neutral">Button</button>
+								</div>
+								<div class="slds-col slds-size_6-of-12">
+									<button class="slds-button slds-button_neutral">Button</button>
+								</div>
+								<div class="slds-col slds-size_6-of-12">
+									<button class="slds-button slds-button_neutral">Button</button>
+								</div>
+								<div class="slds-col slds-size_6-of-12">
+									<button class="slds-button slds-button_neutral">Button</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>			
+		</div>
+	</div>
+	<!-- / REQUIRED SLDS WRAPPER -->    
+
+</body>
+</html>
+</apex:page>

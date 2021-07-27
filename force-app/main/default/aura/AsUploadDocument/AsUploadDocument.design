@@ -1,0 +1,3 @@
+<design:component  label="AS Upload Document" >
+    <design:attribute name="parentId" label="Enrollment ID" />
+</design:component>

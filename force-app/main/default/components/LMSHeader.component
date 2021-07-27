@@ -1,0 +1,109 @@
+<apex:component controller="LMSHeaderController">
+    
+    <style type="text/css">
+        .tab-menu-wrap{
+            display: none;
+        }
+        @media only screen and (min-width:48em) {
+
+        }
+
+        @media only screen and (min-width:64.0625em) {
+
+        }
+
+        @media only screen and (max-width:47.9375em) {
+            .tab-menu-wrap{
+                display: block;
+            }
+            .almond-slds .slds-tabs--default__nav {
+                display: block!important;
+            }
+            .tab-menu-wrap {
+                border: 1px solid #003d79;
+                padding: 8px;
+                background: #003d79;
+                color: #fff;
+                cursor: pointer;       
+            }
+        }
+    </style>
+
+    <apex:attribute name="hideSFLink" type="Boolean" description="Show a link to go back to the Salesforce UI"  default="false"/>
+    <div class="tab-menu-wrap btn-tab-menu-res">
+        <span>MENU</span>
+    </div> 
+    <div class="lx-lms-header slds-container--center slds-container--x-large">
+        <div class="slds-tabs--default">
+            <ul class="slds-tabs--default__nav" role="tablist">
+                
+                <li class="slds-tabs--default__item slds-text-title--caps" title="{!$Label.ALMS_MyProfile}" role="presentation">
+                    <a class="slds-tabs--default__link navbar-brand" href="{!$Page.MyTraining}" role="tab" tabindex="0">
+                        <!--apex:image value="{!IF(customLogo == null,URLFOR($Resource.almond_uilib, '/img/almond_logo.png'),customLogo)}" /-->
+                        <apex:image value="{!URLFOR($Resource.PSA_logo)}" />
+                    </a>
+                </li>
+                <apex:outputPanel layout="none" rendered="{!customSectionURL != null && customSectionName != null}">
+                    <li class="slds-tabs--default__item slds-text-title--caps {!IF(section == 'custom','slds-active','')}" title="{!customSectionName}" role="presentation">
+                        <a class="slds-tabs--default__link" href="{!JSENCODE(customSectionURL)}" role="tab" tabindex="0" aria-selected="{!IF(section == 'custom','true','false')}" aria-controls="tab-default-0">
+                            {!customSectionName}
+                        </a>
+                    </li>
+                </apex:outputPanel>
+
+                <li class="slds-tabs--default__item slds-text-title--caps {!IF(section == 'tracks','slds-active','')}" title="{!$Label.ALMS_TrainingTracks}" role="presentation">
+                    <a class="slds-tabs--default__link" href="{!$Page.TrainingTracks}" role="tab" tabindex="0" aria-selected="{!IF(section == 'tracks','true','false')}" aria-controls="tab-default-1">
+                        Qualifications
+                    </a><!--{!$Label.ALMS_TrainingTracks} -->
+                </li>
+                <li class="slds-tabs--default__item slds-text-title--caps {!IF(section == 'catalog','slds-active','')}" title="{!$Label.ALMS_PublicCatalog}" role="presentation">
+                    <a class="slds-tabs--default__link" href="{!$Page.TrainingCatalogHome}" role="tab" tabindex="-1" aria-selected="{!IF(section == 'catalog','true','false')}" aria-controls="tab-default-2">
+                        Education Catalogue
+                    </a><!--{!$Label.ALMS_PublicCatalog} -->
+                </li>
+                <li class="slds-tabs--default__item slds-text-title--caps {!IF(section == 'mytraining','slds-active','')} tab-to-be-hidden-if-not-logged-in" title="{!$Label.ALMS_My_Training}" role="presentation">
+                    <a class="slds-tabs--default__link" href="{!$Page.MyTraining}" role="tab" tabindex="-1" aria-selected="{!IF(section == 'mytraining','true','false')}" aria-controls="tab-default-3">
+                        My Education
+                    </a><!--{!$Label.ALMS_My_Training} -->
+                </li>
+                <li class="slds-tabs--default__item slds-text-title--caps {!IF(section == 'myprofile','slds-active','')} tab-to-be-hidden-if-not-logged-in completedModulesTab" title="{!$Label.ALMS_MyProfile}" role="presentation">
+                    <a class="slds-tabs--default__link" href="{!$Page.MyProfile}" role="tab" tabindex="-1" aria-selected="{!IF(section == 'myprofile','true','false')}" aria-controls="tab-default-4">
+                        Completed Modules
+                    </a><!--{!$Label.ALMS_MyProfile} -->
+                </li>
+                
+                <apex:outputPanel layout="none" rendered="{!!hideSFLink && !hideBackToSFButton}">
+                    <apex:outputPanel layout="none" rendered="{!ursAdministrator}">   
+                        <li class="slds-tabs--default__item slds-text-title--caps" title="{!$Label.ALMS_MyProfile}" role="presentation">
+                            <a class="slds-tabs--default__link" href="{!backToSFURL}" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-5" id="almond-header-logo">
+                                Salesforce
+                            </a>
+                        </li>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+            </ul>
+        </div>
+    </div>
+    
+    <script> 
+    	var IS_SESSION_LOGIN_OR_NONMEMBER = ('{!$Api.Session_Id}' == 'NULL_SESSION_ID' ? false : true );    
+    	
+        jQuery(document).ready(function($){
+            FastClick.attach(document.body);
+            if(!IS_SESSION_LOGIN_OR_NONMEMBER){
+            	$(".tab-to-be-hidden-if-not-logged-in").hide();
+            }
+            if('{!ursAdministrator}'=='false'){
+            	$(".completedModulesTab").hide();
+            }
+
+            $('.btn-tab-menu-res').on('click', function() {
+               $('.lx-lms-header').slideToggle("slow");
+            });
+
+        });
+
+
+    </script>
+
+</apex:component>

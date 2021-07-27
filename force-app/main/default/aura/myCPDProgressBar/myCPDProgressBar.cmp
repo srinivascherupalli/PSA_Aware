@@ -1,0 +1,1092 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  access="global"
+  controller="PSA_Progress"
+>
+  <!--Attribute-->
+  <aura:attribute name="selectedCPDYear" type="string" />
+  <aura:attribute name="mainCPDData" type="AsCPDPlanner__c" />
+  <aura:attribute name="cpdPlanData" type="PSA_Progress.courseCatalogWrapper" />
+  <aura:attribute name="accountContactRelation" type="AccountContactRelation" />
+  <aura:attribute name="isCourse" type="Account" />
+  <aura:handler name="init" value="this" action="{!c.doInit}" />
+   
+      <!--Member login Profile-->
+    <aura:if
+      isTrue="{!v.cpdPlanData.userDeatils.ProfileId == '00e7F000000ZqfOQAS'}"
+    >
+        <!--PageHero-->
+        <section class="page-hero">
+            <img
+                 src="{!$Resource.PSAFED + '/dist/images/My_CPD_Year_Dashboard.jpg'}"
+                 alt=""
+                 class="page-hero__bg-img"
+                 />
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <div class="page-hero__heading-wrapper">
+                            <h1 class="page-hero__heading"
+                                >{!v.cpdPlanData.userDeatils.FirstName}, welcome to My
+                                Dashboard</h1
+                                >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Content starts here-->
+      <section class="dashboard">
+        <div class="container">
+          <div class="row">
+              <!--User Box-->
+            <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+              <div class="cd-box cd-profile-box">
+                <div>
+                  <img src="{!v.cpdPlanData.userDeatils.FullPhotoUrl}" />
+                </div>
+                <div> <h2>Hi, {!v.cpdPlanData.userDeatils.FirstName}</h2> </div>
+                <div class="cd-link">
+                  <a href="{!'/s/account/'+v.cpdPlanData.userDeatils.AccountId}"
+                    ><strong>Update Profile</strong></a
+                  >
+                <a href="/s/order/Order/00B7F00000DVQl2UAH">View Invoices</a>
+
+                </div>
+              </div>
+            </div>
+				<!--Progress bar box-->
+            <div
+              class="col-12 col-lg-6 order-0 order-sm-first order-lg-0 dashboard__card-wrapper"
+            >
+              <c:memberProgressBar mainCPDData="{!v.mainCPDData}" />
+            </div>
+				<!--catalogue  box-->
+            <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+              <div class="cd-box cd-cpd-catalogue">
+                <div>
+                  <img src="{!'sfsites/c' + $Resource.CD_Search_Icon}" />
+                </div>
+                <div>
+                  <span class="cd-box-h4"
+                    >Browse Australia’s largest pharmacist CPD catalogue</span
+                  >
+                </div>
+                <div class="cd-link">
+                  <a href="/s/education-catalogue"
+                    ><strong>Click here</strong> to browse CPD</a
+                  >
+                </div>
+              </div>
+            </div>
+              <!--Article Box-->
+            <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+              <div class="cd-box cd-ap-box">
+                <div>
+                  <img src="{!'sfsites/c' + $Resource.AP_logo}" />
+                  <a target="_blank" href="https://www.psa.org.au/apcpd"
+                    ><strong>Click here</strong> for the latest CPD articles</a
+                  >
+                </div>
+              </div>
+            </div>
+				 <!--Resource Hub Box-->
+            <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+              <div class="cd-box cd-self-care-box cd-resource-hub-box">
+                <div> <img src="{!'sfsites/c' + $Resource.CD_RH_Icon}" /> </div>
+                <div>
+                  <span class="cd-box-h3">Browse PSA's Resource Hub</span>
+                </div>
+                <div class="cd-link">
+                  <a
+                    target="_blank"
+                    href="https://www.psa.org.au/practice-support-industry/resources"
+                    ><strong>Click here</strong></a
+                  >
+                </div>
+              </div>
+            </div>
+			<!--membership Box-->
+            <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+              <div class="cd-box cd-membership-box">
+                <div> <h2>Membership</h2> </div>
+                <div>
+                  <img src="{!'sfsites/c' + $Resource.CD_PSA_Icon}" />
+                </div>
+                <div>
+                  <p
+                    >PSA Member for <br /><strong class="cd-year"
+                      >{!v.cpdPlanData.userDeatils.AS_Membership_Span__c}</strong
+                    >
+                    <aura:if
+                      isTrue="{!v.cpdPlanData.userDeatils.AS_Membership_Span__c > 1}"
+                    >
+                      years<aura:set attribute="else"> year</aura:set></aura:if
+                    ></p
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!--Enrollment-->
+              <aura:if isTrue="{!v.cpdPlanData.showEnrollment==true}">
+              <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                  <div class="cd-self-care-box cd-box">
+                    <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                    </div>
+                    <div> <span class="cd-box-h3">My Enrolments</span> </div>
+                    <div class="cd-link">
+                      <a href="/s/my-enrolments"
+                        ><strong>Click here</strong> to access your enrolments</a
+                      >
+                    </div>
+                  </div>
+                  </div>
+              </aura:if>
+<!-- self care box-->	
+              <aura:if isTrue="{!not(empty(v.accountContactRelation))}">
+                <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                  <div class="cd-self-care-box cd-box">
+                    <div>
+                      <img src="{!'sfsites/c' + $Resource.CD_Care_Icon}" />
+                    </div>
+                    <div> <span class="cd-box-h3">Self Care</span> </div>
+                    <div class="cd-link">
+                      <a href="/s/myeducation"
+                        ><strong>Click here</strong> to access your education</a
+                      >
+                    </div>
+                  </div>
+                  </div>
+              </aura:if>
+
+<!-- Courses box starts here-->	
+              <aura:iteration var="course" items="{!v.isCourse}">
+                <aura:if
+                  isTrue="{!course == 'Intern Training Program 2019 1st Intake'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Intern Training Program</span>
+                      </div>
+                      <div class="cd-link">
+                        <a href="/s/sfdcpage/%2Fapex%2FMyTraining"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'Intern Training Program 2019 2nd Intake'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Intern Training Program</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/training-plan/a110o000008guGSAAY/intern-training-program"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'Intern Training Program 2020 1st Intake'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Intern Training Program</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/training-plan/a110o000008qFXwAAM/intern-training-program-2020-intake-1"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div></div
+                  >
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'Intern Training Program 2020 2nd Intake'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Intern Training Program</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/training-plan/a110o00000A62gBAAR/intern-training-program-2020-intake-2"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div></div
+                    >
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training ACT'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000003CTdaQAG"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training NSW'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000002OKiLQAW"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training QLD'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000003BadFQAS"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training SA'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000003Bt1oQAC"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training NT'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000001u7Q8QAI"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training TAS'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000003BszfQAC"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training VIC'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000003BZ7vQAG"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training WA'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F0000030paLQAQ"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'Ethics and Dispensing in Pharmacy Practice'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h5"
+                          >Ethics and Dispensing in Pharmacy Practice</span
+                        >
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000001bU5sQAE"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Re-Entry Course'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Re-Entry Course</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000001bU5tQAE"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'Graduate Diploma of Advanced Pharmacy Practice'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h5"
+                          >Graduate Diploma of Advanced Pharmacy Practice</span
+                        >
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000001c4y3QAA"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'Diploma of Leadership and Management'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h5"
+                          >Diploma of Leadership and Management</span
+                        >
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000002P3jSQAS"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'General Practice Pharmacist: Foundation Stage Training Program'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-gp-box cd-box">
+                      <div>
+                        <img
+                          src="{!'sfsites/c' + $Resource.GP_Pharmacist_Icon}"
+                        />
+                      </div>
+                      <div>
+                        <span class="cd-box-h5"
+                          ><strong
+                            >GP Pharmacist<br />Foundation Training</strong
+                          ></span
+                        >
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/training-track/a160o000006OlsX/general-practice-pharmacist-foundation-stage-training-program"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/group/0F90o000000VB69CAG/gp-pharmacist-community-of-practice"
+                          target="_blank"
+                          ><u><em>Access the Community of Practice</em></u></a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                  <aura:if isTrue="{!course == 'Intern Training Program 2021 1st Intake'}">
+              <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                <div class="cd-self-care-box cd-itp-box cd-box">
+                  <div>
+                    <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                  </div>
+                  <div>
+                    <span class="cd-box-h3">Intern Training Program</span>
+                  </div>
+                  <div class="cd-link">
+                    <a
+                      href="/s/training-plan/a110o000009WsCb/"
+                      ><strong>Click here</strong> to access your course</a
+                    >
+                  </div>
+                </div>
+               </div>
+            </aura:if>
+              </aura:iteration>
+          </div>
+        </div>
+      </section>
+    </aura:if>
+        <!--Non Member login-->
+      <aura:if
+      isTrue="{!v.cpdPlanData.userDeatils.ProfileId== '00e7F000000ZqfPQAS'}"
+    >
+           <!--PageHero-->
+        <section class="page-hero">
+            <img
+                 src="{!$Resource.PSAFED + '/dist/images/My_CPD_Year_Dashboard.jpg'}"
+                 alt=""
+                 class="page-hero__bg-img"
+                 />
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <div class="page-hero__heading-wrapper">
+                            <h1 class="page-hero__heading"
+                                >{!v.cpdPlanData.userDeatils.FirstName}, welcome to My
+                                Dashboard</h1
+                                >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="dashboard">
+          <div class="container">
+            <div class="row">
+                <!-- User detail box-->
+              <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                <div class="cd-box cd-profile-box">
+                  <div>
+                    <img src="{!v.cpdPlanData.userDeatils.FullPhotoUrl}" />
+                  </div>
+                  <div>
+                    <h2>Hi, {!v.cpdPlanData.userDeatils.FirstName}</h2>
+                  </div>
+                  <div class="cd-link">
+                    <a
+                      href="{!'/s/account/'+v.cpdPlanData.userDeatils.AccountId}"
+                      ><strong>Update Profile</strong></a
+                    >
+                      <a href="/s/order/Order/00B7F00000DVQl2UAH">View Invoices</a>
+                  </div>
+                </div>
+              </div>
+ 				<!-- Progress box-->
+              <div
+                class="col-12 col-lg-6 order-0 order-sm-first order-lg-0 dashboard__card-wrapper"
+              >
+                <div class="container">
+                  <div class="row">
+                    <div class="cd-box cd-cpd-progress cd-non-member col-12">
+                      <div class="cd-cpd-progress-top row">
+                        <div class="col-12 col-md-9 text-left">
+                          <h2 data-aura-rendered-by="41:2;a"
+                            >My CPD Progress</h2
+                          >
+                        </div>
+                        <div class="col-12 col-md-3 pr-md-0"> </div>
+                      </div>
+
+                      <div
+                        class="slds-progress-bar row"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        aria-valuenow="10"
+                        role="progressbar"
+                      >
+                        <span
+                          class="slds-progress-bar__value group-1 col-1 slds-progress-bar__pillRight"
+                        >
+                          <span class="slds-assistive-text text-left"
+                            ></span
+                          >
+                        </span>
+                      </div>
+                      <div class="cd-link" data-aura-rendered-by="48:2;a">
+                        <a
+                          href="{!'https://psa.secure.force.com/membershipsignup?nonmemberaccountid='+v.cpdPlanData.userDeatils.AccountId}"
+                          target="_blank"
+                          data-aura-rendered-by="49:2;a"
+                          >Members can track their CPD progress at a glance.
+                          <strong data-aura-rendered-by="51:2;a"
+                            >Click here</strong
+                          >
+                          to join now.</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+<!-- Catalogue box-->
+              <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                <div class="cd-box cd-cpd-catalogue">
+                  <div>
+                    <img src="{!'sfsites/c' + $Resource.CD_Search_Icon}" />
+                  </div>
+                  <div>
+                    <span class="cd-box-h4"
+                      >Browse Australia’s largest pharmacist CPD catalogue</span
+                    >
+                  </div>
+                  <div class="cd-link">
+                    <a href="/s/education-catalogue"
+                      ><strong>Click here</strong> to browse CPD</a
+                    >
+                  </div>
+                </div>
+              </div>
+                 <!-- Resource box-->
+              <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                <div class="cd-box cd-ap-box">
+                  <div>
+                    <img src="{!'sfsites/c' + $Resource.AP_logo}" />
+                    <a
+                      target="_blank"
+                      href="https://www.australianpharmacist.com.au/"
+                      ><strong>Click here</strong> to access the award winning
+                      journal.</a
+                    >
+                  </div>
+                </div>
+              </div>
+ <!-- Resource box-->	
+              <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                <div class="cd-box cd-self-care-box cd-resource-hub-box">
+                  <div>
+                    <img src="{!'sfsites/c' + $Resource.CD_RH_Icon}" />
+                  </div>
+                  <div>
+                    <span class="cd-box-h3">Browse PSA's Resource Hub</span>
+                  </div>
+                  <div class="cd-link">
+                    <a
+                      target="_blank"
+                      href="https://www.psa.org.au/practice-support-industry/resources"
+                      ><strong>Click here</strong></a
+                    >
+                  </div>
+                </div>
+              </div>
+<!-- membership box-->	
+              <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                <div class="cd-non-membership-box cd-membership-box cd-box">
+                  <div>
+                    <img src="{!'sfsites/c' + $Resource.CD_Hand_Icon}" />
+                  </div>
+                  <div>
+                    <span class="cd-box-h3">Join PSA</span>
+                    <span class="cd-box-h5"
+                      >- the peak body championing pharmacists</span
+                    >
+                  </div>
+                  <div class="cd-link">
+                    <a
+                      target="_blank"
+                      href="{!'https://psa.secure.force.com/membershipsignup?nonmemberaccountid='+v.cpdPlanData.userDeatils.AccountId}"
+                      ><strong>Click here</strong> to join now</a
+                    >
+                  </div>
+                </div>
+              </div>
+<!--Enrollment-->
+              <aura:if isTrue="{!v.cpdPlanData.showEnrollment==true}">
+              <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                  <div class="cd-self-care-box cd-box">
+                    <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                    </div>
+                    <div> <span class="cd-box-h3">My Enrolments</span> </div>
+                    <div class="cd-link">
+                      <a href="/s/my-enrolments"
+                        ><strong>Click here</strong> to access your enrolments</a
+                      >
+                    </div>
+                  </div>
+                  </div>
+              </aura:if>
+<!-- self care box-->	
+              <aura:if isTrue="{!not(empty(v.accountContactRelation))}">
+                <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                  <div class="cd-self-care-box cd-box">
+                    <div>
+                      <img src="{!'sfsites/c' + $Resource.CD_Care_Icon}" />
+                    </div>
+                    <div> <span class="cd-box-h3">Self Care</span> </div>
+                    <div class="cd-link">
+                      <a href="/s/myeducation"
+                        ><strong>Click here</strong> to access your education</a
+                      >
+                    </div>
+                  </div>
+                  </div>
+              </aura:if>
+
+<!-- Courses box starts here-->	
+              <aura:iteration var="course" items="{!v.isCourse}">
+                <aura:if
+                  isTrue="{!course == 'Intern Training Program 2019 1st Intake'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Intern Training Program</span>
+                      </div>
+                      <div class="cd-link">
+                        <a href="/s/sfdcpage/%2Fapex%2FMyTraining"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'Intern Training Program 2019 2nd Intake'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Intern Training Program</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/training-plan/a110o000008guGSAAY/intern-training-program"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'Intern Training Program 2020 1st Intake'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Intern Training Program</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/training-plan/a110o000008qFXwAAM/intern-training-program-2020-intake-1"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div></div
+                  >
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'Intern Training Program 2020 2nd Intake'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Intern Training Program</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/training-plan/a110o00000A62gBAAR/intern-training-program-2020-intake-2"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div></div
+                    >
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training ACT'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000003CTdaQAG"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training NSW'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000002OKiLQAW"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training QLD'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000003BadFQAS"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training SA'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000003Bt1oQAC"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training NT'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000001u7Q8QAI"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training TAS'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000003BszfQAC"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training VIC'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000003BZ7vQAG"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Immunisation Training WA'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Immunisation Training</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F0000030paLQAQ"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'Ethics and Dispensing in Pharmacy Practice'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h5"
+                          >Ethics and Dispensing in Pharmacy Practice</span
+                        >
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000001bU5sQAE"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if isTrue="{!course == 'Re-Entry Course'}">
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h3">Re-Entry Course</span>
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000001bU5tQAE"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'Graduate Diploma of Advanced Pharmacy Practice'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h5"
+                          >Graduate Diploma of Advanced Pharmacy Practice</span
+                        >
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000001c4y3QAA"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'Diploma of Leadership and Management'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-itp-box cd-box">
+                      <div>
+                        <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                      </div>
+                      <div>
+                        <span class="cd-box-h5"
+                          >Diploma of Leadership and Management</span
+                        >
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/sfdcpage/%2Fapex%2FTrainingTrackDetail%3Fid%3Da167F000002P3jSQAS"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                <aura:if
+                  isTrue="{!course == 'General Practice Pharmacist: Foundation Stage Training Program'}"
+                >
+                  <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                    <div class="cd-self-care-box cd-gp-box cd-box">
+                      <div>
+                        <img
+                          src="{!'sfsites/c' + $Resource.GP_Pharmacist_Icon}"
+                        />
+                      </div>
+                      <div>
+                        <span class="cd-box-h5"
+                          ><strong
+                            >GP Pharmacist<br />Foundation Training</strong
+                          ></span
+                        >
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/training-track/a160o000006OlsX/general-practice-pharmacist-foundation-stage-training-program"
+                          ><strong>Click here</strong> to access your course</a
+                        >
+                      </div>
+                      <div class="cd-link">
+                        <a
+                          href="/s/group/0F90o000000VB69CAG/gp-pharmacist-community-of-practice"
+                          target="_blank"
+                          ><u><em>Access the Community of Practice</em></u></a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </aura:if>
+                  <aura:if
+              isTrue="{!course == 'Intern Training Program 2021 1st Intake'}"
+            >
+              <div class="col-12 col-sm-6 col-lg-3 dashboard__card-wrapper">
+                <div class="cd-self-care-box cd-itp-box cd-box">
+                  <div>
+                    <img src="{!'sfsites/c' + $Resource.CD_Course_Icon}" />
+                  </div>
+                  <div>
+                    <span class="cd-box-h3">Intern Training Program</span>
+                  </div>
+                  <div class="cd-link">
+                    <a
+                      href="/s/training-plan/a110o000009WsCb/"
+                      ><strong>Click here</strong> to access your course</a
+                    >
+                  </div>
+                </div></div
+              >
+            </aura:if>
+              </aura:iteration>
+            </div>
+          </div>
+        </section>
+    </aura:if>
+</aura:component>

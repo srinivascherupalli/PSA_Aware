@@ -1,0 +1,177 @@
+@font-face {
+    font-family: MariadProRegular;
+    src: url(/resource/MariadProRegular);
+}
+
+.THIS * {
+    font-family: MariadProRegular;
+}
+.THIS.slds-container {
+    padding: 50px 25px;
+}
+
+.THIS .enroltable th {
+    vertical-align: top;
+    width: 50%;
+	
+}
+
+.THIS .enroltable thead {
+    border-bottom: 1px solid #DDDBDA;
+    background: #FAFAF9;
+}
+
+.THIS .enroltable > thead th div {
+    text-transform: uppercase;
+    color: #3E3E3C;
+    font-size: 12px;
+}
+
+.THIS .enroltable th table,
+.THIS .enroltable th table tbody,
+.THIS .enroltable th table tr {
+    width: 107.3%;
+    display: block;
+    z-index: 1;
+    position: relative;
+}
+
+.THIS .enroltable > tbody > tr {
+    border-bottom: 1px solid #DDDBDA;
+}
+
+.THIS .enroltable > tbody > tr:last-child {
+	border-bottom: none;
+}
+
+.THIS .enroltable th table tbody tr:hover td {
+    background: transparent;
+}
+
+.THIS .enroltable th table tbody td:nth-child(1) {
+	width: 50%;
+    text-align: left;
+    display: inline-block;
+}
+
+.THIS .enroltable th table tbody td:nth-child(2) {
+	width: 50%;
+    text-align: right;
+    display: inline-block;
+}
+
+.THIS .slds-custom-head {
+    border-top: 1px solid #DDDBDA;
+    border-left: 1px solid #DDDBDA;
+    border-right: 1px solid #DDDBDA;
+}
+
+.THIS .slds-custom-head .slds-page-header__name h1 span {
+	margin: 5px 0;
+	font-weight: bolder; 
+}
+
+.THIS .slds-tablelist-container {
+	box-shadow: 0 0 1px #ddd;
+}
+
+.THIS button:focus {
+    box-shadow: none;
+}
+
+.THIS .slds-title-btn {
+    color: #003D79;
+}
+
+/* .THIS .slds-outer-text .slds-assistive-text {
+	top: 15px;
+    left: 46px;
+    width: auto !important;
+    height: auto !important;
+    color: #003D79;
+    clip: unset !important;
+    font-weight: bolder;
+} */
+.THIS .slds-outer-text {
+    color: #073d79;
+    cursor: auto;
+}
+
+.THIS .slds-outer-text svg {
+    background: #073d79;
+    width: 30px;
+    height: 30px;
+    padding: 7px;
+    border-radius: 50%;
+    fill: white !important;
+}
+
+.THIS .slds-primary-btn {
+    background: #003D79;
+    color: #fff;
+	transition: all .25s;
+}
+
+.THIS .slds-primary-btn:hover,
+.THIS .slds-primary-btn:focus {
+    border-color: #003D79;
+    background: #fff;
+    color: #003D79;
+}
+
+
+.THIS .slds-draft-btn {
+    background: #878787;
+    color: #fff;
+	transition: all .25s;
+}
+
+.THIS .slds-draft-btn:hover,
+.THIS .slds-draft-btn:focus {
+    border-color: #878787;
+    background: #fff;
+    color: #878787;
+}
+
+.THIS .slds-pending-payment-btn,
+.THIS .slds-pending-btn {
+    background-color: #878787;
+    color: #fff;
+	transition: all .25s;
+}
+
+.THIS .slds-pending-payment-btn:hover,
+.THIS .slds-pending-btn:hover,
+.THIS .slds-pending-payment-btn:focus,
+.THIS .slds-pending-btn:focus {
+    border-color: #878787;
+    background: #fff;
+    color: #878787;
+}
+
+.THIS .slds-icon-action-approval {
+    background: #003D79;
+}
+
+.THIS .slds-table-loader {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    min-height: 50px;
+    background: transparent;
+}
+
+.THIS .slds-spinner_small.slds-spinner::before,
+.THIS .slds-spinner_small.slds-spinner::after,
+.THIS .slds-spinner_small .slds-spinner__dot-a::before,
+.THIS .slds-spinner_small .slds-spinner__dot-b::before,
+.THIS .slds-spinner_small .slds-spinner__dot-a::after,
+.THIS .slds-spinner_small .slds-spinner__dot-b::after,
+.THIS .slds-spinner--small.slds-spinner::before,
+.THIS .slds-spinner--small.slds-spinner::after,
+.THIS .slds-spinner--small .slds-spinner__dot-a::before,
+.THIS .slds-spinner--small .slds-spinner__dot-b::before,
+.THIS .slds-spinner--small .slds-spinner__dot-a::after,
+.THIS .slds-spinner--small .slds-spinner__dot-b::after {
+    background: #003D79;
+}

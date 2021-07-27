@@ -1,0 +1,24 @@
+<aura:component implements="force:appHostable" >
+	<lightning:card title="">
+        <center class="slds-m-bottom_x-large">
+        	<img src="{!$Resource.PSA_logo}"/>
+            <span>Pharmaceutical Society of Australia
+            </span>
+            <img src="{!$Resource.PSA_Header}"/>
+            <div class="slds-box" style="background-color: white;">
+            	Enter your payment method
+            </div>
+        </center>
+        
+    </lightning:card>
+    New
+    <force:CardPayment
+          paymentProvider = ""
+          transactionType = ""
+          transactionParams = ""
+          expiryMonthRequired = "true"
+          expiryYearRequired = "true"     
+          hideEmail = "true"                                           
+          addressLine1Label = "Street"
+          payButtonLabel="Save Card"/>
+</aura:component>

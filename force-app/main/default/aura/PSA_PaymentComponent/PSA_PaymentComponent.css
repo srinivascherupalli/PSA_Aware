@@ -1,0 +1,9 @@
+.THIS .form-token { 
+    height: 60px !important;
+    padding: 6px 20px !important;
+    border: 2px solid #008540 !important;
+    font: 1.8rem/1.2 "Roboto-Regular" !important;
+}
+.THIS p {
+    font: 1.8rem/1.7 "Roboto-Light" !important;
+}

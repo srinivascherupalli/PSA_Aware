@@ -1,0 +1,102 @@
+<!-- 
+    *Author : Cristelle Do-ong
+    *Description : This Component will display after clicking the Reflect button 
+    *Date Created : July 27,2018
+    *Last Modified By : 
+    *Date Last Modified : 
+    *Related Meta Data : User
+-->
+
+<!-- AsPsaCdpPage01 -->
+<apex:component controller="AsCPDPlanner">
+	<div id="cdp_component01" class="cdp-wrapper-container-box slds-box cdp-component">
+		<div class="cdp-box-container">
+			<div class="slds-grid  ">
+				<div class="slds-col slds-size_5-of-12 domains-tiles" >
+ 
+					<div class="cdp-container-rotate-box">
+						<div class="cdp-box" style="width:272px;margin-bottom:22px;height:74px;text-align:center;">
+							<p> Domain 3:<br/>
+							Medicines management and <br/>
+							patient care </p>
+						</div>
+
+						<div class="cdp-box" style="width:272px;margin-bottom:22px;height:74px;text-align:center;">
+							<p> Domain 4:<br/>
+							Leadership and management<br/>
+						  </p>
+						</div>
+
+						<div class="cdp-box" style="width:272px;margin-bottom:22px;height:74px;text-align:center;">
+							<p> Domain 5:<br/> 
+							Education and research </p>
+						</div>	
+					</div>
+
+					<div class="cdp-container-rotate-box-none">
+						<div class="cpd-boxes-domain4">
+							<p> Domain 4<br/>
+								Leadership and management<br/>
+							  </p>
+						</div>
+						<div class="cpd-boxes-domain2">
+							<p> Domain 2:<br/> 
+							Communication and collaboration </p>
+						</div>	
+						<div class="cpd-boxes-domain1">
+							<p> Domain 1:<br/>
+								Professionalism and ethics
+							</p>
+						</div>
+					</div>
+ 
+ 
+				</div>
+				<div class="slds-col slds-size_7-of-12 ">
+					<div class="cpd-domain-container-box-3">
+
+						<p style="font-size: 16px;font-weight: 600;padding-bottom: 17px;">
+							Developing your CPD plan
+						</p>
+ 
+						<p style="font-size: 16px; padding-bottom: 17px;line-height: 18px;">
+							The first step in developing your CPD plan is to establish your scope of practice.
+						</p>
+
+						<p style="font-size: 16px;padding-bottom: 17px;">
+                            In the 2016 <label style="font-style: italic;">National Competency Standards Framework</label> there are a number of standards that are universally applicable to all pharmacists. This includes all of the standards in Domains 1 and 2, and Standards 4.1 and 4.2.
+						</p>
+                        
+                        <p style="font-size: 16px;padding-bottom: 17px;">
+                        	Because they apply to all pharmacists, these have been automatically selected for you and added to your scope of practice. Click next to continue on the next step.
+                        </p>
+                        <div class="cdp-domain-box">
+							<div class="cdp-domain-list" id="cpd-display-domains124">
+	                        </div>
+                    	</div>
+						
+					</div> 
+					
+                    <div class="cdp-btn-group-procced">
+						<div class="slds-form-element">
+							<div class="slds-form-element__icon slds-align-middle">
+								<a href="https://my.psa.org.au/s/article/CPD-UserGuide" target="_blank"> <button class="slds-button slds-button_icon slds-button slds-button_icon cdp-btn-helper-bottom" aria-describedby="help" title="Help">
+									<svg class="slds-button__icon" aria-hidden="true">
+										<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use>
+									</svg>
+									<span class="slds-assistive-text">Help</span>
+<!-- 									<div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help">
+										<div class="slds-popover__body">Need help? Access the full National Competency Standards Framework and view user guides and tutorial videos to assist you.</div>
+									</div> -->
+								</button> </a>
+								<button class="slds-button slds-button_brand cdp-back-to-menu">Previous</button>
+								<button class="slds-button slds-button_brand cdp-next-select-page02">Next</button>
+							</div>
+						</div> 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</apex:component>

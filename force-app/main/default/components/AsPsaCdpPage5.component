@@ -1,0 +1,62 @@
+<!-- 
+    *Author : Jet R. Compayan
+    *Description : This component is the confirmation of the domains and topic is save in salesforce
+    *Date Created : Apr 26,2018
+    *Last Modified By : Cristelle Do-ong
+    *Date Last Modified : July 27, 2018
+    *Related Meta Data : User
+-->
+
+<!-- AsPsaCdpPage5 -->
+<apex:component controller="AsCPDPlanner">
+	<div id="cdp_component5" class="cdp-wrapper-container-box slds-box cdp-component">
+		<div class="cdp-box-container">
+			<div class="slds-grid  ">
+				<div class="slds-col slds-size_12-of-12 ">
+ 						
+					<p style="font-size: 16px;font-weight: 600;padding-bottom: 17px;text-align: justify;">
+						Congratulations, you have now defined your scope of practice and identified your professional development needs.
+					</p>
+
+					<p style="font-size: 16px;padding-bottom: 17px;text-align: justify;">
+						Based on the information you have provided, you will now be presented with a broad range of relevant CPD to choose from. Take a look around and bookmark those activities that appeal to you and meet your professional development needs.
+					</p>
+
+					<p style="font-size: 16px;padding-bottom: 17px;text-align: justify;">
+						Once you are finished, you will have your CPD plan, and can get on with learning, extending your competence and enhancing your practice.
+                    </p>
+                    
+                    <p style="font-size: 16px;padding-bottom: 17px;text-align: justify;">
+						Your CPD plan should be a living document, so come back and go through these steps again if your role, or the focus of your professional development changes during the CPD period.
+                    </p> 
+
+					<div class="cdp-btn-group-procced">
+						<div class="slds-grid">
+							<div class="slds-col">
+								<p style="text-align: justify;">When you are ready to start planning your CPD, click Next to continue.</p>	
+							</div>
+							<div class="slds-col slds-text-align_right">
+								<div class="slds-form-element">
+									<div class="slds-form-element__icon slds-align-middle">
+										<a href="https://my.psa.org.au/s/article/CPD-UserGuide" target="_blank"><button class="slds-button slds-button_icon slds-button slds-button_icon cdp-btn-helper-bottom" aria-describedby="help" title="Help">
+											<svg class="slds-button__icon" aria-hidden="true">
+												<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.AsSldsPsaCdp,'/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use>
+											</svg>
+											<span class="slds-assistive-text">Help</span>
+		<!-- 									<div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help">
+												<div class="slds-popover__body">Need help? Access the full National Competency Standards Framework and view user guides and tutorial videos to assist you.</div>
+											</div> -->
+										</button>
+										</a>
+										<button class="slds-button slds-button_brand cpd-btn-back-to-page4">Previous</button>
+										<button class="slds-button slds-button_brand cpd-btn-back-to-page-finish">Next</button>
+									</div>
+								</div> 
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</apex:component>

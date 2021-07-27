@@ -1,0 +1,13 @@
+.THIS .PSA_main_container {
+    padding: 20px;
+    box-sizing: border-box;
+}
+.THIS #legend {
+    display: none;
+}
+
+.THIS .PSA_main_container .PSA_CPD_ASR p {
+	color: #8e8e84;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}

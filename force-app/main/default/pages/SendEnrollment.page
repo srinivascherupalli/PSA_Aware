@@ -1,0 +1,48 @@
+<apex:page standardController="Enrolment_Form__c" extensions="ASUpdateSentEnrollment" showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        
+        <apex:form >
+            <apex:slds />
+            <div class="slds">
+                <apex:actionFunction name="runAction" action="{!redirectVF}" rerender="allPanel" status="myStatus" oncomplete="displayMsg()"/>
+                
+                <div role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal--prompt">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__content slds-p-around--medium" style="border-top-right-radius: 5px;border-top-left-radius: 5px;">
+                            <div class="dispMsg" style="display: none;text-align: center;font-size: 19px;">
+                                <h1>Updating record.</h1>
+                            </div>
+                            <apex:actionStatus id="myStatus">
+                                <apex:facet name="start">
+                                    <apex:outputPanel >
+                                        <!--apex:image value="{!URLFOR($Resource.ASPHPPADDON__donationSLDS, '/assets/images/spinners/slds_spinner_brand.gif')}" style="position:absolute;margin: 0 auto;height:50px;left: 45%;top: 43%;"/-->
+										<h3>Please wait!</h3>
+                                    </apex:outputPanel>
+                                </apex:facet>
+                            </apex:actionStatus>
+                        </div>
+                        <div class="slds-modal__footer okButton" style="display: none;">
+                            <!--apex:commandButton styleClass="slds-button slds-button--brand" value="Done" action="{!done}"/-->
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+                
+            </div>
+            <script type="text/javascript">
+            
+            $(document).ready(function(){
+              runAction(); 
+            });
+            
+            function displayMsg(){
+                $('.dispMsg').show();
+                $('.okButton').show();
+            }
+            </script>
+            
+        </apex:form>
+    </html>
+</apex:page>

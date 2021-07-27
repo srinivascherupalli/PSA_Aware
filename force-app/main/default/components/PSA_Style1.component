@@ -1,0 +1,1389 @@
+<apex:component >
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif !important;
+
+        }
+
+        body font {
+            color: #607a91;
+        }
+
+        .pbButtonb [id*="bottom:next"],
+        .pbButtonb [id*="bottom:finish"] {
+
+            border-radius: 5px;
+            background-image: -moz-linear-gradient( 90deg, rgb(44, 85, 140) 0%, rgb(63, 98, 150) 100%);
+            background-image: -webkit-linear-gradient( 90deg, rgb(44, 85, 140) 0%, rgb(63, 98, 150) 100%);
+            background-image: -ms-linear-gradient( 90deg, rgb(44, 85, 140) 0%, rgb(63, 98, 150) 100%);
+            box-shadow: 0px 6px 16.92px 1.08px rgba(65, 107, 168, 0.8);
+
+            -webkit-border-radius: 5;
+            -moz-border-radius: 5;
+
+            -webkit-box-shadow: 0px 3px 13px #0336b8;
+            -moz-box-shadow: 0px 3px 13px #0336b8;
+            box-shadow: 0px 3px 13px #0336b8;
+            font-family: Arial;
+            color: #ffffff;
+            font-size: 13px;
+            padding: 13px 27px 10px 27px;
+            text-decoration: none;
+            border: none !important;
+        }
+
+        .pbButtonb [id*="bottom:back"] {
+
+            visibility: visible;
+            font-size: 13px;
+            border: 1px solid #ffffff;
+            background: #fff;
+            padding: 13px 27px 10px 0px;
+            color: #607a91;
+
+        }
+
+        #psa .psa-header {
+            text-align: center;
+            background: #eff7fa;
+            padding: 4% 4% 14% 4%;
+        }
+
+        #psa .pbHeader {
+            display: none;
+        }
+
+        #psa .pbBottomButtons {
+            border-top: 1px solid #ffffff00;
+        }
+
+        #psa .psa-content {
+            border: 1px solid #fff;
+            width: 744px;
+            margin: 0% auto;
+            margin-top: -11%;
+            margin-bottom: 15%;
+            background-color: #ffff;
+            border-radius: 20px;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0px 7px 25.38px 1.62px rgba(0, 0, 0, 0.05);
+        }
+
+        #psa .psa-header .psa-title h1 {
+            color: #607a91;
+            font-size: 28px;
+        }
+
+        #psa .psa-header .psa-title p {
+            font-size: 15px;
+            color: #939da6;
+            font-style: oblique;
+        }
+
+        #psa .psa-header .psa-logo img {
+            width: 16%;
+            margin-bottom: 2%;
+        }
+
+        #psa .apexp {
+            position: relative;
+            z-index: 999;
+            margin: 1% auto;
+            width: 73%;
+            margin-top: 11%;
+        }
+
+        #psa .bPageBlock {
+            border-top: 4px solid #fff0;
+            background-color: #ffffff00;
+            border: 1px solid #fff0;
+        }
+
+        .datePicker {
+            z-index: 999;
+            display: none!important;
+        }
+
+        input[type="text"] {
+            border: 1px solid #fff;
+            padding: 7px 0px 7px 0px;
+            border-bottom: 1px solid #dce3e9;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-bottom: 1px solid #017eff;
+        }
+
+        body .bPageBlock .pbBody .dataCol {
+            padding-left: 1px !important;
+        }
+
+        .waitingSearchDiv {
+            position: fixed !important;
+            text-align: center !important;
+            top: 0 !important;
+            z-index: 9999 !important;
+            left: 0 !important;
+        }
+
+        .pbTitle {
+            display: none;
+        }
+
+        [id*="bottom:back"] {
+            float: left;
+        }
+
+        /* radio */
+
+        [type="radio"]:checked,
+        [type="radio"]:not(:checked) {
+            position: absolute;
+            left: -9999px;
+        }
+
+        [type="radio"]:checked+label,
+        [type="radio"]:not(:checked)+label {
+            position: relative;
+            padding-left: 28px;
+            cursor: pointer;
+            line-height: 20px;
+            display: inline-block;
+            color: #666;
+        }
+
+        [type="radio"]:checked+label:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            border: 1px solid #335b8f;
+            border-radius: 100%;
+            background: #335b8f;
+        }
+
+        [type="radio"]:not(:checked)+label:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            border: 1px solid #d9e2ec;
+            border-radius: 100%;
+            background: #d9e2ec;
+
+        }
+
+        [type="radio"]:checked+label:after,
+        [type="radio"]:not(:checked)+label:after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #ffffff;
+            position: absolute;
+            top: 7px;
+            left: 3px;
+            border-radius: 100%;
+            -webkit-transition: all 0.2s ease;
+            transition: all 0.2s ease;
+        }
+
+        [type="radio"]:not(:checked)+label:after {
+            opacity: 0;
+            -webkit-transform: scale(0);
+            transform: scale(0);
+        }
+
+        [type="radio"]:checked+label:after {
+            opacity: 1;
+            -webkit-transform: scale(1);
+            transform: scale(1);
+        }
+
+        .pbBody,
+        .pbBody a,
+        .pbBody td,
+        .lbBody a,
+        .lbBodyDescription,
+        .list .headerRow .noRowsHeader {
+            color: #457dcc;
+            text-decoration: none;
+        }
+
+        .FlowNextBtn:hover,
+        .FlowFinishBtn:hover {
+            background: #365a8c !important;
+        }
+
+        .span_req {
+            float: right;
+            color: #f00;
+            line-height: 2px;
+        }
+
+        .psa-attachment td {
+            display: inline-block;
+        }
+
+        .psa-attachment .apexp {
+            position: relative;
+            z-index: 999;
+            margin: 1% auto;
+            width: 100% !important;
+            text-align: center;
+            margin-top: 0% !important;
+        }
+
+        .psa-attachment input:focus {
+            outline: -webkit-focus-ring-color auto 0px !important;
+        }
+
+        .psa-attachment .pbTitle,
+        .psa-attachment .empty {
+            display: none;
+        }
+
+
+
+        .psa-fileupload {
+            display: block;
+            position: relative;
+            width: 200px;
+            margin: auto;
+            cursor: pointer;
+            border: 0;
+            height: 60px;
+            border-radius: 5px;
+            outline: 0;
+        }
+
+        .fileType:hover:after {
+            background: #FF1111;
+        }
+
+        .psa-fileupload:after {
+            transition: 200ms all ease;
+            border-radius: 5px;
+            background-image: -moz-linear-gradient( 90deg, rgb(44, 85, 140) 0%, rgb(63, 98, 150) 100%);
+            background-image: -webkit-linear-gradient( 90deg, rgb(44, 85, 140) 0%, rgb(63, 98, 150) 100%);
+            background-image: -ms-linear-gradient( 90deg, rgb(44, 85, 140) 0%, rgb(63, 98, 150) 100%);
+            box-shadow: 0px 6px 16.92px 1.08px rgba(65, 107, 168, 0.8);
+            color: #fff;
+            font-size: 15px;
+            text-align: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            display: block;
+            content: 'Attachment';
+            line-height: 37px;
+            border-radius: 5px;
+        }
+
+        .btn-psa-upload {
+            display: none;
+        }
+
+        /* media Querries */
+
+        @media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+            #psa .psa-header .psa-logo img {
+                width: 100% !important;
+            }
+            #psa .psa-header .psa-title h1 {
+                font-size: 16px !important;
+            }
+
+            #psa .psa-content {
+                width: 100%;
+                margin-top: 0%;
+                border-radius: 0%;
+            }
+            #psa .psa-col-2 {
+                width: 100% !important;
+                min-height: 538px !important;
+            }
+            #psa .apexp {
+                margin: 0% auto !important;
+                width: 100% !important;
+                margin-top: 0% !important;
+            }
+        }
+
+        /* ----------- iPad Pro ----------- */
+
+        /* Portrait and Landscape */
+
+        @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) {
+            #psa .psa-content {
+                width: 100% !important;
+                margin-top: 0%;
+                border-radius: 0%;
+            }
+            #psa .psa-header {
+                padding: 4% !important;
+            }
+            #psa .psa-header .psa-logo img {
+                width: 38% !important;
+            }
+            #psa .psa-header .psa-title h1 {
+                font-size: 16px !important;
+            }
+        }
+    </style>
+    <div class="psa-page-1">
+
+        <Style>
+            #psa .psa-header {
+                text-align: center;
+                background: #eff7fa;
+                padding: 4% 4% 14% 4%;
+            }
+
+            #psa .pbHeader {
+                display: none;
+            }
+
+            #psa .pbBottomButtons {
+                border-top: 1px solid #ffffff00;
+            }
+
+            #psa .psa-col {
+                display: inline-block;
+                vertical-align: top;
+            }
+
+            #psa .psa-content {
+                background-image: url("{!URLFOR($Resource.AS_membersignup_slice,"psa-member-signup-slices/yellow.png")}");
+                background-repeat: no-repeat;
+                background-position: bottom;
+                background-position-x: right;
+                background-size: 35%;
+            }
+
+            #psa .psa-col-2 {
+                width: 59%;
+                position: relative;
+                height: 552px;
+            }
+
+            #psa .psa-col-1 {
+                width: 40%;
+                position: relative;
+                height: 552px;
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-image: url("{!URLFOR($Resource.AS_membersignup_slice,"psa-member-signup-slices/Girl.png")}");
+            }
+
+            #psa .psa-col-1 h1 {
+                position: absolute;
+                top: 11%;
+                color: #fff;
+                left: 22%;
+                font-size: 19px;
+                text-align: center;
+                font-weight: 100;
+                font-style: italic;
+                width: 56%;
+            }
+
+            #psa .psa-side-image {
+                width: 100%;
+            }
+
+            #psa .psa-header .psa-title h1 {
+                color: #607a91;
+                font-size: 28px;
+            }
+
+            #psa .psa-header .psa-title p {
+                font-size: 15px;
+                color: #939da6;
+                font-style: oblique;
+            }
+
+            #psa .psa-header .psa-logo img {
+                width: 16%;
+                margin-bottom: 2%;
+            }
+
+            [id*=BecomeMember] div[align="LEFT"] {
+                margin: 5%;
+            }
+
+            #psa .psa-image-footer {
+                position: absolute;
+                bottom: -0.3%;
+                right: -1%;
+                width: 100%;
+                text-align: right;
+            }
+
+            #psa .apexp {
+                position: relative;
+                z-index: 999;
+                margin: 1% auto;
+                width: 73%;
+                margin-top: 3%;
+            }
+
+            #psa .bPageBlock {
+                border-top: 4px solid #fff0;
+                background-color: #ffffff00;
+                border: 1px solid #fff0;
+            }
+
+            #psa .pbBottomButtons {
+                margin: 1% auto;
+                width: 84%;
+            }
+
+            body .bEditBlock .pbBottomButtons>table,
+            body .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons>table {
+                border-top: 1px solid #fff0 !important;
+            }
+
+            .pbTitle {
+                display: none;
+            }
+
+            .pbButtonb {
+                text-align: left !important;
+            }
+
+            [id*=BecomeMember] div:nth-child(1) b {
+                font-size: 20px;
+                font-family: "Arial";
+                color: rgb(92, 111, 124);
+                line-height: 1.4;
+                text-align: left;
+                font-weight: 500;
+            }
+
+            .apexp .bPageBlock .pbHeader td,
+            .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons .pbButtonb {
+                padding: 0;
+
+            }
+
+            .apexp .bPageBlock .pbBottomButtons .btn {
+                margin: 0%;
+            }
+
+            /* media Querries */
+
+            @media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+                #psa .psa-col-1 {
+                    display: none !important;
+                }
+                .pbSubsection tr {
+                    margin-right: 4%;
+                }
+            }
+
+            /* ----------- iPad Pro ----------- */
+
+            /* Portrait and Landscape */
+
+            @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) {
+                #psa .psa-col-1 {
+                    display: none !important;
+                }
+                .pbSubsection tr {
+                    margin-right: 4%;
+                }
+            }
+        </Style>
+    </div>
+
+    <div class="psa-page-2">
+        <Style>
+            .requiredBlock {
+                display: none;
+            }
+
+            .pbSubsection {
+                width: 100%;
+            }
+
+            .pbSubsection tr {
+                display: inline-block;
+                margin-right: 4%;
+                vertical-align: top;
+                margin-bottom: 5%;
+            }
+
+            .pbSubsection td {
+                display: block;
+            }
+
+            #psa .psa-col-1 {
+                display: none;
+            }
+
+            #psa .apexp {
+                width: 84%;
+                margin-top: 6%;
+            }
+
+            .interviewDisplayTextRow {
+                margin-bottom: 5%;
+                width: 100%;
+                text-align: left;
+            }
+
+            .interviewDisplayTextRow div {
+                text-align: left !important;
+            }
+
+            .pbSubsection tr:nth-child(2),
+            .pbSubsection tr:nth-child(9),
+            .pbSubsection tr:nth-child(17) {
+                display: none;
+            }
+
+            .FlowText,
+            .FlowDate {
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 11px;
+                color: #5e6e7b;
+            }
+
+            .pbSubsection tr:nth-child(6) {
+                width: 28%;
+            }
+
+            .pbSubsection tr:nth-child(6) [id*=Date_of_Birth] {
+                width: 105px;
+            }
+
+            .pbSubsection tr:nth-child(7) {
+                width: 58%;
+            }
+
+            .pbSubsection tr:nth-child(7) [id*=Email_Address] {
+                width: 335px;
+            }
+
+            .empty {
+
+                display: none !important;
+            }
+
+            .bPageBlock .detailList .labelCol {
+                width: 100%;
+                text-align: left;
+            }
+
+            body .bPageBlock .detailList tr td,
+            body .bPageBlock .detailList tr th,
+            body table.list tr td,
+            body table.list tr th,
+            body .hoverDetail .bPageBlock .detailList tr td,
+            body .hoverDetail .bPageBlock .detailList tr th {
+                border-color: #ff1a1a00 !important;
+            }
+
+            .pbSubsection tr:nth-child(10),
+            .pbSubsection tr:nth-child(11),
+            .pbSubsection tr:nth-child(12),
+            .pbSubsection tr:nth-child(13),
+            .pbSubsection tr:nth-child(14),
+            .pbSubsection tr:nth-child(15),
+            .pbSubsection tr:nth-child(20),
+            .pbSubsection tr:nth-child(21),
+            .pbSubsection tr:nth-child(22),
+            .pbSubsection tr:nth-child(23),
+            .pbSubsection tr:nth-child(24),
+            .pbSubsection tr:nth-child(25) {
+                width: 44.5%;
+            }
+
+            .pbSubsection tr:nth-child(10) input[type="text"],
+            .pbSubsection tr:nth-child(11) input[type="text"],
+            .pbSubsection tr:nth-child(12) input[type="text"],
+            .pbSubsection tr:nth-child(13) input[type="text"],
+            .pbSubsection tr:nth-child(14) input[type="text"],
+            .pbSubsection tr:nth-child(15) input[type="text"],
+            .pbSubsection tr:nth-child(20) input[type="text"],
+            .pbSubsection tr:nth-child(21) input[type="text"],
+            .pbSubsection tr:nth-child(22) input[type="text"],
+            .pbSubsection tr:nth-child(23) input[type="text"],
+            .pbSubsection tr:nth-child(24) input[type="text"],
+            .pbSubsection tr:nth-child(25) input[type="text"] {
+                width: 268px;
+            }
+
+            .pbSubsection tr:nth-child(18),
+            .pbSubsection tr:nth-child(19) {
+                width: 95%;
+            }
+
+            .pbSubsection tr:nth-child(18) input[type="text"],
+            .pbSubsection tr:nth-child(19) input[type="text"] {
+                width: 571px;
+            }
+
+            /* Blank Tr tags */
+
+            .pbSubsection tr:nth-child(27),
+            .pbSubsection tr:nth-child(30) {
+                display: none;
+            }
+
+            .interviewFormChoicesWithHelp {
+                width: 355px;
+            }
+
+            [id*=Primary_Address] div:not(.requiredBlock) {
+                display: inline-block;
+                margin-right: 10%;
+            }
+
+            [id*=Preferred_Contact_Number] div:not( .userInputDivShown) {
+                display: inline-block;
+                margin-right: 10%;
+            }
+
+            /*  */
+
+            [id*=Preferred_Contact_Number] .requiredBlock,
+            [id*=Preferred_Contact_Number] .userInputDivHidden {
+                display: none !important;
+            }
+
+            .userInputDivShown {
+                position: absolute;
+                left: 1%;
+                top: 23px;
+                width: 64%;
+                padding-left: 0px;
+            }
+
+            .userInputField {
+                width: 231px;
+            }
+
+            .bPageBlock .detailList .errorMsg {
+                padding-left: 3px;
+                width: 169px;
+            }
+
+            .bPageBlock .detailList .error,
+            .bPageTitle .tagDropDown #tag_edit_error,
+            .bPageTitle .tagDropDown .tagDropDownContent .error,
+            .tagRenameMenu .error,
+            .inlineEditDiv .error,
+            .inlineEditRequiredDiv .error {
+                border-top: 1px solid #fff;
+                border-right: 1px solid #fff;
+                border-left: 1px solid #fff;
+                border-bottom: 1px solid #ff0000;
+            }
+
+            .apexp .bPageBlock .pbHeader td,
+            .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons .pbButtonb {
+                padding: 13px 0px 36px 1px !important;
+            }
+
+            /* media Querries */
+
+            @media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+                .pbSubsection tr {
+                    display: block;
+                    width: 100% !important;
+                    margin-top: 8%;
+                }
+                .pbSubsection tr input[type="text"] {
+                    width: 100% !important;
+                }
+                body .bPageBlock .pbBody .dataCol {
+                    padding-left: 1px !important;
+                    width: 93%;
+                    margin-bottom: 12%;
+                }
+                .dateFormat {
+                    display: block;
+                }
+            }
+
+            /* ----------- iPad Pro ----------- */
+
+            /* Portrait and Landscape */
+
+            @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) {
+                .pbSubsection tr {
+                    display: block;
+                    width: 100% !important;
+                    margin-top: 8%;
+                }
+                .pbSubsection tr input[type="text"] {
+                    width: 100% !important;
+                }
+                input[type="text"] {
+                    font-size: 24px;
+                }
+                body .bPageBlock .pbBody .dataCol {
+                    padding-left: 1px !important;
+                    width: 100%;
+                    margin-bottom: 8%;
+                }
+                .dateFormat {
+                    display: block;
+                }
+            }
+        </Style>
+    </div>
+
+    <div class="psa-page-3">
+        <style>
+            #psa .psa-col-1 {
+                display: none;
+            }
+
+            #psa .apexp {
+                width: 84%;
+                margin-top: 6%;
+            }
+
+            .pbSubsection tr {
+                display: inline-block;
+                margin-right: 4%;
+                vertical-align: top;
+                margin-bottom: 5%;
+            }
+
+            .interviewDisplayTextRow {
+                margin-bottom: 5%;
+                width: 100%;
+                text-align: left;
+            }
+
+            .pbSubsection tr:nth-child(2) {
+                display: none;
+            }
+
+            .pbSubsection td {
+                display: block;
+            }
+
+            .bPageBlock .detailList .labelCol {
+                width: 100%;
+                text-align: left;
+            }
+
+            [id*=Role] {
+                border: 1px solid #fff;
+                padding: 7px 0px 7px 0px;
+                border-bottom: 1px solid #c1c1c1;
+                width: 600px
+            }
+
+            [id*=Role]:focus {
+                outline: none;
+                border-bottom: 1px solid #027fff;
+            }
+
+            .requiredBlock {
+                display: none;
+            }
+
+            /* media Querries */
+
+            @media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+                .pbSubsection tr {
+                    display: block;
+                    width: 100% !important;
+                    margin-top: 8%;
+                }
+                [id*=Role] {
+                    width: 100%;
+                }
+                body .bPageBlock .pbBody .dataCol {
+                    padding-left: 1px !important;
+                    width: 100%;
+                    margin-bottom: 12%;
+                }
+            }
+
+            @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) {
+                .pbSubsection tr {
+                    display: block;
+                    width: 100% !important;
+                    margin-top: 8%;
+                }
+                .pbSubsection tr input[type="text"] {
+                    width: 100% !important;
+                }
+                body .bPageBlock .pbBody .dataCol {
+                    padding-left: 1px !important;
+                    width: 100%;
+                    margin-bottom: 8%;
+                }
+                .dateFormat {
+                    display: block;
+                }
+                [id*=Role] {
+                    border: 1px solid #fff;
+                    padding: 7px 0px 7px 0px;
+                    border-bottom: 1px solid #c1c1c1;
+                    width: 100%;
+                    font-size: 24px;
+                }
+            }
+        </style>
+    </div>
+
+    <div class="psa-page-4">
+        <style>
+            #psa .psa-col-1 {
+                display: none;
+            }
+
+            #psa .apexp {
+                width: 84%;
+                margin-top: 6%;
+            }
+
+            .interviewDisplayTextRow {
+                margin-bottom: 5%;
+                width: 100%;
+                text-align: left;
+            }
+
+            .pbSubsection tr:nth-child(2) {
+                display: none;
+            }
+
+            .pbSubsection td {
+                display: block;
+            }
+
+            .bPageBlock .detailList .labelCol {
+                width: 100%;
+                text-align: left;
+            }
+
+            .pbSubsection tr {
+                display: inline-block;
+                margin-right: 4%;
+                vertical-align: top;
+                margin-bottom: 5%;
+            }
+
+            .pbSubsection tr:nth-child(3),
+            .pbSubsection tr:nth-child(4) {
+                width: 44.5%;
+                margin-bottom: 1%;
+            }
+
+            .pbSubsection tr:nth-child(3) input[type="text"],
+            .pbSubsection tr:nth-child(4) input[type="text"] {
+                width: 268px;
+            }
+
+            .pbSubsection tr:nth-child(5) {
+                width: 600px;
+                margin-bottom: 1%
+            }
+
+            .requiredBlock {
+                display: none;
+            }
+
+            [id*=Hours_Worked_Per_Week] {
+                border: 1px solid #fff;
+                padding: 7px 0px 7px 0px;
+                border-bottom: 1px solid #c1c1c1;
+                width: 570px
+            }
+
+            [id*=Hours_Worked_Per_Week]:focus {
+                outline: none;
+                border-bottom: 1px solid #027fff;
+            }
+
+            .empty {
+                display: none;
+            }
+
+            .apexp .bPageBlock .pbHeader td,
+            .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons .pbButtonb {
+                padding: 13px 0px 36px 1px !important;
+            }
+
+            /* media Querries */
+
+            @media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+                .pbSubsection tr {
+                    display: block;
+                    width: 100% !important;
+                    margin-top: 1%;
+                }
+                .pbSubsection tr input[type="text"] {
+                    width: 100% !important;
+                }
+                body .bPageBlock .pbBody .dataCol {
+                    padding-left: 1px !important;
+                    width: 93%;
+                    margin-bottom: 5%;
+                }
+                [id*=Hours_Worked_Per_Week] {
+                    width: 100%;
+                }
+            }
+
+            /* ----------- iPad Pro ----------- */
+
+            /* Portrait and Landscape */
+
+            @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) {
+                .pbSubsection tr {
+                    display: block;
+                    width: 100% !important;
+                    margin-top: 1%;
+                }
+                .pbSubsection tr input[type="text"] {
+                    width: 100% !important;
+                }
+                body .bPageBlock .pbBody .dataCol {
+                    padding-left: 1px !important;
+                    width: 93%;
+                    margin-bottom: 5%;
+                }
+                [id*=Hours_Worked_Per_Week] {
+                    width: 100%;
+                }
+            }
+        </style>
+    </div>
+    <div class="psa-page-5">
+        <style>
+            #psa .psa-col-1 {
+                display: none;
+            }
+
+            #psa .apexp {
+                width: 84%;
+                margin-top: 6%;
+            }
+
+            .interviewDisplayTextRow {
+                margin-bottom: 5%;
+                width: 100%;
+                text-align: left;
+            }
+
+            .pbSubsection td {
+                display: block;
+            }
+
+            .bPageBlock .detailList .labelCol {
+                width: 100%;
+                text-align: left;
+            }
+
+            .pbSubsection tr {
+                display: inline-block;
+                margin-right: 4%;
+                vertical-align: top;
+                margin-bottom: 5%;
+            }
+
+            .pbSubsection tr:nth-child(1),
+            .pbSubsection tr:nth-child(2) {
+                width: 44.5%;
+                margin-bottom: 1%;
+            }
+
+            .pbSubsection tr:nth-child(1) input[type="text"],
+            .pbSubsection tr:nth-child(2) input[type="text"] {
+                width: 268px;
+            }
+
+            .requiredBlock {
+                display: none;
+            }
+
+            .empty {
+                display: none;
+            }
+
+            .apexp .bPageBlock .pbHeader td,
+            .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons .pbButtonb {
+                padding: 13px 0px 36px 1px !important;
+            }
+
+            /* media Querries */
+
+            @media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+                .pbSubsection tr {
+                    display: block;
+                    width: 100% !important;
+                    margin-top: 1%;
+                }
+                .pbSubsection tr input[type="text"] {
+                    width: 100% !important;
+                }
+                body .bPageBlock .pbBody .dataCol {
+                    padding-left: 1px !important;
+                    width: 93%;
+                    margin-bottom: 5%;
+                }
+
+            }
+
+            /* ----------- iPad Pro ----------- */
+
+            /* Portrait and Landscape */
+
+            @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) {
+                .pbSubsection tr {
+                    display: block;
+                    width: 100% !important;
+                    margin-top: 3%;
+                }
+                .pbSubsection tr input[type="text"] {
+                    width: 100% !important;
+                }
+                input[type="text"] {
+                    font-size: 24px;
+                }
+                body .bPageBlock .pbBody .dataCol {
+                    padding-left: 1px !important;
+                    width: 100%;
+                    margin-bottom: 2%;
+                }
+                .dateFormat {
+                    display: block;
+                }
+            }
+        </style>
+    </div>
+    <div class="psa-page-6">
+        <style>
+            #psa .psa-col-1 {
+                display: none;
+            }
+
+            #psa .apexp {
+                width: 84%;
+                margin-top: 6%;
+            }
+
+            .interviewDisplayTextRow {
+                margin-bottom: 5%;
+                width: 100%;
+                text-align: left;
+            }
+
+            .pbSubsection tr {
+                display: inline-block;
+                margin-right: 4%;
+                vertical-align: top;
+                margin-bottom: 5%;
+            }
+
+            .pbSubsection td {
+                display: block;
+            }
+
+            .bPageBlock .detailList .labelCol {
+                width: 100%;
+                text-align: left;
+            }
+
+            .requiredBlock {
+                display: none;
+            }
+
+            .empty {
+                display: none;
+            }
+
+            .pbSubsection tr:nth-child(2) {
+                display: none;
+            }
+
+
+            [id*=Payment_Terms_Affiliate] div:not(.requiredBlock) {
+                display: inline-block;
+                margin-right: 10%;
+            }
+
+            [id*="Payment_Terms_Affiliate.input"] {
+                width: 308px;
+            }
+
+            .apexp .bPageBlock .pbHeader td,
+            .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons .pbButtonb {
+                padding: 13px 0px 36px 1px !important;
+            }
+        </style>
+    </div>
+    <div class="psa-page-7">
+        <style>
+            #psa .psa-col-1 {
+                display: none;
+            }
+
+            #psa .apexp {
+                width: 84%;
+                margin-top: 6%;
+            }
+
+            .interviewDisplayTextRow {
+                margin-bottom: 5%;
+                width: 100%;
+                text-align: left;
+            }
+
+            .pbSubsection tr {
+                display: inline-block;
+                margin-right: 4%;
+                vertical-align: top;
+                margin-bottom: 5%;
+            }
+
+            [id*=Payment_Terms_Associate] div:not(.requiredBlock) {
+                display: inline-block;
+                margin-right: 10%;
+            }
+
+            [id*="Payment_Terms_Associate.input"] {
+                width: 308px;
+            }
+
+            .pbSubsection td {
+                display: block;
+            }
+
+            .bPageBlock .detailList .labelCol {
+                width: 100%;
+                text-align: left;
+            }
+
+            .requiredBlock {
+                display: none;
+            }
+
+            .pbSubsection tr:nth-child(2) {
+                display: none;
+            }
+
+            .apexp .bPageBlock .pbHeader td,
+            .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons .pbButtonb {
+                padding: 13px 0px 36px 1px !important;
+            }
+        </style>
+    </div>
+
+    <div class="psa-page-8">
+        <style>
+            .psa-thankyou-page {
+                background: #126086;
+            }
+
+            .psa-thankyou-page .psa-header {
+                display: none !important;
+            }
+
+            .psa-thankyou-page .psa-content {
+                margin-top: 6% !important;
+                box-shadow: 0px 0px 20px 0px #353535 !important;
+                width: 20% !important;
+            }
+
+            .psa-thankyou-page .psa-col-1 {
+                display: none;
+            }
+
+            .psa-thankyou-page .apexp {
+                position: relative !important;
+                z-index: 999 !important;
+                width: 90% !important;
+            }
+
+            .psa-thankyou-page .psa-content {
+                background-image: url("{!URLFOR($Resource.AS_membersignup_slice,"psa-member-signup-slices/pharmacybg.jpg")}") !important;
+                background-repeat: no-repeat !important;
+                background-size: 569px !important;
+                background-position: bottom !important;
+            }
+
+            .psa-thankyou-page .bEditBlock .pbBottomButtons>table,
+            body .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons>table {
+                border-top: 1px solid #fff0 !important;
+            }
+
+            .psa-thankyou-page .psa-logo-only {
+                background-image: url("{!URLFOR($Resource.AS_membersignup_slice,"psa-member-signup-slices/logo.png")}");
+                padding: 22px !important;
+                width: 1% !important;
+                margin: 1% auto !important;
+                background-size: auto !important;
+                margin-top: 14% !important;
+                background-repeat: no-repeat;
+            }
+
+            .psa-thankyou-page .pbBottomButtons {
+                margin-top: 0px !important;
+                margin-bottom: 21 !important;
+            }
+
+            .pbButtonb {
+                text-align: center !important;
+            }
+
+            .pbButtonb input {
+                margin-bottom: 16% !important;
+            }
+
+            .apexp .bPageBlock .pbHeader td,
+            .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons .pbButtonb {
+                padding: 5px 12px !important;
+                text-align: center !important;
+            }
+
+            .apexp .bPageBlock.apexDefaultPageBlock .pbBody {
+                margin: 0% !important;
+            }
+
+            #psa .psa-content {
+                min-height: 400px !important;
+            }
+
+            /* media Querries */
+
+            @media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+                .psa-thankyou-page .psa-content {
+                    width: 100% !important;
+                }
+            }
+
+            /* ----------- iPad Pro ----------- */
+
+            /* Portrait and Landscape */
+
+            @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) {
+                .psa-thankyou-page .psa-content {
+                    background-size: contain;
+                    background-position: bottom;
+                    background-position-y: 340px;
+                }
+            }
+        </style>
+    </div>
+
+    <div class="psa-page-9">
+        <style>
+            .psa-thankyou-page {
+                background: #126086;
+            }
+
+            .psa-thankyou-page .psa-header {
+                display: none !important;
+            }
+
+            .psa-thankyou-page .psa-content {
+                margin-top: 6% !important;
+                box-shadow: 0px 0px 20px 0px #353535 !important;
+                width: 50% !important;
+                min-height: 380px !important;
+            }
+
+            .psa-thankyou-page .psa-col-1 {
+                display: none;
+            }
+
+            .psa-thankyou-page .apexp {
+                position: relative !important;
+                z-index: 999 !important;
+                width: 90% !important;
+                margin-top: 0% !important;
+            }
+
+            .psa-thankyou-page .psa-content {
+                background-image: url("{!URLFOR($Resource.AS_membersignup_slice,"psa-member-signup-slices/pharmacybg.jpg")}") !important;
+                background-repeat: no-repeat !important;
+                background-size: 793px !important;
+                background-position: bottom !important;
+            }
+
+            .psa-thankyou-page .bEditBlock .pbBottomButtons>table,
+            body .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons>table {
+                border-top: 1px solid #fff0 !important;
+            }
+
+            .psa-thankyou-page .psa-logo-only {
+                background-image: url("{!URLFOR($Resource.AS_membersignup_slice,"psa-member-signup-slices/logo.png")}");
+                padding: 22px !important;
+                width: 1% !important;
+                margin: 1% auto !important;
+                background-size: auto !important;
+                margin-top: 6% !important;
+                background-repeat: no-repeat;
+            }
+
+            .psa-thankyou-page .pbBottomButtons {
+                margin-top: 0px !important;
+                margin-bottom: 21 !important;
+            }
+
+            .pbButtonb {
+                text-align: center !important;
+            }
+
+            .pbButtonb input {
+                margin-bottom: 16% !important;
+            }
+
+            .apexp .bPageBlock .pbHeader td,
+            .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons .pbButtonb {
+                padding: 5px 12px !important;
+                ;
+                text-align: center !important;
+                ;
+            }
+
+            .apexp .bPageBlock.apexDefaultPageBlock .pbBody {
+                margin: 0% !important;
+                ;
+            }
+
+            #psa .psa-content {
+                min-height: 400px !important;
+                ;
+            }
+
+            /* media Querries */
+
+            @media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+                .psa-thankyou-page .psa-content {
+                    width: 100% !important;
+                }
+                .psa-fileupload {
+                    width: 100% !important;
+                }
+            }
+
+            /* ----------- iPad Pro ----------- */
+
+            /* Portrait and Landscape */
+
+            @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5)   {
+                .psa-thankyou-page .psa-content {
+                    background-size: contain !important;
+                }
+            }
+        </style>
+    </div>
+</apex:component>

@@ -1,0 +1,240 @@
+<aura:component
+  implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+  controller="TrainingTrackDetailCtrl_Lightning"
+  access="global"
+>
+  <!-- Attributes -->
+  <aura:attribute
+    name="pageStateWrapper"
+    type="TrainingTrackDetailCtrl_Lightning.pageStateWrapper"
+  />
+  <aura:attribute name="categoryPicklistValues" type="List" />
+  <aura:attribute name="deliveryPicklistValues" type="List" />
+  <aura:attribute name="tpTypePicklistValues" type="List" />
+
+  <aura:attribute name="prerequsiteList" type="List" default="[]" />
+  <aura:attribute name="relatedList" type="List" default="[]" />
+  <aura:attribute name="badgeimage" type="String" />
+
+  <!-- Handlers -->
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <!--Content Start here-->
+    <!-- Page Hero starts here  -->
+  <aura:if
+    isTrue="{!v.pageStateWrapper.track.Qualification_Card__c == False}"
+  >
+    <aura:if
+      isTrue="{!v.pageStateWrapper.track.PSA_Group__c== 'Group 1'}"
+    >
+         <section class="course-hero course-hero--group1">
+        <lightning:breadcrumbs>
+          <lightning:breadcrumb
+            label="Browse Education Catalogue"
+            href="/s/education-catalogue"
+          />
+          <lightning:breadcrumb
+            label="{!v.pageStateWrapper.track.Name}"
+            href="#"
+          />
+        </lightning:breadcrumbs>
+      </section>
+    </aura:if>
+    <aura:if
+      isTrue="{!v.pageStateWrapper.track.PSA_Group__c== 'Group 2'}"
+    >
+         <section class="course-hero course-hero--group2">
+        <lightning:breadcrumbs>
+          <lightning:breadcrumb
+            label="Browse Education Catalogue"
+            href="/s/education-catalogue"
+          />
+          <lightning:breadcrumb
+            label="{!v.pageStateWrapper.track.Name}"
+            href="#"
+          />
+        </lightning:breadcrumbs>
+      </section>
+    </aura:if>
+       <aura:if
+      isTrue="{!v.pageStateWrapper.track.PSA_Group__c== 'Group 3'}"
+    >
+         <section class="course-hero course-hero--group3">
+        <lightning:breadcrumbs>
+          <lightning:breadcrumb
+            label="Browse Education Catalogue"
+            href="/s/education-catalogue"
+          />
+          <lightning:breadcrumb
+            label="{!v.pageStateWrapper.track.Name}"
+            href="#"
+          />
+        </lightning:breadcrumbs>
+      </section>
+      </aura:if>
+       <aura:if
+      isTrue="{!empty(v.pageStateWrapper.track.PSA_Group__c)}"
+    >
+         <section class="course-hero course-hero--no-group">
+        <lightning:breadcrumbs>
+          <lightning:breadcrumb
+            label="Browse Education Catalogue"
+            href="/s/education-catalogue"
+          />
+          <lightning:breadcrumb
+            label="{!v.pageStateWrapper.track.Name}"
+            href="#"
+          />
+        </lightning:breadcrumbs>
+      </section>
+      </aura:if>
+    </aura:if>
+     <aura:if
+    isTrue="{!v.pageStateWrapper.track.Qualification_Card__c == True}"
+  >
+  <section class="course-hero course-hero--qualification">
+    <lightning:breadcrumbs>
+      <lightning:breadcrumb
+        label="Browse Education Catalogue"
+        href="/s/education-catalogue"
+      />
+      <lightning:breadcrumb label="{!v.pageStateWrapper.track.Name}" href="#" />
+    </lightning:breadcrumbs>
+         </section></aura:if>  
+<!-- Page hero ends here -->
+  <section class="course-body">
+    <div class="container">
+      <div class="row">
+          <!-- Side bar -->
+        <c:Course_Details_Track_Sidebar
+          pageStateWrapper="{!v.pageStateWrapper}"
+          tpDuration="{!v.pageStateWrapper.track.PSA_Duration_editorial__c}"
+          deliveryMethod="{!v.pageStateWrapper.track.PSA_Delivery_Method__c}"
+          totalSectionItem="{!v.pageStateWrapper.track.Total_Training_Tracks_Items__c}"
+          memberPrice="{!v.pageStateWrapper.track.PSA_Member_Price__c}"
+          nonMemberPrice="{!v.pageStateWrapper.track.PSA_Non_Member_Price__c}"
+          type="{!v.pageStateWrapper.track.AS_Track_Type__c}"
+          isMember="{!v.pageStateWrapper.isLogin}"
+          badgeimage="{!v.badgeimage}"
+          aura:id="sidebarCmp"
+        />
+           <!-- Detail content starts here -->
+        <div class="col-12 col-sm-8 col-md-9">
+          <div class="course-body__content-wrapper">
+              <aura:if
+              isTrue="{!not(empty(v.pageStateWrapper.track.PSA_Marketing_Text__c))}"
+            >
+            <span class="tag"
+              >{!v.pageStateWrapper.track.PSA_Marketing_Text__c}</span
+                ></aura:if>
+            <h1 class="h2 course-body__title"
+              >{!v.pageStateWrapper.track.Name}</h1
+            >
+            <div class="course-body__text text-lg">
+              <div class="uiOutputRichText">
+                <ui:outputRichText
+                  value="{!v.pageStateWrapper.track.Description__c}"
+                />
+              </div>
+            </div>
+            <!-- Tags -->
+            <div class="tags course-body__tags">
+              <aura:if isTrue="{!not(empty(v.categoryPicklistValues))}">
+                <aura:iteration items="{!v.categoryPicklistValues}" var="item">
+                  <a href="{!'/s/education-catalogue?filter=category:' + item.value}" >{!item.text}</a>
+                </aura:iteration>
+              </aura:if>
+              <aura:if isTrue="{!not(empty(v.deliveryPicklistValues))}">
+                <aura:iteration items="{!v.deliveryPicklistValues}" var="item">
+                  <a href="{!'/s/education-catalogue?filter=delivery:' + item.value}">{!item.text}</a>
+                </aura:iteration></aura:if
+              >
+              <aura:if isTrue="{!not(empty(v.tpTypePicklistValues))}">
+                <aura:iteration items="{!v.tpTypePicklistValues}" var="item">
+                  <a href="{!'/s/education-catalogue?filter=Type:' + item.value}">{!item.text}</a>
+                </aura:iteration></aura:if
+              >
+            </div>
+            <!-- Blue Headeing and information  -->
+            <aura:if
+              isTrue="{!not(empty(v.pageStateWrapper.track.PSA_Explanation_Heading__c))}"
+            >
+              <h2 class="h3 course-body__title course-body__title--explanatory"
+                >{!v.pageStateWrapper.track.PSA_Explanation_Heading__c}</h2
+              >
+            </aura:if>
+               <!-- Detailed Information -->
+            <aura:if
+              isTrue="{!not(empty(v.pageStateWrapper.track.Information__c))}"
+            >
+              <div class="course-body__explanatory-text">
+                <ui:outputRichText
+                  value="{!v.pageStateWrapper.track.Information__c}"
+                />
+              </div>
+            </aura:if>
+              
+               <!-- Learning Accordian -->
+              <aura:if
+              isTrue="{!not(empty(v.pageStateWrapper.track.PSA_Learning_Objectives__c))}"
+            >
+            <c:CourseDetailLearning_Accordian
+              learningObjectText="{!v.pageStateWrapper.track.PSA_Learning_Objectives__c }"
+              aura:id="learningAccordian"
+            />
+              </aura:if>
+
+            <!-- Credit Box component-->
+            
+            <aura:if
+              isTrue="{!not(empty(or(v.pageStateWrapper.track.PSA_CPD_Accreditation_Number__c,v.pageStateWrapper.track.PSA_Group_1_CPD__c,v.pageStateWrapper.track.PSA_Group_2_CPD__c,v.pageStateWrapper.track.PSA_CPD_Accreditation_Statement__c,v.pageStateWrapper.track.PSA_APC_Image__c)))}"
+            >
+              <c:Credit_Box
+                code="{!v.pageStateWrapper.track.PSA_CPD_Accreditation_Number__c}"
+                group1CPD="{!v.pageStateWrapper.track.PSA_Group_1_CPD__c }"
+                group2CPD="{!v.pageStateWrapper.track.PSA_Group_2_CPD__c }"
+                statement="{!v.pageStateWrapper.track.PSA_CPD_Accreditation_Statement__c}"
+                logoImage="{!v.pageStateWrapper.track.PSA_APC_Image__c}"
+                aura:id="cpdBoxCmp"
+            /></aura:if>
+               <!-- Competency Standards (2016) -->
+			<aura:if
+              isTrue="{!not(empty(v.pageStateWrapper.track.PSA_2016_Competencies__c))}"
+            >
+            <div class="course-body__standards">
+              <h2
+                class="h3 course-body__section-title course-body__section-title--standards"
+              >
+                Competency Standards (2016)
+              </h2>
+              <p class="text-lg course-body__standards-text"
+                >{!v.pageStateWrapper.track.PSA_2016_Competencies__c}
+              </p>
+                </div></aura:if>
+              <!-- Pre Requsite plans -->
+            <c:CourseDetail_Prerequsite cards="{!v.prerequsiteList}" />
+              <!-- FAQs -->
+           <aura:if isTrue="{!not(empty(v.pageStateWrapper.tPlan.listFAQs))}">
+			
+            <c:Coursedetail_Accordian
+              isFAQ="{!v.pageStateWrapper.track.PSA_FAQ__c}"
+              listofFAQ="{!v.pageStateWrapper.tPlan.listFAQs}"
+              aura:id="accordianCmp"
+            />
+              </aura:if>
+              <!-- Partnership Box-->
+            <aura:if
+              isTrue="{!not(empty(v.pageStateWrapper.track.PSA_Content_Sponsor__c))}"
+            >
+              <c:CourseDetail_PartnershipBox
+                content="{!v.pageStateWrapper.track.PSA_Content_Sponsor__c}"
+                aura:id="partnerboxCmp"
+              />
+            </aura:if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+    <!-- Related Plans -->
+  <c:CourseDetail_RelatedPlans cards="{!v.relatedList}" />
+</aura:component>

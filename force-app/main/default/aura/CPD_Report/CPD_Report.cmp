@@ -1,0 +1,181 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="PSA">
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    <aura:attribute name="userInfo" type="user"/>
+    <aura:attribute name="currentCPDTargetInfo" type="Decimal"/>
+    <aura:attribute name="currentCPDActivitiesSummaryTotalInfo" type="Integer"/>
+    <aura:attribute name="currentCPDActivitiesSummaryPercentageInfo" type="Double"/>
+    <aura:attribute name="currentCPDInfo" type="AsCPDPlanner__c"/>
+    <aura:attribute name="plansInfo" type="List"/>
+    <aura:attribute name="planId" type="String"/>
+    <aura:attribute name="completeActivities" type="List"/>
+    <aura:attribute name="planAttachments" type="List"/>
+    <aura:attribute name="planAttachment" type="Attachment"/>
+    <aura:attribute name="isSpinner" type="Boolean" default="true" />
+    
+    <div class="cd-mcd">
+        <aura:if isTrue="{!v.userInfo.ProfileId != '00e7F000000ZqTwQAK'}">
+            <aura:if isTrue="{!v.userInfo.ProfileId == '00e7F000000ZqfOQAS'}">
+                <lightning:select label="CPD Plans" name="cd_plans" class="cd-plans" onchange="{!c.onChangePlans}">
+                    <aura:iteration var="plan" items="{!v.plansInfo}">
+                        <aura:if isTrue="{!v.planId == plan.Id}">
+                            <option value="{!plan.Id}" selected="selected">{!plan.Name}</option>
+                            <aura:set attribute="else">
+                                <option value="{!plan.Id}">{!plan.Name}</option>
+                            </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:select>
+                <div class="cd-mcd-progress-bar">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_11-of-12">
+                            <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!v.currentCPDActivitiesSummaryPercentageInfo}" role="progressbar">
+                                <span class="slds-progress-bar__value" style="{!'width:'+v.currentCPDActivitiesSummaryPercentageInfo+'%'}">
+                                    <span class="slds-assistive-text"><lightning:formattedNumber value="{!v.currentCPDInfo.Total_CPD_Credits_Achieved__c}" minimumFractionDigits="2"/></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-12 cd-target">
+                            Target<br></br><lightning:formattedNumber value="{!v.currentCPDTargetInfo}" minimumFractionDigits="2"/>
+                        </div>
+                    </div>
+                    <div class="slds-form-element cd-ap-checkbox">
+                        <div class="slds-form-element__control">
+                            <div class="slds-checkbox">
+                                <aura:if isTrue="{!v.currentCPDInfo.AS_Accredited_pharmacist__c}">
+                                    <input data-id="{!v.planId}" onclick="{!c.submitAccreditedPharmacist}" type="checkbox" id="checkbox-ap" checked="checked" />
+                                    <aura:set attribute="else">
+                                        <input data-id="{!v.planId}" onclick="{!c.submitAccreditedPharmacist}" type="checkbox" id="checkbox-ap" checked="" />
+                                    </aura:set>
+                                </aura:if>
+                                <label class="slds-checkbox__label" for="checkbox-ap">
+                                    <span class="slds-checkbox_faux"></span>
+                                    <span class="slds-form-element__label">I am an accredited pharmacist.</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters cd-mcd-plan-summary">
+                        <div class="slds-col slds-size_3-of-12">
+                            <div>Group 1 Credits</div>
+                            <div class="cd-credits"><lightning:formattedNumber value="{!v.currentCPDInfo.AS_Total_Group_1_CPD__c}" minimumFractionDigits="2"/></div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <div>Group 2 Credits</div>
+                            <div class="cd-credits"><lightning:formattedNumber value="{!v.currentCPDInfo.AS_Total_Group_2_CPD__c}" minimumFractionDigits="2"/></div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <div>Group 3 Credits</div>
+                            <div class="cd-credits"><lightning:formattedNumber value="{!v.currentCPDInfo.AS_Total_Group_3_CPD__c}" minimumFractionDigits="2"/></div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <div>Total Credits</div>
+                            <div class="cd-credits"><lightning:formattedNumber value="{!v.currentCPDInfo.Total_CPD_Credits_Achieved__c}" minimumFractionDigits="2"/></div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="cd-mcd-link-tabs">
+                    <li><a href="{!'/s/my-cpd-plan?id=' + v.planId}" title="Plan">Plan</a></li>
+                    <li><a href="{!'/s/my-cpd-do?id=' + v.planId}" title="Do">Do</a></li>
+                    <li><a href="{!'/s/my-cpd-record?id=' + v.planId}" title="Record">Record</a></li>
+                    <li><a href="{!'/s/my-cpd-reflect?id=' + v.planId}" title="Reflect">Reflect</a></li>
+                    <li class="cd-link-active"><a href="{!'/s/my-cpd-report?id=' + v.planId}" title="Report">Report</a></li>
+                </ul>
+                <div class="cd-mcd-link-tab-content">
+                    <h3>Report</h3>
+                    <p>The CPD period is 1 October to 30 September each year and pharmacists holding general registration must achieve the annual requirements during this period and declare whether they met the standard at renewal of registration.</p>
+                    <p>As a PSA member, you can easily track your CPD and generate reports to support your AHPRA and AACP reporting obligations at the click of a button.</p>
+                    <p>This report aggregates your CPD activity within the CPD reporting period based on the activities you choose to include in your plan. The report can be printed or emailed should you be audited.</p>
+                    <p>The CPD Plan Report will support:</p>
+                    <p><strong>AHPRA reporting</strong> – your registration reporting requirements to the Pharmacy Board of Australia via AHPRA. Most pharmacists require 40 credits per CPD year.</p>
+                    <p><strong>AACP reporting</strong> – Accredited pharmacists require 60 credits in the 12 month period to the reaccreditation date (ensure you have ticked the ‘I am an accredited pharmacist’ checkbox). If your 12 month period falls across two CPD periods, you will need to print and submit two CPD Plan Reports.</p>
+                    <p><strong>Intern reporting</strong> – Interns are required to complete 40 credits in the 12 month period leading up to their internship completion date. If your 12 month period falls across two CPD periods, you will need to print and submit two CPD Plan Reports.</p>
+                    <p>To download a report, please firstly click 'Generate a CPD Plan Report'. Then you can choose to 'Download Report' to save it as an electronic file, print or email it as needed.</p>
+                    <div class="slds-grid cd-report-btns">
+                        <div class="slds-col slds-size_1-of-3">
+                            <p><button data-id="{!v.planId}" onclick="{!c.submitCPDPlanReport}" class="slds-button slds-button_brand">Generate</button><strong> a CPD Plan Report</strong></p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <p><a href="{!'/servlet/servlet.FileDownload?file='+v.planAttachment.Id}" download="{!v.planAttachment.Name}" target="_blank" class="slds-button slds-button_brand">Download</a><strong> a CPD Plan Report</strong></p>
+                        </div>
+                    </div>
+                    <p>The CPD Plan report includes all CPD activities that you have completed. You can choose to refine the report by unselecting some CPD activities. Unselect activities by clicking on the green tick in the tiles below.</p>
+                    <ul class="cd-activities cd-report-activities">
+                        <aura:iteration var="activity" items="{!v.completeActivities}">
+                            <li>
+                                <aura:if isTrue="{!activity.RecordTypeId == '0127F000000K1c5QAC'}">
+                                    <a href="{!'/s/ascpd-learning-summary/'+activity.Id}">
+                                        <div class="cd-img">
+                                            <img src="{!'sfsites/c' + $Resource.CD_Self_Record_Icon}"/>
+                                        </div>
+                                        <h6>{!activity.Name}</h6>
+                                    </a>
+                                    <aura:set attribute="else">
+                                        <a href="{!'/s/ascpd-learning-summary/'+activity.Id}">
+                                            <ui:outputRichText class="cd-img" value="{!activity.Eligible_Image__c}"/>
+                                            <h6>{!activity.Name}</h6>
+                                        </a>
+                                    </aura:set>
+                                </aura:if>
+                                <aura:if isTrue="{!activity.AsSummary_Plan__c == '1'}">
+                                    <button title="Included in CPD Plan" data-id="{!activity.Id}" data-status="1" onclick="{!c.submitIncludeStatus}" class="slds-button slds-button_neutral cd-included"><lightning:icon iconName="utility:check" size="small" /></button>
+                                    <aura:set attribute="else">
+                                        <button title="Include in CPD Plan" data-id="{!activity.Id}" data-status="0" onclick="{!c.submitIncludeStatus}" class="slds-button slds-button_neutral cd-include"><lightning:icon iconName="utility:add" size="small" /></button>
+                                    </aura:set>
+                                </aura:if>
+                            </li>
+                        </aura:iteration>
+                    </ul>
+                    <p>If you would like a report of all the activities you have completed in a previous CPD year, please contact our friendly PSA Team or give us a call on 1300 369 772.</p>
+                    <aura:if isTrue="{!v.planAttachment.Id}">
+                        <h3>Download Reports</h3>
+                        <ul class="cd-plan-attachments">
+                            <aura:iteration var="attachment" items="{!v.planAttachments}">
+                                <li>
+                                    <a href="{!'/servlet/servlet.FileDownload?file='+attachment.Id}" download="{!attachment.Name}" target="_blank">
+                                        <div class="slds-page-header__col-title">
+                                            <div class="slds-media">
+                                                <div class="slds-media__figure">
+                                                    <span class="slds-icon_container">
+                                                        <lightning:icon iconName="doctype:pdf" size="small" />
+                                                    </span>
+                                                </div>
+                                                <div class="slds-media__body">
+                                                    <div class="slds-page-header__name">
+                                                        <div class="slds-page-header__name-title">
+                                                            <h1>
+                                                                <span class="slds-truncate">{!attachment.Name}</span>
+                                                            </h1>
+                                                        </div>
+                                                    </div>
+                                                    <p class="slds-page-header__name-meta"><lightning:formattedDateTime value="{!attachment.CreatedDate}" year="numeric" month="numeric" day="numeric"  hour="2-digit" minute="2-digit" /></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </aura:iteration>
+                        </ul>
+                    </aura:if>
+                </div>
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!v.isSpinner}">
+                        <p></p>
+                        <aura:set attribute="else">
+                            <p>Not a PSA Member? Members enjoy:</p>
+                            <ul class="cd-ul">
+                                <li> Free access to CPD, choosing from Australia’s largest pharmacist CPD catalogue</li>
+                                <li>Tracking their CPD quickly and easily</li>
+                                <li>Saving time planning their CPD using PSA’s CPD Planning tool</li>
+                                <li>Free subscription to the award winning Australian Pharmacist journal</li>
+                                <li>Free events, networking, book discounts and much more.</li>
+                            </ul>
+                            <br/>
+                            <p>PSA would love to welcome you to the Australian peak body that champions pharmacists.</p>
+                            <p><a class="slds-button slds-button_brand" target="_blank" href="https://psa.secure.force.com/membershipsignup">Join PSA today!</a> or call us on 1300 369 772.</p>
+                        </aura:set>
+                    </aura:if>
+                </aura:set>
+            </aura:if>
+        </aura:if>
+    </div>
+</aura:component>

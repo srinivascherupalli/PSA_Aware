@@ -1,0 +1,3 @@
+<apex:page standardController="As_AP_Integration__c" extensions="AsApIntegrationTPlanBatch"
+   action="{!runAPIntegration}">
+</apex:page>

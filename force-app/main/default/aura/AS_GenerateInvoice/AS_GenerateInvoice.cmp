@@ -1,0 +1,10 @@
+<aura:component controller="AS_pdfTriggerController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+<!--     <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> -->
+ 	<h1>Clicking this button will create an invoice and be send through email when the order is activated. This may take a few minutes to process.</h1>
+    <h1>To generate an invoice, it must be of:</h1>
+    <p>Status : Draft</p>
+    <p>Generate Status : true</p>
+	<br/>
+    	<lightning:button label="Email Invoice" onclick="{!c.handleClick}"/> 
+    <br/>
+</aura:component>

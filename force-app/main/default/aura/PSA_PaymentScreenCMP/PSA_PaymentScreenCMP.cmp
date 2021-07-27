@@ -1,0 +1,558 @@
+<aura:component extends="c:PSA_Base" controller="PSA_MemberShipController" implements="forceCommunity:availableForAllPageTypes" >
+
+    <ltng:require scripts="{!join(',',
+    $Resource.PSAPayment + '/psa/js/jquery-3.1.1.min.js',
+    $Resource.PSAPayment + '/psa/js/jquery.payform.js')}" />
+
+    <aura:attribute name="selectedPackage" type="Object"/>
+    <aura:attribute name="accountId" type="String"/>
+    <aura:attribute name="billingInfo" type="Object"/>
+    <aura:attribute name="Gateway" type="ChargentBase__Gateway__c"/>
+    <aura:attribute name="cardTypeName" type="String" access="private" required="false" default="" />
+    <aura:attribute name="cardNumber" type="String" access="private" required="false" default="" />
+    <aura:attribute name="cardExpirationDate" type="String" access="private" required="false" default=""  />
+    <aura:attribute name="cvvNumber" type="String" access="private" required="false" default="" />
+    <aura:attribute name="sameAsContact" type="Boolean" access="private" default="false" />
+    <aura:attribute name="profileDetail" type="Map"/>
+    <aura:attribute name="countryoptions" type="List" default="[
+                                                               { label : 'Andorra', value: 'Andorra'},
+                                                               { label : 'Afghanistan', value: 'Afghanistan'},
+                                                               { label : 'Antigua and Barbuda', value: 'Antigua and Barbuda'},
+                                                               { label : 'Anguilla', value: 'Anguilla'},
+                                                               { label : 'Albania', value: 'Albania'},
+                                                               { label : 'Armenia', value: 'Armenia'},
+                                                               { label : 'Angola', value: 'Angola'},
+                                                               { label : 'Antarctica', value: 'Antarctica'},
+                                                               { label : 'Argentina', value: 'Argentina'},
+                                                               { label : 'Austria', value: 'Austria'},
+                                                               { label : 'Australia', value: 'Australia'},
+                                                               { label : 'Aruba', value: 'Aruba'},
+                                                               { label : 'Aland Islands', value: 'Aland Islands'},
+                                                               { label : 'Azerbaijan', value: 'Azerbaijan'},
+                                                               { label : 'Bosnia and Herzegovina', value: 'Bosnia and Herzegovina'},
+                                                               { label : 'Barbados', value: 'Barbados'},
+                                                               { label : 'Bangladesh', value: 'Bangladesh'},
+                                                               { label : 'Belgium', value: 'Belgium'},
+                                                               { label : 'Burkina Faso', value: 'Burkina Faso'},
+                                                               { label : 'Bulgaria', value: 'Bulgaria'},
+                                                               { label : 'Bahrain', value: 'Bahrain'},
+                                                               { label : 'Burundi', value: 'Burundi'},
+                                                               { label : 'Benin', value: 'Benin'},
+                                                               { label : 'Saint Barthélemy', value: 'Saint Barthélemy'},
+                                                               { label : 'Bermuda', value: 'Bermuda'},
+                                                               { label : 'Brunei Darussalam', value: 'Brunei Darussalam'},
+                                                               { label : 'Bolivia, Plurinational State of', value: 'Bolivia, Plurinational State of'},
+                                                               { label : 'Bonaire, Sint Eustatius and Saba', value: 'Bonaire, Sint Eustatius and Saba'},
+                                                               { label : 'Brazil', value: 'Brazil'},
+                                                               { label : 'Bahamas', value: 'Bahamas'},
+                                                               { label : 'Bhutan', value: 'Bhutan'},
+                                                               { label : 'Bouvet Island', value: 'Bouvet Island'},
+                                                               { label : 'Botswana', value: 'Botswana'},
+                                                               { label : 'Belarus', value: 'Belarus'},
+                                                               { label : 'Belize', value: 'Belize'},
+                                                               { label : 'Canada', value: 'Canada'},
+                                                               { label : 'Cocos (Keeling) Islands', value: 'Cocos (Keeling) Islands'},
+                                                               { label : 'Congo, the Democratic Republic of the', value: 'Congo, the Democratic Republic of the'},
+                                                               { label : 'Central African Republic', value: 'Central African Republic'},
+                                                               { label : 'Congo', value: 'Congo'},
+                                                               { label : 'Switzerland', value: 'Switzerland'},
+                                                               { label : 'Cote d’Ivoire', value: 'Cote d’Ivoire'},
+                                                               { label : 'Cook Islands', value: 'Cook Islands'},
+                                                               { label : 'Chile', value: 'Chile'},
+                                                               { label : 'Cameroon', value: 'Cameroon'},
+                                                               { label : 'China', value: 'China'},
+                                                               { label : 'Colombia', value: 'Colombia'},
+                                                               { label : 'Costa Rica', value: 'Costa Rica'},
+                                                               { label : 'Cuba', value: 'Cuba'},
+                                                               { label : 'Cape Verde', value: 'Cape Verde'},
+                                                               { label : 'Curaçao', value: 'Curaçao'},
+                                                               { label : 'Christmas Island', value: 'Christmas Island'},
+                                                               { label : 'Cyprus', value: 'Cyprus'},
+                                                               { label : 'Czech Republic', value: 'Czech Republic'},
+                                                               { label : 'Germany', value: 'Germany'},
+                                                               { label : 'Djibouti', value: 'Djibouti'},
+                                                               { label : 'Denmark', value: 'Denmark'},
+                                                               { label : 'Dominica', value: 'Dominica'},
+                                                               { label : 'Dominican Republic', value: 'Dominican Republic'},
+                                                               { label : 'Algeria', value: 'Algeria'},
+                                                               { label : 'Ecuador', value: 'Ecuador'},
+                                                               { label : 'Estonia', value: 'Estonia'},
+                                                               { label : 'Egypt', value: 'Egypt'},
+                                                               { label : 'Western Sahara', value: 'Western Sahara'},
+                                                               { label : 'Eritrea', value: 'Eritrea'},
+                                                               { label : 'Spain', value: 'Spain'},
+                                                               { label : 'Ethiopia', value: 'Ethiopia'},
+                                                               { label : 'Finland', value: 'Finland'},
+                                                               { label : 'Fiji', value: 'Fiji'},
+                                                               { label : 'Falkland Islands (Malvinas)', value: 'Falkland Islands (Malvinas)'},
+                                                               { label : 'Faroe Islands', value: 'Faroe Islands'},
+                                                               { label : 'France', value: 'France'},
+                                                               { label : 'Gabon', value: 'Gabon'},
+                                                               { label : 'United Kingdom', value: 'United Kingdom'},
+                                                               { label : 'Grenada', value: 'Grenada'},
+                                                               { label : 'Georgia', value: 'Georgia'},
+                                                               { label : 'French Guiana', value: 'French Guiana'},
+                                                               { label : 'Guernsey', value: 'Guernsey'},
+                                                               { label : 'Ghana', value: 'Ghana'},
+                                                               { label : 'Gibraltar', value: 'Gibraltar'},
+                                                               { label : 'Greenland', value: 'Greenland'},
+                                                               { label : 'Gambia', value: 'Gambia'},
+                                                               { label : 'Guinea', value: 'Guinea'},
+                                                               { label : 'Guadeloupe', value: 'Guadeloupe'},
+                                                               { label : 'Equatorial Guinea', value: 'Equatorial Guinea'},
+                                                               { label : 'Greece', value: 'Greece'},
+                                                               { label : 'South Georgia and the South Sandwich Islands', value: 'South Georgia and the South Sandwich Islands'},
+                                                               { label : 'Guatemala', value: 'Guatemala'},
+                                                               { label : 'Guinea-Bissau', value: 'Guinea-Bissau'},
+                                                               { label : 'Guyana', value: 'Guyana'},
+                                                               { label : 'Heard Island and McDonald Islands', value: 'Heard Island and McDonald Islands'},
+                                                               { label : 'Honduras', value: 'Honduras'},
+                                                               { label : 'Croatia', value: 'Croatia'},
+                                                               { label : 'Haiti', value: 'Haiti'},
+                                                               { label : 'Hungary', value: 'Hungary'},
+                                                               { label : 'Indonesia', value: 'Indonesia'},
+                                                               { label : 'Ireland', value: 'Ireland'},
+                                                               { label : 'Israel', value: 'Israel'},
+                                                               { label : 'Isle of Man', value: 'Isle of Man'},
+                                                               { label : 'India', value: 'India'},
+                                                               { label : 'British Indian Ocean Territory', value: 'British Indian Ocean Territory'},
+                                                               { label : 'Iraq', value: 'Iraq'},
+                                                               { label : 'Iran, Islamic Republic of', value: 'Iran, Islamic Republic of'},
+                                                               { label : 'Iceland', value: 'Iceland'},
+                                                               { label : 'Italy', value: 'Italy'},
+                                                               { label : 'Jersey', value: 'Jersey'},
+                                                               { label : 'Jamaica', value: 'Jamaica'},
+                                                               { label : 'Jordan', value: 'Jordan'},
+                                                               { label : 'Japan', value: 'Japan'},
+                                                               { label : 'Kenya', value: 'Kenya'},
+                                                               { label : 'Kyrgyzstan', value: 'Kyrgyzstan'},
+                                                               { label : 'Cambodia', value: 'Cambodia'},
+                                                               { label : 'Kiribati', value: 'Kiribati'},
+                                                               { label : 'Comoros', value: 'Comoros'},
+                                                               { label : 'Saint Kitts and Nevis', value: 'Saint Kitts and Nevis'},
+                                                               { label : 'Korea, Democratic People’s Republic of', value: 'Korea, Democratic People’s Republic of'},
+                                                               { label : 'Korea, Republic of', value: 'Korea, Republic of'},
+                                                               { label : 'Kuwait', value: 'Kuwait'},
+                                                               { label : 'Cayman Islands', value: 'Cayman Islands'},
+                                                               { label : 'Kazakhstan', value: 'Kazakhstan'},
+                                                               { label : 'Lao People’s Democratic Republic', value: 'Lao People’s Democratic Republic'},
+                                                               { label : 'Lebanon', value: 'Lebanon'},
+                                                               { label : 'Saint Lucia', value: 'Saint Lucia'},
+                                                               { label : 'Liechtenstein', value: 'Liechtenstein'},
+                                                               { label : 'Sri Lanka', value: 'Sri Lanka'},
+                                                               { label : 'Liberia', value: 'Liberia'},
+                                                               { label : 'Lesotho', value: 'Lesotho'},
+                                                               { label : 'Lithuania', value: 'Lithuania'},
+                                                               { label : 'Luxembourg', value: 'Luxembourg'},
+                                                               { label : 'Latvia', value: 'Latvia'},
+                                                               { label : 'Libya', value: 'Libya'},
+                                                               { label : 'Morocco', value: 'Morocco'},
+                                                               { label : 'Monaco', value: 'Monaco'},
+                                                               { label : 'Moldova, Republic of', value: 'Moldova, Republic of'},
+                                                               { label : 'Montenegro', value: 'Montenegro'},
+                                                               { label : 'Saint Martin (French part)', value: 'Saint Martin (French part)'},
+                                                               { label : 'Madagascar', value: 'Madagascar'},
+                                                               { label : 'Macedonia, the former Yugoslav Republic of', value: 'Macedonia, the former Yugoslav Republic of'},
+                                                               { label : 'Mali', value: 'Mali'},
+                                                               { label : 'Myanmar', value: 'Myanmar'},
+                                                               { label : 'Mongolia', value: 'Mongolia'},
+                                                               { label : 'Macao', value: 'Macao'},
+                                                               { label : 'Martinique', value: 'Martinique'},
+                                                               { label : 'Mauritania', value: 'Mauritania'},
+                                                               { label : 'Montserrat', value: 'Montserrat'},
+                                                               { label : 'Malta', value: 'Malta'},
+                                                               { label : 'Mauritius', value: 'Mauritius'},
+                                                               { label : 'Maldives', value: 'Maldives'},
+                                                               { label : 'Malawi', value: 'Malawi'},
+                                                               { label : 'Mexico', value: 'Mexico'},
+                                                               { label : 'Malaysia', value: 'Malaysia'},
+                                                               { label : 'Mozambique', value: 'Mozambique'},
+                                                               { label : 'Namibia', value: 'Namibia'},
+                                                               { label : 'New Caledonia', value: 'New Caledonia'},
+                                                               { label : 'Niger', value: 'Niger'},
+                                                               { label : 'Norfolk Island', value: 'Norfolk Island'},
+                                                               { label : 'Nigeria', value: 'Nigeria'},
+                                                               { label : 'Nicaragua', value: 'Nicaragua'},
+                                                               { label : 'Netherlands', value: 'Netherlands'},
+                                                               { label : 'Norway', value: 'Norway'},
+                                                               { label : 'Nepal', value: 'Nepal'},
+                                                               { label : 'Nauru', value: 'Nauru'},
+                                                               { label : 'Niue', value: 'Niue'},
+                                                               { label : 'New Zealand', value: 'New Zealand'},
+                                                               { label : 'Oman', value: 'Oman'},
+                                                               { label : 'Panama', value: 'Panama'},
+                                                               { label : 'Peru', value: 'Peru'},
+                                                               { label : 'French Polynesia', value: 'French Polynesia'},
+                                                               { label : 'Papua New Guinea', value: 'Papua New Guinea'},
+                                                               { label : 'Philippines', value: 'Philippines'},
+                                                               { label : 'Pakistan', value: 'Pakistan'},
+                                                               { label : 'Poland', value: 'Poland'},
+                                                               { label : 'Saint Pierre and Miquelon', value: 'Saint Pierre and Miquelon'},
+                                                               { label : 'Pitcairn', value: 'Pitcairn'},
+                                                               { label : 'Palestine', value: 'Palestine'},
+                                                               { label : 'Portugal', value: 'Portugal'},
+                                                               { label : 'Paraguay', value: 'Paraguay'},
+                                                               { label : 'Qatar', value: 'Qatar'},
+                                                               { label : 'Reunion', value: 'Reunion'},
+                                                               { label : 'Romania', value: 'Romania'},
+                                                               { label : 'Serbia', value: 'Serbia'},
+                                                               { label : 'Russian Federation', value: 'Russian Federation'},
+                                                               { label : 'Rwanda', value: 'Rwanda'},
+                                                               { label : 'Saudi Arabia', value: 'Saudi Arabia'},
+                                                               { label : 'Solomon Islands', value: 'Solomon Islands'},
+                                                               { label : 'Seychelles', value: 'Seychelles'},
+                                                               { label : 'Sudan', value: 'Sudan'},
+                                                               { label : 'Sweden', value: 'Sweden'},
+                                                               { label : 'Singapore', value: 'Singapore'},
+                                                               { label : 'Saint Helena, Ascension and Tristan da Cunha', value: 'Saint Helena, Ascension and Tristan da Cunha'},
+                                                               { label : 'Slovenia', value: 'Slovenia'},
+                                                               { label : 'Svalbard and Jan Mayen', value: 'Svalbard and Jan Mayen'},
+                                                               { label : 'Slovakia', value: 'Slovakia'},
+                                                               { label : 'Sierra Leone', value: 'Sierra Leone'},
+                                                               { label : 'San Marino', value: 'San Marino'},
+                                                               { label : 'Senegal', value: 'Senegal'},
+                                                               { label : 'Somalia', value: 'Somalia'},
+                                                               { label : 'Suriname', value: 'Suriname'},
+                                                               { label : 'South Sudan', value: 'South Sudan'},
+                                                               { label : 'Sao Tome and Principe', value: 'Sao Tome and Principe'},
+                                                               { label : 'El Salvador', value: 'El Salvador'},
+                                                               { label : 'Sint Maarten (Dutch part)', value: 'Sint Maarten (Dutch part)'},
+                                                               { label : 'Syrian Arab Republic', value: 'Syrian Arab Republic'},
+                                                               { label : 'Swaziland', value: 'Swaziland'},
+                                                               { label : 'Turks and Caicos Islands', value: 'Turks and Caicos Islands'},
+                                                               { label : 'Chad', value: 'Chad'},
+                                                               { label : 'French Southern Territories', value: 'French Southern Territories'},
+                                                               { label : 'Togo', value: 'Togo'},
+                                                               { label : 'Thailand', value: 'Thailand'},
+                                                               { label : 'Tajikistan', value: 'Tajikistan'},
+                                                               { label : 'Tokelau', value: 'Tokelau'},
+                                                               { label : 'Timor-Leste', value: 'Timor-Leste'},
+                                                               { label : 'Turkmenistan', value: 'Turkmenistan'},
+                                                               { label : 'Tunisia', value: 'Tunisia'},
+                                                               { label : 'Tonga', value: 'Tonga'},
+                                                               { label : 'Turkey', value: 'Turkey'},
+                                                               { label : 'Trinidad and Tobago', value: 'Trinidad and Tobago'},
+                                                               { label : 'Tuvalu', value: 'Tuvalu'},
+                                                               { label : 'Taiwan', value: 'Taiwan'},
+                                                               { label : 'Tanzania, United Republic of', value: 'Tanzania, United Republic of'},
+                                                               { label : 'Ukraine', value: 'Ukraine'},
+                                                               { label : 'Uganda', value: 'Uganda'},
+                                                               { label : 'United Arab Emirates', value: 'United Arab Emirates'},
+                                                               { label : 'United States', value: 'United States'},
+                                                               { label : 'Uruguay', value: 'Uruguay'},
+                                                               { label : 'Uzbekistan', value: 'Uzbekistan'},
+                                                               { label : 'Holy See (Vatican City State)', value: 'Holy See (Vatican City State)'},
+                                                               { label : 'Saint Vincent and the Grenadines', value: 'Saint Vincent and the Grenadines'},
+                                                               { label : 'Venezuela, Bolivarian Republic of', value: 'Venezuela, Bolivarian Republic of'},
+                                                               { label : 'Virgin Islands, British', value: 'Virgin Islands, British'},
+                                                               { label : 'Vietnam', value: 'Vietnam'},
+                                                               { label : 'Vanuatu', value: 'Vanuatu'},
+                                                               { label : 'Wallis and Futuna', value: 'Wallis and Futuna'},
+                                                               { label : 'Samoa', value: 'Samoa'},
+                                                               { label : 'Yemen', value: 'Yemen'},
+                                                               { label : 'Mayotte', value: 'Mayotte'},
+                                                               { label : 'South Africa', value: 'South Africa'},
+                                                               { label : 'Zambia', value: 'Zambia'},
+                                                               { label : 'Zimbabwe', value: 'Zimbabwe'}
+                                                               ]"/>
+
+    <aura:attribute name="gatewayId" type="String"/>
+    <aura:attribute name="sessionId" type="String" />
+    <aura:attribute name="quoteId" type="String" />
+    <aura:attribute name="quoteLinesObj" type="list" default="[]" />
+    <aura:attribute name="quoteObj" type="Object" />
+    <aura:attribute name="helperObj" type="Object" />
+    <aura:attribute name="productName" type="String"/>
+
+    <aura:attribute name="frequency" type="String"/>
+
+    <aura:handler event="c:PSA_NavigationEvent" action="{!c.handleButtonClick}"/>
+    <aura:handler name="change" value="{!v.cardNumber}" action="{!c.handleCardNumberChange}"/>
+    <aura:handler name="change" value="{!v.cardExpirationDate}" action="{!c.handleExpirationDateChange}"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <!-- Component Start -->
+
+    <!-- PSA Section Starts -->
+
+    <aura:if isTrue="{!v.isLoading == true}">
+    <h3 class="loaderMsg">
+      We are finalising a few details - this may take a few minutes. We look forward to see what you achieve in your career with your PSA Membership. We never settle in our pursuit of excellence and with our support you won't have to either
+    </h3>
+    </aura:if>
+
+    <div class="psa-heading text-center">
+        <h1>Payment Details</h1>
+    </div>
+    
+     <hr class="psa-hori-line" />
+        
+            <div class="membership-package-info">
+        <div class="box-membership-package">
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="membership-package-subheading">
+                        <p>Your package</p>
+                    </div>
+                </div>
+            </div>
+            <aura:iteration items="{!v.quoteLinesObj}" var="item">
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="membership-package-advantage">
+                        <h3>{!item.SBQQ__ProductName__c}</h3>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="membership-package-advantage-value text-right">
+                        <h3><span><lightning:formattedNumber value="{!item.blng__BillableUnitPrice__c}" style="currency" currencyCode="AUD" maximumFractionDigits="2"/> </span> <span class="freq">{!item.SBQQ__BillingFrequency__c}</span></h3>
+                    </div>
+                </div>
+            </div>
+            </aura:iteration>
+
+        </div>
+    </div>
+    
+    <hr class="psa-hori-line" />
+
+    
+    <div class="psa-sub-heading payment-method-info">
+        <h3><i class="fas fa-folder-open"></i> Payment method</h3>
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="pay-method-tab-listing">
+                    <li class="active"><a href="#tab1">Credit/Debit Card <span><!-- Tab description --></span></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="tab-content active" id="tab1">
+                    <div class="box-pay-method-info">
+                        <form>
+                            <div class="form-group-payment-method" aura:id="card-number-form-element">
+                                <lightning:input aura:id="fields"
+                                             name="card_Number" 
+                                             type="text" 
+                                             maxlength="19" 
+                                             placeholder="Card Number - xxxx xxxx xxxx xxxx"
+                                             label="Card"
+                                             required="true"
+                                             class="form-input"
+                                             value="{!v.cardNumber}"
+                                             onkeyup="{!c.checkCardNumber}"
+                                             />
+                                <div aura:id="card-error-message"
+                                    class="slds-form-element__help noDisplay">
+                                    Sorry, we do not accept this card type.
+                                </div>
+                                <div aura:id="cardwarningmsg"
+                                    class="slds-form-element__help invalidCardInfo">
+                                    Your Credit Card information is invalid or empty.
+                                </div>
+                            </div>
+                            <span aura:id="svgSpan-Token" />    
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    <div class="form-group-payment-method">
+                                        <lightning:input aura:id="fields" 
+                                            value="{!v.firstName}" 
+                                            class="form-input" 
+                                            name="firstname" 
+                                            label="Cardholder First Name" 
+                                            placeholder="" 
+                                            required="true" 
+                                            pattern="^([^0-9]*)$" 
+                                            messageWhenPatternMismatch="Numbers are not allowed." messageWhenValueMissing="First Name is required."/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    <div class="form-group-payment-method">
+                                        <lightning:input 
+                                            aura:id="fields" 
+                                            value="{!v.lastName}" 
+                                            class="form-input" 
+                                            name="lastname" 
+                                            label="Cardholder Last Name" 
+                                            placeholder="" 
+                                            required="true" 
+                                            messageWhenPatternMismatch="Numbers are not allowed." messageWhenValueMissing="Last Name is required."/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    <div class="form-group-payment-method">
+                                        <lightning:input aura:id="fields"
+                                             name="card_Exparation_date" 
+                                             placeholder="MM/YY" 
+                                             maxlength="5"
+                                             messageWhenPatternMismatch="Enter a valid Expiration Date with MM/YY format"
+                                             pattern="(0[1-9]|10|11|12)/[0-9]{2}"
+                                             label="Expiry Date"
+                                             required="true"
+                                             class="form-input"
+                                             value="{!v.cardExpirationDate}"/>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    <div class="form-group-payment-method">
+                                        <lightning:input aura:id="fields"
+                                             type="password" 
+                                             name="cvv" 
+                                             placeholder="CVV"
+                                             minlength="3"
+                                             maxlength="4"
+                                             pattern="\d{3,4}"
+                                             label="CVV"
+                                             required="true"
+                                             class="form-input"
+                                             value="{!v.cvvNumber}"
+                                             onkeyup="{!c.checkCVVNumber}"/>
+                                        <div aura:id="cvvwarningmsg"
+                                            class="slds-form-element__help invalidCVV">
+                                            Your CVV Number is invalid.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="psa-hori-line" />
+    <div class="psa-sub-heading billing-address-info">
+        <h3><i class="fas fa-map-marker-alt"></i> Billing Address</h3>
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-0 col-md-6 col-md-offset-0 col-lg-4 col-lg-offset-4">
+                <lightning:input 
+                    class="form-input" 
+                    type="checkbox" 
+                    label="Same as contact address" 
+                    name="psa-checkbox-1" 
+                    checked="{!v.sameAsContact}"
+                    onchange="{!c.handleSameAsContact}"/>
+            </div>
+            <!--  Is this correct if I want checked to default to True: "checked="{!v.sameAsContact}" -->
+        </div>
+        
+        <div class="form-group-payment-method">
+            <lightning:input 
+                value="{!v.billingAddress}" 
+                class="form-input"  
+                name="Address1" 
+                label="Address" 
+                aura:id="fields" 
+                required="true" 
+                messageWhenValueMissing="Address is required."/>
+        </div>
+           
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group-payment-method">
+                    <lightning:input 
+                        value="{!v.billingCity}" 
+                        aura:id="fields" 
+                        required="true" 
+                        class="form-input" 
+                        name="city" 
+                        label="City" 
+                        messageWhenValueMissing="City is required."/>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group-payment-method">
+                    <lightning:input 
+                        value="{!v.billingState}" 
+                        class="form-input" 
+                        name="state" 
+                        label="State" 
+                        aura:id="fields" 
+                        required="true" 
+                        messageWhenValueMissing="State is required."/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group-payment-method">
+                    <lightning:combobox 
+                        aura:id="fields" 
+                        name="Country" 
+                        label="Country/region" 
+                        value="{!v.billingCountry}" 
+                        required="true" 
+                        placeholder="Choose Country" 
+                        options="{! v.countryoptions }" 
+                        messageWhenValueMissing="Country is required."/>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group-payment-method">
+                    <lightning:input 
+                        value="{!v.billingZip}" 
+                        class="form-input"  
+                        name="postalcode" 
+                        label="Postal Code" 
+                        aura:id="fields" 
+                        required="true" 
+                        maxlength="5" 
+                        pattern="^[0-9]+$" 
+                        messageWhenPatternMismatch="Only numeric values are allowed." messageWhenValueMissing="PostalCode is required."/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="psa-hori-line" />
+    <div class="psa-sub-heading total-info">
+        <h3><i class="fas fa-folder-open"></i> Total</h3>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="total-addi-info">
+                    <p>Subtotal</p>
+                    <p>Discount <!-- (20% off) --></p>
+                    <p>GST</p>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="total-addi-info text-right">
+                    <p><lightning:formattedNumber value="{!v.payment.subtotal}" style="currency" currencyCode="AUD" maximumFractionDigits="2"/></p>
+                    <p>-<lightning:formattedNumber value="{!v.payment.discount}" style="currency" currencyCode="AUD" maximumFractionDigits="2"/></p>
+                    <p><lightning:formattedNumber value="{!v.payment.tax}" style="currency" currencyCode="AUD" maximumFractionDigits="2"/></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="your-total-heading">
+                    <h3>Your total</h3>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="your-total-heading text-right">
+                    <h3><lightning:formattedNumber value="{!v.payment.total}" style="currency" currencyCode="AUD" maximumFractionDigits="2"/></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="psa-hori-line" />
+    <div class="row">
+        <div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
+            <div class="btn-border">
+                <a href="javascript:void(0);" onclick="{!c.handleBackButtonClick}">Back</a>
+            </div>
+        </div>
+        <div class="col-xs-8 col-sm-6 col-md-6 col-lg-6">
+            <div class="btn-background-border text-right">
+                <a href="javascript:void(0);" onclick="{!c.handleButtonClick}" aura:id="screen_2">Review and Confirm</a>
+            </div>
+        </div>
+    </div>
+    <!-- Component End -->
+</aura:component>

@@ -1,0 +1,3 @@
+<apex:page standardController="LMS_Course_Enrolment__c" extensions="ASCourseEnrollmentToMoodleBatch"
+   action="{!sendToMoodle}">
+</apex:page>

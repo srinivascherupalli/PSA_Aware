@@ -1,0 +1,17 @@
+<apex:page standardController="blng__Payment__c" extensions="BillingProcessRefChargent" lightningStylesheets="true">
+    <apex:form > 
+        <apex:pageBlock title="Hello {!$User.FirstName}!">
+        <apex:pageMessages />
+            You are about to Process a Refund for this Payment Balance Amount: ${!blng__Payment__c.blng__Balance__c}<p/>
+            For the Payment record: {!blng__Payment__c.Name}<p/>
+            This Process cannot be undone<p/>
+            Are you sure?<p/>                  
+            <apex:inputHidden value="{!blng__Payment__c.blng__Balance__c}"/>
+            <apex:inputHidden value="{!blng__Payment__c.blng__Amount__c}"/>
+            <apex:inputHidden value="{!blng__Payment__c.blng__Refunds__c}"/>                        
+
+            <apex:commandButton action="{!BillingProcessRefundChargent}" value="Confirm"/> 
+            <apex:commandButton action="{!CancelRefund}" value="Cancel"/> 
+        </apex:pageBlock>
+    </apex:form> 
+</apex:page>

@@ -1,0 +1,106 @@
+<aura:component controller="declarationController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+
+    <aura:attribute name="accountId" type="String" default="0019D000005AFyB"/>
+
+    <aura:attribute name="enrolId" type="String" default="a1i9D0000001bQk"/>
+
+    <aura:attribute name="isVic" type="Boolean" default="false" />
+
+    <aura:attribute name="openModal" type="Boolean" default="true" />
+
+    <aura:attribute name="permissionPub" type="String" default="false"/>
+
+    <aura:attribute name="optedout" type="Boolean" />
+
+    <aura:attribute name="enrolStatus" type="String" default="Draft"/>
+
+    <!-- init -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:attribute name="options" type="List" default="[
+    {'label': 'Yes', 'value': 'true'},
+    {'label': 'No', 'value': 'false'}
+    ]"/>
+    
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    <aura:attribute name="showToast" type="Boolean" default="false" />
+
+        <div class="slds-container">
+            <div class="slds-text-heading_small mainTitle"><b>Student Declaration &amp; Consent</b></div>
+            <hr class='hrstyle'></hr>
+            <lightning:layout>
+                <lightning:layoutItem>
+                    <ul class="slds-list--dotted">
+                        <li>I declare that the information I have provided to the best of my knowledge is true and correct.</li>
+                        <li>I consent to the collection, use and disclosure of my personal information in accordance with the Privacy Notice below.</li>
+                        <li>I declare that I have read the course information available including course requirements and expectations prior to submitting my enrolment application.</li>
+                        <li>I hereby agree to pay all fees and charges applicable to and arising from this enrolment unless fees and charges are to be paid by my employer.</li>
+                        <li>I confirm that I understand that course access/materials will only be provided once payment has been received by the Pharmaceutical Society of Australia Ltd, or where the option of payment by installments is available, a first installment has been received and a payment plan has been set up.</li>
+                        <li>I hereby agree to abide by the policies and procedures of the Pharmaceutical Society of Australia Ltd.</li>
+                        <li>By clicking Submit below you are agreeing to the terms and conditions outlined in this form. The next page will redirect you to a signature page to digitally sign this document.</li>
+                        <li>Please follow the on screen instructions to submit your form and complete the digital signature process.</li>
+                    </ul>
+
+                    <div class="slds-text-align_center digital_signature">
+                        <p aura:id="sigtextcenter">Digital Signature</p>
+                        <canvas aura:id="can"></canvas>
+
+                        <lightning:button variant="base" iconName="action:refresh" label="reset" iconPosition="left" class="slds-reset-signature" onclick="{!c.resetFunc}"/>
+                    </div>
+
+                    <div class="slds-text-heading_medium"></div>
+
+                    <div class="slds-p-bottom_x-small"> 
+                        <lightning:radioGroup 
+                            aura:id='student-declaration'
+                            name="permissionPub"
+                            label="I give permission for my name to be published in PSA promotions/publications with regards to successful completions"
+                            class="radiobtn"
+                            options="{!v.options}"
+                            value="{!v.permissionPub}"
+                            type="radio"
+                            required="true"
+                            disabled="{!'Draft' != v.enrolStatus}"
+                            />
+                    </div>
+
+                    <div class="tickboxcontent"><ui:inputCheckbox disabled="{!'Draft' != v.enrolStatus}" name="optedout" aura:id="optedout" value="{!v.optedout}" />Please tick this box if you do not wish to receive any further marketing materials from PSA or other third party</div>
+
+                    <div class="slds-m-top_xx-large slds-btn-content">
+                        <div class="slds-float_left">
+                            <lightning:button variant="Neutral" class="slds-back-btn" label="Back" title="Back" onclick="{!c.backCallback}"/>
+                            <lightning:button variant="Neutral" class="slds-cancel-btn" label="Cancel" title="Cancel" onclick="{!c.cancelCallback}"/>
+                        </div>
+                        <div class="slds-float_right">
+    
+                            <aura:if isTrue="{!'Draft' == v.enrolStatus}">
+                                    
+                                <!-- email button -->
+                                <lightning:button variant="Neutral" class="slds-save-email-btn"  label="Save &amp; Email me a link" title="Save &amp; Email me a link" onclick="{!c.sendmeemail}"/> 
+    
+                            </aura:if> 
+    
+                                <!-- save button -->
+                                <lightning:button variant="brand"  class="slds-save-btn" label="Finalize Application" title="Save &amp; Continue" onclick="{!c.formsubmit}"/>
+    
+                        </div>
+                    </div>
+                    
+
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+
+        <!-- spinner -->
+        <aura:if isTrue="{!v.showSpinner}">
+            <div class="slds-spinner_container">
+                <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        <!-- spinner -->
+
+</aura:component>

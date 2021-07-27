@@ -1,0 +1,299 @@
+@font-face {
+    font-family: MariadProRegular;
+    src: url(/resource/MariadProRegular);
+}
+
+.THIS .slds-content-wrapper {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 19px;
+    opacity: 1;
+    padding: 30px 0;
+    border-radius: 7px;
+    margin-top: 20px;
+}
+
+.THIS .slds-container {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 19px;
+    opacity: 1;
+    padding: 30px;
+    border-radius: 7px;
+    margin-top: 20px;
+    display: inline-block;
+    width: 100%;
+}
+
+
+.THIS .slds-progress_vertical .slds-progress__item.slds-is-completed .slds-progress__marker_icon svg {
+    fill: #003d79;
+}
+
+.THIS .slds-progress__item.slds-is-completed .slds-progress__marker,
+.THIS .slds-progress__item.slds-is-active .slds-progress__marker {
+    border-color: #003d79;
+}
+
+.THIS .slds-progress__item.slds-is-completed .slds-progress__marker_icon,
+.THIS .slds-progress__item.slds-is-completed .slds-progress__marker--icon {
+    border-color: transparent;
+    background: transparent;
+    width: 22px;
+    left: -3px;
+}
+
+.THIS * {
+    font-family: MariadProRegular, sans-serif !important;
+}
+
+.THIS.maindiv{
+    width: 100%;
+    margin: auto;
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+
+.THIS .secondtitle{
+    padding-top: 3%;
+}
+
+.THIS .hrstyle{
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.THIS .outputfield{
+    color: #0c467f;
+    font-weight: bold;
+}
+
+.THIS .outputfield .slds-form-element__label{
+    padding-top: 0px;
+    color: #0c467f;
+    font-weight: bold;
+}
+
+.THIS .slds-progress-bar_small {
+    display: none;
+}
+.THIS .slds-progress_vertical .slds-progress__item:before {
+    top: 0;
+    bottom: 35px;
+}
+
+.THIS .slds-progress_vertical .slds-progress__item:after {
+    top: 35px;
+    bottom: 0;
+}
+
+.THIS .slds-progress_vertical .slds-progress__item::before,
+.THIS .slds-progress_vertical .slds-progress__item::after {
+    background-color: #003d79;
+}
+
+.THIS .slds-progress__item {
+    height: 45px;
+}
+
+.THIS .slds-progress__item.slds-is-active {
+    height: 100px;
+    width: auto;
+}
+/* .THIS.Draft .slds-progress__item.slds-is-active:after,
+.THIS.Draft .slds-progress__item.slds-is-active ~ .slds-progress__item .slds-progress__marker,
+.THIS.Draft .slds-progress__item.slds-is-active ~ .slds-progress__item::before,
+.THIS.Draft .slds-progress__item.slds-is-active ~ .slds-progress__item::after {
+    background-color: #dddbda;
+} */
+/* .THIS .slds-progress__item.active:after,
+.THIS .slds-progress__item.active ~ .slds-progress__item .slds-progress__marker,
+.THIS .slds-progress__item.active ~ .slds-progress__item::before,
+.THIS .slds-progress__item.active ~ .slds-progress__item::after {
+    background-color: #dddbda;
+} */
+
+
+.THIS .slds-progress__list .slds-progress__item.slds-is-active:first-child {
+    height: 45px !important;
+}
+
+.THIS .slds-progress__marker {
+    background-color: #003d79;
+    border-color: #eaebf0;
+}
+
+.THIS .slds-progress__item.slds-is-active .slds-progress__marker {
+    border-color: green;
+    background: #eaebf0 !important;
+    box-shadow: #eaebf0 0px 0px 0px 4px;
+}
+
+
+.THIS .slds-title,
+.THIS.slds-title {
+    color: #003D79;
+    font-size: 20px;
+}
+
+.THIS .slds-spinner_large.slds-spinner::before,
+.THIS .slds-spinner_large.slds-spinner::after,
+.THIS .slds-spinner_large .slds-spinner__dot-a::before,
+.THIS .slds-spinner_large .slds-spinner__dot-b::before,
+.THIS .slds-spinner_large .slds-spinner__dot-a::after,
+.THIS .slds-spinner_large .slds-spinner__dot-b::after,
+.THIS .slds-spinner--large.slds-spinner::before,
+.THIS .slds-spinner--large.slds-spinner::after,
+.THIS .slds-spinner--large .slds-spinner__dot-a::before,
+.THIS .slds-spinner--large .slds-spinner__dot-b::before,
+.THIS .slds-spinner--large .slds-spinner__dot-a::after,
+.THIS .slds-spinner--large .slds-spinner__dot-b::after {
+    background: #003D79;
+}
+
+.THIS .slds-form-element__legend {
+    font-size: 12px;
+    color: #607A91;
+    font-weight: 400;
+}
+
+.THIS .slds-modal__header {
+    text-align: left;
+    border-bottom: none;
+    font-size: 20px;
+    color: #003d79;
+}
+
+.THIS .slds-modal__footer {
+    border-top: none;
+}
+
+.THIS .slds-form-element__label {
+    color: #607A91;
+    font: Bold 18px/23px Salesforce Sans;
+}
+
+.THIS .slds-radio .slds-form-element__label {
+    font-size: 14px;
+}
+
+.THIS p {
+    color: #607A91;
+    font-size: 16px;
+}
+
+.THIS .slds-back-btn {
+    font-size: 16px;
+    color: #fff;
+    background: #607A91 0% 0% no-repeat padding-box;
+    border-radius: 6px;
+    opacity: 1;
+    border: 2px solid #607A91;
+    transition: all .25s;
+}
+
+.THIS .slds-back-btn:hover,
+.THIS .slds-back-btn:focus {
+    background: #fff;
+    color: #607A91;
+}
+.THIS .slds-cancel-btn {
+    font-size: 16px;
+    color: #fff;
+    background: #c35c5c 0% 0% no-repeat padding-box;
+    border-radius: 6px;
+    opacity: 1;
+    border: 2px solid #c35c5c;
+    transition: all .25s;
+}
+
+.THIS .slds-cancel-btn:hover,
+.THIS .slds-cancel-btn:focus {
+    background: #fff;
+    color: #c35c5c;
+}
+
+.THIS .slds-save-email-btn {
+    font-size: 16px;
+    color: #003D79;
+    border: 2px solid #003D79;
+    border-radius: 6px;
+    opacity: 1;
+    transition: all .25s;
+}
+
+.THIS .slds-save-email-btn:hover,
+.THIS .slds-save-email-btn:focus {
+    color: #fff;
+    background: #003D79;
+}
+
+.THIS .slds-save-btn {
+    font-size: 16px;
+    border: 2px solid #003D79;
+    background: #003D79 0% 0% no-repeat padding-box;
+    border-radius: 6px;
+    opacity: 1;
+    color: #fff;
+    transition: all .25s;
+}
+
+.THIS .slds-save-btn:hover,
+.THIS .slds-save-btn:focus {
+    background: #fff;
+    color: #003D79;
+}
+
+.THIS .slds-radio [type="radio"]:checked + .slds-radio_faux::after,
+.THIS .slds-radio [type="radio"]:checked + .slds-radio--faux::after,
+.THIS .slds-radio [type="radio"]:checked ~ .slds-radio_faux::after,
+.THIS .slds-radio [type="radio"]:checked ~ .slds-radio--faux::after,
+.THIS .slds-radio [type="radio"]:checked + .slds-radio__label .slds-radio_faux::after,
+.THIS .slds-radio [type="radio"]:checked + .slds-radio__label .slds-radio--faux::after {
+    background: #003D79;
+}
+
+.THIS select, .THIS input, .THIS textarea {
+    border-color: #DDDFE0;
+    color: #607A91;
+}
+
+.THIS .slds-spinner_container {
+    position: fixed;
+}
+
+.THIS .slds-form-control .slds-form-element__icon {
+    position: absolute;
+    top: 22px;
+    right: -14px;
+}
+
+.THIS .slds-form-control .helptext {
+    position: absolute;
+    top: -20px;
+    right: 0;
+}
+
+.THIS .slds-form-control {
+    position: relative;
+    display: inline-block;
+}
+
+.THIS .slds-progress {
+    overflow: hidden;
+    padding-left: 5px;
+}
+
+@media( max-width: 425px) {
+    .THIS.slds-container {
+        padding: 20px 15px;
+    }
+
+    .THIS .slds-btn-content .slds-float_left,
+    .THIS .slds-btn-content .slds-float_right {
+        float: none;
+    }
+
+    .THIS .slds-btn-content button {
+        margin: 5px 0;
+        width: 100%;
+    }
+}

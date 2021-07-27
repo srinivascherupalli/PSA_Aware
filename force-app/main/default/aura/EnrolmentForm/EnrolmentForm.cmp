@@ -1,0 +1,96 @@
+<aura:component controller="AsEnrolmentFormController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,forceCommunity:themeLayout" access="global">
+
+    <aura:attribute name="currentStep" type="String" default="step1"/>
+    <aura:attribute name="accountId" type="String" />
+    <aura:attribute name="enrolId" type="String" />
+    <aura:attribute name="preTrainId" type="String" />
+    <aura:attribute name="currentPage" type="String" />
+    <aura:attribute name="completed" type="String" default="" />
+    <aura:attribute name="tempModal" type="Boolean" default="true"/>
+    <aura:attribute name="isloaded" type="Boolean" default="false"/> 
+    <aura:attribute name="account" type="Account" />
+    <aura:attribute name="enrolment" type="Enrolment_Form__c" />
+    <aura:handler event="c:EnrolmentActiveStep" action="{!c.handleComponentEvent}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> 
+
+    <aura:if isTrue="{!v.isloaded}">
+        <div class='slds-grid'>
+            <div class="slds-col slds-size_1-of-11">
+                <lightning:progressIndicator class="slds-progress slds-progress_vertical" currentStep="{!v.currentStep}" type="base" aura:id="isrendered">
+                    <lightning:progressStep class="{!v.currentPage == 'step1'}" label="Age Details" value="step1" onclick="{!c.handleStepClick}"/>
+                    <lightning:progressStep class="{!v.currentPage == 'step2'}" label="Privicy Notice" value="step2" onclick="{!c.handleStepClick}"/>
+                    <lightning:progressStep class="{!v.currentPage == 'step3'}" label="Personal Details" value="step3" onclick="{!c.handleStepClick}"/>
+                    <lightning:progressStep class="{!v.currentPage == 'step4'}" label="Language and Cultural Diversity" value="step4" onclick="{!c.handleStepClick}"/>
+                    <lightning:progressStep class="{!v.currentPage == 'step5'}" label="Disability" value="step5" onclick="{!c.handleStepClick}"/>
+                    <lightning:progressStep class="{!v.currentPage == 'step6'}" label="Education" value="step6" onclick="{!c.handleStepClick}"/>
+                    <lightning:progressStep class="{!v.currentPage == 'step7'}" label="Employment" value="step7" onclick="{!c.handleStepClick}"/>
+                    <lightning:progressStep class="{!v.currentPage == 'step8'}" label="Pre Training Review" value="step8" onclick="{!c.handleStepClick}"/>
+                    <lightning:progressStep class="{!v.currentPage == 'step9'}" label="Elective Units" value="step9" onclick="{!c.handleStepClick}"/>
+                    <lightning:progressStep class="{!v.currentPage == 'step10'}" label="Event Selection" value="step10" onclick="{!c.handleStepClick}"/>
+                    <lightning:progressStep class="{!v.currentPage == 'step11'}" label="Document" value="step11" onclick="{!c.handleStepClick}"/>
+                    <lightning:progressStep class="{!v.currentPage == 'step12'}" label="Declaration" value="step12" onclick="{!c.handleStepClick}"/>
+                    <lightning:progressStep class="{!v.currentPage == 'step13'}" label="Payment Option" value="step13" onclick="{!c.handleStepClick}"/>
+                    <lightning:progressStep class="{!v.currentPage == 'step14'}" label="Confirmation Page" value="step14" onclick="{!c.handleStepClick}"/>
+                </lightning:progressIndicator>
+            </div>
+            
+            <div class="slds-col slds-size_11-of-12">
+                <aura:if isTrue="{!v.currentStep == 'step1'}">
+                    <c:AgeDetails enrolId="{!v.enrolId}" accountId="{!v.accountId}"/>
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == 'step2'}">
+                    <c:PrivacyNotice enrolId="{!v.enrolId}"/>
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == 'step3'}">
+                    <c:AsPersonalDetails recordId="{!v.accountId}" recordIdEnrol="{!v.enrolId}"/>
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == 'step4'}">
+                    <c:language_and_cultural_diversity accountId="{!v.accountId}" enrolId="{!v.enrolId}"/>
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == 'step5'}">
+                    <c:AsDisability recordId="{!v.accountId}" recordIdEnrol="{!v.enrolId}"/>
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == 'step6'}">
+                    <c:AsEducation recordId="{!v.accountId}" recordIdEnrol="{!v.enrolId}"/>
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == 'step7'}">
+                    <c:AsEmploymentNew recordaccId="{!v.accountId}" recordIdEnrol="{!v.enrolId}"/>
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == 'step8'}">
+                <c:PreTrainingReviewComponent parentId="{!v.enrolId}" recordId="{!v.accountId}" preTrainnigPreviewId="{!v.preTrainId}" />
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == 'step9'}">
+                    <c:AsCoreAndElectiveUnits EnrollmentId="{!v.enrolId}" AccountId="{!v.accountId}" />
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == 'step10'}">
+                    <c:AsEnrollmentEvent EnrollmentId="{!v.enrolId}" status="{!v.enrolment.Enrolment_Status__c}" />
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == 'step11'}">
+                    <c:AsUploadDocument parentId="{!v.enrolId}" />
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == 'step12'}">
+                    <c:AS_Declaration enrolId="{!v.enrolId}" accountId="{!v.accountId}" />
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == 'step13'}">
+                    <c:AsPaymentOption enrollmentId="{!v.enrolId}" accountId="{!v.accountId}"/>
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == 'step14'}">
+                    <c:AsConfirmationPage/> 
+                </aura:if>
+            </div>
+        </div> 
+    </aura:if>
+</aura:component>

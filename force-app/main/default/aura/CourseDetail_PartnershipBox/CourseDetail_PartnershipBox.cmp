@@ -1,0 +1,8 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+	<!--Attribute-->
+    <aura:attribute name="content" type="string"/>
+    <div class="course-body__partnership text-lg text-center">
+        <ui:outputRichText value="{!v.content}"/>
+    </div>    
+        
+</aura:component>

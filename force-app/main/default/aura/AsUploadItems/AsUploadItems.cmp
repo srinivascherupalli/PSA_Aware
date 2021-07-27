@@ -1,0 +1,61 @@
+<aura:component controller="AsUploadItemsController" > 
+    <!-- 'parentId' Aura Attribute for store the Id for Parent Record where we are attach our file -->  
+    <aura:attribute name="parentId" type="Id"  />
+    <!-- 'showLoadingSpinner' attribute for show/hide the uploading image and msg in aura:if-->
+    <aura:attribute name="showLoadingSpinner" type="boolean" default="false" />
+    <!-- 'fileName' attribute for display the selected file name -->  
+    <aura:attribute name="fileName" type="String" default="No File Selected.." />
+    <!-- Lightning Input with file type and on file change call the 'handleFilesChange' controller --> 
+    <aura:attribute name="filePhisicalName" type="String" />
+
+    <aura:attribute name="filetype" type="String" default="" />
+
+    <aura:attribute name="isReadOnly" type="Boolean"  /> 
+
+    <aura:attribute name="showFile" type="Boolean" default="false"  /> 
+
+    <aura:attribute name="EnrollmentStatus" type="String"  />
+
+
+    <aura:if isTrue="{!'Draft' != v.EnrollmentStatus }">
+                    
+        <lightning:input aura:id="fileId" 
+                onchange="{!c.handleFilesChange}" 
+                accept="image/png,.pdf,jpg,docs" 
+                type="file" 
+                disabled="true"
+                name="file"  
+                multiple="false"
+        />
+                
+        <aura:set attribute="else">
+             
+            <lightning:input aura:id="fileId" 
+                    onchange="{!c.handleFilesChange}" 
+                    accept="image/png,.pdf,jpg,docs" 
+                    type="file" 
+                    disabled="false"
+                    name="file"  
+                    multiple="false"
+            />
+           
+        </aura:set>
+         
+    </aura:if> 
+     
+ 
+    <!--use aura:if for show-hide the loading spinner image--> 
+    <aura:if isTrue="{!v.showLoadingSpinner}"> 
+        <div class="slds-text-body_small slds-text-color_error slds-custom-loader">Uploading... 
+            <img src="/auraFW/resources/aura/images/spinner.gif" class="spinner-img" alt="Loading"/>'
+        </div>
+    </aura:if>
+
+    <aura:if isTrue="{!v.showFile}">
+        <div class="upload-file-name" data-filename="{!v.fileName}" >
+            <lightning:icon class="slds-document-icon" iconName="{!v.filetype}" />
+            <h3 class="slds-title">{!v.filePhisicalName}</h3>
+        </div>
+    </aura:if>
+     
+</aura:component>

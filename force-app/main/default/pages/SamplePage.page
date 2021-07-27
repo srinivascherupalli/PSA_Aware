@@ -1,0 +1,16 @@
+<!--
+Author : Jet R. Compayan (jetpersonal2@gmail.com)
+Description : This Page is to embed the lightning Application.
+Company : Alphasys
+-->
+<apex:page sidebar="false" >
+    <apex:includeLightning />
+    <div id="PSA" />
+    <script>
+    	/* Application name created on lighthning  : XeroIntegarationAppLightning */
+        $Lightning.use("c:AS_MembershipSignUpApp", function(){
+            /* Component name created on lighthning  : XeroIntegrationLightning_Comp */
+            $Lightning.createComponent("c:AS_MembershipSignUp", {}, "PSA", function(cmp){});
+        });
+    </script>
+</apex:page>
