@@ -1,6 +1,6 @@
 /**
 * Batch class ASBatchPendingExpiredNotification #PRI-163
-* @author danrl@alphasys.com.au
+* @author danrl@alphasys.com.au 
 */
 global class ASBatchPendingExpiredNotification implements Database.Batchable<sObject>, Database.AllowsCallouts, Database.Stateful {
 
